@@ -2,6 +2,11 @@
   "name": "backend",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.7",
+    // Weitere Abhängigkeiten
   }
 }
