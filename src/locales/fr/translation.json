@@ -1,0 +1,33 @@
+{
+  "myshop": "MaBoutique",
+  "home": "Accueil",
+  "profile": "Profil",
+  "login": "Connexion",
+  "logout": "Déconnexion",
+  "newProducts": "Nouveaux Produits",
+  "categories": {
+    "womensClothing": "Vêtements femmes",
+    "mensClothing": "Vêtements hommes",
+    "shoes": "Chaussures",
+    "womensUnderwear": "Sous-vêtements femmes",
+    "mensUnderwear": "Sous-vêtements hommes",
+    "bags": "Sacs et accessoires",
+    "kidsClothing": "Vêtements enfants",
+    "babyClothing": "Vêtements bébés"
+  },
+  "categoryBanner": {
+    "bestOffers": "Meilleures Offres",
+    "bestOrders": "Meilleures Commandes",
+    "popularCategories": "Catégories Populaires"
+  },
+   "tabs_seller":  {
+    "products": "Produits",
+    "openOrders": "Commandes ouvertes",
+    "allOrders": "Toutes les commandes"
+  },
+  "add_new_product": "Ajouter un nouveau produit",
+  "new_products": "",
+  "alter_max_images": "Un maximum de 3 images peut être sélectionné !",
+  "max_images_selected":  "Un maximum de 3 images ont été sélectionnées.",
+  "product_images_max": "Images du produit (max. 3):"
+}

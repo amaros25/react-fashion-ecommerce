@@ -1,0 +1,17 @@
+// First, install concurrently and (optionally) nodemon so your server restarts automatically on changes:
+npm install concurrently nodemon --save-dev
+
+// Install CORS middleware to handle Cross-Origin Resource Sharing issues:
+npm install cors
+
+// Install Mongoose to interact with MongoDB databases easily:
+npm install mongoose
+
+// In package.json, adding
+// "proxy": "http://localhost:5000",
+// makes API calls from React during development forward to the backend running on port 5000
+
+//In backend package.json
+"start": "nodemon server.js"
+When you run npm start in the backend folder, it runs nodemon server.js.
+Nodemon watches your files and automatically restarts the server when you make changes, very useful for development!

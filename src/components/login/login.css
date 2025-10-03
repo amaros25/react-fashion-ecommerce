@@ -1,0 +1,78 @@
+/* Container zentrieren */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  background-color: #f2f2f2;
+}
+
+/* Formular */
+.login-form {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 300px;
+}
+
+/* Überschrift */
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Labels und Inputs */
+.login-form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Button */
+.login-form button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: #005fa3;
+}
+
+/* Fehleranzeige */
+.error {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Link zur Registrierung */
+.register-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.register-link a {
+  color: #0077cc;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
