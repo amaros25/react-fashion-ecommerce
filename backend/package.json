@@ -3,8 +3,5 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js"
-  },
-  "dependencies": {
-    "nodemon": "^3.1.10"
   }
 }
