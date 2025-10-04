@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 function SellerOpenOrders({ orders, handleStatusChange }) {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [statusUpdates, setStatusUpdates] = useState({});
   const [ordersWithDetails, setOrdersWithDetails] = useState([]);
 
@@ -24,12 +25,12 @@ function SellerOpenOrders({ orders, handleStatusChange }) {
         orders.map(async (order) => {
           try {
             // Produktdaten laden
-            const productRes = await fetch(`/api/products/${order.productID}`);
+            const productRes = await fetch(`${apiUrl}/products/${order.productID}`);
             const product = await productRes.json();
 
             console.log("🟡 product: ", {product});
             // Userdaten laden
-            const userRes = await fetch(`/api/users/${order.userId}`);
+            const userRes = await fetch(`${apiUrl}/users/${order.userId}`);
             const user = await userRes.json();
 
             return {
