@@ -12,6 +12,8 @@ import { useTranslation } from "react-i18next"; // For internationalization (i18
 import Pagination from './pagination.js'; // Pagination component
 
 function Home() {
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   // i18n translation functions
   const { t, i18n } = useTranslation();
 
@@ -51,7 +53,7 @@ function Home() {
 
   // Load latest products whenever `page` or `selectedCategory` changes
   useEffect(() => {
-    let url = `/api/products/latest?page=${page}&limit=12`; // Backend endpoint for latest products
+    let url = `${apiUrl}/products/latest?page=${page}&limit=12`; // Backend endpoint for latest products
     if (selectedCategory) {
       url += `&category=${selectedCategory}`; // Add category as a query param if selected
     }
@@ -84,7 +86,7 @@ function Home() {
 
   // Load homepage sections (offers, best orders) once on component mount
   useEffect(() => {
-    fetch('/api/sections/')
+    fetch(`${apiUrl}/sections/`)
       .then(res => res.json())
       .then(data => setSections(data))
       .catch(err => console.error('Error fetching sections:', err));

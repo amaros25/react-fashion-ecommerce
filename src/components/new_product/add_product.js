@@ -4,6 +4,7 @@ import "./add_product.css";
 import ImageSelectUpload from './image_select_upload.js';
 
 function AddProduct() {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
@@ -69,7 +70,7 @@ function AddProduct() {
         uploadData.append('images', file);
       });
 
-      const uploadRes = await fetch('/api/upload', {
+      const uploadRes = await fetch(`${apiUrl}/upload`, {
         method: 'POST',
         body: uploadData,
       });
@@ -90,7 +91,7 @@ function AddProduct() {
         image: imageUrls,
       };
 
-      const res = await fetch('/api/products/create', {
+      const res = await fetch(`${apiUrl}/products/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productData),

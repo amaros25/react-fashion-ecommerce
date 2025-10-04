@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import AddProduct from "../new_product/add_product"
 
 function ProfileSeller() {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const { t, i18n } = useTranslation();
   const [seller, setSeller] = useState(null);
   const [products, setProducts] = useState([]);
@@ -22,7 +23,7 @@ function ProfileSeller() {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      const response = await fetch(`/api/orders/${orderId}/status`, {
+      const response = await fetch(`${apiUrl}/orders/${orderId}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +47,7 @@ function ProfileSeller() {
 
   // Fetch Funktionen
   const fetchSeller = useCallback(async () => {
-    const res = await fetch(`/api/sellers/${userId}`, {
+    const res = await fetch(`${apiUrl}/sellers/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -54,7 +55,7 @@ function ProfileSeller() {
   }, [userId, token]);
 
   const fetchProducts = useCallback(async () => {
-    const res = await fetch(`/api/products/seller/${userId}`, {
+    const res = await fetch(`${apiUrl}/products/seller/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -67,7 +68,7 @@ function ProfileSeller() {
   }, [userId, token]);
 
   const fetchOrders = useCallback(async () => {
-    const res = await fetch(`/api/orders/seller/${userId}`, {
+    const res = await fetch(`${apiUrl}/orders/seller/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();

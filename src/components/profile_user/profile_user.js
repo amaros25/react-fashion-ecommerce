@@ -4,6 +4,7 @@ import Header from "../header/header";
 import { useNavigate } from "react-router-dom";
 
 function ProfileUser() {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [suggestedProducts, setSuggestedProducts] = useState([]);
@@ -15,7 +16,7 @@ function ProfileUser() {
   useEffect(() => {
     // Benutzerdaten laden
     const fetchUser = async () => {
-      const res = await fetch(`/api/users/${userId}`, {
+      const res = await fetch(`${apiUrl}/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -24,7 +25,7 @@ function ProfileUser() {
 
     // Bestellungen laden
     const fetchOrders = async () => {
-      const res = await fetch(`/api/orders?user=${userId}`, {
+      const res = await fetch(`${apiUrl}/orders?user=${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -33,7 +34,7 @@ function ProfileUser() {
 
     // Zufällige Produkte laden
     const fetchSuggestedProducts = async () => {
-      const res = await fetch(`/api/products/latest`);
+      const res = await fetch(`${apiUrl}/products/latest`);
       const data = await res.json();
       // Shuffle (Fisher-Yates) + z.B. 6 Produkte
       const shuffled = data.sort(() => 0.5 - Math.random());

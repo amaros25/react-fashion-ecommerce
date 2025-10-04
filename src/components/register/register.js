@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./register.css";
 
 function Register() {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const [role, setRole] = useState("shoper"); // Default Rolle
   const [formData, setFormData] = useState({
@@ -84,7 +85,7 @@ function Register() {
         const uploadData = new FormData();
         uploadData.append("images", imageFile);
 
-        const uploadRes = await fetch("/api/upload", {
+        const uploadRes = await fetch(`${apiUrl}/upload`, {
           method: "POST",
           body: uploadData,
         });
@@ -104,7 +105,7 @@ function Register() {
       let payload = {};
 
       if (role === "seller") {
-        endpoint = "/api/sellers/create";
+        endpoint = `${apiUrl}/sellers/create`;
         payload = {
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -115,7 +116,7 @@ function Register() {
           image: imageUrl,
         };
       } else {
-        endpoint = "/api/users/create";
+        endpoint = `${apiUrl}/users/create`;
         payload = {
           firstName: formData.firstName,
           lastName: formData.lastName,

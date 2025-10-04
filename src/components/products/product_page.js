@@ -5,6 +5,7 @@ import "./product_page.css";
 import Header from '../header/header.js';
 
 function ProductPage() {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [showModal, setShowModal] = useState(false);
   const [address, setAddress] = useState({
     street: "",
@@ -58,7 +59,7 @@ function ProductPage() {
 
     try {
       setLoading(true);
-      const res = await fetch("/api/orders/create", {
+      const res = await fetch(`${apiUrl}/orders/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +84,7 @@ function ProductPage() {
   };
 
   useEffect(() => {
-    fetch(`/api/products/${id}`)
+    fetch(`${apiUrl}/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
@@ -98,7 +99,7 @@ function ProductPage() {
         }
 
         if (data.sellerId) {
-          fetch(`/api/sellers/${data.sellerId}`)
+          fetch(`${apiUrl}/sellers/${data.sellerId}`)
             .then((res) => {
               if (!res.ok) {
                 throw new Error(`Fehler beim Abrufen des Verkäufers: ${res.status}`);

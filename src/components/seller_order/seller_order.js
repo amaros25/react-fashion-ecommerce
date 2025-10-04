@@ -3,6 +3,8 @@ import "./seller_orders.css";  // für Styles
 import Header from "../header/header.js";
 
 function SellerOrders() {
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("userId");
@@ -11,7 +13,7 @@ function SellerOrders() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch(`/api/orders?seller=${userId}`, {
+        const res = await fetch(`${apiUrl}/orders?seller=${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch orders");
@@ -34,7 +36,7 @@ function SellerOrders() {
   // Status ändern
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      const res = await fetch(`/api/orders/${orderId}/status`, {
+      const res = await fetch(`${apiUrl}/orders/${orderId}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
