@@ -1,111 +1,173 @@
+/* Styling for the section box that holds each product or section */
 .section-box {
-    background-color: #f5f5f5;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.section-box h3 {
-    margin-top: 5px;
-    margin-bottom: 10px;
-    text-align: center;
-    font-size: 18px;
-}
-
-/* 2x2 Grid for products*/
-.section-product-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-
-.product-card {
-  text-decoration: none;
-  color: inherit;
+  background-color: #f5f5f5; /* Light gray background */
+  padding: 10px;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Light shadow for depth */
+  height: 100%; /* Full height */
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: column; /* Stack child elements vertically */
+  justify-content: space-between; /* Distribute space between elements */
+}
+
+/* Heading style inside each section */
+.section-box h3 {
+  margin-top: 5px;
+  margin-bottom: 10px;
   text-align: center;
+  font-size: 18px;
 }
 
+/* Grid layout for product items (2x2 grid) */
+.section-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns for products */
+  gap: 10px; /* Space between items */
+}
+
+/* Styling for each product card */
+.product-card {
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit color */
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center items horizontally */
+  text-align: center; /* Center text */
+}
+
+/* Styling for product image */
 .product-card img {
-    width: 100%;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 5px;
+  width: 100%; /* Full width */
+  height: 60px; /* Fixed height */
+  object-fit: cover; /* Maintain aspect ratio */
+  border-radius: 5px; /* Rounded corners */
 }
 
+/* Styling for product description */
 .product-card p {
   font-size: 14px;
   font-weight: 500;
-  margin: 5px 0;
-  text-align: center;
-
-  /* Multiline ellipsis */
-  display: -webkit-box;          /* für Safari/Chrome */
-  display: box;                  /* älterer Syntax */
-  display: -moz-box;             /* alter Firefox */
+  margin: 5px 0; /* Spacing around the text */
+  text-align: center; /* Center the text */
+  
+  /* Multiline ellipsis for truncating text */
+  display: -webkit-box; /* For Safari/Chrome */
+  display: box; /* Old syntax for older browsers */
+  display: -moz-box; /* Old Firefox syntax */
   -webkit-box-orient: vertical;
   box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: hidden; /* Hide overflow text */
+  text-overflow: ellipsis; /* Show ellipsis for overflowed text */
   text-decoration: none; 
   color: inherit; 
-  /* 2 lines clamp */
-  -webkit-line-clamp: 2;         /* Webkit */
-  line-clamp: 2;                 /* Standard */
+  
+  /* Limit to 2 lines of text */
+  -webkit-line-clamp: 2; /* Webkit browsers */
+  line-clamp: 2; /* Standard for browsers supporting the feature */
 
-  height: 2.8em; /* sorgt für gleiche Höhe bei 2 Zeilen */
-  line-height: 1.4em;
+  height: 2.8em; /* Ensure the height stays consistent */
+  line-height: 1.4em; /* Line height for 2 lines */
 }
 
+/* Price section (old and new prices) layout */
 .price-row {
   display: flex;
-  gap: 5px;
-  align-items: baseline;
-  justify-content: center;
+  gap: 5px; /* Space between price elements */
+  align-items: baseline; /* Align prices to the baseline */
+  justify-content: center; /* Center prices */
 }
 
+/* Styling for new price */
 .new-price {
-  font-weight: bold;
-  color: black;
+  font-weight: bold; /* Bold new price */
+  color: black; /* Black color */
 }
 
+/* Styling for old price */
 .old-price {
-  text-decoration: line-through;
-  color: gray;
-  font-size: 0.9em;
+  text-decoration: line-through; /* Strike-through for old price */
+  color: gray; /* Gray color */
+  font-size: 0.9em; /* Slightly smaller size */
 }
 
+/* Discount label */
 .discount {
-  color: red;
-  font-weight: bold;
-  font-size: 0.85em;
-  margin-top: 2px;
+  color: red; /* Red color for discount */
+  font-weight: bold; /* Bold text */
+  font-size: 0.85em; /* Smaller font size for discount */
+  margin-top: 2px; /* Small margin on top */
 }
 
+/* Hover effect for product cards */
 .product-card:hover {
-  transform: translateY(-3px);
-  transition: 0.2s;
+  transform: translateY(-3px); /* Lift the card slightly */
+  transition: 0.2s; /* Smooth transition */
 }
 
+/* Category text in product card */
 .product-card .product-category {
   margin-top: 10px;
-  font-weight: bold;
-  text-align: center;
-  color: red;
+  font-weight: bold; /* Bold category text */
+  text-align: center; /* Center text */
+  color: red; /* Red color for category */
 }
 
- 
-
-/* Preisbereich unsichtbar, aber Höhe behalten */
+/* Invisible price row but keeps height */
 .category-section .price-row,
 .category-section .new-price,
 .category-section .old-price,
 .category-section .discount {
-  visibility: hidden;
+  visibility: hidden; /* Hide elements, but retain space */
+}
+
+/* Mobile-First Design: Adjustments for mobile screens */
+@media (max-width: 768px) {
+  /* Adjust grid layout for smaller screens (2 columns on mobile) */
+  .section-product-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for mobile */
+  }
+
+  /* Adjust card images for mobile */
+  .product-card img {
+    height: 80px; /* Slightly bigger image height on mobile */
+  }
+
+  /* Reduce the size of the heading in smaller viewports */
+  .section-box h3 {
+    font-size: 16px; /* Smaller font size */
+  }
+
+  /* Adjust product description text */
+  .product-card p {
+    font-size: 12px; /* Smaller font size for mobile */
+  }
+
+  /* Make product cards touch-friendly */
+  .product-card {
+    padding: 10px; /* Add padding around cards */
+  }
+}
+
+/* For very small screens (e.g., below 480px) */
+@media (max-width: 480px) {
+  /* Adjust grid layout to single column for ultra small screens */
+  .section-product-grid {
+    grid-template-columns: 1fr; /* Single column layout */
+  }
+
+  /* Further adjust product image size */
+  .product-card img {
+    height: 100px; /* Make the image taller for smaller screens */
+  }
+
+  /* Further reduce font size for product names */
+  .product-card p {
+    font-size: 10px; /* Smaller text for very small screens */
+    line-height: 1.2em; /* Tighter line height */
+  }
+
+  /* Adjust the section title font size */
+  .section-box h3 {
+    font-size: 14px; /* Smaller font size for small screens */
+  }
 }
