@@ -14,7 +14,7 @@ function TopBannerSlider() {
 
     // Array of banner image paths for the slider
     const banners = [
-        './images/banner1.png',
+        'https://res.cloudinary.com/ddclvkost/image/upload/v1759689511/banner1_bkjkc4.png',
         './images/banner2.jpg',
         './images/banner3.jpg',
     ];
