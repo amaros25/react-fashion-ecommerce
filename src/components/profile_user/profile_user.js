@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./profile_user.css";
-import Header from "../header/header";
+import {Header} from "../header/header";
 import { useNavigate } from "react-router-dom";
 
 function ProfileUser() {
@@ -55,8 +55,7 @@ function ProfileUser() {
 
   return (
     <div className="profile-user-container">
- 
-
+      <Header />
       <div className="profile-header">
         <img src={user.image} alt={user.firstName} className="profile-image" />
         <div className="profile-info">

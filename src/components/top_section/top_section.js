@@ -13,7 +13,7 @@ function TopSection({ title, products }) {
         to={`/product/${product._id}`} 
         className="product-card"
         >
-        <img src={product.image[0]} alt={product.name} />
+        <img src={product.image[0]} alt={product.name} loading="lazy" />
         <p className="product-name">{product.name}</p>
         <div className="price-area">
             <div className="price-row">

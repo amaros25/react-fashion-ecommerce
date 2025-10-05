@@ -45,7 +45,7 @@ function TopBannerSlider() {
     <div className="banner-wrapper"> {/* Wrapper div for the whole banner and sections */}
         <div className="banner-slider"> {/* Banner slider container */}
             <button className="arrow left" onClick={prevSlide}>‹</button> {/* Left arrow button */}
-            <img src={banners[current]} alt="Banner" className="banner-image" /> {/* Current banner image */}
+            <img src={banners[current]} alt="Banner" className="banner-image"  loading="lazy" /> {/* Current banner image */}
             <button className="arrow right" onClick={nextSlide}>›</button> {/* Right arrow button */}
         </div>
 

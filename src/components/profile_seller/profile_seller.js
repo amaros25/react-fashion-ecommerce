@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import SellerOpenOrders from './seller_open_orders.js';
-import Header from '../header/header.js';
+import {Header} from '../header/header.js';
 import { useNavigate } from "react-router-dom";
 import "./profile_seller.css";
 import { useTranslation } from "react-i18next";
@@ -106,7 +106,7 @@ function ProfileSeller() {
 
   return (
     <div className="profile-seller-container">
- 
+      <Header />
       <div className="profile-header">
         <div className="profile-left">
           <img src={seller.image} alt={seller.shopName} className="profile-image" />

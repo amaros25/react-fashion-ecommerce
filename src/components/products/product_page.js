@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import "./product_page.css";
-
-import Header from '../header/header.js';
+import { Header } from '../header/header.js';
 
 function ProductPage() {
   const apiUrl = process.env.REACT_APP_API_URL;
+ 
   const [showModal, setShowModal] = useState(false);
   const [address, setAddress] = useState({
     street: "",
@@ -90,12 +90,12 @@ function ProductPage() {
         setProduct(data);
 
         console.log("🟢 data.image: ", data.image);
-        // Sicherstellen, dass images immer ein Array ist
+ 
         if (Array.isArray(data.image) && data.image.length > 0) {
             console.log("🟢 data.image isArray: ", data.image);
-          setMainImage(data.image[0]); // Das erste Bild als mainImage setzen
+          setMainImage(data.image[0]); 
         } else if (data.image) {
-          setMainImage(data.image ); // Einzelbild als mainImage setzen
+          setMainImage(data.image ); 
         }
 
         if (data.sellerId) {
@@ -132,11 +132,10 @@ function ProductPage() {
 
   return (
     <div className="product-page">
- 
-    
+      <Header />
       {/* Links: Produktbilder */}
       <div className="product-images">
-        <img src={mainImage} alt={product.name} className="main-image" />
+        <img src={mainImage} alt={product.name} className="main-image"  loading="lazy" />
         <div className="thumbnail-row">
           {/* Überprüfen, ob es mehrere Bilder gibt */}
           {product.image && product.image.length > 0 ? (
@@ -146,6 +145,7 @@ function ProductPage() {
                 src={img}
                 alt={`${product.name}-${index}`}
                 className={`thumbnail ${mainImage === img ? "active" : ""}`}
+                loading="lazy" 
                 onClick={() => setMainImage(img)}
               />
             ))
@@ -155,6 +155,7 @@ function ProductPage() {
                 src={product.image}
                 alt={product.name}
                 className="thumbnail active"
+                loading="lazy" 
                 onClick={() => setMainImage(product.image)}
               />
             )
@@ -170,7 +171,7 @@ function ProductPage() {
         <div className="seller-info">
           <div className="seller-details">
             {seller.image && (
-              <img src={seller.image} alt={seller.shopName} className="seller-image" />
+              <img src={seller.image} alt={seller.shopName} className="seller-image"  loading="lazy" />
             )}
             <div>
               <h3>{seller.shopName}</h3>
