@@ -132,7 +132,7 @@ function ProductPage() {
 
   return (
     <div className="product-page">
-      <Header />
+ 
     
       {/* Links: Produktbilder */}
       <div className="product-images">

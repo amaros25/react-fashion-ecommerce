@@ -28,5 +28,36 @@
   "add_new_product": "Add New Product",
   "alter_max_images": "A maximum of 3 images may be selected!",
   "max_images_selected":  "A maximum of 3 images have been selected.",
-  "product_images_max": "Product Images (max. 3):"
+  "product_images_max": "Product Images (max. 3):",
+  "search_product" : "Search item",
+  "login_failed": "Login failed",
+
+   "register": {
+    "title": "Register",
+    "role": "Role",
+    "selectRole": "Select your role",
+    "shoper": "Shoper (regular user)",
+    "seller": "Seller",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "phone": "Phone Number",
+    "shopName": "Shop Name",
+    "address": "Address",
+    "profileImageOptional": "Profile Image (optional)",
+    "profileImageRequired": "Profile Image (required)",
+    "removeImage": "Remove Image",
+    "submit": "Register",
+    "alreadyRegistered": "Already registered?",
+    "login": "Login",
+    "error": {
+      "fillShopNameAddress": "Please fill in shop name and address.",
+      "uploadProfileImage": "Please upload a profile image.",
+      "enterPhone": "Please enter phone number.",
+      "registrationFailed": "Registration failed"
+    }
+  },
+    "sizes": "Sizes"
+
   }

@@ -9,8 +9,8 @@ function AddProduct() {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
 
-  const [imageFiles, setImageFiles] = useState([]); // echte File-Objekte
-  const [imagePreviews, setImagePreviews] = useState([]); // Data-URLs zur Vorschau
+  const [imageFiles, setImageFiles] = useState([]); // real File objects
+  const [imagePreviews, setImagePreviews] = useState([]); // data URLs for preview
 
   const [formData, setFormData] = useState({
     name: "",
@@ -97,7 +97,7 @@ function AddProduct() {
         body: JSON.stringify(productData),
       });
 
-      if (!res.ok) throw new Error("Product add Error");
+      if (!res.ok) throw new Error("Product add error");
 
       alert("Product added successfully!");
       navigate("/profile_seller");
@@ -110,8 +110,8 @@ function AddProduct() {
   return (
     <div className="add-product-container">
       <form onSubmit={handleSubmit} className="add-product-form">
-        {/* Übergabe von selectedImages und setSelectedImages an ImageSelectUpload */}
-        <ImageSelectUpload onImageChange={handleImageChange} />
+        {/* Pass selectedImages and setSelectedImages to ImageSelectUpload */}
+        <ImageSelectUpload onImageChange={handleImageChange} maximages={3} />
 
         <select name="category" value={formData.category} onChange={handleChange} required>
           <option value="">Select a category</option>

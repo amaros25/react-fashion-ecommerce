@@ -63,7 +63,7 @@ function SellerOrders() {
 
   return (
     <div className="seller-orders-container">
-      <Header />
+ 
       <h2>Manage Orders</h2>
       <table className="orders-table">
         <thead>

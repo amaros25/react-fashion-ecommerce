@@ -1,97 +1,94 @@
-import React, { useRef, useEffect, useState } from 'react'; // React Hooks
-import './home.css'; // Main styling
-import '../products/product_list.css'; // Styling for product list
-import '../products/new_product_list.css'; // Styling for new product list
+import React, { useRef, useEffect, useState } from 'react'; // React hooks
+import './home.css'; // Main styles for Home component
+import '../products/product_list.css'; // Styles for product list display
+import '../products/new_product_list.css'; // Styles for new product list display
 
-import TopBannerSlider from '../top_banner_slider/top_banner_slider'; // Component for top image slider
-import TopSection from '../top_section/top_section'; // Component for sections (e.g., offers, bestsellers)
-
-import Header from '../header/header'; // Header component
+import TopBannerSlider from '../top_banner_slider/top_banner_slider'; // Component for top image/banner slider
+import { Header } from '../header/header'; // Header component, including search and category selection
+import Foot from '../foot/foot'; // Footer component
 import { Link } from "react-router-dom"; // For routing to product detail pages
-import { useTranslation } from "react-i18next"; // For internationalization (i18n)
-import Pagination from './pagination.js'; // Pagination component
+import { useTranslation } from "react-i18next"; // i18n hook for translations and RTL support
+import Pagination from './pagination.js'; // Pagination component for product lists
 
 function Home() {
-  const apiUrl = process.env.REACT_APP_API_URL;
+  const apiUrl = process.env.REACT_APP_API_URL; // Base URL for backend API
 
-  // i18n translation functions
+  // State for currently selected category filter; empty means no filter
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  // State for current search term from search input
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // i18n hooks for translation and language direction
   const { t, i18n } = useTranslation();
 
-  // Reference for the horizontal scroll container (category list)
-  const scrollRef = useRef(null);
+  /**
+   * Handle search input from Header component
+   * @param {string} searchInput - The term user typed in search
+   */
+  const handleSearch = (searchInput) => {
+    console.log("🟢 searchInput: ", searchInput);
+    setSearchTerm(searchInput);  // Set the search term
+    setSelectedCategory("");     // Reset selected category when searching
+    setPage(1);                 // Reset to first page of results
+  };
 
-  // List of category keys (used for filtering and translation)
-  const categoryKeys = [
-    "womensClothing",
-    "mensClothing",
-    "shoes",
-    "womensUnderwear",
-    "mensUnderwear",
-    "bags",
-    "kidsClothing",
-    "babyClothing"
-  ];
-
-  // State for homepage sections like offers and best orders
-  const [sections, setSections] = useState([]);
-
-  // Extract offers and bestOrders from fetched sections
-  const offers = sections?.offers || [];
-  const bestOrders = sections?.bestOrders || [];
-
-  // States for latest products, selected category, pagination
+  // State for array of latest products fetched from backend
   const [latestProducts, setLatestProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(""); // Currently selected category
-  const [page, setPage] = useState(1); // Current page number
-  const [totalPages, setTotalPages] = useState(1); // Total number of pages for pagination
-  const [productsCounter, setTotalProductsCounter] = useState(1); // Total number of pages for pagination
 
-  // Filter products by selected category (if any)
+  // Current page for pagination (starts from 1)
+  const [page, setPage] = useState(1);
+
+  // Total number of pages available from backend (used for Pagination component)
+  const [totalPages, setTotalPages] = useState(1);
+
+  // Total number of products available (useful for displaying counts or stats)
+  const [productsCounter, setTotalProductsCounter] = useState(1);
+
+  // Filter latestProducts by selected category if one is chosen
+  // Defensive check ensures latestProducts is always an array
   const filteredProducts = selectedCategory
     ? (Array.isArray(latestProducts) ? latestProducts.filter(p => p.category === selectedCategory) : [])
     : (Array.isArray(latestProducts) ? latestProducts : []);
 
-  // Load latest products whenever `page` or `selectedCategory` changes
+  /**
+   * Fetch latest products whenever page, selectedCategory, or searchTerm changes.
+   * Adds query parameters to API URL accordingly.
+   */
   useEffect(() => {
-    let url = `${apiUrl}/products/latest?page=${page}&limit=12`; // Backend endpoint for latest products
+    let url = `${apiUrl}/products/latest?page=${page}&limit=15`; // Base endpoint with pagination
+
     if (selectedCategory) {
-      url += `&category=${selectedCategory}`; // Add category as a query param if selected
+      url += `&category=${selectedCategory}`; // Append category filter if selected
     }
+
+    if (searchTerm) {
+      url += `&search=${encodeURIComponent(searchTerm)}`; // Append search term, URL encoded
+    }
+
+    console.log("🟢 url: ", url);
+
+    // Fetch products data from backend
     fetch(url)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data.products)) {
-          setLatestProducts(data.products); // Save products to state
-          setTotalPages(data.totalPages); // Update total page count
-          setTotalProductsCounter(data.totalAllProducts); // Update total page count
+          setLatestProducts(data.products);  // Update products list state
+          setTotalPages(data.totalPages);    // Update total pages for pagination
+          setTotalProductsCounter(data.totalAllProducts); // Update total product count
         } else {
-          // Fallback if response is invalid
+          // If API response format is unexpected, reset states
           setLatestProducts([]);
           setTotalPages(1);
         }
       })
       .catch(err => console.error('Error fetching latest products:', err));
-  }, [page, selectedCategory]); // Re-run on page or category change
+  }, [page, selectedCategory, searchTerm]); // Dependency array triggers re-fetch on these changes
 
-  // Scroll function for horizontal category list
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const scrollAmount = 650;
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth' // Smooth scrolling animation
-      });
-    }
-  };
-
-  // Load homepage sections (offers, best orders) once on component mount
-  useEffect(() => {
-    fetch(`${apiUrl}/sections/`)
-      .then(res => res.json())
-      .then(data => setSections(data))
-      .catch(err => console.error('Error fetching sections:', err));
-  }, []);
-
+  /**
+   * Effect to toggle RTL (right-to-left) styling based on current language.
+   * Adds or removes 'rtl' class on <body> element.
+   */
   useEffect(() => {
     if (i18n.language === 'ar') {
       document.body.classList.add('rtl');
@@ -100,55 +97,22 @@ function Home() {
     }
   }, [i18n.language]);
 
-  // Component UI
+  // Render component UI
   return (
-    <div className="main-container">
-      {/* Top header and image slider */}
-      <Header />
-      <TopBannerSlider />
-
-      {/* Top sections (e.g., Best Offers & Best Orders) */}
-      <div className="section-grid">
-        <TopSection title={t("categoryBanner.bestOffers")} products={offers} /> 
-        <TopSection title={t("categoryBanner.bestOrders")} products={bestOrders} />
-      </div>
-
-      {/* Horizontal category navigation */}
-      <nav className="horizontal-nav">
-        {/* Scroll left button */}
-        <button className="scroll-arrow left" onClick={() => scroll('left')}>‹</button>
-
-        {/* Category list */}
-        <ul className="nav-scroll-list" ref={scrollRef}>
-          {/* 'Home' item to reset category filter */}
-          <li 
-            className="nav-item"
-            onClick={() => setSelectedCategory("")}>
-            {t("home")}
-          </li>
-
-          {/* Render all categories */}
-          {categoryKeys.map((key, index) => (
-            <li
-              key={index}
-              className="nav-item"
-              onClick={() => setSelectedCategory(key)}
-            >
-              {t(`categories.${key}`)} {/* Translated category name */}
-            </li>
-          ))}
-        </ul>
-
-        {/* Scroll right button */}
-        <button className="scroll-arrow right" onClick={() => scroll('right')}>›</button>
-      </nav>
+    // Root container with dynamic text direction based on language
+    <div className="main-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       
-      {/* Dynamic section title depending on selected category */}
-      <h2 className="section-title" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-        {selectedCategory ? t(`categories.${selectedCategory}`) : `${t("newProducts")} : ${productsCounter}`}
-      </h2>
+      {/* Header component with category selector and search input */}
+      <Header 
+        selectedCategory={selectedCategory} 
+        setSelectedCategory={setSelectedCategory} 
+        onSearch={handleSearch}
+      />
+      
+      {/* Show top banner slider only if no search term and no category selected */}
+      {searchTerm === "" && selectedCategory === "" && <TopBannerSlider />}
 
-      {/* Latest product list */}
+      {/* Latest products grid/list */}
       <div className="latest-product-list">
         {filteredProducts.map((product) => (
           <Link 
@@ -156,23 +120,32 @@ function Home() {
             to={`/product/${product._id}`} 
             className="latest-product-item"
           >
+            {/* Product image */}
             <img 
               src={product.image[0]} 
               alt={product.name} 
               className="latest-product-image" 
             />
+            {/* Product name */}
             <h3>{product.name}</h3>
-            <p>{product.price} €</p>
+            {/* Product price with currency */}
+            <p>{product.price} DT</p>
+            <p className="product-sizes">
+              {t("sizes")}: {product.sizes.map(sizeObj => sizeObj.size).join(", ")}
+            </p>
           </Link>
         ))}
       </div>
 
-      {/* Pagination component */}
+      {/* Pagination component with current page and total pages */}
       <Pagination 
         page={page} 
         totalPages={totalPages} 
         onPageChange={setPage} 
       />
+
+      {/* Footer component */}
+      <Foot/>
     </div>
   );
 }

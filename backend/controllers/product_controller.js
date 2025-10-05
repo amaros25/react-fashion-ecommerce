@@ -17,8 +17,9 @@ exports.getNewProducts = async (req, res) => {
     const page = parseInt(req.query.page) || 1;  // Default to page 1 if no page is provided
     const limit = parseInt(req.query.limit) || 12;  // Default to 12 products per page if not specified
     const category = req.query.category;  // Category filter (if any)
+    const search = req.query.search;  // Suchbegriff aus Query
     const skip = (page - 1) * limit;  // Calculate how many items to skip for pagination
-
+    console.log("🟢 search: ", search);
     // Initialize an empty filter object
     const filter = {};
 
@@ -27,6 +28,15 @@ exports.getNewProducts = async (req, res) => {
       filter.category = category;
     }
 
+    if (search) {
+      // Suche Wörter splitten (nach Leerzeichen)
+      const searchWords = search.trim().split(/\s+/);
+
+      // Für jedes Wort ein RegExp Match im Feld "name" (case insensitive)
+      filter.$and = searchWords.map(word => ({
+        name: { $regex: word, $options: 'i' }
+      }));
+    }
     // Get the total number of products that match the filter (to calculate pagination)
     const total = await Product.countDocuments(filter);
 

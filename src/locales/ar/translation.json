@@ -1,5 +1,5 @@
 {
-  "myshop": "متجري",
+  "myshop": "كمندي",
   "home": "الصفحة الرئيسية",
   "profile": "الملف الشخصي",
   "login": "تسجيل الدخول",
@@ -30,9 +30,40 @@
   "max_images_selected": "تم اختيار 3 صور كحد أقصى",
   "product_images_max": ":صور المنتج (بحد أقصى 3)",
   "choose_files": "اختر الملفات",
-  "no_file_chosen": "لم يتم اختيار أي ملف"
-
-
-
-
+  "no_file_chosen": "لم يتم اختيار أي ملف",
+  "search": "بحث",
+  "search_product" : "البحث عن منتج",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "login_start": "دخول",
+  "register_quest": "ليس لديك حساب؟",
+ 
+  "login_failed": "فشل تسجيل الدخول",
+    "register": {
+    "title": "تسجيل",
+    "role": ":الدور",
+    "selectRole": "اختر دورك",
+    "shoper": "مشتري (مستخدم عادي)",
+    "seller": "بائع",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "phone": "رقم الهاتف",
+    "shopName": "اسم المتجر",
+    "address": "العنوان",
+    "profileImageOptional": "صورة الملف الشخصي (اختياري)",
+    "profileImageRequired": "صورة الملف الشخصي (إجباري)",
+    "removeImage": "إزالة الصورة",
+    "submit": "تسجيل",
+    "alreadyRegistered": "هل لديك حساب بالفعل؟",
+    "login": "تسجيل الدخول",
+    "error": {
+      "fillShopNameAddress": "يرجى إدخال اسم المتجر والعنوان.",
+      "uploadProfileImage": "يرجى تحميل صورة الملف الشخصي.",
+      "enterPhone": "يرجى إدخال رقم الهاتف.",
+      "registrationFailed": "فشل في التسجيل"
+    }
+  },
+    "sizes": "المقاسات"
 }

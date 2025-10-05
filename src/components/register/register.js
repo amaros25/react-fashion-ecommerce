@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./register.css";
+import { useTranslation } from "react-i18next";
+import ImageSelectUpload from '../new_product/image_select_upload.js';
 
-function Register() {
+function Register({ closePopup, switchToLogin }) {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const navigate = useNavigate();
-  const [role, setRole] = useState("shoper"); // Default Rolle
+  const { t, i18n } = useTranslation();  // i18n hook for translations and language direction
+  const navigate = useNavigate(); // navigate for routing (not currently used)
+
+  // State for user role, default to "shoper"
+  const [role, setRole] = useState("shoper");
+
+  // State to hold form input values
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -15,17 +22,22 @@ function Register() {
     shopName: "",
     address: "",
   });
+
+  // State for selected image file and its preview URL
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+
+  // State to store and display error messages
   const [error, setError] = useState("");
 
+  // Generic input change handler for form fields
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle role change - reset form and image states
   const handleRoleChange = (e) => {
     setRole(e.target.value);
-    // Reset image and form fields when role changes
     setImageFile(null);
     setImagePreview(null);
     setFormData({
@@ -40,46 +52,47 @@ function Register() {
     setError("");
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  // Handle image selection from child component
+  // Receives an array of files; use the first one if available
+  const handleImageChange = (files) => {
+    const file = files && files.length > 0 ? files[0] : null;
     if (file) {
       setImageFile(file);
-
+      // Create a preview image URL using FileReader
       const reader = new FileReader();
       reader.onload = () => setImagePreview(reader.result);
       reader.readAsDataURL(file);
+    } else {
+      setImageFile(null);
+      setImagePreview(null);
     }
   };
 
-  const removeImage = () => {
-    setImageFile(null);
-    setImagePreview(null);
-  };
-
+  // Form submission handler - validates, uploads image, sends data to backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // Validierung
+    // Validation depending on role
     if (role === "seller") {
       if (!formData.shopName || !formData.address) {
-        setError("Bitte Shop Name und Adresse ausfüllen.");
+        setError("Bitte Shop Name und Adresse ausfüllen."); // "Please fill shop name and address."
         return;
       }
       if (!imageFile) {
-        setError("Bitte ein Profilbild hochladen.");
+        setError("Bitte ein Profilbild hochladen."); // "Please upload a profile image."
         return;
       }
     }
     if (role === "shoper") {
       if (!formData.phone) {
-        setError("Bitte Telefonnummer eingeben.");
+        setError("Bitte Telefonnummer eingeben."); // "Please enter a phone number."
         return;
       }
     }
 
     try {
-      // Bild hochladen (falls vorhanden)
+      // Upload image if selected
       let imageUrl = "";
       if (imageFile) {
         const uploadData = new FormData();
@@ -96,11 +109,10 @@ function Register() {
         }
 
         const uploadJson = await uploadRes.json();
-        imageUrl = uploadJson.urls[0];  // erstes Bild aus dem Array
-
+        imageUrl = uploadJson.urls[0];  // Use first image URL from response
       }
 
-      // Payload vorbereiten
+      // Prepare API endpoint and payload based on role
       let endpoint = "";
       let payload = {};
 
@@ -123,38 +135,40 @@ function Register() {
           email: formData.email,
           password: formData.password,
           phone: formData.phone,
-          image: imageUrl || "", // optional
+          image: imageUrl || "", // image is optional here
         };
       }
 
-      // Request an Backend
+      // Send registration data to backend
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error("Registrierung fehlgeschlagen");
-
-      navigate("/login"); // Nach Registrierung zum Login
+      if (!res.ok) throw new Error("Registrierung fehlgeschlagen"); // "Registration failed"
+      closePopup();
+      switchToLogin(); // switch to login view after success
     } catch (err) {
       setError(err.message);
     }
   };
 
   return (
-    <div className="register-container">
+    <div className="register-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <form className="register-form" onSubmit={handleSubmit}>
-        <h2>Registrierung</h2>
+        <h2>{t("register.title")}</h2>
         {error && <p className="error">{error}</p>}
 
-        <label>Rolle:</label>
+        {/* Role selection */}
+        <label>{t("register.role")}</label>
         <select value={role} onChange={handleRoleChange}>
-          <option value="shoper">Shoper (normaler Nutzer)</option>
-          <option value="seller">Seller</option>
+          <option value="shoper">{t("register.shoper")}</option>
+          <option value="seller">{t("register.seller")}</option>
         </select>
 
-        <label>Vorname:</label>
+        {/* Basic user info inputs */}
+        <label>{t("register.firstName")}</label>
         <input
           type="text"
           name="firstName"
@@ -162,8 +176,7 @@ function Register() {
           onChange={handleChange}
           required
         />
-
-        <label>Nachname:</label>
+        <label>{t("register.lastName")}</label>
         <input
           type="text"
           name="lastName"
@@ -171,8 +184,7 @@ function Register() {
           onChange={handleChange}
           required
         />
-
-        <label>Email:</label>
+        <label>{t("register.email")}</label>
         <input
           type="email"
           name="email"
@@ -180,8 +192,7 @@ function Register() {
           onChange={handleChange}
           required
         />
-
-        <label>Passwort:</label>
+        <label>{t("register.password")}</label>
         <input
           type="password"
           name="password"
@@ -190,9 +201,10 @@ function Register() {
           required
         />
 
+        {/* Role-specific fields */}
         {role === "shoper" && (
           <>
-            <label>Telefonnummer:</label>
+            <label>{t("register.phone")}</label>
             <input
               type="tel"
               name="phone"
@@ -200,26 +212,14 @@ function Register() {
               onChange={handleChange}
               required
             />
-            <label>Profilbild (optional):</label>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            {imagePreview && (
-              <div className="image-preview">
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  style={{ width: "150px", height: "150px", objectFit: "cover" }}
-                />
-                <button type="button" onClick={removeImage}>
-                  Bild entfernen
-                </button>
-              </div>
-            )}
+            <label>{t("register.profileImageOptional")}</label>
+            <ImageSelectUpload onImageChange={handleImageChange} maximages={1} />
           </>
         )}
 
         {role === "seller" && (
           <>
-            <label>Shop Name:</label>
+            <label>{t("register.shopName")}</label>
             <input
               type="text"
               name="shopName"
@@ -227,7 +227,7 @@ function Register() {
               onChange={handleChange}
               required
             />
-            <label>Adresse:</label>
+            <label>{t("register.address")}</label>
             <input
               type="text"
               name="address"
@@ -235,31 +235,21 @@ function Register() {
               onChange={handleChange}
               required
             />
-            <label>Profilbild (Pflicht):</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              required
-            />
-            {imagePreview && (
-              <div className="image-preview">
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  style={{ width: "150px", height: "150px", objectFit: "cover" }}
-                />
-                <button type="button" onClick={removeImage}>
-                  Bild entfernen
-                </button>
-              </div>
-            )}
+            <label>{t("register.profileImageRequired")}</label>
+            <ImageSelectUpload onImageChange={handleImageChange} maximages={1} />
           </>
         )}
 
-        <button type="submit">Registrieren</button>
+        <button type="submit">{t("register.submit")}</button>
+
         <p className="login-link">
-          Schon registriert? <a href="/login">Login</a>
+          {t("register.alreadyRegistered")}
+          <span
+            onClick={switchToLogin}
+            style={{ color: "#0077cc", cursor: "pointer", textDecoration: "underline" }}
+          >
+            {t("login")}
+          </span>
         </p>
       </form>
     </div>

@@ -55,7 +55,7 @@ function ProfileUser() {
 
   return (
     <div className="profile-user-container">
-      <Header />
+ 
 
       <div className="profile-header">
         <img src={user.image} alt={user.firstName} className="profile-image" />

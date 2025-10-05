@@ -1,5 +1,5 @@
 .main-container {
-    max-width: 1200px; /* Maximum width for the main container */
+    max-width: 1400px; /* Maximum width for the main container */
     margin: 0 auto; /* Center container horizontally */
     padding: 20px; /* Inner padding */
     min-height: 100vh; /* Minimum height to fill the viewport */
@@ -20,26 +20,7 @@ body {
     box-sizing: inherit;
 }
 
-.section-grid {
-    display: grid; /* Use CSS Grid layout */
-    grid-template-columns: repeat(2, 1fr); /* 3 equal columns */
-    gap: 20px; /* Space between grid items */
 
-    margin-top: -150px; /* Negative margin to pull the section up */
-    position: relative; /* Position relative for z-index to work */
-    z-index: 2; /* Layer this above elements with lower z-index */
-}
-
-.banner-slider {
-    position: relative; /* Position relative for layering */
-    z-index: 1; /* Behind .section-grid */
-    margin-bottom: 100px; /* Space below the banner */
-}
-
-.section-title {
-  margin-top: 30px; /* Space above the section title */
-  direction: ltr;
-}
 
 
 .pagination-container {

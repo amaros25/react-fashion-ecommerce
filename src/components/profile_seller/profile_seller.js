@@ -106,7 +106,7 @@ function ProfileSeller() {
 
   return (
     <div className="profile-seller-container">
-      <Header />
+ 
       <div className="profile-header">
         <div className="profile-left">
           <img src={seller.image} alt={seller.shopName} className="profile-image" />

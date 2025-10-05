@@ -115,15 +115,37 @@
 .custom-dropzone {
   border: 2px dashed #007bff;
   border-radius: 5px;
-  padding: 15px 20px;
+  padding: 15px 5px;
   background-color: #f0f8ff;
   color: #333;
   cursor: pointer;
   text-align: center;
-  width: 250px;
+  width: 100px;
   margin-bottom: 10px;
 }
 
 .custom-dropzone:hover {
   background-color: #e8f4ff;
+}
+
+ 
+.image-preview.single-preview {
+  flex-direction: column;
+  align-items: flex-start;
+  height: auto;
+  margin-left: 0;
+}
+
+.image-preview.single-preview .image-thumbnail {
+  width: 120px;
+  height: 100px;
+  margin-inline-start: 10px;
+}
+
+.image-preview.single-preview .delete-button-image {
+  top: -20px;
+  right: 15px;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
 }
