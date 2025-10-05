@@ -1,56 +1,114 @@
+/* Main Container */
 .main-container {
-    max-width: 1400px; /* Maximum width for the main container */
-    margin: 0 auto; /* Center container horizontally */
+    width: 100%; /* Maximum width for mobile devices */
+    max-width: 1400px; /* Maximum width for larger screens (desktop) */
+    margin: 0 auto; /* Center the container horizontally */
     padding: 20px; /* Inner padding */
     min-height: 100vh; /* Minimum height to fill the viewport */
-    padding-bottom: 200px; /* Extra bottom padding, maybe for footer space */
-    
+    padding-bottom: 200px; /* Extra bottom padding for footer space */
 }
 
+/* Body Styles */
 body {
     margin: 0; /* Remove default margin */
     padding: 0; /* Remove default padding */
-    box-sizing: border-box; /* Include padding and border in element's total width/height */
-    font-family: sans-serif; /* Use a clean, sans-serif font */
-    background-color: #f8f8f8; /* Light grey background */
+    box-sizing: border-box; /* Include padding and border in the element's total width/height */
+    font-family: sans-serif; /* Sans-serif font for a clean look */
+    background-color: #f8f8f8; /* Light background color */
 }
 
-/* Apply box-sizing border-box to all elements and their ::before and ::after pseudo-elements */
+/* Box-Sizing for all elements */
 *, *::before, *::after {
     box-sizing: inherit;
 }
 
-
-
-
+/* Pagination */
 .pagination-container {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin: 20px 0;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 20px 0;
 }
 
 .pagination-button {
-  border: none;
-  background-color: #eee;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 4px;
-  font-weight: 500;
+    border: none;
+    background-color: #eee;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 500;
 }
 
 .pagination-button.active {
-  background-color: #007bff;
-  color: white;
+    background-color: #007bff;
+    color: white;
 }
 
 .pagination-ellipsis {
-  padding: 8px 12px;
-  color: #666;
-  user-select: none;
+    padding: 8px 12px;
+    color: #666;
+    user-select: none;
 }
 
- .rtl .section-title {
-  text-align: right; /* Text nach rechts ausrichten */
-  direction: rtl;
+/* RTL (Right to Left) Support */
+.rtl .section-title {
+    text-align: right;
+    direction: rtl;
+}
+
+/* MOBILE FIRST STYLES */
+
+/* For screens smaller than 768px (e.g., mobile phones) */
+@media (max-width: 768px) {
+    .main-container {
+        padding: 10px; /* Less padding on mobile devices */
+    }
+
+    .pagination-container {
+        flex-direction: column; /* Stack the buttons vertically */
+        gap: 4px; /* Less gap between the buttons */
+    }
+
+    .pagination-button {
+        padding: 6px 10px; /* Smaller buttons on mobile */
+        font-size: 14px; /* Smaller font size */
+    }
+
+    /* Prevent horizontal scrollbar */
+    body {
+        overflow-x: hidden;
+    }
+}
+
+/* For screens smaller than 480px (e.g., very small phones) */
+@media (max-width: 480px) {
+    .main-container {
+        padding: 5px; /* Even less padding on very small devices */
+    }
+
+    .pagination-button {
+        padding: 5px 8px; /* Very small buttons */
+        font-size: 12px; /* Very small font size */
+    }
+}
+
+/* DESKTOP STYLES (from 768px upwards) */
+
+/* For screens larger than 768px (e.g., tablets and desktops) */
+@media (min-width: 768px) {
+    .pagination-container {
+        gap: 8px; /* More gap between buttons */
+    }
+
+    .pagination-button {
+        padding: 8px 12px; /* Larger buttons */
+        font-size: 16px; /* Larger font size */
+    }
+}
+
+/* For tablets or larger devices (from 1024px upwards) */
+@media (min-width: 1024px) {
+    .main-container {
+        padding: 20px; /* More padding for larger screens */
+    }
 }

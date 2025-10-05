@@ -1,42 +1,47 @@
+/* Container for the "Add Product" form */
 .add-product-container {
-  max-width: 100%;
-  margin: 20px auto;
+  max-width: 100%; /* Make the container take up full width */
+  margin: 20px auto; /* Center the container horizontally */
   background-color: transparent;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for a lifted effect */
   padding: 20px;
-  border-radius: 8px;
-  background-color: #fff;
+  border-radius: 8px; /* Rounded corners */
+  background-color: #fff; /* White background */
   box-sizing: border-box;
 }
 
+/* Flexbox layout for the form */
 .add-product-form {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  flex-direction: column; /* Stack the form elements vertically */
+  gap: 20px; /* Space between form elements */
 }
 
+/* Styling for input, textarea, and select elements */
 .add-product-form input,
 .add-product-form textarea,
 .add-product-form select {
   display: block;
-  width: 100%;
+  width: 100%; /* Full width */
   padding: 12px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  margin-bottom: 15px; /* Space below each element */
+  border: 1px solid #ccc; /* Light border */
+  border-radius: 8px; /* Rounded corners */
   font-size: 16px;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
+/* Focus state for input, textarea, and select elements */
 .add-product-form input:focus,
 .add-product-form textarea:focus,
 .add-product-form select:focus {
-  border-color: #0441e9;
-  outline: none;
+  border-color: #0441e9; /* Blue border on focus */
+  outline: none; /* Remove the default outline */
 }
 
+/* Button styling */
 .add-product-form button {
-  background-color: #0f0cd8;
+  background-color: #0f0cd8; /* Blue background */
   color: white;
   padding: 12px 18px;
   border: none;
@@ -46,43 +51,50 @@
   transition: background-color 0.3s ease;
 }
 
+/* Hover state for the button */
 .add-product-form button:hover {
-  background-color: #0306a1;
+  background-color: #0306a1; /* Darker blue on hover */
 }
 
+/* Disabled button styling */
 .add-product-form button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
+/* Styling for the size field (for product size options) */
 .size-field {
   display: flex;
-  gap: 15px;
+  gap: 15px; /* Space between size options */
   margin-bottom: 20px;
 }
 
+/* Image preview container */
 .image-preview {
   display: flex;
   gap: 15px;
   margin-top: 15px;
-  justify-content: center;
+  justify-content: center; /* Center the images horizontally */
 }
 
+/* Each image preview container */
 .preview-container {
   position: relative;
   width: 120px;
   height: 120px;
-  background-color: rgb(154, 167, 240);
+  background-color: rgb(154, 167, 240); /* Light blue background */
   border-radius: 8px;
   overflow: hidden;
 }
 
+/* Image styling inside preview container */
 .preview-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* Maintain aspect ratio */
 }
 
+/* Delete button for image preview */
 .delete-button {
   position: absolute;
   top: 4px;
@@ -92,25 +104,28 @@
   background-color: black;
   color: red;
   border: none;
-  border-radius: 50%;
+  border-radius: 50%; /* Circular button */
   font-size: 14px;
   line-height: 18px;
   text-align: center;
   cursor: pointer;
   padding: 0;
-  z-index: 10;
+  z-index: 10; /* Ensure it is on top of the image */
 }
 
+/* Hover state for the delete button */
 .delete-button:hover {
   background-color: #222;
   color: darkred;
 }
 
+/* Wrapper for the submit button */
 .submit-button-wrapper {
-  text-align: center;
+  text-align: center; /* Center the button */
   margin-top: 30px;
 }
 
+/* Styling for the submit button */
 .submit-button-wrapper button {
   padding: 14px 24px;
   font-size: 18px;
@@ -118,25 +133,98 @@
   transition: transform 0.2s ease;
 }
 
+/* Hover state for the submit button */
 .submit-button-wrapper button:hover {
-  transform: scale(1.05);
+  transform: scale(1.05); /* Slight scale-up effect on hover */
 }
 
+/* Styling for select element */
 .add-product-form select {
-  background-color: #fff;
+  background-color: #fff; /* White background for select element */
 }
 
+/* MOBILE FIRST STYLES */
+
+/* For screens smaller than 768px (e.g., mobile phones) */
 @media (max-width: 768px) {
   .add-product-container {
-    padding: 15px;
+    padding: 15px; /* Reduced padding for mobile */
   }
 
   .add-product-form {
-    gap: 15px;
+    gap: 15px; /* Reduced gap between elements */
   }
 
   .submit-button-wrapper button {
-    width: 100%;
-    padding: 14px;
+    width: 100%; /* Full width for the button */
+    padding: 14px; /* More padding for touch targets */
+  }
+
+  /* Adjust the image preview size for smaller screens */
+  .preview-container {
+    width: 100px;
+    height: 100px;
+  }
+
+  .delete-button {
+    top: 2px; /* Adjust positioning for smaller images */
+    right: 2px;
+  }
+}
+
+/* For very small screens (below 480px) */
+@media (max-width: 480px) {
+  .add-product-container {
+    padding: 10px; /* Further reduced padding */
+  }
+
+  .add-product-form {
+    gap: 12px; /* Even smaller gap */
+  }
+
+  .submit-button-wrapper button {
+    padding: 12px; /* Reduced padding on very small screens */
+  }
+
+  /* Adjust image preview further for very small screens */
+  .preview-container {
+    width: 90px;
+    height: 90px;
+  }
+
+  /* Further reduce the font size for small screens */
+  .add-product-form input,
+  .add-product-form textarea,
+  .add-product-form select {
+    font-size: 14px; /* Smaller font size */
+  }
+
+  .add-product-form button {
+    font-size: 14px; /* Smaller button text */
+  }
+}
+
+/* DESKTOP STYLES */
+
+/* For screens larger than 768px (tablets and desktops) */
+@media (min-width: 768px) {
+  .add-product-container {
+    max-width: 800px; /* Set a max-width for the form on large screens */
+    padding: 20px; /* Standard padding */
+  }
+
+  .add-product-form {
+    gap: 25px; /* Increased gap between form elements for larger screens */
+  }
+
+  .submit-button-wrapper button {
+    width: auto; /* Allow button to auto adjust width */
+    padding: 16px 28px; /* Slightly larger padding for desktop */
+  }
+
+  /* Adjust the image preview size for larger screens */
+  .preview-container {
+    width: 130px;
+    height: 130px;
   }
 }
