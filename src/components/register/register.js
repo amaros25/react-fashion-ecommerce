@@ -6,6 +6,8 @@ import ImageSelectUpload from '../new_product/image_select_upload.js';
 
 function Register({ closePopup, switchToLogin }) {
   const apiUrl = process.env.REACT_APP_API_URL;
+  const cloudName = process.env.REACT_APP_CLOUD_NAME;
+  const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
   const { t, i18n } = useTranslation();  // i18n hook for translations and language direction
   const navigate = useNavigate(); // navigate for routing (not currently used)
 
@@ -94,24 +96,24 @@ function Register({ closePopup, switchToLogin }) {
     try {
       // Upload image if selected
       let imageUrl = "";
-      if (imageFile) {
-        const uploadData = new FormData();
-        uploadData.append("images", imageFile);
 
-        const uploadRes = await fetch(`${apiUrl}/upload`, {
+
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        formData.append("upload_preset", uploadPreset);
+
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
           method: "POST",
-          body: uploadData,
+          body: formData,
         });
 
-        if (!uploadRes.ok) {
-          const errText = await uploadRes.text();
-          throw new Error("Image upload failed: " + errText);
-        }
+        if (!res.ok) throw new Error("Image upload failed");
 
-        const uploadJson = await uploadRes.json();
-        imageUrl = uploadJson.urls[0];  // Use first image URL from response
+        const data = await res.json();
+        imageUrl = data.secure_url;  
       }
-
+    
       // Prepare API endpoint and payload based on role
       let endpoint = "";
       let payload = {};
