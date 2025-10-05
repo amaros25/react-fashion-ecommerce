@@ -3,14 +3,12 @@
   width: 100%;
   background: linear-gradient(to left , #f5f5f5, #f5f5f5);
   border-bottom: 1px solid #e0e0e0;
-  padding: 10px 10px;
+  padding: 1px 10px;
   display: flex;
   align-items: center;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(218, 13, 13, 0.05);
+  box-shadow: 0 2px 6px rgba(173, 51, 51, 0.05);
   font-family: 'Segoe UI', sans-serif;
-  margin-top: 20px; 
-
 }
 
 .nav-scroll-list {
@@ -89,12 +87,12 @@
 
 .navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Zentriert den Inhalt */
   align-items: center;
-  padding: 5px 20px; /* etwas weniger als 50px, damit mehr Platz bleibt */
-  flex-wrap: nowrap; /* auch hier kein Umbruch */
+  padding: 5px 20px; /* Angepasstes Padding für bessere Sichtbarkeit */
+  width: 100%; /* Stellt sicher, dass der Container die gesamte Breite nutzt */
+  box-sizing: border-box; /* Verhindert, dass Padding die Gesamtbreite überschreitet */
 }
-
 .logo {
   font-size: 24px;
   font-weight: bold;
@@ -127,3 +125,85 @@
   margin-top: 10px;
 }
 
+
+/* Das Formular für die Suche */
+.search-form {
+  display: flex; /* sorgt dafür, dass die Elemente nebeneinander angezeigt werden */
+  gap: 10px;     /* Abstand zwischen Eingabefeld und Button */
+  align-items: center; /* Vertikale Ausrichtung */
+  margin-top: 5px; /* Etwas Abstand nach oben */
+}
+
+.search-form input {
+  padding: 10px 15px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 400px; /* Breite des Eingabefeldes anpassen */
+}
+
+.search-form button {
+  padding: 10px 15px;
+  font-size: 14px;
+  border: 1px solid #007bff;
+  background-color: #007bff;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-form button:hover {
+  background-color: #0056b3;
+}
+
+.help-link {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+  padding: 10px;
+  transition: color 0.3s;
+}
+
+.help-link:hover {
+  color: #007bff;
+}
+
+.nav-item.active {
+  font-weight: bold;
+  color: #eee8e8; /* Beispiel Highlight-Farbe */
+  border-bottom: 2px solid #f0ebec;
+}
+
+.login-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.login-popup-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  position: relative;
+  min-width: 300px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}

@@ -8,8 +8,9 @@ import ProfileSeller from "./components/profile_seller/profile_seller";
 import SellerOrders  from "./components/seller_order/seller_order";
 import AddProduct from './components/new_product/add_product.js';
 import "./i18n"; 
-
+//import Homepage from "./components/learn_react/home.js";
 function App() {
+  
   return (
     <Router>
       <Routes>

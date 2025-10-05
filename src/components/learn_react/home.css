@@ -1,0 +1,18 @@
+
+
+
+.blogpreview{
+    padding: 10px 16px;
+    margin: 10px 0;
+    border-bottom: 1px solid #706b6b;
+}
+
+.blogpreview:hover{
+    box-shadow: 1px 3px 5px rgba(2, 207, 2, 0.1);
+}
+
+.blogpreview h2{
+    font-size: 20px;
+    color:aqua;
+    margin-bottom: 5px;
+}

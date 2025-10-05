@@ -9,9 +9,12 @@ h2 {
 
 .latest-product-list {
     display: grid; /* Use CSS Grid instead of Flexbox */
-    grid-template-columns: repeat(4, 1fr); /* Create 4 equal-width columns */
+    grid-template-columns: repeat(5, 1fr); /* Create 4 equal-width columns */
     gap: 20px; /* Space between grid items */
     padding: 10px 0; /* Vertical padding */
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden; 
 }
 
 .latest-product-item {
@@ -24,6 +27,9 @@ h2 {
     display: flex; /* Use flexbox inside product item */
     flex-direction: column; /* Arrange content vertically */
     justify-content: space-between; /* Space content evenly vertically */
+     min-width: 0;  /* Wichtig: erlaubt dem Element zu schrumpfen */
+    max-width: 100%;
+    text-decoration: none;
 }
 
 .product-item:hover {
@@ -39,13 +45,25 @@ h2 {
     margin-bottom: 15px; /* Space below the image */
 }
 
-.product-item h3 {
-    font-size: 18px; /* Font size for product title */
-    font-weight: bold; /* Bold font */
-    margin-bottom: 10px; /* Space below the title */
+.latest-product-item h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;  
+  min-width: 0;  
+  color: #444;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 
 .product-item p {
     font-size: 16px; /* Font size for product description or price */
     color: #444; /* Darker text color for better readability */
+}
+
+.product-sizes {
+  font-size: 13px;
+  color: #666;
+  margin-top: 3px;
 }

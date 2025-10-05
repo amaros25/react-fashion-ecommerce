@@ -1,5 +1,5 @@
 {
-  "myshop": "MaBoutique",
+  "myshop": "Cmandi",
   "home": "Accueil",
   "profile": "Profil",
   "login": "Connexion",
@@ -29,5 +29,41 @@
   "new_products": "",
   "alter_max_images": "Un maximum de 3 images peut être sélectionné !",
   "max_images_selected":  "Un maximum de 3 images ont été sélectionnées.",
-  "product_images_max": "Images du produit (max. 3):"
+  "product_images_max": "Images du produit (max. 3):",
+  "choose_files": "Sélectionner des fichiers",
+  "search_product" : "Rechercher un article",
+  "search": "rechercher",
+  "email": "E-mail",
+  "password": "Mot de passe",
+  "login_start": "Se connecter",
+  "register_quest": "Pas encore de compte ?",
+ 
+  "login_failed": "Échec de la connexion",
+  "register": {
+    "title": "S'inscrire",
+    "role": "Rôle",
+    "selectRole": "Sélectionnez votre rôle",
+    "shoper": "Acheteur (utilisateur régulier)",
+    "seller": "Vendeur",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "email": "Email",
+    "password": "Mot de passe",
+    "phone": "Numéro de téléphone",
+    "shopName": "Nom de la boutique",
+    "address": "Adresse",
+    "profileImageOptional": "Image de profil (optionnel)",
+    "profileImageRequired": "Image de profil (obligatoire)",
+    "removeImage": "Supprimer l'image",
+    "submit": "S'inscrire",
+    "alreadyRegistered": "Déjà inscrit ?",
+    "login": "Connexion",
+    "error": {
+      "fillShopNameAddress": "Veuillez renseigner le nom de la boutique et l'adresse.",
+      "uploadProfileImage": "Veuillez télécharger une image de profil.",
+      "enterPhone": "Veuillez entrer un numéro de téléphone.",
+      "registrationFailed": "Échec de l'inscription"
+    }   
+  },
+   "sizes": "Tailles"
 }

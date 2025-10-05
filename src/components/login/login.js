@@ -1,65 +1,98 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./login.css";
+import { useNavigate } from "react-router-dom"; // Navigation hook for routing after login
+import "./login.css"; // Styles for login form
+import { useTranslation } from "react-i18next"; // Translation hook for i18n support
 
-function Login() {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const navigate = useNavigate();
+function Login({ closePopup, switchToRegister }) {
+  const apiUrl = process.env.REACT_APP_API_URL; // Backend API base URL
+  const { t, i18n } = useTranslation(); // Translation and language direction
+  const navigate = useNavigate(); // For programmatic navigation
+
+  // Local state for form inputs and error message
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  /**
+   * Handles login form submission
+   * Sends email and password to backend to authenticate
+   */
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission behavior
 
-    // Beispiel-API-Aufruf zum Einloggen
     try {
+      // POST request to login endpoint with email and password
       const res = await fetch(`${apiUrl}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
+      // If response is not OK, throw an error with localized message
       if (!res.ok) {
-        throw new Error("Login fehlgeschlagen");
+        throw new Error(t("login_failed"));
       }
 
-        const data = await res.json();
-        localStorage.setItem("token", data.token); // Token speichern
-        localStorage.setItem("role", data.role);       // Rolle speichern
-        localStorage.setItem("userId", data.userId);   // User ID speichern
-        if (data.role === "seller") {
+      closePopup(); // Close the login popup/modal on success
+
+      // Parse JSON response
+      const data = await res.json();
+
+      // Save auth token and user info in localStorage for session management
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("userId", data.userId);
+
+      // Navigate user based on their role
+      if (data.role === "seller") {
         navigate("/profile_seller");
-        } else {
+      } else {
         navigate("/profile_user");
-        }
+      }
     } catch (err) {
+      // Display any error messages to user
       setError(err.message);
     }
   };
 
   return (
-    <div className="login-container">
+    <div className="login-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <form className="login-form" onSubmit={handleSubmit}>
-        <h2>Login</h2>
+        <h2>{t("login")}</h2>
+
+        {/* Show error message if login fails */}
         {error && <p className="error">{error}</p>}
-        <label>Email</label>
+
+        {/* Email input */}
+        <label>{t("email")}</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <label>Passwort</label>
+
+        {/* Password input */}
+        <label>{t("password")}</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Einloggen</button>
+
+        {/* Submit button */}
+        <button type="submit">{t("login_start")}</button>
+
+        {/* Link to switch to Register component */}
         <p className="register-link">
-          Noch kein Konto? <a href="/register">Registrieren</a>
+          {t("register_quest")}{" "}
+          <span
+            onClick={switchToRegister}
+            style={{ color: "#0077cc", cursor: "pointer", textDecoration: "underline" }}
+          >
+            {t("register.title")}
+          </span>
         </p>
       </form>
     </div>
