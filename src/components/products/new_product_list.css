@@ -1,42 +1,48 @@
+/* Container style */
 .container {
     padding: 20px; /* Add padding inside the container */
 }
 
+/* Heading Style */
 h2 {
     text-align: left; /* Align heading text to the left */
     margin-bottom: 20px; /* Space below the heading */
 }
 
+/* Latest Product List - Grid Layout */
 .latest-product-list {
-    display: grid; /* Use CSS Grid instead of Flexbox */
-    grid-template-columns: repeat(5, 1fr); /* Create 4 equal-width columns */
+    display: grid; /* Use CSS Grid for responsive grid layout */
+    grid-template-columns: repeat(5, 1fr); /* Default: 5 equal-width columns */
     gap: 20px; /* Space between grid items */
     padding: 10px 0; /* Vertical padding */
     min-width: 0;
     max-width: 100%;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
+/* Latest Product Item Styling */
 .latest-product-item {
     background-color: #f0f9fa; /* Light gray-blue background */
     border-radius: 15px; /* Rounded corners */
     padding: 15px; /* Inner spacing */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
     text-align: center; /* Center text inside each product */
-    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover transitions */
-    display: flex; /* Use flexbox inside product item */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover transition */
+    display: flex; /* Use flexbox inside each product item */
     flex-direction: column; /* Arrange content vertically */
     justify-content: space-between; /* Space content evenly vertically */
-     min-width: 0;  /* Wichtig: erlaubt dem Element zu schrumpfen */
+    min-width: 0;  /* Prevent shrinking */
     max-width: 100%;
-    text-decoration: none;
+    text-decoration: none; /* Remove text decoration */
 }
 
-.product-item:hover {
+/* Hover effects for product item */
+.latest-product-item:hover {
     transform: translateY(-5px); /* Slightly lift the product on hover */
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
 }
 
+/* Product image style */
 .latest-product-image {
     width: 100%; /* Image fills the width of container */
     height: 300px; /* Fixed image height */
@@ -45,25 +51,89 @@ h2 {
     margin-bottom: 15px; /* Space below the image */
 }
 
+/* Product title style */
 .latest-product-item h3 {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;  
-  min-width: 0;  
-  color: #444;
-  text-decoration: none;
-  font-size: 14px;
-  margin-bottom: 5px;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflowed text */
+    text-overflow: ellipsis; /* Add ellipsis for long titles */
+    width: 100%;
+    min-width: 0; /* Allow item to shrink */
+    color: #444; /* Dark text for better readability */
+    text-decoration: none; /* Remove text decoration */
+    font-size: 14px; /* Font size for product title */
+    margin-bottom: 5px; /* Space below the title */
 }
 
+/* Product description or price style */
 .product-item p {
-    font-size: 16px; /* Font size for product description or price */
-    color: #444; /* Darker text color for better readability */
+    font-size: 16px; /* Font size for description/price */
+    color: #444; /* Darker text for readability */
 }
 
+/* Product size information style */
 .product-sizes {
-  font-size: 13px;
-  color: #666;
-  margin-top: 3px;
+    font-size: 13px;
+    color: #666; /* Lighter text color */
+    margin-top: 3px; /* Space above the product sizes */
+}
+
+/* Media Queries for Responsiveness */
+
+/* Tablet layout - 2 columns */
+@media (max-width: 1024px) {
+    .latest-product-list {
+        grid-template-columns: repeat(3, 1fr); /* 3 equal-width columns */
+    }
+
+    .latest-product-item {
+        width: 100%; /* Ensure product items take full width */
+    }
+}
+
+/* Mobile layout - 1 column */
+@media (max-width: 768px) {
+    .latest-product-list {
+        grid-template-columns: 1fr; /* 1 column */
+        padding: 10px 5px; /* Less padding on small screens */
+    }
+
+    .latest-product-item {
+        width: 100%; /* Ensure product items take full width */
+    }
+
+    .latest-product-image {
+        height: 200px; /* Smaller image height for mobile */
+    }
+
+    .latest-product-item h3 {
+        font-size: 16px; /* Larger font for better mobile readability */
+    }
+
+    .product-item p {
+        font-size: 14px; /* Adjust font size for mobile */
+    }
+}
+
+/* Extra small devices (Portrait mobile) */
+@media (max-width: 480px) {
+    .latest-product-list {
+        grid-template-columns: 1fr; /* Stack items in 1 column */
+        gap: 15px; /* Adjust gap */
+    }
+
+    .latest-product-item {
+        padding: 10px; /* Reduce padding for smaller screens */
+    }
+
+    .latest-product-image {
+        height: 150px; /* Even smaller image height */
+    }
+
+    .latest-product-item h3 {
+        font-size: 14px; /* Slightly smaller font size for mobile */
+    }
+
+    .product-item p {
+        font-size: 12px; /* Smaller font size for description/price */
+    }
 }

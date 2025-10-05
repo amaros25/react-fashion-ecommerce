@@ -1,19 +1,24 @@
+/* General container padding */
 .container {
     padding: 20px; /* Add space inside the container */
 }
 
+/* Header style */
 h2 {
     text-align: left; /* Align heading text to the left */
     margin-bottom: 20px; /* Space below the heading */
 }
 
+/* Product list container with horizontal scrolling support */
 .product-list {
     display: flex; /* Use flexbox for horizontal layout */
     overflow-x: auto; /* Enable horizontal scrolling if needed */
     padding: 10px 0; /* Vertical padding above and below the list */
     gap: 20px; /* Space between each product item */
+    scroll-snap-type: x mandatory; /* Ensure smooth snapping of items */
 }
 
+/* Individual product item styling */
 .product-item {
     background-color: #cde0c1; /* Light gray-green background */
     border-radius: 15px; /* Rounded corners */
@@ -24,13 +29,18 @@ h2 {
     display: flex; /* Use flexbox inside each product */
     flex-direction: column; /* Arrange content vertically */
     justify-content: space-between; /* Space content evenly vertically */
+    flex-shrink: 0; /* Prevent shrinking of items */
+    width: 250px; /* Default width of product item */
+    scroll-snap-align: start; /* Snap to start for each product */
 }
 
+/* Hover effects for product item */
 .product-item:hover {
     transform: translateY(-5px); /* Lift product slightly on hover */
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
 }
 
+/* Product image styling */
 .product-image {
     width: 100%; /* Full width of container */
     height: 200px; /* Fixed image height */
@@ -39,13 +49,65 @@ h2 {
     margin-bottom: 15px; /* Space below the image */
 }
 
+/* Product title styling */
 .product-item h3 {
     font-size: 18px; /* Font size for product title */
     font-weight: bold; /* Make title bold */
     margin-bottom: 10px; /* Space below the title */
 }
 
+/* Product description or price styling */
 .product-item p {
     font-size: 16px; /* Font size for product description or price */
     color: #444; /* Darker text color for better readability */
+}
+
+/* Media Queries: Mobile-first design */
+@media (max-width: 768px) {
+    /* Adjust product-list layout to a single column on small screens */
+    .product-list {
+        flex-direction: column; /* Stack product items vertically on smaller screens */
+        gap: 15px; /* Smaller gap between items */
+        overflow-x: hidden; /* Disable horizontal scrolling */
+    }
+
+    /* Adjust product item width for smaller screens */
+    .product-item {
+        width: 100%; /* Product items take full width on mobile */
+    }
+
+    /* Adjust image size on smaller screens */
+    .product-image {
+        height: 150px; /* Smaller image size on mobile */
+    }
+
+    /* Adjust font size for product title and description on small screens */
+    .product-item h3 {
+        font-size: 16px; /* Smaller title font size */
+    }
+
+    .product-item p {
+        font-size: 14px; /* Smaller description/price font size */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Further adjust product item padding on very small screens */
+    .product-item {
+        padding: 10px; /* Reduce padding for smaller devices */
+    }
+
+    /* Further reduce image height on very small screens */
+    .product-image {
+        height: 120px; /* Even smaller image size */
+    }
+
+    /* Adjust title and description sizes for very small screens */
+    .product-item h3 {
+        font-size: 14px; /* Even smaller title font size */
+    }
+
+    .product-item p {
+        font-size: 12px; /* Even smaller description/price font size */
+    }
 }
