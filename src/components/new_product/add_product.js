@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./add_product.css";
 import ImageSelectUpload from './image_select_upload.js';
-
+ 
 function AddProduct() {
   const apiUrl = process.env.REACT_APP_API_URL;
+  const cloudName = process.env.REACT_APP_CLOUD_NAME;
+  const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
+  const imageUrls = []; 
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
@@ -62,28 +65,26 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("🟡 Uploading images...");
 
     try {
-      const uploadData = new FormData();
-      imageFiles.forEach(file => {
-        uploadData.append('images', file);
-      });
+        console.log("🟡apiUrl", apiUrl);
+      console.log("🟡 cloudName:", cloudName);
+      console.log("🟡 uploadPreset:", uploadPreset);
+      for (const file of imageFiles) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", uploadPreset);
 
-      const uploadRes = await fetch(`${apiUrl}/upload`, {
-        method: 'POST',
-        body: uploadData,
-      });
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+          method: "POST",
+          body: formData,
+        });
 
-      if (!uploadRes.ok) {
-        const errText = await uploadRes.text();
-        throw new Error('Image upload failed: ' + errText);
+        if (!res.ok) throw new Error("Image upload failed");
+
+        const data = await res.json();
+        imageUrls.push(data.secure_url);
       }
-
-      const uploadJson = await uploadRes.json();
-      const imageUrls = uploadJson.urls;
-      console.log("🟢 Uploaded images:", imageUrls);
-
       const productData = {
         ...formData,
         sellerId: userId,
@@ -106,6 +107,9 @@ function AddProduct() {
       alert("Error: " + err.message);
     }
   };
+
+ 
+
 
   return (
     <div className="add-product-container">
