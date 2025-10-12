@@ -1,8 +1,6 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
+import React, {useEffect, useState, useContext } from 'react';
 import './home.css';
-import '../products/product_list.css';
 import '../products/new_product_list.css';
-
 import TopBannerSlider from '../top_banner_slider/top_banner_slider';
 import { Header } from '../header/header';
 import Foot from '../foot/foot';
@@ -20,7 +18,7 @@ function Home() {
     setSelectedCategory,
     searchTerm,
     setSearchTerm
-  } = useContext(FilterContext); // ✅ Context benutzen
+  } = useContext(FilterContext);
 
   const { t, i18n } = useTranslation();
 
@@ -29,7 +27,6 @@ function Home() {
   const [totalPages, setTotalPages] = useState(1);
   const [productsCounter, setTotalProductsCounter] = useState(1);
 
-  // Produkte filtern
   const filteredProducts = selectedCategory
     ? latestProducts.filter(p => p.category === selectedCategory)
     : latestProducts;
@@ -71,7 +68,7 @@ function Home() {
   return (
     <div className="main-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <Header />
-
+  
       {searchTerm === "" && selectedCategory === "" && <TopBannerSlider />}
 
       <div className="latest-product-list">
@@ -103,7 +100,9 @@ function Home() {
       />
 
       <Foot/>
+   
     </div>
+
   );
 }
 
