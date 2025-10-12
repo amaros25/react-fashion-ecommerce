@@ -7,7 +7,6 @@ import Foot from '../foot/foot';
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Pagination from './pagination.js';
-
 import { FilterContext } from '../filter_context/filter_context';
 
 function Home() {

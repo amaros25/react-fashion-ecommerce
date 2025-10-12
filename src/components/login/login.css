@@ -5,14 +5,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff; /* White background */
-  height: 100vh; /* Full viewport height */
 }
 
 /* Login form styling */
 .login-form {
   background-color: rgb(241, 240, 240); /* Light gray background */
-  padding: 30px;
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1); /* Slight shadow */
   width: 100%; /* Make it responsive */
@@ -81,68 +79,61 @@
   text-decoration: underline;
 }
 
-/* MOBILE FIRST STYLES */
 
-/* For screens smaller than 768px (e.g., mobile phones) */
-@media (max-width: 768px) {
-  .login-form {
-    padding: 15px; /* Less padding on mobile */
-    margin: 0 10px; /* Add margin for better spacing */
-  }
+/* ---------- Responsive Design ---------- */
 
-  .login-form h2 {
-    font-size: 1.5rem; /* Smaller title */
-  }
-
-  .login-form input, .login-form button {
-    padding: 10px; /* Larger buttons and inputs */
-    font-size: 1rem; /* Larger font size for readability */
-  }
-
-  .login-form button {
-    margin-top: 15px; /* Reduced space between button and inputs */
-  }
-
-  .register-link {
-    font-size: 0.85rem; /* Smaller font for the registration link */
-  }
-}
-
-/* For screens smaller than 480px (e.g., very small phones) */
+/* Very small phones */
 @media (max-width: 480px) {
   .login-form {
-    max-width: 100%; /* Full width on very small screens */
-    padding: 10px; /* Further reduced padding */
+    padding: 15px;
+    font-size: 0.9rem;
   }
 
   .login-form h2 {
-    font-size: 1.2rem; /* Adjust title size */
+    font-size: 1.3rem;
   }
 
-  .login-form input, .login-form button {
-    padding: 12px; /* Larger input/button areas */
-    font-size: 1.1rem; /* Adjust font size for better legibility */
+  .login-form input,
+  .login-form button {
+    padding: 12px;
+    font-size: 1rem;
   }
 
   .register-link {
-    font-size: 0.8rem; /* Even smaller font size for the registration link */
+    font-size: 0.8rem;
   }
 }
 
-/* DESKTOP STYLES */
-
-/* For screens larger than 768px (tablets and desktops) */
-@media (min-width: 768px) {
+/* Tablets & small desktops */
+@media (min-width: 481px) and (max-width: 768px) {
   .login-form {
-    max-width: 450px; /* A bit larger max-width for tablets and desktop screens */
-    padding: 30px; /* Standard padding */
+    padding: 25px;
+    max-width: 380px;
   }
 
   .login-form h2 {
-    font-size: 1.8rem; /* Larger title for larger screens */
+    font-size: 1.6rem;
   }
 
-  .login-form input, .login-form button {
-    font-size: 1.1rem; /* Larger font size for desktop */
+  .login-form input,
+  .login-form button {
+    font-size: 1rem;
+  }
+}
+
+/* Larger screens */
+@media (min-width: 769px) {
+  .login-form {
+    padding: 30px;
+    max-width: 450px;
+  }
+
+  .login-form h2 {
+    font-size: 1.8rem;
+  }
+
+  .login-form input,
+  .login-form button {
+    font-size: 1.1rem;
   }
 }

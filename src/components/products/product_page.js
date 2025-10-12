@@ -132,7 +132,7 @@ function ProductPage() {
 
   return (
     <div className="product-page">
-      <Header />
+      <Header /> 
       {/* Links: Produktbilder */}
       <div className="product-images">
         <img src={mainImage} alt={product.name} className="main-image"  loading="lazy" />

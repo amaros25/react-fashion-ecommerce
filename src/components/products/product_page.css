@@ -1,26 +1,24 @@
-/* Produktseite Layout */
 .product-page {
-  max-width: 1200px; /* Maximale Breite für den Container */
-  margin: 0 auto; /* Horizontales Zentrieren */
-  padding: 40px 20px; /* Innenabstand */
-  display: flex; /* Flexbox-Layout für Produktbilder und Informationen */
-  flex-wrap: wrap; /* Ermöglicht das Umfließen der Boxen auf kleineren Bildschirmen */
-  justify-content: center; /* Zentriert den Inhalt */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   background-color: #f8f8f8;
   border-radius: 15px;
 }
 
-/* Produktbilder */
 .product-images {
-  flex: 1 1 50%; /* Bildbereich nimmt 50% der Breite ein */
+  flex: 1 1 40%;
 }
 
 .main-image {
-width: 100%;
-height: auto;
-border-radius: 15px;
-margin-bottom: 15px;
-margin-top: 20px;
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  margin-top: 20px;
 }
 
 .thumbnail-row {
@@ -44,17 +42,15 @@ margin-top: 20px;
   border: 2px solid #f1356d;
 }
 
-/* Produktinformationen */
 .product-info {
-  flex: 1 1 50%; /* Der Textbereich nimmt auch 50% der Breite ein */
+  flex: 1 1 50%;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-left: 10px;
+  padding : 0px 30px;
   margin-top: 10px;
 }
 
-/* Produktname und Beschreibung */
 .product-info h1 {
   font-size: 28px;
   margin-bottom: 20px;
@@ -65,7 +61,6 @@ margin-top: 20px;
   line-height: 1.6;
 }
 
-/* Verkäufer-Info */
 .seller-info {
   background-color: #fff;
   padding: 20px;
@@ -111,7 +106,6 @@ margin-top: 20px;
   font-size: 18px;
 }
 
-/* Buy Box */
 .product-buy-box {
   background-color: #fff;
   padding: 20px;
@@ -148,18 +142,26 @@ margin-top: 20px;
   background-color: #d12e5a;
 }
 
-/* Responsiv für kleinere Bildschirme */
 @media (max-width: 992px) {
   .product-page {
-    flex-direction: column; /* Auf mobilen Geräten wird alles untereinander angezeigt */
+    flex-direction: column;
+    padding: 0px 10px;
+  }
+ 
+  .product-images {
+    flex: 1 1 100%;
   }
 
-  .product-info,
-  .product-images {
-    flex: 1 1 100%; /* Beide nehmen 100% der Breite ein */
-  }
-  
+  .product-info {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding : 0px 5px;
+  margin-top: 10px;
+}
+
   .product-buy-box {
-    width: 100%; /* Box wird 100% der Breite auf mobilen Geräten */
+    width: 100%;
   }
 }
