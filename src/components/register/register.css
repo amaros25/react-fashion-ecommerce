@@ -3,6 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 80vh;
+  background-color: #f7f7f7;
 }
 
 .register-form {
@@ -15,13 +16,11 @@
   box-sizing: border-box;
 }
 
-/* Überschrift */
 .register-form h2 {
   text-align: center;
   margin-bottom: 20px;
 }
 
-/* Labels und Inputs */
 .register-form label {
   display: block;
   margin-top: 15px;
@@ -39,12 +38,10 @@
   box-sizing: border-box;
 }
 
-/* Gruppen für Seller oder Shoper optional */
 .input-group {
   margin-bottom: 10px;
 }
 
-/* Button */
 .register-form button {
   width: 100%;
   padding: 12px;
@@ -61,14 +58,12 @@
   background-color: #005fa3;
 }
 
-/* Fehleranzeige */
 .error {
   color: red;
   margin-top: 10px;
   text-align: center;
 }
 
-/* Link zur Login-Seite */
 .login-link {
   text-align: center;
   margin-top: 15px;
@@ -82,4 +77,44 @@
 
 .login-link a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .register-form {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .register-form h2 {
+    font-size: 1.3rem;
+    margin-bottom: 15px; 
+  }
+
+  .register-form label {
+    margin-top: 10px; 
+  }
+
+  .register-form input,
+  .register-form select {
+    padding: 8px; 
+    font-size: 0.9rem;
+    margin-top: 4px;  
+  }
+  .login-link {
+    font-size: 0.8rem;
+  }
+
+  .register-form button {
+    margin-top: 15px;  
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+  .login-link {
+    margin-top: 10px;
+    font-size: 0.8rem;
+  }
+  .error {
+    margin-top: 8px;
+    font-size: 0.85rem;
+  }
 }

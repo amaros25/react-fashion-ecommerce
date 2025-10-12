@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const uri = process.env.MONGO_URI;
 
-console.log("=============> MONGO_URI:", uri); // Überprüfe, ob es korrekt geladen wird
+console.log("=============> MONGO_URI:", uri);
 
 const connectDB = async () => {
   try {

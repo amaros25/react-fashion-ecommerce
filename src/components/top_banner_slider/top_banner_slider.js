@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'; // Import React and hooks: useRef, useEffect, useState
+import { useMemo } from 'react';
 
 import './top_banner_slider.css'; // Import CSS for styling this component
 import TopSection from '../top_section/top_section'; // Import TopSection component (e.g., for offers, bestsellers)
@@ -20,8 +21,8 @@ function TopBannerSlider() {
     ];
 
     // Extract offers and bestOrders arrays safely from fetched sections (or default to empty arrays)
-    const offers = sections?.offers || [];
-    const bestOrders = sections?.bestOrders || [];
+    const offers = useMemo(() => sections?.offers || [], [sections]);
+    const bestOrders = useMemo(() => sections?.bestOrders || [], [sections]);
     const [offersToShow, setOffersToShow] = useState([]);
     const [bestOrdersToShow, setBestOrdersToShow] = useState([]);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth); // Track screen width
