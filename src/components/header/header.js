@@ -84,26 +84,16 @@ function Header() {
 
   return (
     <div className="header">
+
+    <div className="header">
       <nav className="navbar">
         <h1 className="logo">
-          <Link to="/" style={{ textDecoration: "none", color: "inherit", fontSize: 40 }}>
+          <Link to="/"  >
             {t("myshop")}
           </Link>
         </h1>
-
-        <form onSubmit={handleSearchSubmit} className="search-form">
-          <input
-            type="text"
-            placeholder={t("search_product")}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button type="submit">{t("search")}</button>
-        </form>
-
         <div className="links">
           <Link to="/">{t("home")}</Link>
-
           {isLoggedIn ? (
             <span onClick={handleProfileClick} className="profile-link">
               {t("profile")}
@@ -113,15 +103,12 @@ function Header() {
               {t("login")}
             </span>
           )}
-
           {isLoggedIn && (
             <span onClick={handleLogout} className="logout-link">
               {t("logout")}
             </span>
           )}
-
           <button onClick={handleHelpClick} className="help-link">?</button>
-
           <select
             onChange={(e) => changeLanguage(e.target.value)}
             value={i18n.language}
@@ -132,32 +119,35 @@ function Header() {
           </select>
         </div>
       </nav>
+      <form onSubmit={handleSearchSubmit} className="search-form">
+          <input
+            type="text"
+            placeholder={t("search_product")}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button type="submit">{t("search")}</button>
+        </form>
 
       <nav className="horizontal-nav">
         <button className="scroll-arrow left" onClick={() => scroll('left')}>‹</button>
-
         <ul className="nav-scroll-list" ref={scrollRef}>
           <li
             className={`nav-item ${selectedCategory === "" ? "active" : ""}`}
-            onClick={() => handleCategoryClick("")}
-          >
+            onClick={() => handleCategoryClick("")}>
             {t("home")}
           </li>
-
           {categoryKeys.map((key, index) => (
             <li
               key={index}
               className={`nav-item ${selectedCategory === key ? "active" : ""}`}
-              onClick={() => handleCategoryClick(key)}
-            >
+              onClick={() => handleCategoryClick(key)}>
               {t(`categories.${key}`)}
             </li>
           ))}
         </ul>
-
         <button className="scroll-arrow right" onClick={() => scroll('right')}>›</button>
       </nav>
-
       {showLoginPopup && (
         <div className="login-popup-overlay" onClick={() => setShowLoginPopup(false)}>
           <div className="login-popup-content" onClick={(e) => e.stopPropagation()}>
@@ -176,7 +166,7 @@ function Header() {
         </div>
       )}
     </div>
+    </div>
   );
 }
-
 export { Header };

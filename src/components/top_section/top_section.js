@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from "react-router-dom";
 import '../top_section/top_section.css';
 
 function TopSection({ title, products }) {
+  const productGridRef = useRef(null);
+  const isRTL = document.documentElement.dir === 'rtl';
+  useEffect(() => {
+    if (productGridRef.current) {
+      productGridRef.current.scrollLeft = 0;
+    }
+  }, [products]);
+
+  useEffect(() => {
+    if (productGridRef.current) {
+      if (isRTL) {
+        productGridRef.current.scrollLeft = productGridRef.current.scrollWidth;
+      } else {
+        productGridRef.current.scrollLeft = 0;
+      }
+    }
+  }, [products, isRTL]);
+
+
   return (
     <div className="section-box">
       <h3 className="section-title">{title}</h3>
-      <div className="section-product-grid">
+     <div className="section-product-grid" ref={productGridRef} dir={isRTL  ? "rtl" : "ltr"}>
         {products.map((product) => (
         <Link 
         key={product._id} 

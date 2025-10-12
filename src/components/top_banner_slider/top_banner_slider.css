@@ -69,63 +69,32 @@
   margin-bottom: 0px;
 }
 
-/* Mobile-First Design: Adjustments for mobile screens */
+/* For mobile devices */
 @media (max-width: 768px) {
-  /* Adjust banner slider height for mobile */
-  .banner-slider {
-    height: 200px;  /* Smaller height on mobile */
-  }
-
-  /* Adjust section grid to a single column on mobile */
   .section-grid {
-    grid-template-columns: 1fr;  /* 1 column layout */
-    margin-top: 0;               /* Remove overlap with banner */
+    margin-top: -80px;         /* Move grid up to overlap banner by 40px */
+    grid-template-columns: 1fr; /* Single column for mobile */
+    gap: 10px;                 /* Space between grid items */
+    display: grid;             /* Use CSS Grid layout */
   }
-
-  /* Adjust arrow button sizes for smaller screens */
-  .arrow {
-    font-size: 1.5rem;           /* Smaller arrow size */
-    padding: 8px;                /* Reduce padding */
-  }
-
-  /* Adjust section title font size for mobile */
-  .section-title {
-    font-size: 1.2rem;           /* Smaller font size for mobile */
-  }
-
-  /* Ensure banner image covers smaller screens properly */
-  .banner-image {
-    object-fit: cover; /* Ensures image scales correctly */
-    border-radius: 15px; /* Slightly less rounding on mobile for fit */
+  .best-orders {
+    display: none; /* Hide Best Orders section on mobile */
   }
 }
 
-/* Very small screens (e.g., under 480px) */
-@media (max-width: 480px) {
-  /* Further adjust banner image for small screens */
-  .banner-image {
-    border-radius: 10px; /* Even smaller border radius for tiny screens */
-  }
+.section-product-grid {
+  width: 100%;
+  max-width: 95vw; /* ← neu: Begrenze auf Viewport-Breite */
+  box-sizing: border-box;
+}
 
-  /* Further reduce font size of section title */
-  .section-title {
-    font-size: 1rem;  /* Smaller font size */
-  }
-
-  /* Adjust banner height for very small screens */
-  .banner-slider {
-    height: 150px; /* Even smaller height */
-  }
-
-  /* Adjust the section grid layout for very small screens */
+/* For larger screens (PC, tablets in landscape, etc.) */
+@media (min-width: 769px) {
   .section-grid {
-    grid-template-columns: 1fr; /* 1 column for very small screens */
-    gap: 15px;                  /* Slightly smaller gap */
+    grid-template-columns: repeat(2, 1fr); /* Show 2 columns on large screens */
   }
 
-  /* Ensure arrows remain functional on small screens */
-  .arrow {
-    font-size: 1.25rem;    /* Reduce arrow size further */
-    padding: 6px;          /* Further reduce padding */
+  .best-orders {
+    display: block; /* Ensure Best Orders is visible on large screens */
   }
 }

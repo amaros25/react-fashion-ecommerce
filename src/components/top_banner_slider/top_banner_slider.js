@@ -22,6 +22,9 @@ function TopBannerSlider() {
     // Extract offers and bestOrders arrays safely from fetched sections (or default to empty arrays)
     const offers = sections?.offers || [];
     const bestOrders = sections?.bestOrders || [];
+    const [offersToShow, setOffersToShow] = useState([]);
+    const [bestOrdersToShow, setBestOrdersToShow] = useState([]);
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth); // Track screen width
 
     // useEffect to fetch sections data once on component mount
     useEffect(() => {
@@ -41,6 +44,31 @@ function TopBannerSlider() {
         setCurrent((current + 1) % banners.length);
     };
 
+    
+    // Update screen width when window is resized
+    useEffect(() => {
+        const handleResize = () => setScreenWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [])
+
+    // Function to select 3 random items from a given array
+    const getRandomItems = (array, numItems) => {
+        const shuffled = [...array].sort(() => 0.5 - Math.random()); // Shuffle the array
+        return shuffled.slice(0, numItems); // Return the first 'numItems' items
+    };
+
+    // Select random items based on screen size (only for mobile/tablet)
+    useEffect(() => {
+        if (screenWidth <= 768) {  // For mobile or tablet
+            setOffersToShow(getRandomItems(offers, 6)); // Select 3 random offers
+            setBestOrdersToShow(getRandomItems(bestOrders, 6)); // Select 3 random best orders
+        } else {
+            setOffersToShow(offers); // Show all offers on larger screens
+            setBestOrdersToShow(bestOrders); // Show all best orders on larger screens
+        }
+    }, [screenWidth, offers, bestOrders]); // Re-run when screen width or offers change
+
     return (
     <div className="banner-wrapper"> {/* Wrapper div for the whole banner and sections */}
         <div className="banner-slider"> {/* Banner slider container */}
@@ -51,9 +79,11 @@ function TopBannerSlider() {
 
         {/* Section grid containing best offers and best orders */}
         <div className="section-grid">
-            <TopSection title={t("categoryBanner.bestOffers")} products={offers} /> {/* Best Offers section */}
-            <TopSection title={t("categoryBanner.bestOrders")} products={bestOrders} /> {/* Best Orders section */}
-        </div>
+         
+            <TopSection title={t("categoryBanner.bestOffers")} products={offersToShow} /> {/* Best Offers section */}
+            <TopSection title={t("categoryBanner.bestOrders")} products={bestOrdersToShow} className="best-orders" /> {/* Best Orders section */}
+
+         </div>
     </div>
     );
 }
