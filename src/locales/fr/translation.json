@@ -65,5 +65,66 @@
       "registrationFailed": "Échec de l'inscription"
     }   
   },
-   "sizes": "Tailles"
+   "sizes": "Tailles",
+  "product_page": {
+    "rating": "Note",
+    "size": "Taille",
+    "color": "Couleur",
+    "quantity": "Quantité",
+    "select_size": "Sélectionnez une taille",
+    "select_color": "Sélectionnez une couleur",
+    "variant_out_of_stock": "Cette variante est en rupture de stock.",
+    "order_now": "Commander maintenant",
+    "enter_shipping_address": "Entrez l'adresse de livraison",
+    "street": "Rue",
+    "city": "Ville",
+    "postal_code": "Code postal",
+    "country": "Pays",
+    "placing_order": "Commande en cours...",
+    "submit_order": "Valider la commande",
+    "cancel": "Annuler",
+    "order_success": "Commande passée avec succès !",
+    "order_error": "Erreur lors de la commande.",
+ 
+    "select_size_first": "Veuillez d'abord choisir une taille.",
+    "order_create_error": "La commande n'a pas pu être créée.",
+    "select_size_alert": "Veuillez sélectionner une taille et une couleur avant d’ajouter au panier.",
+    "must_login": "Vous devez être connecté pour ajouter des produits au panier.",
+    "invalid_selection": "Sélection invalide. Veuillez choisir une taille et une couleur valides.",
+    "exceeds_stock": "La quantité dépasse le stock disponible.",
+    "available": "disponible",
+    "cart_updated": "Panier mis à jour avec succès.",
+    "added_to_cart": "Produit ajouté au panier."
+  },
+   "cart_page": {
+    "title": "Votre panier",
+    "empty_cart": "Votre panier est vide.",
+    "shipping_cost_once": "Frais de livraison (une seule fois) :",
+    "seller_subtotal": "Sous-total (frais de livraison inclus)",
+    "total_price": "Prix total :",
+    "gps_denied": "Accès GPS refusé",
+    "geolocation_unsupported": "La géolocalisation n'est pas prise en charge par votre navigateur",
+    "current_position": "Votre position actuelle",
+    "use_my_position": "Utiliser ma position",
+    "confirm_position": "Confirmer",
+    "cancel_position": "Annuler",
+    "price_suf": "DT"
+  },
+ 
+  "phone": "Téléphone",
+  "address": "Adresse",
+  "total_orders": "Commandes totales",
+  "open_orders": "Commandes ouvertes",
+    "loading_profile": "Chargement du profil",
+  "your_orders": "Vos commandes",
+  "no_orders_yet": "Vous n'avez pas encore de commandes.",
+  "order_id": "ID de commande",
+  "loading_product": "Chargement du produit...",
+  "size": "Taille",
+  "color": "Couleur",
+  "quantity": "Quantité",
+  "price": "Prix",
+  "status": "Statut",
+  "pending": "En attente"
+ 
 }

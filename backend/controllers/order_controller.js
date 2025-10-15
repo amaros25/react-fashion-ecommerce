@@ -29,17 +29,21 @@ exports.getOrderBySellerID = async (req, res) => {
 };
 
 // Return Orders by UserID
-exports.getOrderByUserID = async (req, res) => {
-  try {
-    const orders = await Order.find({ sellerId: req.params.userId });
-    if (orders.length === 0) {
-      return res.status(404).json({ message: 'No orders found for this user' });
+  exports.getOrderByUserID = async (req, res) => {
+    try {
+      const userId = req.params.id; // Korrekt, weil Route /user/:id
+      const orders = await Order.find({ userId });
+      console.log("🟢 orders: ", orders);
+
+      if (orders.length === 0) {
+        return res.status(404).json({ message: 'No orders found for this user' });
+      }
+
+      res.json(orders);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching orders', error });
     }
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching orders', error });
-  }
-};
+  };
 
 // Add a new Order
 exports.createOrder = async(req, res) => {

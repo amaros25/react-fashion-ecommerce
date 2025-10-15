@@ -227,6 +227,14 @@ body[dir="ltr"] .search-form input {
 
 @media (max-width: 768px) {
 
+.nav-icon {
+  width: 24px;      /* oder z.B. 20px, je nachdem wie klein du es willst */
+  height: 24px;     /* gleiche Höhe wie Breite */
+  object-fit: contain; /* damit das Bild nicht gestreckt wird */
+  cursor: pointer;
+  margin-right: 10px; /* optional, falls Abstand gewünscht ist */
+}
+
 .header {
   max-width: 100% !important;
   margin: 0 !important;

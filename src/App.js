@@ -7,8 +7,10 @@ import ProfileUser from "./components/profile_user/profile_user";
 import ProfileSeller from "./components/profile_seller/profile_seller";
 import SellerOrders  from "./components/seller_order/seller_order";
 import AddProduct from './components/new_product/add_product.js';
+import CartPage from './components/cart/cart_page.js';
 import { FilterProvider } from './components/filter_context/filter_context.js';
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./i18n"; 
 //import Homepage from "./components/learn_react/home.js";
 function App() {
@@ -25,8 +27,11 @@ function App() {
           <Route path="/profile_user" element={<ProfileUser />} />
           <Route path="/add_product" element={<AddProduct />} />
           <Route path="/seller_orders" element={<SellerOrders />} />
+          <Route path="/cart_page" element={<CartPage/>} />
         </Routes>
       </Router>
+      <ToastContainer position="top-center" autoClose={3000} theme="colored" />
+
     </FilterProvider>
   );
 }

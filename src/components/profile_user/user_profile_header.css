@@ -1,0 +1,115 @@
+.profile-header-container {
+  display: flex;
+  flex-direction: column; /* mobil zuerst */
+  align-items: center;
+  gap: 10px; /* weniger Abstand für Handy */
+  padding: 15px;
+  margin-bottom: 20px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Avatar + Name */
+.profile-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.default-avatar-icon {
+  width: 100px;
+  height: 100px;
+  color: #bbb;
+}
+
+.profile-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Email/Telefon/Adresse */
+.profile-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* linksbündig */
+  gap: 5px;
+  width: 100%;
+  max-width: 400px; /* optional für Desktop */
+}
+
+/* Container für drei Cards */
+.profile-cards-container {
+  display: flex;
+  flex-direction: column; /* mobil: untereinander */
+  gap: 10px; /* weniger Abstand für Handy */
+  width: 100%;
+  margin-top: 0px; /* statt 20px */
+}
+
+/* Jede Card */
+.profile-card {
+  background: #fff;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: center;
+}
+
+/* Überschriften und Text in Card */
+.profile-card h4 {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.profile-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.3;
+}
+
+/* Desktop Version: nebeneinander */
+@media(min-width: 768px) {
+  .profile-header-container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .profile-left {
+    align-items: center;
+  }
+
+  .profile-right {
+    margin-left: 40px;
+  }
+
+  .profile-cards-container {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .profile-card {
+    flex: 1;
+  }
+}
