@@ -357,7 +357,7 @@ const CartPage = () => {
                 className="change-address-btn"
                 onClick={() => setShowAddressForm(true)}
               >
-                {t("Change")}
+                {t("cart_page.Change")}
               </button>
             </div>
           )}
@@ -376,7 +376,7 @@ const CartPage = () => {
           disabled={!canOrder && !user?.address?.street} // disabled until address saved or exists
           onClick={() => handle_new_order()} // your order handler
         >
-          Bestellen
+          {t("cart_page.submit_order")}
         </button>
 
         </div>
