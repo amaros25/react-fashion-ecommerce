@@ -4,11 +4,12 @@ import { useParams } from "react-router-dom";
 import "./product_page.css";
 import { Header } from '../header/header.js';
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function ProductPage() {
   const apiUrl = process.env.REACT_APP_API_URL;
   const { t, i18n } = useTranslation();
-
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [address, setAddress] = useState({
     street: "",
@@ -163,11 +164,11 @@ function ProductPage() {
   } else {
     // Neu hinzufügen
     cart.push(newItem);
-     toast.success(t("product_page.added_to_cart"));
-  }
+   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
-  alert(t("product_page.added_to_cart"));
+  toast.success(t("product_page.added_to_cart"));
+  navigate("/cart_page");
 };
 
 
@@ -293,7 +294,7 @@ function ProductPage() {
             </div>
           </div>
           <button className="buy-button" onClick={handleBuyClick}>
-             {t("product_page.order_now")}
+             {t("product_page.submit_order")}
           </button>
         </div>
       </div>
