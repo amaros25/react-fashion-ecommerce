@@ -1,11 +1,11 @@
 import React, {useEffect, useState, useContext } from 'react';
+import { useTranslation } from "react-i18next";
 import './home.css';
 import '../products/new_product_list.css';
 import TopBannerSlider from '../top_banner_slider/top_banner_slider';
 import { Header } from '../header/header';
 import Foot from '../foot/foot';
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import Pagination from './pagination.js';
 import { FilterContext } from '../filter_context/filter_context';
 

@@ -13,7 +13,8 @@ const productShema = new mongoose.Schema({
     sizes: [
         {
             size: { type: String, required: true }, // Like "M", "L", "34", "36"
-            stock: { type: Number, required: true, default: 0 }
+            stock: { type: Number, required: true, default: 0 },
+            color: { type: String, required: true }
         },
     ],
    // isDiscounted: {type: Boolean, default: false},

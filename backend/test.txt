@@ -1,0 +1,1 @@
+MONGO_URI_ = mongodb+srv://amaros:passWordDb@products.uobdbkb.mongodb.net/online_shop?retryWrites=true&w=majority&appName=products

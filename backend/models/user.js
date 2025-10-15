@@ -1,11 +1,16 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },   // Vorname
-  lastName: { type: String, required: true },    // Nachname
-  email: { type: String, required: true, unique: true }, // Email, eindeutig
-  password: { type: String, required: true },   // Passwort (gehasht speichern)
-  phone: { type: String }                        // Telefonnummer (optional oder Pflicht je nach Bedarf)
-}, { timestamps: true }); // automatisch createdAt, updatedAt
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  phone: { type: String },
+  address:{
+    street: {type: String},
+    postalCode: {type: Number},
+    city: {type: String}
+  }
+}, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

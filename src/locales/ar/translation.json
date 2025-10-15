@@ -65,5 +65,67 @@
       "registrationFailed": "فشل في التسجيل"
     }
   },
-    "sizes": "المقاسات"
+  "sizes": "المقاسات",
+  "product_page": {
+    "rating": "التقييم",
+    "size": "المقاس",
+    "color": "اللون",
+    "quantity": "الكمية",
+    "select_size": "اختر المقاس",
+    "select_color": "اختر اللون",
+    "variant_out_of_stock": "هذه النسخة غير متوفرة.",
+    "order_now": "اطلب الآن",
+    "enter_shipping_address": "أدخل عنوان الشحن",
+    "street": "الشارع",
+    "city": "المدينة",
+    "postal_code": "الرمز البريدي",
+    "country": "البلد",
+    "placing_order": "جاري تنفيذ الطلب...",
+    "submit_order": "إرسال الطلب",
+    "cancel": "إلغاء",
+    "order_success": "تم تقديم الطلب بنجاح!",
+    "order_error": "حدث خطأ أثناء تقديم الطلب.",
+    "select_size_first": "يرجى اختيار المقاس أولاً.",
+    "order_create_error": "تعذر إنشاء الطلب.",
+    "select_size_alert": "يرجى اختيار المقاس واللون قبل الإضافة إلى السلة.",
+    "must_login": "يجب تسجيل الدخول لإضافة المنتجات إلى السلة.",
+    "invalid_selection": "اختيار غير صالح. يرجى اختيار مقاس ولون صالحين.",
+    "exceeds_stock": "الكمية المطلوبة تتجاوز المخزون المتاح.",
+    "available": "متاح",
+    "cart_updated": "تم تحديث السلة بنجاح.",
+    "added_to_cart": "تمت إضافة المنتج إلى السلة."
+
+  },
+    "cart_page": {
+    "title": "سلة التسوق الخاصة بك",
+    "empty_cart": "سلة التسوق فارغة",
+    "shipping_cost_once": "تكلفة الشحن (مرة واحدة):",
+    "seller_subtotal": "المجموع الفرعي (شامل التوصيل)",
+    "total_price":  "السعر الإجمالي:",
+    "gps_denied": "تم رفض الوصول إلى GPS",
+    "geolocation_unsupported": "الموقع الجغرافي غير مدعوم في متصفحك",
+    "current_position": "موقعك الحالي",
+    "use_my_position": "استخدم موقعي",
+    "confirm_position": "تأكيد",
+    "cancel_position": "إلغاء",
+    "price_suf": "د"
+    
+  },
+ 
+  "phone": "الهاتف",
+  "address": "العنوان",
+  "total_orders": "إجمالي الطلبات",
+  "open_orders": "الطلبات المفتوحة",
+    "loading_profile": "جارٍ تحميل الملف الشخصي",
+  "your_orders": "طلباتك",
+  "no_orders_yet": "ليس لديك أي طلبات بعد.",
+  "order_id": "رقم الطلب",
+  "loading_product": "جارٍ تحميل المنتج...",
+  "size": "المقاس",
+  "color": "اللون",
+  "quantity": "الكمية",
+  "price": "السعر",
+  "status": "الحالة",
+  "pending": "قيد الانتظار"
+   
 }

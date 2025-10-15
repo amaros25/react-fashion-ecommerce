@@ -142,6 +142,30 @@
   background-color: #d12e5a;
 }
 
+.product-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.product-title {
+  font-size: 1.2rem;
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #c22929;
+  white-space: nowrap;
+  padding: 4px 20px;
+}
+
 @media (max-width: 992px) {
   .product-page {
     flex-direction: column;

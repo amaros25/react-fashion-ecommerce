@@ -93,23 +93,47 @@ function Header() {
           </Link>
         </h1>
         <div className="links">
-          <Link to="/">{t("home")}</Link>
+ 
+          <Link to="/">
+            <img src="/icons/home_icon.svg" style={{ width: "26px", height: "35px" }} />
+
+          </Link>
+
           {isLoggedIn ? (
-            <span onClick={handleProfileClick} className="profile-link">
-              {t("profile")}
-            </span>
+            <img src="/icons/profile_icon.svg"
+              style={{ width: "24px", height: "50px"}}  
+              className="nav-icon"
+              onClick={handleProfileClick}
+            />
           ) : (
-            <span onClick={handleProfileClick} className="login-link">
-              {t("login")}
-            </span>
+             <img src="/icons/login_icon.svg"
+              style={{ width: "24px", height: "24px" }} 
+              alt="Login"
+              className="nav-icon"
+              onClick={handleProfileClick}
+            />
           )}
           {isLoggedIn && (
-            <span onClick={handleLogout} className="logout-link">
-              {t("logout")}
-            </span>
+            <img src="/icons/logout_icon.svg"
+              style={{ width: "24px", height: "24px" }}  
+              className="nav-icon"
+              onClick={handleLogout}
+            />
           )}
-          <button onClick={handleHelpClick} className="help-link">?</button>
-          <select
+
+          <Link to="/cart_page">
+            <img src="/icons/empty_cart_icon.svg" style={{ width: "26px", height: "35px" }} />
+
+          </Link>
+
+  
+          <img src="/icons/help_icon.svg"
+            style={{ width: "24px", height: "24px" }}  
+            className="nav-icon"
+            onClick={handleHelpClick}
+          />
+
+           <select
             onChange={(e) => changeLanguage(e.target.value)}
             value={i18n.language}
             style={{ marginLeft: '15px', marginTop: '10px', cursor: 'pointer' }}
