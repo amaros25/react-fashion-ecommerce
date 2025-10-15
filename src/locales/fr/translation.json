@@ -108,7 +108,9 @@
     "use_my_position": "Utiliser ma position",
     "confirm_position": "Confirmer",
     "cancel_position": "Annuler",
-    "price_suf": "DT"
+    "price_suf": "DT",
+    "Change": "Modifier l’adresse"
+ 
   },
  
   "phone": "Téléphone",
