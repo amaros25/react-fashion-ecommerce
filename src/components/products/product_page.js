@@ -170,8 +170,6 @@ function ProductPage() {
   toast.success(t("product_page.added_to_cart"));
   navigate("/cart_page");
 };
-
-
   return (
     <div className="product-page">
       <Header /> 

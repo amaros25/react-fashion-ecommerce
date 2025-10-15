@@ -108,7 +108,8 @@
     "use_my_position": "استخدم موقعي",
     "confirm_position": "تأكيد",
     "cancel_position": "إلغاء",
-    "price_suf": "د"
+    "price_suf": "د",
+    "Change": "تغيير العنوان"
     
   },
  
@@ -116,7 +117,7 @@
   "address": "العنوان",
   "total_orders": "إجمالي الطلبات",
   "open_orders": "الطلبات المفتوحة",
-    "loading_profile": "جارٍ تحميل الملف الشخصي",
+  "loading_profile": "جارٍ تحميل الملف الشخصي",
   "your_orders": "طلباتك",
   "no_orders_yet": "ليس لديك أي طلبات بعد.",
   "order_id": "رقم الطلب",

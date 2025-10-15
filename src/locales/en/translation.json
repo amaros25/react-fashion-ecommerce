@@ -103,7 +103,8 @@
     "use_my_position": "Use my position",
     "confirm_position": "Confirm",
     "cancel_position": "Cancel",
-    "price_suf": "DT"
+    "price_suf": "DT",
+    "Change": "Change Address"
   },
   "email": "Email",
   "phone": "Phone",
