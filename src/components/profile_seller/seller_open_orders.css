@@ -1,0 +1,227 @@
+/* Container für alle Bestellungen */
+.order-container {
+  width: 100%;
+  max-width: 900px;
+  height: 500px;
+  overflow-y: auto;
+  border: 1px solid #f1f1f1ff;
+  border-radius: 8px;
+  padding: 10px;
+  margin: auto;
+  box-sizing: border-box;
+  position: relative;
+}
+/* Einzelne Bestellkarte */
+.order-card {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  border: 1px solid #f1f1f1;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Bestellnummer und Bestelldatum */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.order-header .order-number {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.order-header .order-date {
+  font-size: 14px;
+  color: #777;
+}
+
+/* Produkt und Benutzerbereich nebeneinander */
+.order-details {
+  display: flex;
+  justify-content: space-between;   /* Horizontaler Abstand zwischen Produkt und User-Info */
+  align-items: center;              /* Vertikale Zentrierung innerhalb des Containers */
+}
+
+/* Linke Seite: Produktdetails */
+.product-details {
+ 
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Vertikale Ausrichtung und Abstand */
+  align-content: center;
+}
+
+.product-details img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 15px;
+}
+
+.product-details .product-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+.product-details .product-info {
+  font-size: 14px;
+  color: #555;
+}
+
+.product-details .product-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Rechte Seite: Benutzerinfo */
+.user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertikal zentrieren */
+  align-items: flex-start; /* Links ausrichten */
+  padding-left: 20px;
+  gap: 10px;
+  /* Keine Änderung an Margin, da wir die Zentrierung durch Flexbox steuern */
+}
+
+.user-info .user-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.user-info .user-contact,
+.user-info .user-address {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Gesamtpreis */
+.total-price {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  border-top: 1px solid #f1f1f1;
+  padding-top: 10px;
+}
+
+.total-price .price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Status Dropdown, Update Button, Aktueller Status und Letztes Update */
+.status-update {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  gap: 20px;
+}
+
+.status-update .status-select {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  min-width: 150px;
+}
+
+.status-update .update-button {
+  padding: 6px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.status-update .status-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 14px;
+  color: #777;
+  flex: 1;
+  gap: 5px;
+}
+
+
+/* Container für jedes Produkt */
+/* Container für jedes Produkt */
+.product-item {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;  /* An den Anfang der Y-Achse ausrichten */
+  margin-bottom: 15px;  /* Abstände zwischen den Produkten */
+}
+
+
+/* Produktbild */
+.product-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Container für die Produktinformationen */
+.product-info-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Volle Breite nutzen */
+  gap: 8px; /* Abstand zwischen den einzelnen Details */
+  justify-content: flex-start; /* Zeilen untereinander ausrichten */
+  margin-left: 0; /* Sicherstellen, dass keine Verschiebung durch margin entsteht */
+}
+
+/* Produkttitel */
+.product-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px; /* Leichter Abstand zum Rest der Infos */
+}
+
+
+/* Allgemeine Produktinformationen (Farbe, Größe, Menge) */
+.product-info {
+  font-size: 14px;
+  color: #555;
+  margin: 0; /* Entfernt eventuell störende Margen */
+  padding: 0;
+}
+
+/* Produktpreis */
+.product-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.order-header .order-number {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+.order-header .order-date {
+  font-size: 14px;
+  color: #777;
+}

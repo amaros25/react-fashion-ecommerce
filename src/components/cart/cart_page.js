@@ -376,7 +376,7 @@ const CartPage = () => {
           disabled={!canOrder && !user?.address?.street} // disabled until address saved or exists
           onClick={() => handle_new_order()} // your order handler
         >
-          {t("cart_page.submit_order")}
+          {t("product_page.submit_order")}
         </button>
 
         </div>
