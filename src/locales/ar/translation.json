@@ -127,6 +127,45 @@
   "quantity": "الكمية",
   "price": "السعر",
   "status": "الحالة",
-  "pending": "قيد الانتظار"
-   
+  "pending": "قيد الانتظار",
+    "orderNumber": "رقم الطلب",
+  "orderDate": "تاريخ الطلب",
+  "productName": "اسم المنتج",
+  "productColor": "اللون",
+  "productSize": "الحجم",
+  "totalPrice": "السعر الإجمالي",
+  "currentStatus": "الحالة الحالية",
+  "lastUpdate": "آخر تحديث",
+  "confirmed": "مؤكد",
+  "shipped": "تم الشحن",
+  "delivered": "تم التوصيل",
+  "cancelled": "تم الإلغاء",
+  "noUser": "لا يوجد مستخدم",
+  "noPhone": "لا يوجد رقم هاتف",
+  "noAddress": "لا يوجد عنوان",
+  "product_color": {
+    "Red": "أحمر",
+    "Blue": "أزرق",
+    "Green": "أخضر",
+    "Yellow": "أصفر",
+    "Black": "أسود",
+    "White": "أبيض",
+    "Orange": "برتقالي",
+    "Purple": "أرجواني",
+    "Pink": "وردي",
+    "Brown": "بني",
+    "Gray": "رمادي",
+    "Beige": "بيج",
+    "Teal": "أزرق مخضر",
+    "Violet": "بنفسجي",
+    "Indigo": "نيلي",
+    "Turquoise": "تركوازي"
+  },
+  "order_state":{
+  "pending": "قيد الانتظار",
+    "confirmed": "مؤكد",
+    "shipped": "تم الشحن",
+    "delivered": "تم التوصيل",
+    "cancelled": "تم الإلغاء"
+  }
 }

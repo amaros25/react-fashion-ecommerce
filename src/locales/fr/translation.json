@@ -127,6 +127,48 @@
   "quantity": "Quantité",
   "price": "Prix",
   "status": "Statut",
-  "pending": "En attente"
+  "pending": "En attente",
+  "orderNumber": "Numéro de commande",
+  "orderDate": "Date de commande",
+  "productName": "Nom du produit",
  
+  "totalPrice": "Prix total",
+  "currentStatus": "Statut actuel",
+  "lastUpdate": "Dernière mise à jour",
+  "confirmed": "Confirmé",
+  "shipped": "Expédié",
+  "delivered": "Livré",
+  "cancelled": "Annulé",
+  "noUser": "Pas d'utilisateur",
+  "noPhone": "Pas de téléphone",
+  "noAddress": "Pas d'adresse",
+ 
+  "productColor": "Couleur du produit",
+  "productSize": "Taille du produit",
+  "product_color": {
+    "Red": "Rouge",
+    "Blue": "Bleu",
+    "Green": "Vert",
+    "Yellow": "Jaune",
+    "Black": "Noir",
+    "White": "Blanc",
+    "Orange": "Orange",
+    "Purple": "Violet",
+    "Pink": "Rose",
+    "Brown": "Marron",
+    "Gray": "Gris",
+    "Beige": "Beige",
+    "Teal": "Sarcelle",
+    "Violet": "Violet",
+    "Indigo": "Indigo",
+    "Turquoise": "Turquoise"
+  },
+  "order_state":{
+  "pending": "En attente",
+  "confirmed": "Confirmé",
+  "shipped": "Expédié",
+  "delivered": "Livré",
+  "cancelled": "Annulé"
+  }
+
 }

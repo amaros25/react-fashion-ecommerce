@@ -2,8 +2,7 @@
 .order-container {
   width: 100%;
   max-width: 900px;
-  height: 500px;
-  overflow-y: auto;
+  height: auto; /* Entferne die feste Höhe */
   border: 1px solid #f1f1f1ff;
   border-radius: 8px;
   padding: 10px;
@@ -224,4 +223,32 @@
 .order-header .order-date {
   font-size: 14px;
   color: #777;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.pagination button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.pagination .active {
+  background-color: #007bff;
+  color: white;
 }

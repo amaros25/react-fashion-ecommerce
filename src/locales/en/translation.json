@@ -121,7 +121,47 @@
   "quantity": "Quantity",
   "price": "Price",
   "status": "Status",
-  "pending": "Pending"
+  "pending": "Pending",
+  "orderNumber": "Order Number",
+  "orderDate": "Order Date",
+  "productName": "Product Name",
  
-
+  "totalPrice": "Total Price",
+  "currentStatus": "Current Status",
+  "lastUpdate": "Last Update",
+  "confirmed": "Confirmed",
+  "shipped": "Shipped",
+  "delivered": "Delivered",
+  "cancelled": "Cancelled",
+  "noUser": "No User",
+  "noPhone": "No Phone",
+  "noAddress": "No Address"
+ ,
+  "order_state":{
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "shipped": "Shipped",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled"
+  },
+  "productColor": "Product Color",
+  "productSize": "Product Size",
+  "product_color": {
+    "Red": "Red",
+    "Blue": "Blue",
+    "Green": "Green",
+    "Yellow": "Yellow",
+    "Black": "Black",
+    "White": "White",
+    "Orange": "Orange",
+    "Purple": "Purple",
+    "Pink": "Pink",
+    "Brown": "Brown",
+    "Gray": "Gray",
+    "Beige": "Beige",
+    "Teal": "Teal",
+    "Violet": "Violet",
+    "Indigo": "Indigo",
+    "Turquoise": "Turquoise"
+  }
   }
