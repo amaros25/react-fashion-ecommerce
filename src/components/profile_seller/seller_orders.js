@@ -1,16 +1,81 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next"; // Importiere den i18n Hook
-import "./seller_open_orders.css"; // Importiere die CSS-Datei
+import { useTranslation } from "react-i18next";
+import "./seller_orders.css";
 
-function SellerOpenOrders({ orders, handleStatusChange }) {
-  const { t } = useTranslation(); // Initialisiere den Übersetzungs-Hook
+function SellerOrders({ sellerId, handleStatusChange }) {
+  const { t } = useTranslation();
   const apiUrl = process.env.REACT_APP_API_URL;
-  const [statusUpdates, setStatusUpdates] = useState({});
-  const [ordersWithDetails, setOrdersWithDetails] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // Aktuelle Seite
-  const ordersPerPage = 1; // Bestellungen pro Seite
 
-  // Status im State aktualisieren
+  const [orders, setOrders] = useState([]);
+  const [statusUpdates, setStatusUpdates] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const ordersPerPage = 20;
+const [searchOrder, setSearchOrder] = useState("");
+const [filterStatus, setFilterStatus] = useState("");
+
+const handleFilter = () => {
+  setCurrentPage(1); // Zurück zur ersten Seite bei neuem Filter
+  fetchOrders();
+};
+
+
+async function fetchOrders() {
+  try {
+    const queryParams = new URLSearchParams({
+      page: currentPage,
+      limit: ordersPerPage,
+    });
+
+    if (filterStatus) queryParams.append("status", filterStatus);
+    if (searchOrder) queryParams.append("orderNumber", searchOrder);
+
+    const res = await fetch(
+      `${apiUrl}/orders/seller/${sellerId}?${queryParams.toString()}`
+    );
+
+    if (!res.ok) {
+      const errData = await res.json();
+      throw new Error(errData.message || "Serverfehler");
+    }
+
+    const data = await res.json();
+    setOrders(data.orders);
+    setTotalPages(Math.ceil(data.totalCount / ordersPerPage));
+  } catch (error) {
+    console.error("Fehler beim Laden der Bestellungen:", error);
+    setOrders([]);
+    setTotalPages(1);
+  }
+}
+
+
+  // Daten vom Backend laden (mit Pagination)
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const res = await fetch(
+        `${apiUrl}/orders/seller/${sellerId}?page=${currentPage}&limit=${ordersPerPage}`
+
+        );
+        const data = await res.json();
+
+        // Erwartet: { orders: [...], totalCount: number }
+        setOrders(data.orders);
+        setTotalPages(Math.ceil(data.totalCount / ordersPerPage));
+      } catch (error) {
+        console.error("Fehler beim Laden der Bestellungen:", error);
+        setOrders([]);
+        setTotalPages(1);
+      }
+    }
+
+    if (sellerId) {
+      fetchOrders();
+    }
+  }, [sellerId, currentPage, apiUrl]);
+
+  // Status im lokalen State aktualisieren
   const onStatusChange = (orderId, newStatus) => {
     setStatusUpdates((prev) => ({ ...prev, [orderId]: newStatus }));
   };
@@ -23,79 +88,66 @@ function SellerOpenOrders({ orders, handleStatusChange }) {
     }
   };
 
-  // Hol User und Produktdaten für jede Order
-  useEffect(() => {
-    async function fetchDetails() {
-      const detailedOrders = await Promise.all(
-        orders.map(async (order) => {
-          try {
-            // Holen der Produktdetails für jedes Item in der Bestellung
-            const productDetails = await Promise.all(
-              order.items.map(async (item) => {
-                const productRes = await fetch(
-                  `${apiUrl}/products/${item.productId}`
-                );
-                const product = await productRes.json();
-                return {
-                  ...item,
-                  product,
-                };
-              })
-            );
-
-            // Userdaten laden
-            const userRes = await fetch(`${apiUrl}/users/${order.userId}`);
-            const user = await userRes.json();
-            return {
-              ...order,
-              items: productDetails,
-              user,
-            };
-          } catch (error) {
-            console.error("Fehler beim Laden von Produkt oder User", error);
-            return order; // fallback: return bare order
-          }
-        })
-      );
-      setOrdersWithDetails(detailedOrders);
-    }
-
-    if (orders && orders.length > 0) {
-      fetchDetails();
-    } else {
-      setOrdersWithDetails([]); // Leere Orders zurücksetzen, wenn keine vorhanden sind
-    }
-  }, [orders]);
-
-  // Funktion, um eine Farbe zu übersetzen
+  // Funktion zur Übersetzung der Farbe
   const translateColor = (color) => {
     const translatedColor =
       t(`product_color.${color}`) || t(`product_color.${color.toLowerCase()}`);
-    return translatedColor || color; // Falls keine Übersetzung gefunden, gib den Originalfarbwert zurück.
+    return translatedColor || color;
   };
 
-  // Berechnen, welche Bestellungen auf der aktuellen Seite angezeigt werden
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = ordersWithDetails.slice(indexOfFirstOrder, indexOfLastOrder);
-
-  // Berechnen der Gesamtzahl der Seiten
-  const totalPages = Math.ceil(ordersWithDetails.length / ordersPerPage);
-
-  // Seitenwechsel-Funktion
+  // Seitenwechsel
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Generierung der Seitenzahlen (max. 5 Seitenzahlen anzeigen)
+  // Array für Seitenzahlen (Optional: max 5 Seiten anzeigen)
   const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
+  const maxPagesToShow = 5;
+  let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+  let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+  if (endPage - startPage < maxPagesToShow - 1) {
+    startPage = Math.max(1, endPage - maxPagesToShow + 1);
+  }
+  for (let i = startPage; i <= endPage; i++) {
     pageNumbers.push(i);
   }
 
   return (
+
+
+
     <div className="order-container">
-      {currentOrders.map((order) => (
+
+      
+        <div className="order-filter-card">
+      <input
+        type="text"
+        placeholder={t("searchOrderNumber")}
+        value={searchOrder}
+        onChange={(e) => setSearchOrder(e.target.value)}
+        className="search-input"
+      />
+
+      <select
+        value={filterStatus}
+        onChange={(e) => setFilterStatus(e.target.value)}
+        className="filter-select"
+      >
+        <option value="">{t("allStatuses")}</option>
+        <option value="pending">{t("pending")}</option>
+        <option value="confirmed">{t("confirmed")}</option>
+        <option value="shipped">{t("shipped")}</option>
+        <option value="delivered">{t("delivered")}</option>
+        <option value="cancelled">{t("cancelled")}</option>
+      </select>
+
+      <button onClick={handleFilter} className="filter-button">
+        {t("filter")}
+      </button>
+    </div>
+
+      {orders.length === 0 && <p>{t("noOrders")}</p>}
+
+      {orders.map((order) => (
         <div key={order._id} className="order-card">
-          {/* Bestellnummer und Bestelldatum */}
           <div className="order-header">
             <div className="order-number">
               {t("orderNumber")}: {order.orderNumber}
@@ -105,9 +157,7 @@ function SellerOpenOrders({ orders, handleStatusChange }) {
             </div>
           </div>
 
-          {/* Produkt und Benutzerbereich nebeneinander */}
           <div className="order-details">
-            {/* Linke Seite: Produktdetails */}
             <div className="product-details">
               {order.items.map((item, index) => (
                 <div key={index} className="product-item">
@@ -128,23 +178,20 @@ function SellerOpenOrders({ orders, handleStatusChange }) {
                       {t("quantity")}: {item.quantity}
                     </div>
                     <div className="product-price">
-                      {`€ ${(item.product.price * item.quantity).toFixed(2)}`}
+                      € {(item.product.price * item.quantity).toFixed(2)}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Rechte Seite: Benutzerinfo */}
             <div className="user-info">
               <div className="user-name">
                 {order.user
                   ? `${order.user.firstName} ${order.user.lastName}`
                   : t("noUser")}
               </div>
-              <div className="user-contact">
-                {order.user?.phone || t("noPhone")}
-              </div>
+              <div className="user-contact">{order.user?.phone || t("noPhone")}</div>
               <div className="user-address">
                 {order.user?.address
                   ? `${order.user.address.street}, ${order.user.address.postalCode} ${order.user.address.city}`
@@ -153,14 +200,12 @@ function SellerOpenOrders({ orders, handleStatusChange }) {
             </div>
           </div>
 
-          {/* Gesamtpreis */}
           <div className="total-price">
             <div className="price">
-              {t("totalPrice")}: {`€ ${order.totalPrice.toFixed(2)}`}
+              {t("totalPrice")}: € {order.totalPrice.toFixed(2)}
             </div>
           </div>
 
-          {/* Status Dropdown, Update Button, Aktueller Status und Letztes Update */}
           <div className="status-update">
             <div style={{ display: "flex", gap: "10px", flex: 1 }}>
               <select
@@ -179,10 +224,7 @@ function SellerOpenOrders({ orders, handleStatusChange }) {
                 <option value="cancelled">{t("cancelled")}</option>
               </select>
 
-              <button
-                className="update-button"
-                onClick={() => onSubmit(order._id)}
-              >
+              <button className="update-button" onClick={() => onSubmit(order._id)}>
                 {t("update")}
               </button>
             </div>
@@ -195,16 +237,15 @@ function SellerOpenOrders({ orders, handleStatusChange }) {
               </div>
               <div>
                 <strong>{t("lastUpdate")}:</strong>{" "}
-                {new Date(
-                  order.status?.slice(-1)[0]?.date
-                ).toLocaleDateString() || t("noUpdate")}
+                {order.status?.slice(-1)[0]?.date
+                  ? new Date(order.status.slice(-1)[0].date).toLocaleDateString()
+                  : t("noUpdate")}
               </div>
             </div>
           </div>
         </div>
       ))}
 
-      {/* Numerische Paginierungs-Steuerung */}
       <div className="pagination">
         {pageNumbers.map((number) => (
           <button
@@ -220,4 +261,4 @@ function SellerOpenOrders({ orders, handleStatusChange }) {
   );
 }
 
-export default SellerOpenOrders;
+export default SellerOrders;

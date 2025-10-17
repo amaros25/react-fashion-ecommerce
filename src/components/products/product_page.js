@@ -27,6 +27,92 @@ function ProductPage() {
   const [seller, setSeller] = useState(null);
    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+
+{/*
+   const createTestOrders = async () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+
+  if (!userId || !token) {
+    console.warn("⚠️ Kein Benutzer angemeldet – Testorders werden nicht erstellt.");
+    return;
+  }
+
+  if (!product || !seller) {
+    console.warn("⚠️ Produkt oder Verkäufer noch nicht geladen.");
+    return;
+  }
+
+  // 100 Testbestellungen generieren
+  for (let i = 0; i < 100; i++) {
+    const orderData = {
+      userId,
+      sellerId: seller._id,
+      items: [
+        {
+          productId: product._id,
+          color: "Black",
+          size: "M",
+          quantity: Math.floor(Math.random() * 3) + 1,
+        },
+      ],
+      totalPrice: product.price * (Math.floor(Math.random() * 3) + 1) + 7.5,
+      status: [
+        {
+          update: ["pending", "confirmed", "shipped", "delivered", "cancelled", "returned_to_sender"][
+            Math.floor(Math.random() * 6)
+          ],
+          date: new Date(
+            new Date().setMonth(new Date().getMonth() - Math.floor(Math.random() * 6))
+          ),
+        },
+      ],
+      paymentMethod: "Cash on Delivery",
+      notes: "Test Order " + (i + 1),
+    };
+
+    try {
+      const res = await fetch(`${apiUrl}/orders/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        console.error("❌ Fehler bei Testorder:", err);
+      }
+    } catch (error) {
+      console.error("⚠️ Fehler beim Erstellen der Testorder:", error);
+    }
+  }
+
+  console.log("✅ 100 Testorders erfolgreich erstellt!");
+  alert("✅ 100 Testorders erfolgreich erstellt!");
+};
+
+
+useEffect(() => {
+  if (window.location.hostname === "localhost") {
+    // Nur in Dev-Umgebung automatisch ausführen
+    setTimeout(() => {
+      createTestOrders();
+    }, 2000); // 2 Sekunden warten, bis Produkt/Seller geladen sind
+  }
+}, [product, seller]);
+
+
+{window.location.hostname === "localhost" && (
+  <button onClick={createTestOrders} style={{ marginTop: "20px", background: "#444", color: "#fff" }}>
+    🚀 100 Testbestellungen erstellen
+  </button>
+)}
+
+*/}
   useEffect(() => {
       const token = localStorage.getItem("token");
       setIsLoggedIn(!!token);
