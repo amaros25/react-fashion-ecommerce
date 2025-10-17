@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
-
-import SellerOpenOrders from "./seller_open_orders.js";
+ 
 import { Header } from "../header/header.js";
 import { useNavigate } from "react-router-dom";
 import "./profile_seller.css";
 import { useTranslation } from "react-i18next";
 import AddProduct from "../new_product/add_product";
+import SellerProducts from "./seller_products";
+import ProfileSellerHeader from "./profile_seller_header"
+import SellerOrders from "./seller_orders.js"
 
 function ProfileSeller() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -14,7 +16,6 @@ function ProfileSeller() {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [filteredOpenOrders, setFilteredOpenOrders] = useState([]);
-
   const [activeTab, setActiveTab] = useState("products");
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
@@ -88,7 +89,7 @@ function ProfileSeller() {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
-        console.log("🟢 fetchProducts: ", data);
+    console.log("🟢 fetchProducts: ", data);
     if (Array.isArray(data)) {
       setProducts(
         data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -120,25 +121,7 @@ function ProfileSeller() {
   return (
     <div className="profile-seller-container">
       <Header />
-      <div className="profile-header">
-        <div className="profile-left">
-          <img
-            src={seller.image}
-            alt={seller.shopName}
-            className="profile-image"
-          />
-          <h2 className="shop-name">{seller.shopName}</h2>
-        </div>
-        <div className="profile-info">
-          <h3>
-            {seller.firstName} {seller.lastName}
-          </h3>
-          <p>{seller.address}</p>
-          <p>{seller.email}</p>
-        </div>
-        <div className="shop-info"></div>
-      </div>
-
+      <ProfileSellerHeader seller = {seller} openOrders = {filteredOpenOrders} orders = {orders}/>
       <nav
         style={{
           display: "flex",
@@ -148,12 +131,10 @@ function ProfileSeller() {
           justifyContent: "center",
         }}
       >
-        {["products", "openOrders", "allOrders", "add_new_product"].map(
+        {["products",  "allOrders", "add_new_product"].map(
           (tab) => {
             let label = "";
-
             if (tab === "products") label = t(`tabs_seller.${tabKeys[0]}`);
-            if (tab === "openOrders") label = t(`tabs_seller.${tabKeys[1]}`);
             if (tab === "allOrders") label = t(`tabs_seller.${tabKeys[2]}`);
             if (tab === "add_new_product") label = t(t("add_new_product"));
 
@@ -180,63 +161,11 @@ function ProfileSeller() {
         )}
       </nav>
       <div>
-        {activeTab === "products" && (
-          <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-            <div
-              className="product-list"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                gap: "20px",
-                padding: "20px",
-              }}
-            >
-              {products.map((product) => (
-                <div
-                  key={product._id}
-                  className="product-card"
-                  style={{
-                    backgroundColor: "#fff",
-                    padding: "15px",
-                    borderRadius: "10px",
-                    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-                    textAlign: "center",
-                  }}
-                >
-                  <img
-                    src={product.image[0]}
-                    alt={product.name}
-                    style={{
-                      width: "100%",
-                      height: "200px",
-                      objectFit: "cover",
-                      borderRadius: "5px",
-                    }}
-                  />
-                  <h4 style={{ margin: "10px 0 5px" }}>{product.name}</h4>
-                  <p style={{ margin: "5px 0", color: "#555" }}>
-                    Price: €{product.price}
-                  </p>
-                  <p style={{ margin: "5px 0", color: "#777" }}>
-                    Published:{" "}
-                    {new Date(product.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {activeTab === "openOrders" && (
-          <SellerOpenOrders
-            orders={filteredOpenOrders}
-            handleStatusChange={handleStatusChange}
-          />
-        )}
-
+        {activeTab === "products" && <SellerProducts products={products} />}
+  
         {activeTab === "allOrders" && (
-          <SellerOpenOrders
-            orders={orders}
+          <SellerOrders
+            sellerId={userId}
             handleStatusChange={handleStatusChange}
           />
         )}

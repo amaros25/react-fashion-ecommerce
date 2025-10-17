@@ -1,0 +1,121 @@
+.profile-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 25px;
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+
+/* Linke Spalte */
+.profile-left {
+  flex: 0 0 30%;
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+}
+
+/* Rechte Seite – Container für Cards */
+.right-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* --- Orders Card --- */
+.order-stats-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px 40px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-item + .stat-item {
+  border-left: 1px solid #ddd;
+}
+
+.stat-item h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #666;
+}
+
+.stat-number {
+  font-size: 30px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 5px;
+}
+
+/* --- Chart Card --- */
+.order-chart-card {
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 20px 25px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 🔹 zentriert horizontal */
+}
+
+.order-chart-card h4 {
+  margin-bottom: 10px;
+  color: #444;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center; /* 🔹 Text im Zentrum */
+  width: 100%;
+}
+
+.recharts-responsive-container {
+  width: 100% !important;
+  height: 220px !important;
+}
+
+.order-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;        /* falls schmaler Bildschirm */
+  gap: 15px;
+  margin-top: 10px;
+  color: #555;
+  font-size: 14px;
+}
+
+.order-legend div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Kleine farbige Punkte */
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Farben passend zu Linien */
+.dot.total { background-color: #3b82f6; }       /* Blau */
+.dot.pending { background-color: #8b5cf6; }     /* Lila */
+.dot.cancelled { background-color: #ff66b2; }   /* Hellrosa */
+.dot.delivered { background-color: #4caf50; }   /* Grün */
+.dot.returned { background-color: #b71c1c; }    /* Dunkelrot */

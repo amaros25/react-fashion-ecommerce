@@ -41,7 +41,24 @@ const orderSchema = new mongoose.Schema({
   status: [
     {
       date: { type: Date, default: Date.now },
-      update: { type: String, enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'], default: 'pending' }
+      update: { 
+        type: String, 
+        enum: [
+          'pending',
+          'confirmed',
+          'shipped',
+          'delivered',
+          'return_requested',
+          'return_shipped',
+          'return_received',
+          'refund_in_process',
+          'refunded',
+          'cancelled',
+          'failed_delivery',
+          'returned_to_sender'
+        ],
+        default: 'pending' 
+    }
     }
   ],
   order_coupon: { type: String },

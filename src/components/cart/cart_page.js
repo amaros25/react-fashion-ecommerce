@@ -329,13 +329,7 @@ const CartPage = () => {
     </div>
   );
 })}
-
-
-
-
-
         </div>
-
         {/* Cart total */}
 
         <div

@@ -7,6 +7,7 @@ const sellerSchema = new mongoose.Schema({
   address: { type: String, required: true },
   image: { type: String, required: true },
   rating: { type: Number, default: 0 },
+  phone: { type: Number, default: 0 },
   email: { type: String, required: true, unique: true }, // <-- hinzufügen
   password: { type: String, required: true },           // <-- hinzufügen
 });
