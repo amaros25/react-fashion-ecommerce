@@ -145,6 +145,7 @@ function ProfileSellerHeader({ seller, openOrders, orders }) {
             <div><span className="dot delivered"></span> Delivered</div>
             <div><span className="dot returned"></span> Returned</div>
             </div>
+           
         </div>
       </div>
     </div>

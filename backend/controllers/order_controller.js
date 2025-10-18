@@ -27,9 +27,7 @@ exports.getOrderBySellerID = async (req, res) => {
     const page = parseInt(req.query.page) || 1; // Default Seite 1
     const limit = parseInt(req.query.limit) || 20; // Default 20 pro Seite
     const { status, orderNumber } = req.query; 
-    console.log("🟢 sellerId: ", sellerId);
-    console.log("🟢 page: ", page);
-    console.log("🟢 limit: ", limit);
+ 
 
     if (!sellerId) {
       return res.status(400).json({ message: 'sellerId wird benötigt' });
@@ -45,7 +43,6 @@ exports.getOrderBySellerID = async (req, res) => {
 
     // Gesamtanzahl der Bestellungen für Pagination
     const totalCount = await Order.countDocuments(query);
-    console.log("🟢 totalCount: ", totalCount);
 
     if (totalCount === 0) {
       return res.status(404).json({ message: 'Keine Bestellungen für diesen Verkäufer gefunden' });
@@ -60,16 +57,14 @@ exports.getOrderBySellerID = async (req, res) => {
 
     // Alle UserIds aus den Bestellungen sammeln
     const userIds = [...new Set(orders.map(o => o.userId.toString()))];
-    console.log("🟢 userIds: ", userIds);
-
+ 
     // Userdaten abrufen
     const users = await User.find({ _id: { $in: userIds } }).lean();
     const usersMap = {};
     users.forEach(u => {
       usersMap[u._id.toString()] = u;
     });
-    console.log("🟢 users: ", users);
-    // Alle Produkt-IDs sammeln
+     // Alle Produkt-IDs sammeln
     const productIds = [];
     orders.forEach(order => {
       order.items.forEach(item => {
@@ -77,8 +72,7 @@ exports.getOrderBySellerID = async (req, res) => {
       });
     });
     const uniqueProductIds = [...new Set(productIds)];
-    console.log("🟢 productIds: ", productIds);
-    // Produktdaten abrufen
+     // Produktdaten abrufen
     const products = await Product.find({ _id: { $in: uniqueProductIds } }).lean();
     const productsMap = {};
     products.forEach(p => {
@@ -94,8 +88,7 @@ exports.getOrderBySellerID = async (req, res) => {
         product: productsMap[item.productId.toString()] || null,
       })),
     }));
-    console.log("🟢 enrichedOrders: ", enrichedOrders);
-    // Antwort mit paginierten und angereicherten Bestellungen
+     // Antwort mit paginierten und angereicherten Bestellungen
     res.json({
       orders: enrichedOrders,
       totalCount,

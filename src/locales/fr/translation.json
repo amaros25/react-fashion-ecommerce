@@ -5,6 +5,13 @@
   "login": "Connexion",
   "logout": "Déconnexion",
   "newProducts": "Nouveaux Produits",
+  "select_category": "Sélectionner une catégorie",
+  "product_name": "Nom du produit",
+  "product_description": "Description",
+  "product_price": "Prix",
+  "size_stock_color": "Tailles & Stock & Couleur",
+  "size_exp": "Taille (par exemple M, 36)",
+  "select_color": "Sélectionner la couleur",
   "categories": {
     "womensClothing": "Vêtements femmes",
     "mensClothing": "Vêtements hommes",
@@ -25,7 +32,7 @@
     "openOrders": "Commandes ouvertes",
     "allOrders": "Toutes les commandes"
   },
-  "add_new_product": "Ajouter un nouveau produit",
+  "add_new_product": "Nouveau produit",
   "new_products": "",
   "alter_max_images": "Un maximum de 3 images peut être sélectionné !",
   "max_images_selected":  "Un maximum de 3 images ont été sélectionnées.",
@@ -119,13 +126,14 @@
   "open_orders": "Commandes ouvertes",
     "loading_profile": "Chargement du profil",
   "your_orders": "Vos commandes",
-  "no_orders_yet": "Vous n'avez pas encore de commandes.",
+  "no_orders_yet": "Aucune commande.",
   "order_id": "ID de commande",
   "loading_product": "Chargement du produit...",
   "size": "Taille",
   "color": "Couleur",
   "quantity": "Quantité",
   "price": "Prix",
+
   "status": "Statut",
   "pending": "En attente",
   "orderNumber": "Numéro de commande",
@@ -164,11 +172,52 @@
     "Turquoise": "Turquoise"
   },
   "order_state":{
-  "pending": "En attente",
-  "confirmed": "Confirmé",
-  "shipped": "Expédié",
-  "delivered": "Livré",
-  "cancelled": "Annulé"
-  }
+    "all": "Tous les statuts",
+    "pending": "En attente",
+    "confirmed": "Confirmé",
+    "shipped": "Expédié",
+    "delivered": "Livré",
+    "received": "Reçu",
+
+    "user_cancelled": "Annulé",
+    "seller_cancelled": "Annulé par le vendeur",
+    "failed_delivery": "Échec de livraison",
+    "returned_to_sender": "Retour à l'expéditeur",
+    "return_requested": "Retour demandé",
+    "return_confirmed": "Retour confirmé",
+    "return_shipped": "Retour expédié",
+    "return_received": "Retour reçu"
+  },
+ 
+  "no_products_found": "Aucun produit trouvé",
+  "number": "N°",
+  "times_ordered": "fois commandé",
+  "error_loading_products": "Erreur lors du chargement des produits",
+  "search_product_by_id": "Rechercher par numéro de produit (ex. : PR-123456)",
+  "searchOrderNumber": "Rechercher par numéro d'ordre (ex. : O123456)",
+  "filter": "Filtrer",
+  "noOrders": "Aucune commande",
+  "product_colors":{
+    "red": "Rouge",
+    "blue": "Bleu",
+    "green": "Vert",
+    "yellow": "Jaune",
+    "black": "Noir",
+    "white": "Blanc",
+    "orange": "Orange",
+    "purple": "Violet",
+    "pink": "Rose",
+    "brown": "Marron",
+    "gray": "Gris",
+    "beige": "Beige",
+    "teal": "Sarcelle",
+    "violet": "Violet",
+    "indigo": "Indigo",
+    "turquoise": "Turquoise"
+  },
+  "other": "Autre",
+  "enter_custom_color": "Entrez une couleur",
+  "add_another_size": "Ajouter une autre taille",
+  "post_product": "Publier le produit"
 
 }

@@ -1,3 +1,4 @@
+
 /* Container für alle Bestellungen */
 .order-container {
   width: 100%;
@@ -32,7 +33,7 @@
 .order-header .order-number {
   font-size: 16px;
   font-weight: bold;
-  color: #333;
+  color: #0ca7b3;
 }
 
 .order-header .order-date {
@@ -40,19 +41,16 @@
   color: #777;
 }
 
-/* Produkt und Benutzerbereich nebeneinander */
 .order-details {
   display: flex;
-  justify-content: space-between;   /* Horizontaler Abstand zwischen Produkt und User-Info */
-  align-items: center;              /* Vertikale Zentrierung innerhalb des Containers */
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Linke Seite: Produktdetails */
 .product-details {
- 
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Vertikale Ausrichtung und Abstand */
+  gap: 15px;
   align-content: center;
 }
 
@@ -81,15 +79,18 @@
   color: #333;
 }
 
-/* Rechte Seite: Benutzerinfo */
 .user-info {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Vertikal zentrieren */
-  align-items: flex-start; /* Links ausrichten */
-  padding-left: 20px;
-  gap: 10px;
-  /* Keine Änderung an Margin, da wir die Zentrierung durch Flexbox steuern */
+  justify-content: center;
+  align-items: flex-start;
+  border-top: 1px solid #e2e2e2;
+  border-bottom: 1px solid #e2e2e2;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  gap: 5px;
+  width: 100%; 
+  box-sizing: border-box; /* stellt sicher, dass Padding in der Gesamtbreite berücksichtigt wird */
 }
 
 .user-info .user-name {
@@ -104,7 +105,6 @@
   color: #555;
 }
 
-/* Gesamtpreis */
 .total-price {
   display: flex;
   justify-content: space-between;
@@ -119,7 +119,6 @@
   color: #333;
 }
 
-/* Status Dropdown, Update Button, Aktueller Status und Letztes Update */
 .status-update {
   display: flex;
   justify-content: space-between;
@@ -156,18 +155,13 @@
   gap: 5px;
 }
 
-
-/* Container für jedes Produkt */
-/* Container für jedes Produkt */
 .product-item {
   display: flex;
   gap: 15px;
-  align-items: flex-start;  /* An den Anfang der Y-Achse ausrichten */
-  margin-bottom: 15px;  /* Abstände zwischen den Produkten */
+  align-items: flex-start;
+  margin-bottom: 15px;
 }
 
-
-/* Produktbild */
 .product-image {
   width: 80px;
   height: 80px;
@@ -175,34 +169,29 @@
   border-radius: 8px;
 }
 
-/* Container für die Produktinformationen */
 .product-info-container {
   display: flex;
   flex-direction: column;
-  width: 100%; /* Volle Breite nutzen */
-  gap: 8px; /* Abstand zwischen den einzelnen Details */
-  justify-content: flex-start; /* Zeilen untereinander ausrichten */
-  margin-left: 0; /* Sicherstellen, dass keine Verschiebung durch margin entsteht */
+  width: 100%;
+  gap: 8px;
+  justify-content: flex-start;
+  margin-left: 0;
 }
 
-/* Produkttitel */
 .product-title {
   font-weight: bold;
   font-size: 16px;
   color: #333;
-  margin-bottom: 8px; /* Leichter Abstand zum Rest der Infos */
+  margin-bottom: 8px;
 }
 
-
-/* Allgemeine Produktinformationen (Farbe, Größe, Menge) */
 .product-info {
   font-size: 14px;
   color: #555;
-  margin: 0; /* Entfernt eventuell störende Margen */
+  margin: 0;
   padding: 0;
 }
 
-/* Produktpreis */
 .product-price {
   font-size: 16px;
   font-weight: bold;
@@ -215,17 +204,12 @@
   margin-bottom: 10px;
 }
 
-.order-header .order-number {
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
-}
+ 
 .order-header .order-date {
   font-size: 14px;
   color: #777;
 }
 
-/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
@@ -253,7 +237,6 @@
   color: white;
 }
 
-
 .order-filter-card {
   display: flex;
   align-items: center;
@@ -261,11 +244,12 @@
   background-color: #ffffff;
   padding: 12px 16px;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 }
 
-.search-input, .filter-select {
+.search-input,
+.filter-select {
   padding: 8px 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -277,7 +261,7 @@
 }
 
 .filter-button {
-  background-color: #4f46e5;
+  background-color: #007bff;
   color: white;
   padding: 8px 14px;
   border: none;
@@ -286,5 +270,256 @@
 }
 
 .filter-button:hover {
-  background-color: #4338ca;
+  background-color: #0264cc;
+}
+
+.no-orders-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.status-update-container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  flex: 1;
+  align-items: center;
+}
+
+.status-info div {
+  display: flex;
+  gap: 5px;
+}
+
+/* Für Tablets (max. 1024px) */
+@media (max-width: 1024px) {
+  .order-container {
+    padding: 8px;
+  }
+
+  .order-card {
+    padding: 15px;
+  }
+
+  .product-details img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .user-info {
+    padding-left: 15px;
+  }
+
+.status-update .status-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Links ausrichten */
+  font-size: 14px;
+  color: #777;
+  flex: 1;
+  gap: 5px;
+}
+  .status-update .status-update-container {
+    gap: 10px;
+  }
+  .pagination button {
+    padding: 6px 10px;
+  }
+
+  .order-filter-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-input,
+  .filter-select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .filter-button {
+    width: 100%;
+  }
+}
+
+/* Für Handys im Hochformat (max. 768px) */
+@media (max-width: 768px) {
+   .order-container {
+    padding: 6px;
+  }
+  .order-card {
+    flex-direction: column; /* Vertikale Anordnung */
+  }
+
+  .user-info {
+    order: 3;
+    margin-top: 10px; /* Etwas Abstand für mehr Klarheit */
+  }
+
+  .total-price {
+    order: 2;
+  }
+
+  .product-details {
+    order: 1;
+  }
+
+  .product-details img {
+    width: 60px;
+    height: 60px;
+  }
+
+  /* Anpassen der order-header-Elemente */
+  .order-header {
+    display: flex;
+    flex-direction: column; /* Stellt sicher, dass Bestellnummer und Bestelldatum untereinander angezeigt werden */
+    align-items: flex-start; /* Ausrichtung der Elemente links */
+  }
+
+  .order-header .order-number,
+  .order-header .order-date {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 5px; /* Fügt Abstand zwischen den Zeilen hinzu */
+  }
+
+  .pagination button {
+    padding: 5px 8px;
+  }
+
+  .order-filter-card {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-input,
+  .filter-select {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .filter-button {
+    width: 100%;
+  }
+
+  /* Weitere Anpassungen */
+  .status-update .status-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Links ausrichten */
+    font-size: 14px;
+    color: #777;
+    flex: 1;
+    gap: 5px;
+  }
+
+  /* Das Status-Select und der Button sind untereinander */
+  .status-update-container {
+    order: 2; /* Status Select und Button kommen nach den Infos */
+  }
+
+  .update-button {
+    width: 100%; /* Button nimmt die gesamte Breite auf Handys */
+  }
+
+  .status-update {
+    flex-direction: column; /* Stellen wir sicher, dass die Elemente vertikal angeordnet werden */
+  }
+
+  .status-update .status-info {
+    order: 1; /* Sicherstellen, dass die Infos oben sind */
+    margin-bottom: 15px; /* Abstand nach den Infos */
+  }
+
+  .status-update .status-update-container {
+    order: 2; /* Status Select und Button kommen nach den Infos */
+    flex-direction: row; /* Status-Select und Button nebeneinander */
+    gap: 15px; /* Abstand zwischen den beiden */
+  }
+
+  .update-button {
+    width: 100%; /* Button nimmt auf kleinen Geräten die volle Breite */
+  }
+
+  .status-update .status-info div {
+    display: flex;
+    gap: 5px;
+  }
+
+}
+
+/* Für Handys im Hochformat (max. 480px) */
+@media (max-width: 480px) {
+  .order-container {
+    padding: 4px;
+  }
+
+  .order-card {
+    display: flex;
+    flex-direction: column;
+  }
+  .product-details {
+    order: 1;
+  }
+  .total-price {
+    order: 2;
+  }
+
+  .product-details img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .user-info {
+    order: 3;
+    padding-left: 0;
+  }
+
+  .pagination button {
+    padding: 4px 6px;
+  }
+
+  .order-filter-card {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .search-input,
+  .filter-select {
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  .filter-button {
+    width: 100%;
+  }
+   .status-update-container {
+    flex-direction: column; /* Status Select und Button untereinander */
+  }
+
+  .update-button {
+    width: 100%; /* Button nimmt volle Breite */
+  }
+
+  .status-update .status-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Links ausrichten */
+    font-size: 14px;
+    color: #777;
+    flex: 1;
+    gap: 5px;
+  }
+  .status-update .status-update-container {
+    flex-direction: column; /* Status Select und Button untereinander */
+  }
+
+  .update-button {
+    width: 100%; /* Button nimmt volle Breite */
+  }
+
 }

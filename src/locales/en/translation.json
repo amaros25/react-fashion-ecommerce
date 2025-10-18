@@ -5,6 +5,7 @@
   "login": "Login",
   "logout": "Logout",
   "newProducts": "New Products",
+  "select_category": "Select a category",
   "categories": {
     "womensClothing": "Women's Clothing",
     "mensClothing": "Men's Clothing",
@@ -137,12 +138,21 @@
   "noPhone": "No Phone",
   "noAddress": "No Address"
  ,
-  "order_state":{
+  "order_state": {
+    "all": "All States",
     "pending": "Pending",
     "confirmed": "Confirmed",
     "shipped": "Shipped",
     "delivered": "Delivered",
-    "cancelled": "Cancelled"
+    "received": "Received",
+    "user_cancelled": "Cancelled by user",
+    "seller_cancelled": "Cancelled by seller",
+    "failed_delivery": "Failed delivery",
+    "returned_to_sender": "Returned to sender",
+    "return_requested": "Return requested",
+    "return_confirmed": "Return confirmed",
+    "return_shipped": "Return shipped",
+    "return_received": "Return received"
   },
   "productColor": "Product Color",
   "productSize": "Product Size",
@@ -163,5 +173,13 @@
     "Violet": "Violet",
     "Indigo": "Indigo",
     "Turquoise": "Turquoise"
-  }
+  },
+  "no_products_found": "No products found",
+  "number": "Nr",
+  "times_ordered": "times ordered",
+  "error_loading_products": "Error loading products",
+  "search_product_by_id": "Search by product number (e.g., PR-123456)",
+   "searchOrderNumber": "Search by order number (e.g., O123456)",
+  "filter": "Filter",
+  "noOrders": "No orders"
   }
