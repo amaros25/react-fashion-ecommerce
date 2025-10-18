@@ -22,7 +22,7 @@ function AddProduct() {
     description: "",
     price: "",
     category: "",
-    type: "test",
+    type: "",
     sizes: [{ size: "", stock: 0, color: "" }],
   });
 
