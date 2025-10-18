@@ -1,4 +1,5 @@
 const Product = require('../models/product')
+const Order = require("../models/order");
 
 // Return all top products
 exports.getTopProducts = async (req, res) => {
@@ -19,7 +20,7 @@ exports.getNewProducts = async (req, res) => {
     const category = req.query.category;  // Category filter (if any)
     const search = req.query.search;  // Suchbegriff aus Query
     const skip = (page - 1) * limit;  // Calculate how many items to skip for pagination
-    console.log("🟢 search: ", search);
+
     // Initialize an empty filter object
     const filter = {};
 
@@ -79,15 +80,92 @@ exports.getProductByID = async (req, res) => {
 };
  
 // Return Product by SellerID
+
 exports.getProductBySellerID = async (req, res) => {
   try {
-    const products = await Product.find({ sellerId: req.params.sellerId });
-    if (products.length === 0) {
-      return res.status(404).json({ message: 'No products found for this seller' });
+    const { sellerId } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const search = req.query.search?.trim() || "";
+    const skip = (page - 1) * limit;
+
+    const filter = { sellerId };
+
+    // Suche nach Name oder Produktnummer
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { productNumber: { $regex: search, $options: "i" } },
+      ];
     }
-    res.json(products);
+
+    // Anzahl Produkte für Pagination
+    const totalCount = await Product.countDocuments(filter);
+    console.log("🟢 totalCount: ", totalCount);
+    // Produkte laden 
+    const products = await Product.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    // Relevante Order-Status
+    const validStatuses = [
+      "confirmed",
+      "shipped",
+      "delivered",
+      "received",
+    ];
+
+    // Order-Aggregation: Letzten Status checken, nur gültige Status zählen
+    const orderCounts = await Order.aggregate([
+      // Sicherstellen, dass Status-Array existiert und nicht leer ist
+      {
+        $match: { status: { $exists: true, $not: { $size: 0 } } }
+      },
+      // Letzten Status aus dem Status-Array holen
+      {
+        $addFields: {
+          lastStatus: { $arrayElemAt: ["$status", -1] }
+        }
+      },
+      // Nur Orders mit letztem Status aus validStatuses filtern (update statt status)
+      {
+        $match: {
+          "lastStatus.update": { $in: validStatuses }
+        }
+      },
+      // Produkte aus dem Array unwinden
+      { $unwind: "$items" },
+      // Gruppieren nach ProduktId und aufsummieren der Menge
+      {
+        $group: {
+          _id: "$items.productId",
+          count: { $sum: "$items.quantity" }
+        }
+      }
+    ]);
+    console.log("🟢 orderCounts: ", orderCounts);
+    // Map für schnelle Suche der Bestellmengen
+    const orderCountMap = {};
+    orderCounts.forEach((oc) => {
+      orderCountMap[oc._id.toString()] = oc.count;
+    });
+
+    // Produkte mit orderCount ergänzen
+    const productsWithOrderCount = products.map((p) => ({
+      ...p.toObject(),
+      orderCount: orderCountMap[p._id.toString()] || 0,
+    }));
+
+    res.json({
+      products: productsWithOrderCount,
+      totalCount,
+      page,
+      totalPages: Math.ceil(totalCount / limit),
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching products', error });
+    console.error("❌ Fehler beim Laden der Produkte:", error);
+    res.status(500).json({ message: "Fehler beim Laden der Produkte", error });
   }
 };
 

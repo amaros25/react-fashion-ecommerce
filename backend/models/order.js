@@ -48,15 +48,16 @@ const orderSchema = new mongoose.Schema({
           'confirmed',
           'shipped',
           'delivered',
+          'received',
+          'user_cancelled',
+          'seller_cancelled',
+          'failed_delivery',
+          'returned_to_sender',
           'return_requested',
+          'return_confirmed',
           'return_shipped',
           'return_received',
-          'refund_in_process',
-          'refunded',
-          'cancelled',
-          'failed_delivery',
-          'returned_to_sender'
-        ],
+          ],
         default: 'pending' 
     }
     }

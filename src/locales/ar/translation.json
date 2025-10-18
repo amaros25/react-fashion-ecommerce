@@ -5,6 +5,13 @@
   "login": "تسجيل الدخول",
   "logout": "تسجيل الخروج",
   "newProducts": "المنتجات الجديدة",
+  "select_category": "اختر فئة",
+  "product_name": "اسم المنتج",
+  "product_description": "االوصف",
+  "product_price": "السعر",
+  "size_stock_color": "الأحجام & المخزون & اللون",
+  "size_exp": "الحجم (على سبيل المثال M، 36)",
+  "select_color": "اختر اللون",
   "categories": {
     "womensClothing": "ملابس نسائية",
     "mensClothing": "ملابس رجالية",
@@ -161,11 +168,51 @@
     "Indigo": "نيلي",
     "Turquoise": "تركوازي"
   },
-  "order_state":{
-  "pending": "قيد الانتظار",
-    "confirmed": "مؤكد",
-    "shipped": "تم الشحن",
-    "delivered": "تم التوصيل",
-    "cancelled": "تم الإلغاء"
-  }
+    "order_state": {
+      "all": "جميع الحالات",
+      "pending": "قيد الانتظار",
+      "confirmed": "تم التأكيد",
+      "shipped": "تم الشحن",
+      "delivered": "تم التسليم",
+      "received": "تم الاستلام",
+      "user_cancelled": "تم الإلغاء من قبل المستخدم",
+      "seller_cancelled": "تم الإلغاء من قبل البائع",
+      "failed_delivery": "فشل في التوصيل",
+      "returned_to_sender": "تم إرجاعه إلى المرسل",
+      "return_requested": "تم طلب الإرجاع",
+      "return_confirmed": "تم تأكيد الإرجاع",
+      "return_shipped": "تم شحن الإرجاع",
+      "return_received": "تم استلام الإرجاع"
+    },
+   
+  "no_products_found": "لم يتم العثور على منتجات",
+  "number": "رقم",
+  "times_ordered": "مرات تم الطلب",
+  "error_loading_products": "حدث خطأ أثناء تحميل المنتجات",
+  "search_product_by_id": "ابحث برقم المنتج (على سبيل المثال، PR-123456)",
+  "searchOrderNumber": "ابحث برقم الطلب (على سبيل المثال، O123456)",
+  "filter": "تصفية",
+  "noOrders": "لا توجد طلبات",
+  "product_colors":{
+    "red": "أحمر",
+    "blue": "أزرق",
+    "green": "أخضر",
+    "yellow": "أصفر",
+    "black": "أسود",
+    "white": "أبيض",
+    "orange": "برتقالي",
+    "purple": "بنفسجي",
+    "pink": "وردي",
+    "brown": "بني",
+    "gray": "رمادي",
+    "beige": "بيج",
+    "teal": "أزرق مائل للزرقة",
+    "violet": "بنفسجي",
+    "indigo": "نيلي",
+    "turquoise": "تركواز"
+  },
+  "other": "آخر",
+  "enter_custom_color": "أدخل اللون المخصص",
+  "add_another_size": "إضافة حجم آخر",
+  "post_product": "نشر المنتج"
 }

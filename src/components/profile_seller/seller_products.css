@@ -1,30 +1,415 @@
 
+.product-card {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-width: 100%;
+}
+
 .product-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-.product-card {
-  background-color: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  text-align: center;
+.product-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
 }
 
 .product-card img {
   width: 100%;
-  height: 150px;
+  height: 250px;
   object-fit: cover;
   border-radius: 5px;
 }
 
-.product-card h4 {
-  margin: 10px 0 5px;
+.product-card h4,
+.product-info h4 {
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 14px;
+  margin: 10px 0 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  flex-shrink: 0;
 }
 
-.product-card p {
-  margin: 5px 0;
-  color: #555;
+.seller-products-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: #fafafa;
+  border-radius: 8px;
 }
+
+.product-filter-card {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.product-filter-card input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1.5px solid #ddd;
+  border-radius: 25px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.product-filter-card input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.filter-select.filter-button{
+    border-color: #007bff;
+}
+
+.product-filter-card button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 25px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.product-filter-card button:hover {
+  background-color: #0056b3;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-bottom: 1px solid #eee;
+}
+
+.product-number {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.product-info .price {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #007bff;
+  margin: 25px 0px 0px 0;
+}
+
+.product-info .order-count {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.product-card .date {
+  margin: 0 14px 4px;
+  font-size: 0.82rem;
+  color: #777;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 30px 0;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  border: 1.5px solid #ccc;
+  background-color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #444;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+  cursor: default;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.product-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+}
+
+.product-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.product-card h4,
+.product-info h4 {
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 14px;
+  margin: 10px 0 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  flex-shrink: 0;
+}
+
+.seller-products-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: #fafafa;
+  border-radius: 8px;
+}
+
+.product-filter-card {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.product-filter-card input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1.5px solid #ddd;
+  border-radius: 25px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.product-filter-card input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.product-filter-card button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 25px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.product-filter-card button:hover {
+  background-color: #0056b3;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.product-card {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-bottom: 1px solid #eee;
+}
+
+.product-number {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.product-info .price {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #007bff;
+  margin: 25px 0px 0px 0;
+}
+
+.product-info .order-count {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.product-card .date {
+  margin: 0 14px 4px;
+  font-size: 0.82rem;
+  color: #777;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 30px 0;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  border: 1.5px solid #ccc;
+  background-color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #444;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+  cursor: default;
+}
+
+@media (max-width: 1024px) {
+  .product-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .pagination {
+    font-size: 14px;
+    gap: 10px;
+  }
+
+  .product-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .product-card img {
+    height: 220px;
+  }
+
+  .product-info .price {
+    font-size: 1.1rem;
+  }
+
+  .product-info .order-count {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+.product-list {
+  display: grid;
+  gap: 20px;
+}
+
+  .pagination {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .product-card {
+    margin: 0 auto;
+    max-width: 300px;
+  }
+
+  .product-card img {
+    height: 180px;
+  }
+
+  .product-info .price {
+    font-size: 1.1rem;
+  }
+
+  .product-info .order-count {
+    font-size: 0.9rem;
+  }
+}
+
