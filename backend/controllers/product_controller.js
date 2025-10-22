@@ -171,11 +171,14 @@ exports.getProductBySellerID = async (req, res) => {
 
 // Add a new Product
 exports.createProduct = async(req, res) => {
+    console.log("🟢 : createProduct res:", res);
     try {
         const product = new Product(req.body);
+        console.log("🟢 : product:", product);
         await product.save();
         res.status(201).json(product);
     } catch (error) {
+          console.log('Error adding product: ', error);
         res.status(500).json({ message: 'Error adding product', error });
     }
 };

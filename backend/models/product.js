@@ -18,7 +18,7 @@ const productSchema = new mongoose.Schema({
   image: [{ type: String, required: true }],
   category: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
-  type: { type: String, required: true },
+  type: { type: String, required: false },
   rating: { type: Number, default: 0 },
   sizes: [
     {
@@ -43,6 +43,7 @@ productSchema.pre("validate", async function (next) {
     }
 
     this.productNumber = newNumber;
+   // console.log('OrderController validate: productNumber: ', productNumber);
   }
   next();
 });

@@ -85,6 +85,7 @@ function AddProduct() {
         const data = await res.json();
         imageUrls.push(data.secure_url);
       }
+      console.log("🟢 image upload imageUrls: ", imageUrls);
 
       const productSizes = formData.sizes.map(size => {
         // Wenn "other" ausgewählt und eine benutzerdefinierte Farbe eingegeben wurde, dann die customColor verwenden
@@ -110,6 +111,7 @@ function AddProduct() {
       alert("Product added successfully!");
       navigate("/profile_seller");
     } catch (err) {
+      console.log("🟢 : Error", err.message);
       alert("Error: " + err.message);
     }
   };
