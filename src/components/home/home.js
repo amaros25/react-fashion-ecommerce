@@ -31,7 +31,7 @@ function Home() {
     : latestProducts;
 
   useEffect(() => {
-    let url = `${apiUrl}/products/latest?page=${page}&limit=15`;
+    let url = `${apiUrl}/products/latest?page=${page}&l`;
 
     if (selectedCategory) {
       url += `&category=${selectedCategory}`;
