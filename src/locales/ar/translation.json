@@ -214,5 +214,10 @@
   "other": "آخر",
   "enter_custom_color": "أدخل اللون المخصص",
   "add_another_size": "إضافة حجم آخر",
-  "post_product": "نشر المنتج"
+  "post_product": "نشر المنتج",
+   "upload_status": {
+    "loading": "جاري التحميل... يرجى الانتظار",
+    "success": "تم التحميل بنجاح!",
+    "error": "فشل التحميل!"
+  }
 }

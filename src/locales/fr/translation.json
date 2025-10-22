@@ -218,6 +218,11 @@
   "other": "Autre",
   "enter_custom_color": "Entrez une couleur",
   "add_another_size": "Ajouter une autre taille",
-  "post_product": "Publier le produit"
+  "post_product": "Publier le produit",
+  "upload_status": {
+    "loading": "Téléchargement… veuillez patienter",
+    "success": "Téléchargement réussi !",
+    "error": "Échec du téléchargement !"
+  }
 
 }

@@ -6,6 +6,7 @@ import AddProduct from "../new_product/add_product";
 import SellerProducts from "./seller_products";
 import ProfileSellerHeader from "./profile_seller_header";
 import SellerOrders from "./seller_orders.js";
+import LoadingSpinner from "../products/loading_spinner.js";
 
 function ProfileSeller() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -55,8 +56,10 @@ function ProfileSeller() {
       fetchSeller();
     }
   }, [userId, token, fetchSeller]);
-
-  if (!seller) return <p>Loading Profile...</p>;
+  
+  if (!seller) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="profile-seller-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
