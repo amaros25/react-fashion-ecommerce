@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./add_product.css";
 import ImageSelectUpload from "./image_select_upload.js";
 import { useTranslation } from "react-i18next";
+import UploadStatus from "./upload_status";
 
 function AddProduct() {
   const { t, i18n } = useTranslation();
@@ -27,6 +28,14 @@ function AddProduct() {
   });
 
   const colors = t("product_colors", { returnObjects: true });
+
+  const [status, setStatus] = useState({
+    visible: false,
+    loading: false,
+    success: false,
+    error: false,
+  });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,6 +78,7 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setStatus({ visible: true, loading: true, success: false, error: false });
     try {
       for (const file of imageFiles) {
         const formData = new FormData();
@@ -108,11 +118,14 @@ function AddProduct() {
         body: JSON.stringify(productData),
       });
       if (!res.ok) throw new Error("Product add error");
-      alert("Product added successfully!");
-      navigate("/profile_seller");
+      setStatus({ visible: true, loading: false, success: true, error: false });
+      setTimeout(() => {
+        setStatus({ visible: false, loading: false, success: false, error: false });
+        navigate("/profile_seller");
+      }, 3000);
     } catch (err) {
       console.log("🟢 : Error", err.message);
-      alert("Error: " + err.message);
+      setStatus({ visible: true, loading: false, success: false, error: true });
     }
   };
 
@@ -222,6 +235,7 @@ function AddProduct() {
           <button type="submit">{t("post_product")}</button>
         </div>
       </form>
+      <UploadStatus status={status} />
     </div>
   );
 }

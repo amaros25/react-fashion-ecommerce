@@ -5,6 +5,7 @@ import "./product_page.css";
 import { Header } from '../header/header.js';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "./loading_spinner.js";
 
 function ProductPage() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -186,11 +187,9 @@ useEffect(() => {
       });
   }, [id]);
 
-  if (!product) {
-    return <div>Produkt wird geladen...</div>;
-  }
-  if (!seller) {
-    return <div>Verkäufer werden geladen...</div>;
+
+  if (!product || !seller) {
+    return <LoadingSpinner />;
   }
 
   const handleBuyClick = () => {
