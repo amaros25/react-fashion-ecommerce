@@ -26,8 +26,8 @@ function ProductPage() {
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [seller, setSeller] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(localStorage.getItem("role")?.toLowerCase());
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
   console.log("***** Role:", localStorage.getItem("role"));
 
@@ -118,12 +118,8 @@ useEffect(() => {
 
 */}
   useEffect(() => {
-      const token = localStorage.getItem("token");
-      const role = localStorage.getItem("role");
-      setRole(localStorage.getItem("role")?.toLowerCase());
-      setIsLoggedIn(!!token);
-        if (role === "seller") {
-          toast.error("Verkäufer dürfen keine Bestellungen aufgeben.");
+      if (role === "seller") {
+          toast.error(t("seller_cannot_buy_alter"));
         }
     }, []);
 
@@ -198,9 +194,8 @@ useEffect(() => {
   }
 
   const handleBuyClick = () => {
-  const role = localStorage.getItem("role");
   if (role === "seller") {
-    toast.error("Verkäufer dürfen keine Bestellungen aufgeben.");
+    toast.error(t("seller_cannot_buy_alter"));
     return;
   }
   if (!selectedSize || !selectedColor) {
