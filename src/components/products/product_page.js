@@ -26,7 +26,10 @@ function ProductPage() {
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [seller, setSeller] = useState(null);
-   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState(localStorage.getItem("role")?.toLowerCase());
+
+  console.log("***** Role:", localStorage.getItem("role"));
 
 
 {/*
@@ -116,7 +119,12 @@ useEffect(() => {
 */}
   useEffect(() => {
       const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+      setRole(localStorage.getItem("role")?.toLowerCase());
       setIsLoggedIn(!!token);
+        if (role === "seller") {
+          toast.error("Verkäufer dürfen keine Bestellungen aufgeben.");
+        }
     }, []);
 
   useEffect(() => {
@@ -148,9 +156,6 @@ useEffect(() => {
     : [];
  
   const uniqueColors = Array.from(new Set(availableColors));
-
-
-
   useEffect(() => {
     fetch(`${apiUrl}/products/${id}`)
       .then((res) => res.json())
@@ -193,6 +198,11 @@ useEffect(() => {
   }
 
   const handleBuyClick = () => {
+  const role = localStorage.getItem("role");
+  if (role === "seller") {
+    toast.error("Verkäufer dürfen keine Bestellungen aufgeben.");
+    return;
+  }
   if (!selectedSize || !selectedColor) {
     toast.warn(t("product_page.select_size_alert"));
     return;
@@ -376,8 +386,11 @@ useEffect(() => {
           </div>
             </div>
           </div>
-          <button className="buy-button" onClick={handleBuyClick}>
-             {t("product_page.submit_order")}
+          <button className="buy-button" 
+            onClick={handleBuyClick} 
+            disabled={role === "seller"}
+          >
+            {t("product_page.submit_order")}
           </button>
         </div>
       </div>

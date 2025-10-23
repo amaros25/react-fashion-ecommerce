@@ -1,26 +1,35 @@
 .profile-header {
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
-  gap: 25px;
+  align-items: stretch;
   background-color: #fff;
-  padding: 25px;
+  padding: 60px 20px 40px;  /* oben: 60px, unten: 40px → Abstand zu Cards */
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0,0,0,0.08);
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+  position: relative;
+  gap: 30px;
 }
-
 /* Linke Spalte */
 .profile-left {
-  flex: 0 0 30%;
+  flex: 0 0 25%;
   background: #fafafa;
   padding: 20px;
   border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+  height: auto; /* ← darf sich anpassen */
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
 }
 
 /* Rechte Seite – Container für Cards */
@@ -28,17 +37,19 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: stretch;
   gap: 20px;
 }
 
 /* --- Orders Card --- */
 .order-stats-card {
+  flex-grow: 1;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background-color: #f9f9f9;
+  align-items: center; /* ← hier! von stretch auf center ändern */
+  background-color: #fafafa;
   border-radius: 10px;
-  padding: 20px 40px;
+  padding: 25px;
   box-shadow: 0 0 8px rgba(0,0,0,0.05);
 }
 
@@ -46,6 +57,7 @@
   flex: 1;
   text-align: center;
 }
+
 
 .stat-item + .stat-item {
   border-left: 1px solid #ddd;
@@ -64,7 +76,6 @@
   margin-top: 5px;
 }
 
-/* --- Chart Card --- */
 .order-chart-card {
   background: #fafafa;
   border-radius: 10px;
@@ -72,7 +83,7 @@
   box-shadow: 0 0 8px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
-  align-items: center; /* 🔹 zentriert horizontal */
+  align-items: center;
 }
 
 .order-chart-card h4 {
@@ -80,10 +91,10 @@
   color: #444;
   font-size: 18px;
   font-weight: 600;
-  text-align: center; /* 🔹 Text im Zentrum */
+  text-align: center; 
   width: 100%;
 }
-
+/*
 .recharts-responsive-container {
   width: 100% !important;
   height: 220px !important;
@@ -92,7 +103,7 @@
 .order-legend {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;        /* falls schmaler Bildschirm */
+  flex-wrap: wrap;   
   gap: 15px;
   margin-top: 10px;
   color: #555;
@@ -105,7 +116,7 @@
   gap: 6px;
 }
 
-/* Kleine farbige Punkte */
+
 .dot {
   width: 10px;
   height: 10px;
@@ -113,9 +124,37 @@
   display: inline-block;
 }
 
-/* Farben passend zu Linien */
-.dot.total { background-color: #3b82f6; }       /* Blau */
-.dot.pending { background-color: #8b5cf6; }     /* Lila */
-.dot.cancelled { background-color: #ff66b2; }   /* Hellrosa */
-.dot.delivered { background-color: #4caf50; }   /* Grün */
-.dot.returned { background-color: #b71c1c; }    /* Dunkelrot */
+
+.dot.total { background-color: #3b82f6; }       
+.dot.pending { background-color: #8b5cf6; }     
+.dot.cancelled { background-color: #ff66b2; }   
+.dot.delivered { background-color: #4caf50; } 
+.dot.returned { background-color: #b71c1c; }  
+ */
+.profile-left h3 {
+  margin: 8px 0 5px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.profile-left p {
+  margin: 3px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.shop-name {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 32px;          /* größer als vorher */
+  font-weight: 700;          /* kräftiger */
+  color: #222;
+  text-align: center;
+  line-height: 1.2;          /* schöner Zeilenabstand */
+}
+
+
+
+

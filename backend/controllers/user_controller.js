@@ -42,28 +42,42 @@ exports.createUser = async (req, res) => {
 };
 
 
-// Adresse des Users aktualisieren
-exports.updateAddress = async (req, res) => {
+// Adresse und Telefonnummer des Users aktualisieren
+exports.updateContact = async (req, res) => {
   try {
     const userId = req.params.id; // aus der URL
-    const { street, postalCode, city } = req.body.address;
+    const { address, phone } = req.body; // Adresse & Telefonnummer kommen direkt aus Body
 
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "Benutzer nicht gefunden" });
+    if (!user) {
+      return res.status(404).json({ message: "Benutzer nicht gefunden" });
+    }
 
-    // Adresse aktualisieren
-    user.address = {
-      street: street || user.address.street,
-      postalCode: postalCode || user.address.postalCode,
-      city: city || user.address.city,
- 
-    };
+    // Wenn address übergeben wurde → Felder aktualisieren
+    if (address) {
+      user.address = {
+        street: address.street || user.address?.street,
+        postalCode: address.postalCode || user.address?.postalCode,
+        city: address.city || user.address?.city,
+      };
+    }
+
+    // Wenn phone übergeben wurde → aktualisieren
+    if (phone) {
+      user.phone = phone;
+    }
 
     await user.save();
 
-    res.status(200).json({ message: "Adresse aktualisiert", address: user.address });
+    res.status(200).json({
+      message: "Adresse und Telefonnummer aktualisiert",
+      user,
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Fehler beim Aktualisieren der Adresse", error: err });
+    res.status(500).json({
+      message: "Fehler beim Aktualisieren der Adresse oder Telefonnummer",
+      error: err.message,
+    });
   }
 };

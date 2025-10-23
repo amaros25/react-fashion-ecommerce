@@ -64,6 +64,7 @@ const CartPage = () => {
         });
         const data = await res.json();
         setUser(data);
+        console.log("🟢 user data:", data);
 
         // Show address form if no address exists
         if (data.address) {
@@ -225,29 +226,32 @@ const CartPage = () => {
   // -------------------------------
   // Save delivery address to backend
   // -------------------------------
-  const handleSaveAddress = async (newAddress) => {
-    try {
-      const res = await fetch(`${apiUrl}/users/${userId}/updateAddress`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ address: newAddress }),
-      });
-      if (!res.ok) throw new Error("Failed to save address");
 
-      // Update local state and enable ordering
-      setDeliveryAddresses(newAddress);
-      setUser((prev) => ({ ...prev, address: newAddress })); // show new address
-      setShowAddressForm(false);
-      setCanOrder(true); // enable order button
-      alert("Address saved ✅");
-    } catch (err) {
-      console.error(err);
-      alert("Error saving address");
-    }
-  };
+  const handleSaveAddress = async (newData) => {
+  try {
+    const res = await fetch(`${apiUrl}/users/${userId}/updateContact`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(newData),
+    });
+
+    if (!res.ok) throw new Error("Failed to save contact info");
+
+    const updated = await res.json();
+    setUser(updated.user);
+    setDeliveryAddresses(updated.user.address);
+    setShowAddressForm(false);
+    alert("✅ Adresse & Telefonnummer gespeichert!");
+  } catch (err) {
+    console.error(err);
+    alert("❌ Fehler beim Speichern der Daten.");
+  }
+};
+
+
   // -------------------------------
   // Render empty cart view
   // -------------------------------
@@ -358,8 +362,9 @@ const CartPage = () => {
         {/* Address Form (inline inside summary) */}
         {showAddressForm && (
           <div className="inline-address-form">
-            <DeliveryAddressForm
+           <DeliveryAddressForm
               address={deliveryAddresses}
+              phone={user?.phone}
               onSaveAddress={handleSaveAddress}
             />
           </div>
