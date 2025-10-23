@@ -189,3 +189,10 @@
     width: 100%;
   }
 }
+
+
+.product-buy-box button:disabled {
+  background-color: #ccc;   /* graues Aussehen */
+  cursor: not-allowed;      /* Maus zeigt "nicht erlaubt" */
+  opacity: 0.6;             /* optional leicht transparent */
+}

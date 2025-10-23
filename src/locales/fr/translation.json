@@ -223,6 +223,7 @@
     "loading": "Téléchargement… veuillez patienter",
     "success": "Téléchargement réussi !",
     "error": "Échec du téléchargement !"
-  }
+  },
+  "seller_cannot_buy_alter": "Les vendeurs ne peuvent pas passer de commandes."
 
 }
