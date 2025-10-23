@@ -105,8 +105,8 @@ function ProfileSellerHeader({ seller, openOrders, orders }) {
             <p className="stat-number">{totalOrdersCount}</p>
           </div>
         </div>
-
-        {/* === Diagram Card === */}
+        {/*
+     
         <div className="order-chart-card">
           <h4>Orders Over Time</h4>
           <ResponsiveContainer width="100%" height={220}>
@@ -124,16 +124,12 @@ function ProfileSellerHeader({ seller, openOrders, orders }) {
                   border: "1px solid #ddd",
                 }}
               />
-              {/* Gesamt (blau) */}
+      
               <Line type="monotone" dataKey="total" stroke="#3b82f6" strokeWidth={3} dot={false} />
-              {/* Pending (lila) */}
               <Line type="monotone" dataKey="pending" stroke="#8b5cf6" strokeWidth={3} dot={false} />
-              {/* Cancelled (rosa) */}
               <Line type="monotone" dataKey="cancelled" stroke="#ff66b2" strokeWidth={3} dot={false} />
 
-              {/* Delivered (grün) */}
               <Line type="monotone" dataKey="delivered" stroke="#4caf50" strokeWidth={3} dot={false} />
-              {/* Returned to sender (rot) */}
                 <Line type="monotone" dataKey="returned_to_sender" stroke="#b71c1c" strokeWidth={3} dot={false} />
 
             </LineChart>
@@ -145,8 +141,9 @@ function ProfileSellerHeader({ seller, openOrders, orders }) {
             <div><span className="dot delivered"></span> Delivered</div>
             <div><span className="dot returned"></span> Returned</div>
             </div>
-           
+        
         </div>
+    */}
       </div>
     </div>
   );
