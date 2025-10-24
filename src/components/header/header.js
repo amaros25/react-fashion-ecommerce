@@ -93,13 +93,13 @@ function Header() {
           </Link>
         </h1>
         <div className="links">
- 
           <Link to="/">
             <img src="/icons/home_icon.svg" style={{ width: "26px", height: "35px" }} />
-
           </Link>
-
-          {isLoggedIn ? (
+          <Link to="/cart_page">
+            <img src="/icons/empty_cart_icon.svg" style={{ width: "26px", height: "35px" }} />
+          </Link>
+      {isLoggedIn ? (
             <img src="/icons/profile_icon.svg"
               style={{ width: "24px", height: "50px"}}  
               className="nav-icon"
@@ -120,19 +120,13 @@ function Header() {
               onClick={handleLogout}
             />
           )}
-
-          <Link to="/cart_page">
-            <img src="/icons/empty_cart_icon.svg" style={{ width: "26px", height: "35px" }} />
-
-          </Link>
-
-  
+          {/*
           <img src="/icons/help_icon.svg"
             style={{ width: "24px", height: "24px" }}  
             className="nav-icon"
             onClick={handleHelpClick}
           />
-
+            */}
            <select
             onChange={(e) => changeLanguage(e.target.value)}
             value={i18n.language}
