@@ -224,6 +224,9 @@
     "success": "Téléchargement réussi !",
     "error": "Échec du téléchargement !"
   },
-  "seller_cannot_buy_alter": "Les vendeurs ne peuvent pas passer de commandes."
+  "seller_cannot_buy_alter": "Les vendeurs ne peuvent pas passer de commandes.",
+  "related_products": {
+    "title": "Vous pourriez aussi aimer"
+  }
 
 }

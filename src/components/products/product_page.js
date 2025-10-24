@@ -6,6 +6,8 @@ import { Header } from '../header/header.js';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./loading_spinner.js";
+import RelatedProducts from "../related_products/related_product.js"
+import Foot from '../foot/foot';
 
 function ProductPage() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -389,6 +391,8 @@ useEffect(() => {
           </button>
         </div>
       </div>
+      <RelatedProducts category={product.category}/>
+      <Foot/>
     </div>
   );
 }

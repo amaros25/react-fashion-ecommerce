@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./seller_orders.css";
 import StatusSelect from "./status_select";
 import { useTranslation } from "react-i18next";
+import LoadingSpinner from "../products/loading_spinner";
 
 function SellerOrders({ sellerId, handleStatusChange }) {
   const { t, i18n } = useTranslation();
   const apiUrl = process.env.REACT_APP_API_URL;
+  const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([]);
   const [statusUpdates, setStatusUpdates] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,10 +21,8 @@ function SellerOrders({ sellerId, handleStatusChange }) {
     fetchOrders();
   };
 
- 
- 
-
   async function fetchOrders() {
+    setLoading(true); // Spinner starten
     try {
       const queryParams = new URLSearchParams({
         page: currentPage,
@@ -44,12 +44,14 @@ function SellerOrders({ sellerId, handleStatusChange }) {
       console.error("Error loading orders:", error);
       setOrders([]);
       setTotalPages(1);
+    } finally {
+      setLoading(false);  
     }
   }
 
-  // Daten vom Backend laden (mit Pagination)
   useEffect(() => {
     async function fetchOrders() {
+      setLoading(true); // Spinner starten
       try {
         const res = await fetch(
           `${apiUrl}/orders/seller/${sellerId}?page=${currentPage}&limit=${ordersPerPage}`
@@ -69,7 +71,9 @@ function SellerOrders({ sellerId, handleStatusChange }) {
         console.error("Error loading orders:", error);
         setOrders([]);
         setTotalPages(1);
-      }
+      } finally {
+      setLoading(false);  
+    }
     }
 
     if (sellerId) {
@@ -168,7 +172,7 @@ function SellerOrders({ sellerId, handleStatusChange }) {
         </button>
       </div>
 
-      {orders.length === 0 && (
+      {!loading && orders.length === 0 && (
         <p className="no-orders-message">{t("noOrders")}</p>
       )}
 
@@ -275,6 +279,7 @@ function SellerOrders({ sellerId, handleStatusChange }) {
           </button>
         ))}
       </div>
+      {loading && <LoadingSpinner />}
     </div>
   );
 }

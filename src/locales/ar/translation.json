@@ -220,5 +220,8 @@
     "success": "تم التحميل بنجاح!",
     "error": "فشل التحميل!"
   },
-  "seller_cannot_buy_alter": "لا يمكن للبائعين تقديم طلبات."
+  "seller_cannot_buy_alter": "لا يمكن للبائعين تقديم طلبات.",
+  "related_products": {
+    "title": "قد يعجبك أيضًا"
+  }
 }
