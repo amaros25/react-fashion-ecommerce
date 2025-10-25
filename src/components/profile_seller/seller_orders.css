@@ -523,3 +523,20 @@
   }
 
 }
+
+
+.product-info-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Abstand zwischen den Chips */
+  margin-top: 5px;
+}
+
+.product-info-chips .chip {
+  background-color: #f5f5f5; /* leicht grau */
+  padding: 10px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #333;
+  display: inline-block;
+}

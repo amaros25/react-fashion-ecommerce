@@ -18,7 +18,6 @@ function Header() {
   const scrollRef = useRef(null);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -68,6 +67,14 @@ function Header() {
     navigate("/");
   };
 
+  useEffect(() => {
+      if (i18n.language === 'ar') {
+        document.body.classList.add('rtl');
+      } else {
+        document.body.classList.remove('rtl');
+      }
+    }, [i18n.language]);
+
   const changeLanguage = (lang) => {
     i18n.changeLanguage(lang);
     document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
@@ -83,8 +90,7 @@ function Header() {
   };
 
   return (
-    <div className="header">
-
+    <div className="header" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
     <div className="header">
       <nav className="navbar">
         <h1 className="logo">

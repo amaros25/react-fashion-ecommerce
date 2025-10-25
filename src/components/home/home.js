@@ -67,22 +67,19 @@ function Home() {
   return (
     <div className="main-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <Header />
-  
-      {searchTerm === "" && selectedCategory === "" && <TopBannerSlider />}
-
+      {/* 
+      {searchTerm === "" && selectedCategory === "" && <TopBannerSlider />} */}
       <div className="latest-product-list">
         {filteredProducts.map((product) => (
           <Link 
             key={product._id} 
             to={`/product/${product._id}`} 
-            className="latest-product-item"
-          >
+            className="latest-product-item">
             <img 
               src={product.image[0]} 
               alt={product.name} 
               className="latest-product-image" 
-              loading="lazy" 
-            />
+              loading="lazy"/>
             <h3>{product.name}</h3>
             <p>{product.price} DT</p>
             <p className="product-sizes">
@@ -91,17 +88,13 @@ function Home() {
           </Link>
         ))}
       </div>
-
       <Pagination 
         page={page} 
         totalPages={totalPages} 
         onPageChange={setPage} 
       />
-
       <Foot/>
-   
     </div>
-
   );
 }
 

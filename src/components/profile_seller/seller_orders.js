@@ -96,10 +96,10 @@ function SellerOrders({ sellerId, handleStatusChange }) {
 
   // Funktion zur Übersetzung der Farbe
   const translateColor = (color) => {
-    const translatedColor =
-      t(`product_color.${color}`) || t(`product_color.${color.toLowerCase()}`);
-    return translatedColor || color;
-  };
+  // Standardfarben: aus deinen Übersetzungen
+  const translated = t(`product_colors.${color.toLowerCase()}`, { defaultValue: color });
+  return translated;
+};
 
   // Seitenwechsel
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -115,6 +115,7 @@ function SellerOrders({ sellerId, handleStatusChange }) {
   for (let i = startPage; i <= endPage; i++) {
     pageNumbers.push(i);
   }
+
 
   return (
     <div
@@ -200,11 +201,11 @@ function SellerOrders({ sellerId, handleStatusChange }) {
                     <span className="product-title">
                       {item.product?.name || t("productName")}
                     </span>
-                    <div className="product-info">
-                      {t("productColor")}: {translateColor(item.color)} |{" "}
-                      {t("productSize")}: {item.size} | {t("quantity")}:{" "}
-                      {item.quantity}
-                    </div>
+                  <div className="product-info-chips">
+                    <span className="chip">{t("productColor")}: {translateColor(item.color)}</span>
+                    <span className="chip">{t("productSize")}: {item.size}</span>
+                    <span className="chip">{t("quantity")}: {item.quantity}</span>
+                  </div>
                     <div className="product-price">
                        {(item.product?.price * item.quantity).toFixed(2) || "0.00"}  {t("price_suf")} 
                     </div>

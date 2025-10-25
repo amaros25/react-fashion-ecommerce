@@ -5,6 +5,7 @@ import "./cart_page.css";
 import DeliveryAddressForm from "./delivery_address_form";
 import { useTranslation } from "react-i18next";
 import { FaTrash } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const CartPage = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -30,9 +31,6 @@ const CartPage = () => {
   });
 
   const [sellers, setSellers] = useState({});
-
-
-
 
   useEffect(() => {
     const fetchSellers = async () => {
@@ -134,13 +132,13 @@ const CartPage = () => {
 
   const handle_new_order = async () => {
     if (!userId || !token) {
-      alert(t("product_page.must_login"));
+      toast.error(t("product_page.must_login"));
       return;
     }
 
     if (!user?.address?.street) {
-      alert(t("Bitte zuerst eine Lieferadresse angeben"));
-      return;
+      toast.error(t("enter_address_first"));
+      return; 
     }
 
     try {
@@ -180,15 +178,14 @@ const CartPage = () => {
           throw new Error(`Fehler beim Erstellen der Bestellung für Seller ${sellerId}`);
         }
       }
-
-      alert("✅ Alle Bestellungen wurden erfolgreich erstellt!");
+      toast.error(t("orders_created_success"));
       localStorage.removeItem("cart");
       setCart([]);
       setGroupedCart({});
       navigate("/profile_user"); // oder eine andere Seite
     } catch (err) {
       console.error(err);
-      alert("❌ Fehler beim Erstellen der Bestellung(en).");
+      toast.error(t("orders_created_error"));
     }
   };
 
@@ -244,10 +241,10 @@ const CartPage = () => {
     setUser(updated.user);
     setDeliveryAddresses(updated.user.address);
     setShowAddressForm(false);
-    alert("✅ Adresse & Telefonnummer gespeichert!");
+    toast.info(t("address_saved"));
   } catch (err) {
     console.error(err);
-    alert("❌ Fehler beim Speichern der Daten.");
+      toast.error(t("address_save_error"));
   }
 };
 

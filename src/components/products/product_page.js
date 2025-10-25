@@ -348,8 +348,8 @@ useEffect(() => {
               >
                 <option value="">{t("product_page.select_color")}</option>
                 {uniqueColors.map((color, index) => (
-                  <option key={index} value={color}>
-                    {color}
+                  <option key={index} 
+                  value= {color}>  {t(`product_colors.${color.toLowerCase()}`, { defaultValue: color })}
                   </option>
                 ))}
               </select>

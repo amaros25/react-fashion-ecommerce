@@ -116,7 +116,7 @@
     "confirm_position": "Confirmer",
     "cancel_position": "Annuler",
     "price_suf": "DT",
-    "Change": "Modifier l’adresse"
+    "Change": "Modifier l’adresse / le téléphone"
  
   },
  
@@ -227,6 +227,17 @@
   "seller_cannot_buy_alter": "Les vendeurs ne peuvent pas passer de commandes.",
   "related_products": {
     "title": "Vous pourriez aussi aimer"
-  }
+  },
+  "edit_delivery_address": "📦 Modifier l’adresse / le téléphone",
+  "street": "Rue",
+  "city": "Ville",
+  "postal_code": "Code postal",
+  "phone_number": "Numéro de téléphone",
+  "save": "💾 Enregistrer",
+  "orders_created_success": "✅ Toutes les commandes ont été créées avec succès !",
+  "orders_created_error": "❌ Erreur lors de la création des commandes.",
+  "enter_address_first": "Veuillez d'abord saisir une adresse de livraison",
+  "address_saved": "✅ Adresse et numéro de téléphone enregistrés !",
+  "address_save_error": "❌ Erreur lors de l’enregistrement des données."
 
 }
