@@ -1,25 +1,21 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { useTranslation } from "react-i18next";
 
-const StatusSelect = ({ order, onStatusChange }) => {
+const StatusSelect = forwardRef(({ order, onStatusChange }, ref) => {
   const { t } = useTranslation();
 
-
-
-
-  // Definiere die Optionen basierend auf dem Status des Auftrags
   const getStatusOptions = (status) => {
     switch (status) {
-      case "pending": //Done
+      case "pending":
         return [
           { value: "confirmed", label: t("order_state.confirmed") },
           { value: "seller_cancelled", label: t("order_state.seller_cancelled") },
         ];
       case "confirmed":
         return [
-        { value: "shipped", label: t("order_state.shipped") },
-        { value: "seller_cancelled", label: t("order_state.seller_cancelled") },
-         ];
+          { value: "shipped", label: t("order_state.shipped") },
+          { value: "seller_cancelled", label: t("order_state.seller_cancelled") },
+        ];
       case "shipped":
         return [
           { value: "delivered", label: t("order_state.delivered") },
@@ -41,13 +37,13 @@ const StatusSelect = ({ order, onStatusChange }) => {
     }
   };
 
-  // Die verfügbaren Statusoptionen für den aktuellen Status
   const statusOptions = getStatusOptions(order.status?.slice(-1)[0]?.update || "pending");
 
   return (
     <select
+      ref={ref}
       className="status-select"
-      value={order.status?.slice(-1)[0]?.update || "pending"}
+      defaultValue={order.status?.slice(-1)[0]?.update || "pending"}
       onChange={(e) => onStatusChange(order._id, e.target.value)}
     >
       {statusOptions.map((option) => (
@@ -57,6 +53,6 @@ const StatusSelect = ({ order, onStatusChange }) => {
       ))}
     </select>
   );
-};
+});
 
 export default StatusSelect;

@@ -76,7 +76,7 @@ const CartPage = () => {
         } else {
           setShowAddressForm(true);
         }
-            console.log("🟢 deliveryAddresses", deliveryAddresses);
+          console.log("🟢 deliveryAddresses", deliveryAddresses);
       } catch (err) {
         console.error(err);
       }
