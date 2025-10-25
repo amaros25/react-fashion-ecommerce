@@ -74,8 +74,6 @@ function ProfileUser() {
   return (
     <div className="profile-user-container">
       <Header />
-      
-      {/* Übersetzbarer Header */}
       <UserProfileHeader 
         user={user} 
         totalOrders={totalOrders} 
@@ -113,11 +111,11 @@ function ProfileUser() {
                       <div className="order-product-info">
                         <p className="order-product-title">{product?.name || t("loading_product")}</p>
                         <div className="order-product-variants">
-                          <span>{t("size")}: {item.size}</span> | 
-                          <span>{t("color")}: {item.color}</span> | 
-                          <span>{t("quantity")}: {item.quantity}</span>
-                        </div>
+                        <span>{t("size")}: {item.size}</span>
+                        <span>{t("color")}: {t(`product_colors.${item.color.toLowerCase()}`, { defaultValue: item.color })}</span>
+                        <span>{t("quantity")}: {item.quantity}</span>
                       </div>
+                    </div>
                     </div>
 
                     <div className="order-item-right">

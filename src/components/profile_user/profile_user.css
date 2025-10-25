@@ -247,3 +247,17 @@
 a, p, h2, h4, span, li {
   text-decoration: none;
 }
+
+.order-product-variants {
+  display: flex;
+  gap: 12px;            /* Abstand zwischen Elementen */
+  flex-wrap: wrap;      /* Falls es zu lang wird, bricht es schön um */
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.order-product-variants span {
+  background: #f9f9f9;
+  padding: 4px 8px;
+  border-radius: 6px;
+}

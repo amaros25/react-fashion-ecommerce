@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 function DeliveryAddressForm({ address, phone, onSaveAddress }) {
-  console.log("Address: ", address)
-  console.log("Phone: ", phone)
+  const { t } = useTranslation(); // <== Hook initialisieren
   const [localAddress, setLocalAddress] = useState(address);
   const [localPhone, setLocalPhone] = useState(phone || "");
 
@@ -15,21 +15,22 @@ function DeliveryAddressForm({ address, phone, onSaveAddress }) {
 
   return (
     <div className="address-section">
-      <h3>📦 Lieferadresse bearbeiten</h3>
+      <h3>{t("edit_delivery_address")}</h3>
 
       <div className="address-form">
         <input
           type="text"
-          placeholder="Straße"
+          placeholder={t("street")}
           value={localAddress.street}
           onChange={(e) =>
             setLocalAddress({ ...localAddress, street: e.target.value })
           }
         />
+
         <div className="address-form-row">
           <input
             type="text"
-            placeholder="Stadt"
+            placeholder={t("city")}
             value={localAddress.city}
             onChange={(e) =>
               setLocalAddress({ ...localAddress, city: e.target.value })
@@ -37,7 +38,7 @@ function DeliveryAddressForm({ address, phone, onSaveAddress }) {
           />
           <input
             type="text"
-            placeholder="PLZ"
+            placeholder={t("postal_code")}
             value={localAddress.postalCode}
             onChange={(e) =>
               setLocalAddress({ ...localAddress, postalCode: e.target.value })
@@ -45,17 +46,16 @@ function DeliveryAddressForm({ address, phone, onSaveAddress }) {
           />
         </div>
 
-        {/* Telefonnummer */}
         <input
           type="text"
-          placeholder="Telefonnummer"
+          placeholder={t("phone_number")}
           value={localPhone}
           onChange={(e) => setLocalPhone(e.target.value)}
         />
 
         <div className="address-button-row">
           <button className="save-address-button" onClick={handleSave}>
-            💾 Speichern
+            {t("save")}
           </button>
         </div>
       </div>

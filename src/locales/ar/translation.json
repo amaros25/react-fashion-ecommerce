@@ -116,7 +116,7 @@
     "confirm_position": "تأكيد",
     "cancel_position": "إلغاء",
     "price_suf": "د",
-    "Change": "تغيير العنوان"
+    "Change": "تعديل العنوان / رقم الهاتف "
     
   },
  
@@ -223,5 +223,16 @@
   "seller_cannot_buy_alter": "لا يمكن للبائعين تقديم طلبات.",
   "related_products": {
     "title": "قد يعجبك أيضًا"
-  }
+  },
+   "edit_delivery_address": "📦 تعديل العنوان / رقم الهاتف",
+  "street": "الشارع",
+  "city": "المدينة",
+  "postal_code": "الرمز البريدي",
+  "phone_number": "رقم الهاتف",
+  "save": "💾 حفظ",
+  "orders_created_success": "✅ تم إنشاء جميع الطلبات بنجاح!",
+  "orders_created_error": "❌ حدث خطأ أثناء إنشاء الطلبات.",
+  "enter_address_first": "الرجاء إدخال عنوان التوصيل أولاً",
+  "address_saved": "✅ تم حفظ العنوان ورقم الهاتف!",
+  "address_save_error": "❌ حدث خطأ أثناء حفظ البيانات."
 }
