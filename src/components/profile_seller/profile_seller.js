@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Header } from "../header/header.js";
 import "./profile_seller.css";
-import { useTranslation } from "react-i18next";
 import AddProduct from "../new_product/add_product";
 import SellerProducts from "./seller_products";
 import ProfileSellerHeader from "./profile_seller_header";
 import SellerOrders from "./seller_orders.js";
 import LoadingSpinner from "../products/loading_spinner.js";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 function ProfileSeller() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -17,28 +18,45 @@ function ProfileSeller() {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
   const tabKeys = ["products", "openOrders", "allOrders"];
+  const [loading, setLoading] = useState(false);
+  const [refreshOrders, setRefreshOrders] = useState(0);
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
+     // setLoading(true);
+
       const response = await fetch(`${apiUrl}/orders/${orderId}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          status: newStatus,
-        }),
+        body: JSON.stringify({ status: newStatus }),
       });
+
       if (response.ok) {
         const updatedOrder = await response.json();
-        console.log("Order updated:", updatedOrder);
+
+        // Toast in aktiver Sprache
+        toast.success(
+          t("statusUpdated", { status: t(`order_state.${newStatus}`) }),
+          { position: "top-right", autoClose: 3000 }
+        );
+        setRefreshOrders(prev => prev + 1);
       } else {
         const errorData = await response.json();
-        console.error("Error updating status:", errorData.message);
+        toast.error(
+          t("updateFailed", { message: errorData.message || t("unknownError") }),
+          { position: "top-right", autoClose: 5000 }
+        );
       }
     } catch (error) {
-      console.error("An error occurred:", error);
+      toast.error(
+        t("updateFailed", { message: error.message }),
+        { position: "top-right", autoClose: 5000 }
+      );
+    } finally {
+      //setLoading(false);
     }
   };
 
@@ -113,6 +131,7 @@ function ProfileSeller() {
           <SellerOrders
             sellerId={userId}
             handleStatusChange={handleStatusChange}
+            refreshTrigger={refreshOrders} 
           />
         )}
         {activeTab === "add_new_product" && <AddProduct />}

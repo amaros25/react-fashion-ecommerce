@@ -153,12 +153,6 @@ exports.updateOrderStatus = async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    const hasOtherStatuses = order.status.length > 1 || (order.status.length === 1 && order.status[0].update !== "pending");
-
-    if (status === "confirmed" && hasOtherStatuses) {
-      return res.status(400).json({ message: "Order cannot be confirmed, because it has already been updated to another status." });
-    }
-
     // Falls die Bestellung noch keinen Status hat, initialisiere das Array
     if (!order.status) {
       order.status = [];

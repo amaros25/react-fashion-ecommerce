@@ -238,6 +238,9 @@
   "orders_created_error": "❌ Erreur lors de la création des commandes.",
   "enter_address_first": "Veuillez d'abord saisir une adresse de livraison",
   "address_saved": "✅ Adresse et numéro de téléphone enregistrés !",
-  "address_save_error": "❌ Erreur lors de l’enregistrement des données."
-
+  "address_save_error": "❌ Erreur lors de l’enregistrement des données.",
+  "statusUpdated": "Statut mis à jour avec succès: {{status}}",
+  "updateFailed": "Échec de la mise à jour: {{message}}",
+  "unknownError": "Erreur inconnue"
+  
 }

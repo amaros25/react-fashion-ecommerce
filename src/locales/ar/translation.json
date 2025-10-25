@@ -234,5 +234,8 @@
   "orders_created_error": "❌ حدث خطأ أثناء إنشاء الطلبات.",
   "enter_address_first": "الرجاء إدخال عنوان التوصيل أولاً",
   "address_saved": "✅ تم حفظ العنوان ورقم الهاتف!",
-  "address_save_error": "❌ حدث خطأ أثناء حفظ البيانات."
+  "address_save_error": "❌ حدث خطأ أثناء حفظ البيانات.",
+  "statusUpdated": "تم تغيير الحالة بنجاح إلى {{status}}",
+  "updateFailed": "حدث خطأ أثناء التحديث: {{message}}",
+  "unknownError": "خطأ غير معروف"
 }

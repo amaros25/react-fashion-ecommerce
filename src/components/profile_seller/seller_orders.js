@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./seller_orders.css";
 import StatusSelect from "./status_select";
 import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../products/loading_spinner";
 
-function SellerOrders({ sellerId, handleStatusChange }) {
+function SellerOrders({ sellerId, handleStatusChange, refreshTrigger}) {
   const { t, i18n } = useTranslation();
   const apiUrl = process.env.REACT_APP_API_URL;
   const [loading, setLoading] = useState(false);
@@ -15,11 +15,13 @@ function SellerOrders({ sellerId, handleStatusChange }) {
   const ordersPerPage = 5;
   const [searchOrder, setSearchOrder] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
+  const selectRef = useRef(null);
 
   const handleFilter = () => {
     setCurrentPage(1);
     fetchOrders();
   };
+
 
   async function fetchOrders() {
     setLoading(true); // Spinner starten
@@ -81,17 +83,13 @@ function SellerOrders({ sellerId, handleStatusChange }) {
     }
   }, [sellerId, currentPage, apiUrl]);
 
+   useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders, refreshTrigger]);
+
   // Status im lokalen State aktualisieren
   const onStatusChange = (orderId, newStatus) => {
     setStatusUpdates((prev) => ({ ...prev, [orderId]: newStatus }));
-  };
-
-  // Status an Backend schicken
-  const onSubmit = (orderId) => {
-    const newStatus = statusUpdates[orderId];
-    if (newStatus) {
-      handleStatusChange(orderId, newStatus);
-    }
   };
 
   // Funktion zur Übersetzung der Farbe
@@ -240,11 +238,13 @@ function SellerOrders({ sellerId, handleStatusChange }) {
 
           <div className="status-update">
             <div className="status-update-container">
-              <StatusSelect order={order} onStatusChange={onStatusChange} />
+            <StatusSelect order={order} onStatusChange={onStatusChange} ref={selectRef} />
               <button
                 className="update-button"
-                onClick={() => onSubmit(order._id)}
-              >
+                onClick={() => {
+                    const newStatus = selectRef.current.value;
+                    handleStatusChange(order._id, newStatus);
+                  }}>
                 {t("update")}
               </button>
             </div>
