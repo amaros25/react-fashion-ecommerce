@@ -99,75 +99,85 @@ exports.getProductBySellerID = async (req, res) => {
       ];
     }
 
-    // Anzahl Produkte für Pagination
+    // Produkte des Verkäufers laden
     const totalCount = await Product.countDocuments(filter);
-    console.log("🟢 totalCount: ", totalCount);
-    // Produkte laden 
     const products = await Product.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    // Relevante Order-Status
-    const validStatuses = [
-      "confirmed",
-      "shipped",
-      "delivered",
-      "received",
-    ];
+    if (!products.length) {
+      return res.json({
+        products: [],
+        totalCount: 0,
+        page,
+        totalPages: 1,
+      });
+    }
 
-    // Order-Aggregation: Letzten Status checken, nur gültige Status zählen
-    const orderCounts = await Order.aggregate([
-      // Sicherstellen, dass Status-Array existiert und nicht leer ist
-      {
-        $match: { status: { $exists: true, $not: { $size: 0 } } }
+
+    // IDs der Produkte des Verkäufers
+    const productIds = products.map(p => p._id);
+
+    const rawOrders = await Order.find({
+  "items.productId": { $in: productIds }
+})
+  .select("orderNumber items status")
+  .lean();
+
+console.log("🧾 Gesamt relevante Orders für diesen Seller:", rawOrders.length);
+rawOrders.forEach(o => {
+  console.log("Order:", o.orderNumber);
+  console.log("  ➤ Status:", o.status.map(s => s.update));
+  console.log("  ➤ Produkte:", o.items.map(i => i.productId.toString()));
+});
+    // Order-Aggregation: nur Bestellungen mit diesen Produkten und gültigem Status
+  const orderCounts = await Order.aggregate([
+    // 1️⃣ Nur Orders mit Items, die zu den Produkten des Verkäufers gehören
+    { $match: { "items.productId": { $in: productIds } } },
+
+    // 2️⃣ Items auseinandernehmen
+    { $unwind: "$items" },
+
+    // 3️⃣ Nur Items zählen, die zum Verkäufer gehören
+    { $match: { "items.productId": { $in: productIds } } },
+
+    // 4️⃣ Gruppieren pro Produkt-ID
+    {
+      $group: {
+        _id: "$items.productId",
+        count: { $sum: 1 }, // Menge summieren, oder $sum: 1 für Anzahl der Bestellungen
       },
-      // Letzten Status aus dem Status-Array holen
-      {
-        $addFields: {
-          lastStatus: { $arrayElemAt: ["$status", -1] }
-        }
-      },
-      // Nur Orders mit letztem Status aus validStatuses filtern (update statt status)
-      {
-        $match: {
-          "lastStatus.update": { $in: validStatuses }
-        }
-      },
-      // Produkte aus dem Array unwinden
-      { $unwind: "$items" },
-      // Gruppieren nach ProduktId und aufsummieren der Menge
-      {
-        $group: {
-          _id: "$items.productId",
-          count: { $sum: "$items.quantity" }
-        }
-      }
-    ]);
-    console.log("🟢 orderCounts: ", orderCounts);
-    // Map für schnelle Suche der Bestellmengen
+    },
+  ]);
+    console.log("orderCounts: ", orderCounts)
+
+    // Map erstellen
     const orderCountMap = {};
     orderCounts.forEach((oc) => {
       orderCountMap[oc._id.toString()] = oc.count;
     });
 
-    // Produkte mit orderCount ergänzen
+    // Produkte mit ihren Bestellmengen zusammenbauen
     const productsWithOrderCount = products.map((p) => ({
       ...p.toObject(),
       orderCount: orderCountMap[p._id.toString()] || 0,
     }));
 
+    // ✅ Rückgabe
     res.json({
       products: productsWithOrderCount,
       totalCount,
       page,
       totalPages: Math.ceil(totalCount / limit),
     });
+
   } catch (error) {
     console.error("❌ Fehler beim Laden der Produkte:", error);
     res.status(500).json({ message: "Fehler beim Laden der Produkte", error });
   }
 };
+
 
 // Add a new Product
 exports.createProduct = async(req, res) => {

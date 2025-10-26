@@ -23,8 +23,9 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger}) {
   };
 
 
-  async function fetchOrders() {
-    setLoading(true); // Spinner starten
+  const fetchOrders = useCallback(async () => {
+    if (!sellerId) return;
+    setLoading(true);
     try {
       const queryParams = new URLSearchParams({
         page: currentPage,
@@ -32,24 +33,24 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger}) {
       });
       if (filterStatus) queryParams.append("status", filterStatus);
       if (searchOrder) queryParams.append("orderNumber", searchOrder);
+
       const res = await fetch(
         `${apiUrl}/orders/seller/${sellerId}?${queryParams.toString()}`
       );
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.message || "Serverfehler");
-      }
+
+      if (!res.ok) throw new Error("Serverfehler");
+
       const data = await res.json();
-      setOrders(data.orders);
+      setOrders(data.orders || []);
       setTotalPages(Math.ceil(data.totalCount / ordersPerPage));
     } catch (error) {
       console.error("Error loading orders:", error);
       setOrders([]);
       setTotalPages(1);
     } finally {
-      setLoading(false);  
+      setLoading(false);
     }
-  }
+  }, [sellerId, currentPage, filterStatus, searchOrder, apiUrl]);
 
   useEffect(() => {
     async function fetchOrders() {
@@ -83,7 +84,7 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger}) {
     }
   }, [sellerId, currentPage, apiUrl]);
 
-   useEffect(() => {
+  useEffect(() => {
     fetchOrders();
   }, [fetchOrders, refreshTrigger]);
 
@@ -237,17 +238,21 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger}) {
           </div>
 
           <div className="status-update">
-            <div className="status-update-container">
-            <StatusSelect order={order} onStatusChange={onStatusChange} ref={selectRef} />
-              <button
-                className="update-button"
-                onClick={() => {
+            {/* Nur anzeigen, wenn der letzte Status NICHT seller_cancelled ist */}
+            {order.status?.slice(-1)[0]?.update !== "seller_cancelled" && (
+              <div className="status-update-container">
+                <StatusSelect order={order} onStatusChange={onStatusChange} ref={selectRef} />
+                <button
+                  className="update-button"
+                  onClick={() => {
                     const newStatus = selectRef.current.value;
                     handleStatusChange(order._id, newStatus);
-                  }}>
-                {t("update")}
-              </button>
-            </div>
+                  }}
+                >
+                  {t("update")}
+                </button>
+              </div>
+            )}
 
             <div className="status-info">
               <div>

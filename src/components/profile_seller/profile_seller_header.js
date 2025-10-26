@@ -8,75 +8,28 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
+import React, { useState, useEffect } from "react";
 
-function ProfileSellerHeader({ seller, openOrders, orders }) {
-  const openOrdersCount = openOrders?.length || 0;
-  const totalOrdersCount = orders?.length || 0;
+function ProfileSellerHeader({ seller, apiUrl, token }) {
 
-    const ordersByMonthWithStatus = (() => {
-    const months = {};
+  const [stats, setStats] = useState({ openOrders: 0, totalOrders: 0 });
+useEffect(() => {
+    if (!seller?._id) return;
 
-    orders?.forEach((order) => {
-        const date = new Date(order.createdAt);
-        const monthKey = `${date.getFullYear()}-${date.getMonth()}`; // "2025-9"
-        const monthLabel = date.toLocaleString("default", {
-        month: "short",
-        year: "numeric",
+    const fetchStats = async () => {
+      try {
+        const res = await fetch(`${apiUrl}/orders/stats/${seller._id}`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
+        const data = await res.json();
+        setStats(data);
+      } catch (err) {
+        console.error("Fehler beim Laden der Stats:", err);
+      }
+    };
 
-        const lastStatus = order.status?.length
-        ? order.status[order.status.length - 1].update
-        : "pending";
-
-        if (!months[monthKey]) {
-        months[monthKey] = {
-            label: monthLabel,
-            total: 0,
-            pending: 0,
-            cancelled: 0,
-            delivered: 0,
-            returned_to_sender: 0,
-        };
-        }
-
-        months[monthKey].total++;
-        if (months[monthKey][lastStatus] !== undefined) {
-        months[monthKey][lastStatus]++;
-        }
-    });
-
-    const keys = Object.keys(months)
-        .map((k) => k.split("-").map(Number))
-        .sort((a, b) => new Date(a[0], a[1]) - new Date(b[0], b[1]));
-
-    if (keys.length === 0) return [];
-
-    // Ersten Monat finden
-    const first = keys[0];
-
-    // Einen Monat davor hinzufügen (aber keinen danach!)
-    const extendedKeys = [[first[0], first[1] - 1], ...keys];
-
-    const finalMonths = extendedKeys.map(([year, month]) => {
-        const d = new Date(year, month, 1);
-        const key = `${d.getFullYear()}-${d.getMonth()}`;
-        const label = d.toLocaleString("default", { month: "short", year: "numeric" });
-
-        if (months[key]) return { month: label, ...months[key] };
-        else
-        return {
-            month: label,
-            total: 0,
-            pending: 0,
-            cancelled: 0,
-            delivered: 0,
-            returned_to_sender: 0,
-        };
-    });
-
-    return finalMonths;
-    })();
-
+    fetchStats();
+  }, [seller, apiUrl, token]);
 
   return (
     <div className="profile-header">
@@ -98,11 +51,11 @@ function ProfileSellerHeader({ seller, openOrders, orders }) {
         <div className="order-stats-card">
           <div className="stat-item">
             <h4>Open Orders</h4>
-            <p className="stat-number">{openOrdersCount}</p>
+            <p className="stat-number">{2}</p>
           </div>
           <div className="stat-item">
             <h4>Total Orders</h4>
-            <p className="stat-number">{totalOrdersCount}</p>
+            <p className="stat-number">{3}</p>
           </div>
         </div>
         {/*

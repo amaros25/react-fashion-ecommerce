@@ -18,5 +18,10 @@ router.post('/create', orderController.createOrder);
 // Update order Status
 router.put("/:id/status", orderController.updateOrderStatus);
 
+// GET: Anzahl der Bestellungen pro Produkt
+router.get("/product/:productId/count", orderController.getOrderCountByProduct);
+
+router.get("/stats/:sellerId", orderController.getSellerOrderStats);
+
 
 module.exports = router;
