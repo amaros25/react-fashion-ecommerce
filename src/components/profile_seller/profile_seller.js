@@ -84,8 +84,8 @@ function ProfileSeller() {
       <Header />
       <ProfileSellerHeader
         seller={seller}
-        openOrders={filteredOpenOrders}
-        orders={filteredOpenOrders}
+        apiUrl={apiUrl}
+        token={token}
       />
       <nav
         style={{

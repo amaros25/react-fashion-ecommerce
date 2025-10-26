@@ -170,3 +170,63 @@ exports.updateOrderStatus = async (req, res) => {
     res.status(500).json({ message: "Error updating order status", error });
   }
 };
+
+
+// Anzahl der Bestellungen für ein bestimmtes Produkt ermitteln
+exports.getOrderCountByProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    if (!productId) {
+      return res.status(400).json({ message: "productId wird benötigt" });
+    }
+
+    // Suche alle Bestellungen, die dieses Produkt enthalten
+    const count = await Order.countDocuments({ "items.productId": productId });
+
+    res.status(200).json({
+      productId,
+      totalOrders: count,
+    });
+  } catch (error) {
+    console.error("Fehler beim Zählen der Bestellungen:", error);
+    res.status(500).json({
+      message: "Serverfehler beim Zählen der Bestellungen",
+      error,
+    });
+  }
+};
+
+
+ 
+exports.getSellerOrderStats = async (req, res) => {
+  try {
+    const { sellerId } = req.params;
+    if (!sellerId) {
+      return res.status(400).json({ message: "sellerId wird benötigt" });
+    }
+
+    // Alle Bestellungen des Verkäufers
+    const orders = await Order.find({ sellerId }).select("status").lean();
+
+    const totalOrders = orders.length;
+
+    // Definiere Status, die noch "offen" sind
+    const openStatuses = ["pending"];
+
+    // Nur Orders zählen, deren letzter Status noch offen ist
+    const openOrders = orders.filter(order => {
+      const lastStatus = order.status?.length ? order.status[order.status.length - 1].update : "pending";
+      return openStatuses.includes(lastStatus);
+    });
+
+    res.json({
+      totalOrders,
+      openOrders: openOrders.length
+    });
+
+  } catch (error) {
+    console.error("Fehler beim Laden der Order Stats:", error);
+    res.status(500).json({ message: "Fehler beim Laden der Order Stats", error });
+  }
+};
