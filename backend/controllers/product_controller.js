@@ -16,7 +16,7 @@ exports.getNewProducts = async (req, res) => {
   try {
     // Extract page, limit, and category from the request query parameters
     const page = parseInt(req.query.page) || 1;  // Default to page 1 if no page is provided
-    const limit = parseInt(req.query.limit) || 12;  // Default to 12 products per page if not specified
+    const limit = parseInt(req.query.limit) || 15;  // Default to 12 products per page if not specified
     const category = req.query.category;  // Category filter (if any)
     const search = req.query.search;  // Suchbegriff aus Query
     const skip = (page - 1) * limit;  // Calculate how many items to skip for pagination

@@ -8,6 +8,7 @@ import Foot from '../foot/foot';
 import { Link } from "react-router-dom";
 import Pagination from './pagination.js';
 import { FilterContext } from '../filter_context/filter_context';
+import ProductCard from '../product_card/product_card';
 
 function Home() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -71,21 +72,9 @@ function Home() {
       {searchTerm === "" && selectedCategory === "" && <TopBannerSlider />} */}
       <div className="latest-product-list">
         {filteredProducts.map((product) => (
-          <Link 
-            key={product._id} 
-            to={`/product/${product._id}`} 
-            className="latest-product-item">
-            <img 
-              src={product.image[0]} 
-              alt={product.name} 
-              className="latest-product-image" 
-              loading="lazy"/>
-            <h3>{product.name}</h3>
-            <p>{product.price} DT</p>
-            <p className="product-sizes">
-              {t("sizes")}: {product.sizes.map(sizeObj => sizeObj.size).join(", ")}
-            </p>
-          </Link>
+
+          <ProductCard key={product._id} product={product}/>
+        
         ))}
       </div>
       <Pagination 

@@ -1,3 +1,9 @@
+/* RTL (Right to Left) Support */
+.rtl .section-title {
+    text-align: right;
+    direction: rtl;
+}
+
 /* Main Container */
 .main-container {
     width: 100%; /* Maximum width for mobile devices */
@@ -50,8 +56,3 @@ body {
     user-select: none;
 }
 
-/* RTL (Right to Left) Support */
-.rtl .section-title {
-    text-align: right;
-    direction: rtl;
-}
