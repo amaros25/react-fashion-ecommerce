@@ -1,0 +1,36 @@
+.product-images {
+  flex: 1 1 40%;
+  padding: 10px;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  max-height: 600px; 
+  object-fit: contain; 
+}
+ 
+
+.thumbnail-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border 0.2s ease;
+    margin-top: 10px;
+}
+
+.thumbnail.active {
+  border: 2px solid #f1356d;
+}

@@ -131,6 +131,7 @@
   "loading_product": "Chargement du produit...",
   "size": "Taille",
   "color": "Couleur",
+  "colors": "Couleurs",
   "quantity": "Quantité",
   "price": "Prix",
 
@@ -241,6 +242,7 @@
   "address_save_error": "❌ Erreur lors de l’enregistrement des données.",
   "statusUpdated": "Statut mis à jour avec succès: {{status}}",
   "updateFailed": "Échec de la mise à jour: {{message}}",
-  "unknownError": "Erreur inconnue"
+  "unknownError": "Erreur inconnue",
+  "stock": "Stock"
   
 }

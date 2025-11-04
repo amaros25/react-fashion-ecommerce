@@ -2,9 +2,6 @@
 .container {
     padding: 20px; /* Add padding inside the container */
 }
-
-
-
  
 /* Latest Product List - Grid Layout */
 .product-card-list {
@@ -51,8 +48,6 @@
  
 }
 
- 
- 
 /* Heading Style */
 .product-card-item  h2 {
     text-align: start;
@@ -66,7 +61,6 @@
     line-height: 1.125rem; /* ca. 18px */
     letter-spacing: 0;
     padding-inline-start: 10px; /* 10px links in LTR, rechts in RTL */
-
     text-decoration: none; /* Remove text decoration */
     color: #0a0a0a; /* Dark text for better readability */
     min-width: 0; /* Allow item to shrink */
@@ -76,22 +70,18 @@
     padding-left: 10px;
  }
  
- 
 .product-sizes,
-.product-price {
+.product-card-price {
     padding-left: 10px; /* nur Text einrücken */
 }
 
-/* Text-Inhalt */
- 
- 
-.product-price p {
+.product-card-price p {
     margin: 0 0 8px 0; /* nur unten Abstand */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-family: 'Rubik', sans-serif;
-    color: #494848; /* .product-price kann override bekommen */
+    color: #e00101; /* .product-price kann override bekommen */
     font-size: 1rem;       /* ca. 16px */
     line-height: 1.125rem; /* ca. 18px */
     letter-spacing: 0;
@@ -107,58 +97,51 @@
     color: #6e6d6d; /* .product-price kann override bekommen */
 }
  
- 
-
-
 
 .product-sizes p {
     padding-inline-start: 10px;
 }
 
-/* Price direkt linksbündig */
-.product-price {
-    padding-left: 0; /* überschreibt ggf. padding von anderen Klassen */
+
+.product-card-price {
+    padding-left: 20px;
 }
 
-.product-price p {
-    margin: 0 0 8px 0; /* nur unten Abstand, kein links */
-    padding: 0; /* sicherstellen, dass kein Padding bleibt */
+.product-card-price p {
+    margin: 0 0 8px 0;
+    padding: 0;
 }
 
 
- 
-
- /* Extra small devices (Handy < 400px) */
 @media (max-width: 900px) {
         .product-card-image {
-        height: 200px; /* kleinere Höhe, passt besser auf kleine Geräte */
+        height: 200px; 
     }
 }
 
-/* Extra small devices (Handy < 400px) */
 @media (max-width: 500px) {
  
     .product-card-item {
-        border-radius: 8px; /* etwas kleinere Rundungen */
-        padding: 5px; /* Inhalt näher an den Rand bringen */
+        border-radius: 8px;
+        padding: 5px;
     }
 
     .product-card-item h2 {
-        font-size: 0.9rem; /* kleinerer Titel */
+        font-size: 0.9rem;
         line-height: 1.1rem;
-        padding-inline-start: 5px; /* Abstand zum Rand verkleinern */
+        padding-inline-start: 5px;
         margin-bottom: 5px;
     }
 
     .product-sizes p,
     .product-price p {
-        font-size: 0.85rem; /* kleinerer Text */
+        font-size: 0.85rem;
         line-height: 1rem;
-        padding-inline-start: 5px; /* Abstand anpassen */
+        padding-inline-start: 5px;
         margin-bottom: 4px;
     }
-
+    
     .product-card-image {
-        height: 150px; /* kleinere Höhe, passt besser auf kleine Geräte */
+        height: 150px;
     }
 }
