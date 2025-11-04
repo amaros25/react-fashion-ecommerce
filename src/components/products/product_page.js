@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./loading_spinner.js";
 import RelatedProducts from "../related_products/related_product.js"
 import Foot from '../foot/foot';
+import  ProductImage from './product_images.js'
+import ProductInfo from "./product_info";
+import SellerInfo from "./seller_info.js";
 
 function ProductPage() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -20,8 +23,6 @@ function ProductPage() {
     postalCode: "",
     country: "",
   });
-  const [loading, setLoading] = useState(false);
-  const [orderSuccess, setOrderSuccess] = useState(false);
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState("");
@@ -33,92 +34,6 @@ function ProductPage() {
 
   console.log("***** Role:", localStorage.getItem("role"));
 
-
-{/*
-   const createTestOrders = async () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
-
-  if (!userId || !token) {
-    console.warn("⚠️ Kein Benutzer angemeldet – Testorders werden nicht erstellt.");
-    return;
-  }
-
-  if (!product || !seller) {
-    console.warn("⚠️ Produkt oder Verkäufer noch nicht geladen.");
-    return;
-  }
-
-  // 100 Testbestellungen generieren
-  for (let i = 0; i < 100; i++) {
-    const orderData = {
-      userId,
-      sellerId: seller._id,
-      items: [
-        {
-          productId: product._id,
-          color: "Black",
-          size: "M",
-          quantity: Math.floor(Math.random() * 3) + 1,
-        },
-      ],
-      totalPrice: product.price * (Math.floor(Math.random() * 3) + 1) + 7.5,
-      status: [
-        {
-          update: ["pending", "confirmed", "shipped", "delivered", "cancelled", "returned_to_sender"][
-            Math.floor(Math.random() * 6)
-          ],
-          date: new Date(
-            new Date().setMonth(new Date().getMonth() - Math.floor(Math.random() * 6))
-          ),
-        },
-      ],
-      paymentMethod: "Cash on Delivery",
-      notes: "Test Order " + (i + 1),
-    };
-
-    try {
-      const res = await fetch(`${apiUrl}/orders/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(orderData),
-      });
-
-      if (!res.ok) {
-        const err = await res.text();
-        console.error("❌ Fehler bei Testorder:", err);
-      }
-    } catch (error) {
-      console.error("⚠️ Fehler beim Erstellen der Testorder:", error);
-    }
-  }
-
-  console.log("✅ 100 Testorders erfolgreich erstellt!");
-  alert("✅ 100 Testorders erfolgreich erstellt!");
-};
-
-
-useEffect(() => {
-  if (window.location.hostname === "localhost") {
-    // Nur in Dev-Umgebung automatisch ausführen
-    setTimeout(() => {
-      createTestOrders();
-    }, 2000); // 2 Sekunden warten, bis Produkt/Seller geladen sind
-  }
-}, [product, seller]);
-
-
-{window.location.hostname === "localhost" && (
-  <button onClick={createTestOrders} style={{ marginTop: "20px", background: "#444", color: "#fff" }}>
-    🚀 100 Testbestellungen erstellen
-  </button>
-)}
-
-*/}
   useEffect(() => {
       if (role === "seller") {
           toast.error(t("seller_cannot_buy_alter"));
@@ -210,7 +125,6 @@ useEffect(() => {
     return;
   }
 
-  // Finde die Stock-Info für die gewählte Größe und Farbe
   const stockInfo = product.sizes.find(
     (s) => s.size === selectedSize && s.color === selectedColor
   );
@@ -265,52 +179,17 @@ useEffect(() => {
   return (
     <div className="product-page">
       <Header /> 
-      <div className="product-images">
-        <img src={mainImage} alt={product.name} className="main-image"  loading="lazy" />
-        <div className="thumbnail-row">
-          {product.image && product.image.length > 0 ? (
-            product.image.map((img, index) => (
-              <img
-                key={index}
-                src={img}
-                alt={`${product.name}-${index}`}
-                className={`thumbnail ${mainImage === img ? "active" : ""}`}
-                loading="lazy" 
-                onClick={() => setMainImage(img)}
-              />
-            ))
-          ) : (
-            product.image && (
-              <img
-                src={product.image}
-                alt={product.name}
-                className="thumbnail active"
-                loading="lazy" 
-                onClick={() => setMainImage(product.image)}
-              />
-            )
-          )}
-        </div>
-      </div>
-      <div className="product-info">
-      <div className="product-title-row">
-        <h1 className="product-title">{product.name}</h1>
-        <span className="product-price">{product.price} DT</span>
-      </div>
-        <p>{product.description}</p>
-        <div className="seller-info">
-          <div className="seller-details">
-            {seller.image && (
-              <img src={seller.image} alt={seller.shopName} className="seller-image"  loading="lazy" />
-            )}
-            <div>
-              <h3>{seller.shopName}</h3>
-              <div className="seller-rating">
-                <span> {seller.rating.toFixed(1)} / 5</span>
-              </div>
-            </div>
-          </div>
-        </div>
+
+        <div className="product-main-content"> 
+      <ProductImage
+        mainImage={mainImage}
+        setMainImage={setMainImage}
+        product={product}
+      />
+      <div className="product-info-main">
+
+      <ProductInfo product={product} />
+
         <div className="product-buy-box">
 
           <div className="selection">
@@ -389,9 +268,19 @@ useEffect(() => {
           >
             {t("product_page.submit_order")}
           </button>
+       
         </div>
+        <hr className="product-divider" />
+
+          <SellerInfo seller={seller} />
+    </div>
+
       </div>
-      <RelatedProducts category={product.category}/>
+
+    <RelatedProducts 
+      category={product.category} 
+      currentProductId={product._id} 
+    />
       <Foot/>
     </div>
   );

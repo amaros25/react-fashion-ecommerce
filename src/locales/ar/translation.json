@@ -237,5 +237,8 @@
   "address_save_error": "❌ حدث خطأ أثناء حفظ البيانات.",
   "statusUpdated": "تم تغيير الحالة بنجاح إلى {{status}}",
   "updateFailed": "حدث خطأ أثناء التحديث: {{message}}",
-  "unknownError": "خطأ غير معروف"
+  "unknownError": "خطأ غير معروف",
+  "colors": "الألوان",
+  "stock": "المخزون"
+ 
 }

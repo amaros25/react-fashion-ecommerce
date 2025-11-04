@@ -20,6 +20,7 @@ exports.getNewProducts = async (req, res) => {
     const category = req.query.category;  // Category filter (if any)
     const search = req.query.search;  // Suchbegriff aus Query
     const skip = (page - 1) * limit;  // Calculate how many items to skip for pagination
+    const not = req.query.not; // 👈 Aktuelles Produkt ausschließen
 
     // Initialize an empty filter object
     const filter = {};
@@ -28,7 +29,10 @@ exports.getNewProducts = async (req, res) => {
     if (category) {
       filter.category = category;
     }
-
+    if (not) {
+      // 🚫 Produkt mit dieser ID ausschließen
+      filter._id = { $ne: not };
+    }
     if (search) {
       // Suche Wörter splitten (nach Leerzeichen)
       const searchWords = search.trim().split(/\s+/);

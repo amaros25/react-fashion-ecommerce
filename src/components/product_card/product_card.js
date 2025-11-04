@@ -33,7 +33,7 @@ function ProductCard({product}) {
               <div className="product-sizes">
                 <p>{t("color")}: {product.sizes.map(sizeObj => sizeObj.color).join(", ")}</p>
               </div> 
-              <div className="product-price">
+              <div className="product-card-price">
                 <p>{product.price} DT</p>
              </div>
           </Link>

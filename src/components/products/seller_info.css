@@ -1,0 +1,65 @@
+
+.seller-info {
+  background-color: #fff;
+ 
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.seller-details {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.seller-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #f1356d;
+}
+
+.seller-name {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.seller-info h3 {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.seller-rating {
+  font-size: 16px;
+  color: #f1356d;
+}
+
+.star-rating {
+  display: flex;
+  gap: 3px;
+}
+
+.star-rating .star {
+  color: #f1356d;
+  font-size: 18px;
+}
+
+.seller-city {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Abstand zwischen Icon und Text */
+  font-size: 16px;
+  color: #555;
+}
+
+.city-icon {
+  color: #f1356d; /* Icon-Farbe */
+  font-size: 20px;
+}

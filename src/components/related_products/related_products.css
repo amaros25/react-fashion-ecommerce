@@ -1,7 +1,7 @@
 .related-container {
   width: 100%;
   max-width: 1400px;
-  margin: 60px auto;
+  margin-top: 20px;
   padding: 0 20px 100px 20px;
   background-color: #f8f8f8;
 }
@@ -9,6 +9,7 @@
 .related-title {
   font-size: 1.8rem;
   font-weight: 600;
+  margin-top: 20px;
   margin-bottom: 25px;
   text-align: left;
   color: #333;
