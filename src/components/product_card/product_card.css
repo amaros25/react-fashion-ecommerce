@@ -16,7 +16,7 @@
 
 /* Latest Product Item Styling */
 .product-card-item {
-    background-color: #f0f9fa; /* Light gray-blue background */
+    background-color: #f3f3f3; /* Light gray-blue background */
     border-radius: 15px; /* Rounded corners */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
     transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover transition */
@@ -50,8 +50,9 @@
 
 /* Heading Style */
 .product-card-item  h2 {
-    text-align: start;
-    margin: 0 0 8px 10px; /* nur links einrücken */
+    text-align: center;   
+ 
+ 
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -72,7 +73,9 @@
  
 .product-sizes,
 .product-card-price {
-    padding-left: 10px; /* nur Text einrücken */
+  text-align: center;           /* ✅ Zentriert Text im Block */
+  padding: 0;                   /* Padding entfernen, damit nichts verschoben ist */
+  margin-top: 5px;              /* Optionaler Abstand nach oben */
 }
 
 .product-card-price p {
@@ -98,14 +101,8 @@
 }
  
 
-.product-sizes p {
-    padding-inline-start: 10px;
-}
-
-
-.product-card-price {
-    padding-left: 20px;
-}
+ 
+ 
 
 .product-card-price p {
     margin: 0 0 8px 0;
