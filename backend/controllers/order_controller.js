@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const Order = require('../models/order')
 const User = require('../models/user');
 const Product = require('../models/product');
@@ -116,17 +117,31 @@ exports.getOrderBySellerID = async (req, res) => {
 // Return Orders by UserID
   exports.getOrderByUserID = async (req, res) => {
     try {
-      const userId = req.params.id; // Korrekt, weil Route /user/:id
-      const orders = await Order.find({ userId });
+      console.log("🟢 getOrderByUserID: ", getOrderByUserID);
+      const userID = mongoose.Types.ObjectId(req.params.id);
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
 
+      const skip = (page - 1) * limit;
 
-      if (orders.length === 0) {
-        return res.status(404).json({ message: 'No orders found for this user' });
-      }
-
-      res.json(orders);
+      // Gesamtanzahl der Bestellungen des Users
+      const totalOrders = await Order.countDocuments({ userID });
+      console.log("🟢 totalOrder: ", totalOrders);
+      // Nur benötigte Seite laden
+      const orders = await Order.find({ userID })
+        .sort({ createdAt: -1 }) // neueste zuerst
+        .skip(skip)
+        .limit(limit);
+      console.log("🟢 orders: ", orders);
+      res.json({
+        page,
+        totalOrders,
+        totalPages: Math.ceil(totalOrders / limit),
+        orders,
+      });
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching orders', error });
+      console.error(error);
+      res.status(500).json({ message: "Error fetching orders", error });
     }
   };
 

@@ -6,6 +6,7 @@ import DeliveryAddressForm from "./delivery_address_form";
 import { useTranslation } from "react-i18next";
 import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
+import Foot from '../foot/foot';
 
 const CartPage = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -255,9 +256,13 @@ const CartPage = () => {
   if (cart.length === 0) {
     return (
       <div className="cart-page">
-        <div className="cart-empty">
+        <div className="cart-content">
+         <div className="cart-empty">
           <Header />
           <h2>🛒 {t("cart_page.empty_cart")}</h2>
+        </div>
+      
+        <Foot />
         </div>
       </div>
     );
@@ -379,6 +384,7 @@ const CartPage = () => {
 
  
       </div>
+      <Foot />
     </div>
   );
 };

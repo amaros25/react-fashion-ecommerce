@@ -11,10 +11,19 @@ import Foot from '../foot/foot';
 import  ProductImage from './product_images.js'
 import ProductInfo from "./product_info";
 import SellerInfo from "./seller_info.js";
+import Breadcrumb from './breadcrumb.js'; // Hier importieren
 
 function ProductPage() {
   const apiUrl = process.env.REACT_APP_API_URL;
   const { t, i18n } = useTranslation();
+ 
+
+  useEffect(() => {
+  const direction = i18n.language === "ar" ? "rtl" : "ltr";
+  document.documentElement.setAttribute("dir", direction);
+  console.log(`Language is set to ${i18n.language}, dir is now: ${direction}`);
+}, [i18n.language]);
+
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [address, setAddress] = useState({
@@ -32,7 +41,7 @@ function ProductPage() {
   const [role, setRole] = useState(localStorage.getItem("role")?.toLowerCase());
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
-  console.log("***** Role:", localStorage.getItem("role"));
+ 
 
   useEffect(() => {
       if (role === "seller") {
@@ -40,9 +49,7 @@ function ProductPage() {
         }
     }, []);
 
-  useEffect(() => {
-    document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
-  }, [i18n.language]);
+
 
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -179,7 +186,9 @@ function ProductPage() {
   return (
     <div className="product-page">
       <Header /> 
-
+    <div className="breadcrumb-container">
+        <Breadcrumb category={product.category} productName={product.name} />
+      </div>
         <div className="product-main-content"> 
       <ProductImage
         mainImage={mainImage}

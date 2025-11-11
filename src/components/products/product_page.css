@@ -71,6 +71,49 @@
   margin: 5px 0;   /* Abstand oben/unten */
 }
 
+/* product_page.css */
+.breadcrumb-container {
+  margin: 10px 20px;
+  font-size: 18px;
+  display: flex;
+  justify-content: flex-start; /* Standardmäßig links */
+  width: 100%; /* Stellt sicher, dass der Container die gesamte Breite einnimmt */
+  direction: ltr; /* Standardrichtung für LTR */
+}
+
+html[dir="rtl"] .breadcrumb-container {
+  justify-content: flex-start; /* Nach rechts ausrichten */
+  text-align: right; /* Text rechts ausrichten */
+  direction: rtl; /* Setzt die Schreibrichtung für RTL */
+}
+
+/* LTR-Sprachen (Französisch) nach links ausrichten */
+html[dir="ltr"] .breadcrumb-container {
+  justify-content: flex-start; /* Nach links ausrichten */
+  text-align: left; /* Text links ausrichten */
+  direction: ltr; /* Setzt die Schreibrichtung für LTR */
+}
+
+.breadcrumb {
+  display: flex;
+  gap: 5px;
+  font-weight: 500;
+  align-items: center; /* Falls du eine vertikale Ausrichtung wünschst */
+}
+
+.breadcrumb a {
+  color: #0073e6;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb span {
+  color: #333;
+}
+
 @media (max-width: 992px) {
   .product-page {
     flex-direction: column;
@@ -86,7 +129,6 @@
     width: 100%;
   }
 }
-
 
 .product-buy-box button:disabled {
   background-color: #ccc;   /* graues Aussehen */
