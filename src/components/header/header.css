@@ -1,386 +1,143 @@
+/* === Global Header Container === */
 .header {
-  max-width: 1200px;
+  max-width: 1400px;
   width: 100%;
   margin: 0 auto;
-  box-sizing: border-box;
-  padding: 0 20px;
+  padding: 0 10px;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px); /* subtle glass effect */
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(223, 47, 47, 0.05);
+ 
 }
 
+/* === Logo === */
 .logo {
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 34px;
+  font-weight: 800;
+  color: #007bff;
+  letter-spacing: -0.5px;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.logo a {
+  text-decoration: none;
   color: inherit;
 }
 
+.logo:hover {
+  transform: scale(1.05);
+  color: #0056b3;
+  cursor: pointer;
+}
+
+/* === Top Navbar === */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 20px;
+  padding: 0px 0;
   width: 100%;
-  box-sizing: border-box;
 }
 
+/* === Navigation Links / Icons === */
 .links {
   display: flex;
   align-items: center;
   gap: 30px;
-  flex-wrap: nowrap;
 }
 
-.links .logout-link {
-  font-weight: 500;
-}
-
-.links a,
-.links span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
+.links img {
+  filter: brightness(0.6);
+  transition: transform 0.2s, filter 0.3s;
   cursor: pointer;
-  text-decoration: none;
-  line-height: normal;
-  padding: 4px 8px;
-  margin-top: 10px;
 }
 
-.search-form {
-  display: flex;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
+.links img:hover {
+  transform: scale(1.1);
+  filter: brightness(1);
 }
 
-.search-form input {
-  padding: 10px;
-  font-size: 14px;
-  align-items: center;  
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 400px;
-  margin-left: 10px; 
-  margin-right: 0px; 
-}
- 
-body[dir="ltr"] .search-form input {
-  margin-right: 10px; 
-  margin-left: 0px; 
-}
-
-.search-form button {
-  padding: 10px 25px;
-  font-size: 14px;
-  border: 1px solid #007bff;
-  background-color: #007bff;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.search-form button:hover {
-  background-color: #0056b3;
-}
-
-.help-link {
-  background: transparent;
+.links select {
   border: none;
-  font-size: 20px;
+  background: transparent;
+  font-size: 14px;
   color: #333;
+  font-weight: 500;
   cursor: pointer;
-  padding: 10px;
+  padding: 4px;
   transition: color 0.3s;
 }
 
-.help-link:hover {
+.links select:hover {
   color: #007bff;
 }
 
-.login-popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+/* === Search Bar === */
+.search-form {
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.login-popup-content {
-  background-color: white;
-  border-radius: 8px;
-  position: relative;
-  min-width: 300px;
-}
-
-.close-btn {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  background: transparent;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-/* Horizental Menu */
-.horizontal-nav {
-  position: relative;
-  width: 100%;
-  background: linear-gradient(to left , #f5f5f5, #f5f5f5);
-  border-bottom: 1px solid #e0e0e0;
-  padding: 1px 5px;
-  display: flex;
-
-  align-items: center;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(173, 51, 51, 0.05);
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.nav-scroll-list {
-  display: flex;
   gap: 10px;
-  margin-bottom: 5px;
-  list-style: none;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding: 0 5px;
- 
+  max-width: 600px;
+  width: 100%;
+  margin: 15px auto;
+  padding: 5px 10px;
+  background: #edeef0;
+  border-radius: 12px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.nav-scroll-list::-webkit-scrollbar {
-  display: none;
+.search-form input {
+  flex: 1;
+  border: none;
+  padding: 12px 15px;
+  font-size: 15px;
+  border-radius: 8px;
+  outline: none;
+  background: transparent;
 }
 
-.nav-item {
-  flex: 0 0 auto;
+.search-form input::placeholder {
+  color: #5a5959;
+}
+
+.search-form button {
   padding: 10px 20px;
-  border-radius: 24px;
-  background-color: transparent;
-  transition: background-color 0.3s, color 0.3s, font-weight 0.2s;
-  cursor: pointer;
-  white-space: nowrap;
-  font-weight: 500;
-  color: #352020;
-  letter-spacing: 0.3px;
-  text-transform: capitalize;
-  line-height: 1.4;
-  font-size: 18px;
-}
-
-.nav-item:hover {
-  background-color: #e6e6e6;
-  color: #000;
-}
-
-.nav-item.active {
-  background-color: #007bff;
-  color: #fff;
-  font-weight: 600; /* Etwas kräftiger im aktiven Zustand */
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
-}
-
-.scroll-arrow {
-  background: white;
+  font-size: 14px;
   border: none;
-  font-size: 24px;
-  color: #888;
-  cursor: pointer;
-  transition: color 0.2s, transform 0.2s;
-  z-index: 1;
-}
-
-.scroll-arrow:hover {
-  color: #333;
-  transform: scale(1.2);
-}
-
-.scroll-arrow:disabled {
-  color: #ccc;
-  cursor: default;
-  transform: none;
-}
-
-.scroll-arrow.left {
-  left: 5px;
-}
-
-.scroll-arrow.right {
-  right: 5px;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
-
-.nav-icon {
-  width: 24px;      /* oder z.B. 20px, je nachdem wie klein du es willst */
-  height: 24px;     /* gleiche Höhe wie Breite */
-  object-fit: contain; /* damit das Bild nicht gestreckt wird */
-  cursor: pointer;
-  margin-right: 10px; /* optional, falls Abstand gewünscht ist */
-}
-
-.header {
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 3px;
-}
-
-.logo {
-  font-size: 20px;
-  font-weight: bold;
-  color: inherit;
-}
-
-.navbar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 10px; 
-  width: 100%; 
-  box-sizing: border-box; 
-}
-
-.links {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 0px 0px;
-  flex-wrap: nowrap;
-}
-
-.links .logout-link {
-  font-weight: 500;
-}
-
-.links a,
-.links span {
-  display: flex;  
-  align-items: center; 
-  justify-content: center; 
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  cursor: pointer;
-  text-decoration: none;
-  line-height: normal; 
-  padding: 4px 2px;
-  margin-top: 10px;
-}
-
-.search-form {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 0px 15px;
-  margin-bottom: 10px;
-}
-
-.search-form input {
-  padding: 10px 15px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 300px;
-}
-
-.search-form button {
-  padding: 10px 15px;
-  font-size: 14px;
-  border: 1px solid #007bff;
   background-color: #007bff;
   color: white;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .search-form button:hover {
   background-color: #0056b3;
+  transform: translateY(-1px);
 }
 
-.help-link {
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  color: #333;
-  cursor: pointer;
-  padding: 10px;
-  transition: color 0.3s;
-}
-
-.help-link:hover {
-  color: #007bff;
-}
-
-.login-popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+/* === Horizontal Category Navigation === */
+.horizontal-nav {
+  position: relative;
+  width: 100%;
+  background: #ffffff;
+  padding: 8px 5px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.login-popup-content {
-  background-color: white;
- 
-  border-radius: 8px;
-  position: relative;
-  min-width: 300px;
-}
-
-.close-btn {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  background: transparent;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-/* Horizental Menu */
-.horizontal-nav {
-  width: 100%;
-  background: linear-gradient(to left , #f5f5f5, #f5f5f5);
-  border-bottom: 1px solid #e0e0e0;
-  padding: 10px 0px;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(173, 51, 51, 0.05);
-  font-family: 'Segoe UI', sans-serif;
 }
 
 .nav-scroll-list {
   display: flex;
-  gap: 0px;
-  list-style: none;
+  gap: 10px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding: 0 0px;
+  list-style: none;
   margin: 0;
+  padding: 0 10px;
 }
 
 .nav-scroll-list::-webkit-scrollbar {
@@ -389,59 +146,191 @@ body[dir="ltr"] .search-form input {
 
 .nav-item {
   flex: 0 0 auto;
-  padding: 10px 10px;
-  border-radius: 24px;
+  padding: 10px 18px;
+  border-radius: 20px;
   background-color: transparent;
-  transition: background-color 0.3s, color 0.3s, font-weight 0.2s;
+  color: #333;
+  font-weight: 500;
+  font-size: 15px;
   cursor: pointer;
-  white-space: nowrap;
-  font-weight: 500; 
-  color: #352020;
-  letter-spacing: 0.3px; 
-  text-transform: capitalize;
-  line-height: 1.4;
-  font-size: 14px;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
 }
 
 .nav-item:hover {
-  background-color: #e6e6e6;
-  color: #000;
+  background-color: #f0f4ff;
+  color: #007bff;
+  transform: translateY(-2px);
 }
 
 .nav-item.active {
   background-color: #007bff;
   color: #fff;
   font-weight: 600;
-  box-shadow: 0 2px 10px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
 }
 
+/* === Scroll Buttons for Categories === */
 .scroll-arrow {
   background: white;
   border: none;
-  font-size: 20px;
+  font-size: 24px;
   color: #888;
   cursor: pointer;
   transition: color 0.2s, transform 0.2s;
   z-index: 1;
+  padding: 5px;
 }
 
 .scroll-arrow:hover {
-  color: #333;
+  color: #007bff;
   transform: scale(1.2);
 }
 
 .scroll-arrow:disabled {
   color: #ccc;
-  cursor: default;
-  transform: none;
+  cursor: not-allowed;
 }
 
-.scroll-arrow.left {
-  left: 5px;
+/* === Login Popup Overlay === */
+.login-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
 }
 
-.scroll-arrow.right {
-  right: 5px;
+.login-popup-content {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: popupFadeIn 0.3s ease;
+}
+
+@keyframes popupFadeIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+  /* ... deine anderen mobilen Styles ... */
+
+.header {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px); /* subtle glass effect */
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(223, 47, 47, 0.05);
+ 
+}
+
+  .search-form {
+    display: flex;
+    gap: 8px;                 /* etwas Platz zwischen Input und Button */
+    width: 100%;
+    max-width: 400px;
+    margin: 0px auto;        /* zentriert */
+  }
+
+  .search-form input {
+    width: 100%;
+    font-size: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+  }
+
+  .search-form button {
+ 
+    font-size: 13px;
+    border-radius: 10px;
+    max-width: 100px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .search-form button:hover {
+    background-color: #0056b3;
+  }
+
+  .horizontal-nav {
+    width: 100%;
+    padding: 0; /* remove side padding so text isn’t cut off */
+    margin: 10px;
+  }
+.navbar {
+    flex-direction: column;          /* Stack elements vertically */
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Obere Zeile: Logo + Home Icon nebeneinander */
+  .navbar .top-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  /* Untere Zeile: andere Icons in Reihe unter dem Logo */
+  .navbar .bottom-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    flex-wrap: wrap; /* damit sie umbrechen, wenn wenig Platz */
+  }
+
+  /* Alle Icons etwas kleiner, damit sie auf kleine Displays passen */
+  .navbar .bottom-row img,
+  .navbar .top-row img {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Sprache-Select etwas kleiner */
+  .navbar select {
+    font-size: 13px;
+    padding: 0px;
+  }
+ 
+
+ .nav-item {
+  flex: 0 0 auto;
+  padding: 10px 10px;
+  border-radius: 20px;
+  background-color: transparent;
+  color: #333;
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+ 
+.nav-scroll-list {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  list-style: none;
+  margin: 0;
+  padding: 0 0px;
 }
 
 }

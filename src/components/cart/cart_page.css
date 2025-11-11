@@ -1,20 +1,30 @@
 .cart-page {
-  font-family: "Poppins", sans-serif;
-  background: #fafafa;
-  min-height: 100vh;
-  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* horizontal zentrieren */
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 200px;
 }
 
 .cart-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.cart-empty h2 {
+  margin-top: 50px;
 }
 
 .cart-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 200px; /* 👈 Abstand zum Footer */
+
 }
 
 .cart-title {

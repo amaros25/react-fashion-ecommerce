@@ -19,6 +19,7 @@ function App() {
     <FilterProvider>
       <Router>
         <Routes>
+          <Route path="/home" element={<Homepage />} /> 
           <Route path="/" element={<Homepage />} /> 
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/login" element={<Login />} />
@@ -28,6 +29,7 @@ function App() {
           <Route path="/add_product" element={<AddProduct />} />
           <Route path="/seller_orders" element={<SellerOrders />} />
           <Route path="/cart_page" element={<CartPage/>} />
+          <Route path="/home/:category" element={<Homepage />} />
         </Routes>
       </Router>
       <ToastContainer position="top-center" autoClose={3000} theme="colored" />
