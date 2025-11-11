@@ -121,7 +121,9 @@ exports.getOrderBySellerID = async (req, res) => {
       const userID = mongoose.Types.ObjectId(req.params.id);
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
-
+      console.log("🟢 userID: ", userID);
+      console.log("🟢 page: ", page); 
+      console.log("🟢 limit: ", limit);
       const skip = (page - 1) * limit;
 
       // Gesamtanzahl der Bestellungen des Users

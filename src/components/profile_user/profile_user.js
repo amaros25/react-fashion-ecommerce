@@ -22,6 +22,10 @@ function ProfileUser() {
   // 🔹 Funktion zum Abrufen der Orders (nicht in useEffect!)
   const fetchOrders = async (page = 1) => {
     try {
+      console.log("🟢 userID: ", userId);
+      console.log("🟢 page: ", page); 
+      console.log("🟢 ordersPerPage: ", ordersPerPage);
+      console.log("🟢 apiUrl: ", apiUrl);
       const res = await fetch(
         `${apiUrl}/orders/user/${userId}?page=${page}&limit=${ordersPerPage}`,
         {
@@ -29,7 +33,7 @@ function ProfileUser() {
         }
       );
       const data = await res.json();
-
+      console.log("🟢 data: ", data);
       if (!res.ok) {
         console.error("Fehler beim Laden:", data.message);
         setOrders([]);
