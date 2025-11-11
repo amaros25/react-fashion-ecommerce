@@ -117,8 +117,8 @@ exports.getOrderBySellerID = async (req, res) => {
 // Return Orders by UserID
 exports.getOrderByUserID = async (req, res) => {
   try {
-      console.log("🟢 hola getOrderByUserID ");
-    console.log("🟢 getOrderByUserID: ", getOrderByUserID);
+    console.log("🟢 hola getOrderByUserID ");
+ 
     const userID = req.params.id;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
