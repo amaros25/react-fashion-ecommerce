@@ -27,7 +27,7 @@ function ProfileUser() {
       console.log("🟢 ordersPerPage: ", ordersPerPage);
       console.log("🟢 apiUrl: ", apiUrl);
       const res = await fetch(
-        `${apiUrl}/orders/user/${userId}?page=${page}&limit=${ordersPerPage}`,
+        `${apiUrl}/orders/user/id=${userId}?&page=${page}&limit=${ordersPerPage}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
