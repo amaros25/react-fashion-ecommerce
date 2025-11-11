@@ -115,37 +115,38 @@ exports.getOrderBySellerID = async (req, res) => {
 //};
 
 // Return Orders by UserID
-  exports.getOrderByUserID = async (req, res) => {
-    try {
-      console.log("🟢 getOrderByUserID: ", getOrderByUserID);
-      const userID = mongoose.Types.ObjectId(req.params.id);
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
-      console.log("🟢 userID: ", userID);
-      console.log("🟢 page: ", page); 
-      console.log("🟢 limit: ", limit);
-      const skip = (page - 1) * limit;
+exports.getOrderByUserID = async (req, res) => {
+  try {
+      console.log("🟢 hola getOrderByUserID ");
+    console.log("🟢 getOrderByUserID: ", getOrderByUserID);
+    const userID = req.params.id;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    console.log("🟢 userID: ", userID);
+    console.log("🟢 page: ", page); 
+    console.log("🟢 limit: ", limit);
+    const skip = (page - 1) * limit;
 
-      // Gesamtanzahl der Bestellungen des Users
-      const totalOrders = await Order.countDocuments({ userID });
-      console.log("🟢 totalOrder: ", totalOrders);
-      // Nur benötigte Seite laden
-      const orders = await Order.find({ userID })
-        .sort({ createdAt: -1 }) // neueste zuerst
-        .skip(skip)
-        .limit(limit);
-      console.log("🟢 orders: ", orders);
-      res.json({
-        page,
-        totalOrders,
-        totalPages: Math.ceil(totalOrders / limit),
-        orders,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error fetching orders", error });
-    }
-  };
+    // Gesamtanzahl der Bestellungen des Users
+    const totalOrders = await Order.countDocuments({ userID });
+    console.log("🟢 totalOrder: ", totalOrders);
+    // Nur benötigte Seite laden
+    const orders = await Order.find({ userID })
+      .sort({ createdAt: -1 }) // neueste zuerst
+      .skip(skip)
+      .limit(limit);
+    console.log("🟢 orders: ", orders);
+    res.json({
+      page,
+      totalOrders,
+      totalPages: Math.ceil(totalOrders / limit),
+      orders,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching orders", error });
+  }
+};
 
 // Add a new Order
 exports.createOrder = async(req, res) => {
