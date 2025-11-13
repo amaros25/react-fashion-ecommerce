@@ -1,16 +1,16 @@
 .profile-header-container {
   display: flex;
-  flex-direction: column; /* mobil zuerst */
+  flex-direction: column;
   align-items: center;
-  gap: 10px; /* weniger Abstand für Handy */
-  padding: 15px;
-  margin-bottom: 20px;
+  gap: 10px;
+  padding: 5px;
+  margin-bottom: 5px;
   background: #f9f9f9;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
 }
 
-/* Avatar + Name */
 .profile-left {
   display: flex;
   flex-direction: column;
@@ -21,6 +21,10 @@
 .profile-avatar {
   width: 100px;
   height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
 }
 
 .profile-image {
@@ -44,38 +48,67 @@
   text-align: center;
 }
 
-/* Email/Telefon/Adresse */
 .profile-right {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* linksbündig */
+  align-items: flex-start;
   gap: 5px;
   width: 100%;
-  max-width: 400px; /* optional für Desktop */
+  max-width: 400px;
 }
 
-/* Container für drei Cards */
 .profile-cards-container {
   display: flex;
-  flex-direction: column; /* mobil: untereinander */
-  gap: 10px; /* weniger Abstand für Handy */
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: stretch;
   width: 100%;
-  margin-top: 0px; /* statt 20px */
 }
 
-/* Jede Card */
+.profile-card-data {
+  display: flex;
+  background: #fff;
+  padding: 5px 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+  text-align: start;
+  flex: 1;
+}
+
+.profile-card.rtl-data  {
+  text-align: right;
+  direction: rtl;
+}
+
+.profile-card-line {
+  margin: 0;
+  word-break: break-word;
+}
+
+.profile-card-value {
+  display: block;
+  margin-left: 0;
+}
+
 .profile-card {
   background: #fff;
-  padding: 15px 20px;
+  padding: 5px 5px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
   gap: 5px;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  flex: 1;
 }
 
-/* Überschriften und Text in Card */
 .profile-card h4 {
   margin: 0 0 5px 0;
   font-size: 1rem;
@@ -89,27 +122,32 @@
   line-height: 1.3;
 }
 
-/* Desktop Version: nebeneinander */
-@media(min-width: 768px) {
-  .profile-header-container {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  .profile-left {
-    align-items: center;
-  }
-
-  .profile-right {
-    margin-left: 40px;
-  }
+@media(max-width: 768px) {
 
   .profile-cards-container {
-    flex-direction: row;
-    gap: 20px;
+    flex-direction: column;  
+    gap: 15px;
+    align-items: stretch; 
   }
 
   .profile-card {
-    flex: 1;
+    flex: 1 1 auto; 
+    align-items: flex-center; 
+    text-align: center; 
+    padding: 10px 15px;
   }
+
+  .profile-card.rtl-data {
+    text-align: right;
+    align-items: flex-end; 
+  }
+
+  .profile-card-label {
+    display: block;
+  }
+
+  .profile-card-value {
+    display: block;
+  }
+  
 }

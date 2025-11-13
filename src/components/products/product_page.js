@@ -11,18 +11,26 @@ import Foot from '../foot/foot';
 import  ProductImage from './product_images.js'
 import ProductInfo from "./product_info";
 import SellerInfo from "./seller_info.js";
-import Breadcrumb from './breadcrumb.js'; // Hier importieren
+import Breadcrumb from './breadcrumb.js';
 
 function ProductPage() {
+
   const apiUrl = process.env.REACT_APP_API_URL;
   const { t, i18n } = useTranslation();
- 
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [mainImage, setMainImage] = useState("");
+  const [size, setSize] = useState("");
+  const [quantity, setQuantity] = useState(0);
+  const [seller, setSeller] = useState(null);
+  const [role, setRole] = useState(localStorage.getItem("role")?.toLowerCase());
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
   useEffect(() => {
-  const direction = i18n.language === "ar" ? "rtl" : "ltr";
-  document.documentElement.setAttribute("dir", direction);
-  console.log(`Language is set to ${i18n.language}, dir is now: ${direction}`);
-}, [i18n.language]);
+    const direction = i18n.language === "ar" ? "rtl" : "ltr";
+    document.documentElement.setAttribute("dir", direction);
+    console.log(`Language is set to ${i18n.language}, dir is now: ${direction}`);
+  }, [i18n.language]);
 
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -32,14 +40,7 @@ function ProductPage() {
     postalCode: "",
     country: "",
   });
-  const { id } = useParams();
-  const [product, setProduct] = useState(null);
-  const [mainImage, setMainImage] = useState("");
-  const [size, setSize] = useState("");
-  const [quantity, setQuantity] = useState(0);
-  const [seller, setSeller] = useState(null);
-  const [role, setRole] = useState(localStorage.getItem("role")?.toLowerCase());
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+
 
  
 

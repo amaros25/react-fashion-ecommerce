@@ -7,6 +7,7 @@
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0,0,0,0.08);
   margin-bottom: 10px;
+  margin-top: 10px;
   position: relative;
   gap: 30px;
 }
@@ -94,43 +95,7 @@
   text-align: center; 
   width: 100%;
 }
-/*
-.recharts-responsive-container {
-  width: 100% !important;
-  height: 220px !important;
-}
 
-.order-legend {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;   
-  gap: 15px;
-  margin-top: 10px;
-  color: #555;
-  font-size: 14px;
-}
-
-.order-legend div {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-
-.dot.total { background-color: #3b82f6; }       
-.dot.pending { background-color: #8b5cf6; }     
-.dot.cancelled { background-color: #ff66b2; }   
-.dot.delivered { background-color: #4caf50; } 
-.dot.returned { background-color: #b71c1c; }  
- */
 .profile-left h3 {
   margin: 8px 0 5px 0;
   font-size: 18px;

@@ -3,8 +3,7 @@ const Order = require('../models/order')
 const User = require('../models/user');
 const Product = require('../models/product');
  
- 
-// Return Order by ID
+//Return Order by ID
 exports.getOrderByID = async (req, res) => {
     try{
         const order = await Order.findById(req.params.id);
@@ -16,10 +15,6 @@ exports.getOrderByID = async (req, res) => {
       res.status(500).json({ message: 'Error fetching order', error });  
     }
 };
- 
-// Return Order by SellerID
- 
-
 
 // Return paginated Orders by SellerID with user and product details
 exports.getOrderBySellerID = async (req, res) => {
@@ -102,40 +97,18 @@ exports.getOrderBySellerID = async (req, res) => {
   }
 };
 
-//exports.getOrderBySellerID = async (req, res) => {
- // try {
-  //  const orders = await Order.find({ sellerId: req.params.sellerId });
-  //  if (orders.length === 0) {
-  //    return res.status(404).json({ message: 'No orders found for this seller' });
- //   }
-  //  res.json(orders);
- // } catch (error) {
-  //  res.status(500).json({ message: 'Error fetching orders', error });
- // }
-//};
-
 // Return Orders by UserID
 exports.getOrderByUserID = async (req, res) => {
   try {
-    console.log("🟢 hola getOrderByUserID ");
- 
     const userID = req.params.id;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    console.log("🟢 userID: ", userID);
-    console.log("🟢 page: ", page); 
-    console.log("🟢 limit: ", limit);
     const skip = (page - 1) * limit;
-
-    // Gesamtanzahl der Bestellungen des Users
     const totalOrders = await Order.countDocuments({ userID });
-    console.log("🟢 totalOrder: ", totalOrders);
-    // Nur benötigte Seite laden
     const orders = await Order.find({ userID })
-      .sort({ createdAt: -1 }) // neueste zuerst
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
-    console.log("🟢 orders: ", orders);
     res.json({
       page,
       totalOrders,
@@ -159,7 +132,7 @@ exports.createOrder = async(req, res) => {
     }
 };
 
- // Update order status by order ID
+// Update order status by order ID
 exports.updateOrderStatus = async (req, res) => {
   try {
     const orderId = req.params.id;  // Die Bestellung ID aus der URL
@@ -189,7 +162,6 @@ exports.updateOrderStatus = async (req, res) => {
   }
 };
 
-
 // Anzahl der Bestellungen für ein bestimmtes Produkt ermitteln
 exports.getOrderCountByProduct = async (req, res) => {
   try {
@@ -215,8 +187,6 @@ exports.getOrderCountByProduct = async (req, res) => {
   }
 };
 
-
- 
 exports.getSellerOrderStats = async (req, res) => {
   try {
     const { sellerId } = req.params;
