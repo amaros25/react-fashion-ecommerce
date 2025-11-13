@@ -1,0 +1,51 @@
+.container {
+    padding: 20px; /* Add padding inside the container */
+}
+
+h2 {
+    text-align: left; /* Align heading text to the left */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+.latest-product-list {
+    display: grid; /* Use CSS Grid instead of Flexbox */
+    grid-template-columns: repeat(4, 1fr); /* Create 4 equal-width columns */
+    gap: 20px; /* Space between grid items */
+    padding: 10px 0; /* Vertical padding */
+}
+
+.latest-product-item {
+    background-color: #f0f9fa; /* Light gray-blue background */
+    border-radius: 15px; /* Rounded corners */
+    padding: 15px; /* Inner spacing */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    text-align: center; /* Center text inside each product */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover transitions */
+    display: flex; /* Use flexbox inside product item */
+    flex-direction: column; /* Arrange content vertically */
+    justify-content: space-between; /* Space content evenly vertically */
+}
+
+.product-item:hover {
+    transform: translateY(-5px); /* Slightly lift the product on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+.latest-product-image {
+    width: 100%; /* Image fills the width of container */
+    height: 300px; /* Fixed image height */
+    object-fit: cover; /* Scale image to cover container without distortion */
+    border-radius: 10px; /* Rounded corners for images */
+    margin-bottom: 15px; /* Space below the image */
+}
+
+.product-item h3 {
+    font-size: 18px; /* Font size for product title */
+    font-weight: bold; /* Bold font */
+    margin-bottom: 10px; /* Space below the title */
+}
+
+.product-item p {
+    font-size: 16px; /* Font size for product description or price */
+    color: #444; /* Darker text color for better readability */
+}

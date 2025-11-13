@@ -1,0 +1,75 @@
+.main-container {
+    max-width: 1200px; /* Maximum width for the main container */
+    margin: 0 auto; /* Center container horizontally */
+    padding: 20px; /* Inner padding */
+    min-height: 100vh; /* Minimum height to fill the viewport */
+    padding-bottom: 200px; /* Extra bottom padding, maybe for footer space */
+    
+}
+
+body {
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    box-sizing: border-box; /* Include padding and border in element's total width/height */
+    font-family: sans-serif; /* Use a clean, sans-serif font */
+    background-color: #f8f8f8; /* Light grey background */
+}
+
+/* Apply box-sizing border-box to all elements and their ::before and ::after pseudo-elements */
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+.section-grid {
+    display: grid; /* Use CSS Grid layout */
+    grid-template-columns: repeat(2, 1fr); /* 3 equal columns */
+    gap: 20px; /* Space between grid items */
+
+    margin-top: -150px; /* Negative margin to pull the section up */
+    position: relative; /* Position relative for z-index to work */
+    z-index: 2; /* Layer this above elements with lower z-index */
+}
+
+.banner-slider {
+    position: relative; /* Position relative for layering */
+    z-index: 1; /* Behind .section-grid */
+    margin-bottom: 100px; /* Space below the banner */
+}
+
+.section-title {
+  margin-top: 30px; /* Space above the section title */
+  direction: ltr;
+}
+
+
+.pagination-container {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.pagination-button {
+  border: none;
+  background-color: #eee;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.pagination-button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.pagination-ellipsis {
+  padding: 8px 12px;
+  color: #666;
+  user-select: none;
+}
+
+ .rtl .section-title {
+  text-align: right; /* Text nach rechts ausrichten */
+  direction: rtl;
+}

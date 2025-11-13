@@ -1,0 +1,38 @@
+{
+  "myshop": "متجري",
+  "home": "الصفحة الرئيسية",
+  "profile": "الملف الشخصي",
+  "login": "تسجيل الدخول",
+  "logout": "تسجيل الخروج",
+  "newProducts": "المنتجات الجديدة",
+  "categories": {
+    "womensClothing": "ملابس نسائية",
+    "mensClothing": "ملابس رجالية",
+    "shoes": "أحذية",
+    "womensUnderwear": "ملابس داخلية نسائية",
+    "mensUnderwear": "ملابس داخلية رجالية",
+    "bags": "حقائب وملحقات",
+    "kidsClothing": "ملابس أطفال",
+    "babyClothing": "ملابس حديثي الولادة"
+  },
+  "categoryBanner": {
+    "bestOffers": "أفضل العروض",
+    "bestOrders": "أفضل الطلبات",
+    "popularCategories": "الفئات الشائعة"
+  },
+  "tabs_seller": {
+    "products": "المنتجات",
+    "openOrders": "الطلبات المفتوحة",
+    "allOrders": "جميع الطلبات"
+  },
+  "add_new_product": "أضف منتجًا جديدًا",
+  "alter_max_images": "يُسمح باختيار 3 صور كحد أقصى!",
+  "max_images_selected": "تم اختيار 3 صور كحد أقصى",
+  "product_images_max": ":صور المنتج (بحد أقصى 3)",
+  "choose_files": "اختر الملفات",
+  "no_file_chosen": "لم يتم اختيار أي ملف"
+
+
+
+
+}

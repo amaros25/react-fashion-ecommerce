@@ -1,0 +1,87 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.register-form {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 350px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Überschrift */
+.register-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Labels und Inputs */
+.register-form label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.register-form input,
+.register-form select {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Gruppen für Seller oder Shoper optional */
+.input-group {
+  margin-bottom: 10px;
+}
+
+/* Button */
+.register-form button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 25px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.register-form button:hover {
+  background-color: #005fa3;
+}
+
+/* Fehleranzeige */
+.error {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Link zur Login-Seite */
+.login-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.login-link a {
+  color: #0077cc;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}

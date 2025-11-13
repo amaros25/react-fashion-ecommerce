@@ -1,0 +1,32 @@
+{
+  "myshop": "My Shop",
+  "home": "Home",
+  "profile": "Profile",
+  "login": "Login",
+  "logout": "Logout",
+  "newProducts": "New Products",
+  "categories": {
+    "womensClothing": "Women's Clothing",
+    "mensClothing": "Men's Clothing",
+    "shoes": "Shoes",
+    "womensUnderwear": "Women's Underwear",
+    "mensUnderwear": "Men's Underwear",
+    "bags": "Bags & Accessories",
+    "kidsClothing": "Kids' Clothing",
+    "babyClothing": "Baby Clothing"
+  },
+  "categoryBanner": {
+    "bestOffers": "Best Offers",
+    "bestOrders": "Best Orders",
+    "popularCategories": "Popular Categories"
+  },
+  "tabs_seller": {
+    "products": "Products",
+    "openOrders": "Open Orders",
+    "allOrders": "All Orders"
+  },
+  "add_new_product": "Add New Product",
+  "alter_max_images": "A maximum of 3 images may be selected!",
+  "max_images_selected":  "A maximum of 3 images have been selected.",
+  "product_images_max": "Product Images (max. 3):"
+  }
