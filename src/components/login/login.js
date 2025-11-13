@@ -37,12 +37,19 @@ function Login({ closePopup, switchToRegister }) {
 
       // Parse JSON response
       const data = await res.json();
-
+      console.log("Login Data : ", data);
       // Save auth token and user info in localStorage for session management
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.userId);
 
+      localStorage.setItem("userData", JSON.stringify({
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      }));
       // Navigate user based on their role
       if (data.role === "seller") {
         navigate("/profile_seller");

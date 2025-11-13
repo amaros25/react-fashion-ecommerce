@@ -34,6 +34,9 @@ const login = async (req, res) => {
       userId: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+      address: user.address
     });
   } catch (err) {
     console.error(err);

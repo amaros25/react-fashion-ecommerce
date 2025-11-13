@@ -36,8 +36,6 @@ function ProfileSeller() {
 
       if (response.ok) {
         const updatedOrder = await response.json();
-
-        // Toast in aktiver Sprache
         toast.success(
           t("statusUpdated", { status: t(`order_state.${newStatus}`) }),
           { position: "top-right", autoClose: 3000 }

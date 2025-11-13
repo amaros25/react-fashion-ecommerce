@@ -2,7 +2,7 @@
 /* Container für alle Bestellungen */
 .order-container {
   width: 100%;
-  max-width: 900px;
+ 
   height: auto; /* Entferne die feste Höhe */
   border: 1px solid #f1f1f1ff;
   border-radius: 8px;

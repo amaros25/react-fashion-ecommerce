@@ -30,6 +30,15 @@ app.use("/api/users", userRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/orders', orderRoutes);
 
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://localhost:5173"], // React-Dev-Server-Ports
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
 // Server starten
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

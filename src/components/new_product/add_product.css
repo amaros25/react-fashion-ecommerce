@@ -1,7 +1,7 @@
 /* Container for the "Add Product" form */
 .add-product-container {
   max-width: 100%; /* Make the container take up full width */
-  margin: 20px auto; /* Center the container horizontally */
+  margin: 0 auto; /* Center the container horizontally */
   background-color: transparent;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for a lifted effect */
   padding: 20px;
@@ -9,6 +9,8 @@
   background-color: #fff; /* White background */
   box-sizing: border-box;
 }
+
+ 
 
 /* Flexbox layout for the form */
 .add-product-form {
@@ -209,7 +211,7 @@
 /* For screens larger than 768px (tablets and desktops) */
 @media (min-width: 768px) {
   .add-product-container {
-    max-width: 800px; /* Set a max-width for the form on large screens */
+     /* Set a max-width for the form on large screens */
     padding: 20px; /* Standard padding */
   }
 

@@ -271,7 +271,7 @@
   .horizontal-nav {
     width: 100%;
     padding: 0; /* remove side padding so text isn’t cut off */
-    margin: 10px;
+    margin-top: 10px;
   }
 .navbar {
     flex-direction: column;          /* Stack elements vertically */

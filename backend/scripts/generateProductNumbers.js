@@ -23,7 +23,7 @@ async function addMissingProductNumbers() {
       ]
     });
 
-    console.log(`🟢 Gefundene Produkte ohne Nummer: ${productsWithoutNumber.length}`);
+ 
 
     for (const product of productsWithoutNumber) {
       let newNumber;
@@ -38,8 +38,7 @@ async function addMissingProductNumbers() {
 
       product.productNumber = newNumber;
       await product.save();
-
-      console.log(`✅ Produkt "${product.name}" → ${newNumber}`);
+ 
     }
 
     console.log("🎉 Alle fehlenden Produktnummern wurden erfolgreich erstellt!");

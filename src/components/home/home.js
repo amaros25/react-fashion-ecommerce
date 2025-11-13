@@ -30,6 +30,7 @@ function Home() {
   useEffect(() => {
     if (category && category !== selectedCategory) {
       setSelectedCategory(category);
+      setPage(1);
     }
   }, [category, selectedCategory, setSelectedCategory]);
 

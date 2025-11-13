@@ -25,6 +25,9 @@ function Header() {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const scrollRef = useRef(null);
+  const [role, setRole] = useState(null);
+
+ 
 
   // All available product category keys
   const categoryKeys = [
@@ -75,6 +78,8 @@ function Header() {
    */
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const storedRole = localStorage.getItem("role");
+    setRole(storedRole);
     setIsLoggedIn(!!token);
   }, []);
 
@@ -86,6 +91,7 @@ function Header() {
   const handleProfileClick = () => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
+ 
     if (token) {
       navigate(role === "seller" ? "/profile_seller" : "/profile_user");
     } else {
@@ -165,9 +171,12 @@ function Header() {
               <img src="/icons/home_icon.svg" style={{ width: "26px", height: "35px" }} />
             </Link>
 
-            <Link to="/cart_page">
-              <img src="/icons/empty_cart_icon.svg" style={{ width: "26px", height: "35px" }} />
-            </Link>
+       
+            {role !== "seller" && (
+              <Link to="/cart_page">
+                <img src="/icons/empty_cart_icon.svg" style={{ width: "26px", height: "35px" }} />
+              </Link>
+            )}
 
             {/* Show different icons depending on login status */}
             {isLoggedIn ? (

@@ -44,7 +44,6 @@ useEffect(() => {
         <p>{seller.email}</p>
         <p>{seller.phone}</p>
       </div>
-
       {/* Rechte Seite (eigene Cards, nicht verschachtelt) */}
       <div className="right-content">
         {/* === Orders Card === */}
@@ -58,45 +57,6 @@ useEffect(() => {
             <p className="stat-number">{3}</p>
           </div>
         </div>
-        {/*
-     
-        <div className="order-chart-card">
-          <h4>Orders Over Time</h4>
-          <ResponsiveContainer width="100%" height={220}>
-            <LineChart
-              data={ordersByMonthWithStatus}
-              margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-              <XAxis dataKey="month" stroke="#555" />
-              <YAxis stroke="#555" allowDecimals={false} domain={[0, "dataMax + 2"]} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#fff",
-                  borderRadius: "8px",
-                  border: "1px solid #ddd",
-                }}
-              />
-      
-              <Line type="monotone" dataKey="total" stroke="#3b82f6" strokeWidth={3} dot={false} />
-              <Line type="monotone" dataKey="pending" stroke="#8b5cf6" strokeWidth={3} dot={false} />
-              <Line type="monotone" dataKey="cancelled" stroke="#ff66b2" strokeWidth={3} dot={false} />
-
-              <Line type="monotone" dataKey="delivered" stroke="#4caf50" strokeWidth={3} dot={false} />
-                <Line type="monotone" dataKey="returned_to_sender" stroke="#b71c1c" strokeWidth={3} dot={false} />
-
-            </LineChart>
-          </ResponsiveContainer>
-            <div className="order-legend">
-            <div><span className="dot total"></span> Total</div>
-            <div><span className="dot pending"></span> Pending</div>
-            <div><span className="dot cancelled"></span> Cancelled</div>
-            <div><span className="dot delivered"></span> Delivered</div>
-            <div><span className="dot returned"></span> Returned</div>
-            </div>
-        
-        </div>
-    */}
       </div>
     </div>
   );
