@@ -1,37 +1,34 @@
 .main-chat-container {
   width: 100%;
   max-width: 1400px;
-  margin: 30px auto; /* Abstand oben/unten etwas größer */
-  padding: 30px;     /* mehr Innenabstand für die Box */
-  height: calc(100vh - 60px); /* Höhe anpassen, damit mehr Platz im Container */
+  margin: 30px auto; 
+  padding: 30px;
+  height: calc(100vh - 60px);
   display: flex;
   flex-direction: column;
 }
 
-
-/* Container */
 .main-chat {
-  flex: 1 1 auto; /* flex-grow = 1, flex-shrink = 1, flex-basis = auto */
-  min-height: 600px; /* Mindesthöhe für mehr Platz */
+  flex: 1 1 auto;
+  min-height: 600px;
   display: flex;
   gap: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f7f9fc;
+  background-color: #eeeeee;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  margin: 1% 0;
 }
 
-
-
-/* Sidebar: Chat-Liste */
 .chat-sidebar {
   flex: 1;
   background-color: #ffffff;
   border-right: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
+  border-radius: 10px;
 }
 
 .new-chat {
@@ -94,14 +91,13 @@
   color: #999;
 }
 
-/* Chat Window */
 .chat-window {
   flex: 2;
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
   border-radius: 10px;
-  overflow: hidden; /* wichtig für Scroll */
+  overflow: hidden;
 }
 
 .messages {
@@ -111,10 +107,9 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  scroll-behavior: auto; /* verhindert smooth scroll global */
+  scroll-behavior: auto;
 }
 
-/* Nachrichten */
 .message {
   max-width: 70%;
   padding: 10px 14px;
@@ -125,7 +120,7 @@
   word-wrap: break-word;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: 0.2s;
-  align-self: flex-start; /* Standardmäßig nach links ausrichten */
+  align-self: flex-start;
 }
 
 .message.user {
@@ -152,9 +147,8 @@
   text-align: right;
 }
 
-/* Input Bereich */
 .message-input {
-  flex-shrink: 0; /* Input bleibt unten */
+  flex-shrink: 0;
   display: flex;
   padding: 12px;
   border-top: 1px solid #e0e0e0;
@@ -258,4 +252,14 @@
 
 .read-indicator {
   color: rgb(15, 15, 15); 
+}
+
+.no-chat {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Volle Höhe des Bildschirms */
+  text-align: center; /* Text zentrieren */
+  font-size: 1.2rem;
+  color: #747272;
 }
