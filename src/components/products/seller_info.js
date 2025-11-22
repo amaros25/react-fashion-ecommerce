@@ -1,10 +1,9 @@
 import React from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import "./seller_info.css"; // eigene CSS-Datei
+import "./seller_info.css";
 
 function SellerInfo({ seller }) {
   if (!seller) return null;
-
   return (
     <div className="seller-info">
       <div className="seller-details">
@@ -18,8 +17,6 @@ function SellerInfo({ seller }) {
         )}
         <div>
           <h3 className="seller-name">{seller.shopName}</h3>
- 
-
           <div className="seller-city">
             <FaMapMarkerAlt className="city-icon" />
             <span>{seller.city}</span>

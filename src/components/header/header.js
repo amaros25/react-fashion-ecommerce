@@ -5,11 +5,14 @@ import { useTranslation } from "react-i18next";
 import Login from '../login/login'; 
 import Register from '../register/register'; 
 import { FilterContext } from '../filter_context/filter_context';
+import { MainChat } from "../chat/main_chat"; // Pfad anpassen
 
 function Header() {
+
   const location = useLocation(); // Used to detect the current page path
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const scrollRef = useRef(null);
 
   // Access shared search & filter states from context
   const {
@@ -24,10 +27,7 @@ function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
-  const scrollRef = useRef(null);
   const [role, setRole] = useState(null);
-
- 
 
   // All available product category keys
   const categoryKeys = [
@@ -47,13 +47,11 @@ function Header() {
       setSearchTerm("");
       handleSearch("");
     }
-
     if (categoryKey === "") {
       navigate("/home");
     } else {
       navigate(`/home/${categoryKey}`);
     }
-
     // Delay setting the category to avoid timing issues during navigation
     setTimeout(() => {
       setSelectedCategory(categoryKey);
@@ -136,7 +134,6 @@ function Header() {
    */
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-
     if (!location.pathname.startsWith("/home")) {
       navigate("/home");
       // Wait a short time to ensure Home is rendered before triggering the search
@@ -146,11 +143,6 @@ function Header() {
     } else {
       handleSearch(searchTerm);
     }
-  };
-
-  // Optional: function for a Help page (currently commented out)
-  const handleHelpClick = () => {
-    navigate("/help");
   };
 
   return (
@@ -171,7 +163,16 @@ function Header() {
               <img src="/icons/home_icon.svg" style={{ width: "26px", height: "35px" }} />
             </Link>
 
-       
+           {/* Chat Icon – nur wenn eingeloggt */}
+              {isLoggedIn && (
+              <img
+                src="/icons/chat_icon.svg"
+                style={{ width: "26px", height: "35px", marginLeft: "10px" }}
+                alt="Chat"
+                className="nav-icon"
+                onClick={() => navigate("/chat")}
+              />
+            )}
             {role !== "seller" && (
               <Link to="/cart_page">
                 <img src="/icons/empty_cart_icon.svg" style={{ width: "26px", height: "35px" }} />

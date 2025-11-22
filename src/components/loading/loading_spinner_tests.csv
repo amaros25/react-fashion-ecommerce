@@ -1,0 +1,8 @@
+File,Test File,View,UI Element,Description,Expected Behavior,Mobile ≤768px,Tablet ≤1024px,Webview/Desktop,Result,Notes,JUnit Tested,JUnit Function
+loading_spinner.js,LoadingSpinner.test.js,Loading Spinner,Overlay Container,Dark transparent overlay block,Covers full screen and is centered,OK,OK,OK,OK,,nein,
+loading_spinner.js,LoadingSpinner.test.js,Loading Spinner,Spinner Element,Rotating circular animation,Spinner is visible and animated,OK,OK,OK,OK,,nein,
+loading_spinner.js,LoadingSpinner.test.js,Loading Spinner,Position Centering,Spinner centered on screen,Always centered on all devices,OK,OK,OK,OK,,nein,
+loading_spinner.js,LoadingSpinner.test.js,Loading Spinner,Responsiveness,Overlay fits viewport,No overflow or clipping on any view,OK,OK,OK,OK,,nein,
+loading_spinner.js,LoadingSpinner.test.js,Loading Spinner,Animation Running,CSS animation active,Spinner rotates smoothly,OK,OK,OK,OK,,nein,
+loading_spinner.js,LoadingSpinner.test.js,Loading Spinner,Unmount Behavior,Spinner removed correctly,Cleans up without errors on unmount,OK,OK,OK,OK,,nein,
+loading_spinner.js,LoadingSpinner.test.js,Loading Spinner,Accessibility,Role & aria attributes,Optional: aria-busy or aria-live,OK,OK,OK,OK,,nein,

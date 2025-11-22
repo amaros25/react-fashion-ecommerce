@@ -173,9 +173,11 @@
     "Turquoise": "Turquoise"
   },
   "order_state":{
+    
     "all": "Tous les statuts",
     "pending": "En attente",
     "confirmed": "Confirmé",
+    "dont_respond": "L'utilisateur ne répond pas au téléphone",
     "shipped": "Expédié",
     "delivered": "Livré",
     "received": "Reçu",
@@ -183,11 +185,16 @@
     "user_cancelled": "Annulé",
     "seller_cancelled": "Annulé par le vendeur",
     "failed_delivery": "Échec de livraison",
-    "returned_to_sender": "Retour à l'expéditeur",
+    "second_try": "Deuxième tentative de livraison",
+    "third_try": "Troisième tentative de livraison",
+
     "return_requested": "Retour demandé",
     "return_confirmed": "Retour confirmé",
+    "return_rejected": "Retour refusé",
+
     "return_shipped": "Retour expédié",
-    "return_received": "Retour reçu"
+    "return_received": "Retour reçu",
+     "returned_to_sender": "Retour à l'expéditeur"
   },
  
   "no_products_found": "Aucun produit trouvé",
@@ -243,6 +250,29 @@
   "statusUpdated": "Statut mis à jour avec succès: {{status}}",
   "updateFailed": "Échec de la mise à jour: {{message}}",
   "unknownError": "Erreur inconnue",
-  "stock": "Stock"
-  
+  "stock": "Stock",
+  "errors":{
+    "product_infos_loading_failed": "Échec du chargement du produit. Veuillez vérifier votre connexion Internet et réessayer. Si le problème persiste, contactez notre support client.",
+    "product_color_loading_failed": "Échec du chargement des couleurs du produit. Veuillez vérifier votre connexion Internet et réessayer. Si le problème persiste, contactez notre support client."
+
+  },
+  "chat": {
+    "loadOlderMessages": "Charger les messages anciens",
+    "unread": "Non lu",
+    "read": "Lu",
+    "messagePlaceholder": "Écrire un message...",
+    "sendButton": "Envoyer",
+    "noChat": "Choisissez un chat ou commencez un nouveau",
+    "noMessages": "Aucun message",
+    "order": "Commande",
+    "product": "Produit",
+    "lastMessage": "Dernier message",
+    "newChatButton": "Nouveau chat",
+    "newChatPlaceholderOrder": "Numéro de commande",
+    "newChatPlaceholderProduct": "Numéro de produit",
+    "newChatWithSeller": "Nouveau chat avec le vendeur",
+    "newChatWithAdmin": "Nouveau chat avec l'administrateur",
+    "cancel_with_seller": "Annuler la chat avec le vendeur"
+    
+  }
 }

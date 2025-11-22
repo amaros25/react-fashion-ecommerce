@@ -1,7 +1,6 @@
 import React, {useState, useEffect } from 'react';
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import "./product_page.css";
 import { Header } from '../header/header.js';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +11,7 @@ import  ProductImage from './product_images.js'
 import ProductInfo from "./product_info";
 import SellerInfo from "./seller_info.js";
 import Breadcrumb from './breadcrumb.js';
+import "./product_page.css";
 
 function ProductPage() {
 
@@ -187,18 +187,19 @@ function ProductPage() {
   return (
     <div className="product-page">
       <Header /> 
-    <div className="breadcrumb-container">
-        <Breadcrumb category={product.category} productName={product.name} />
+ 
+
+  <div className="breadcrumb-container">
+      <Breadcrumb category={product.category} productName={product.name} />
       </div>
         <div className="product-main-content"> 
-      <ProductImage
-        mainImage={mainImage}
-        setMainImage={setMainImage}
-        product={product}
-      />
-      <div className="product-info-main">
-
-      <ProductInfo product={product} />
+        <ProductImage
+          mainImage={mainImage}
+          setMainImage={setMainImage}
+          product={product}
+        />
+   <div className="product-right-column">
+        <ProductInfo product={product} />
 
         <div className="product-buy-box">
 
@@ -291,6 +292,7 @@ function ProductPage() {
       category={product.category} 
       currentProductId={product._id} 
     />
+ 
       <Foot/>
     </div>
   );

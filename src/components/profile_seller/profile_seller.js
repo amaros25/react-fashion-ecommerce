@@ -24,7 +24,9 @@ function ProfileSeller() {
   const handleStatusChange = async (orderId, newStatus) => {
     try {
      // setLoading(true);
-
+      console.log("handleStatusChange: newStatus: ", newStatus);
+      console.log("handleStatusChange: apiUrl: ", apiUrl);
+      console.log("handleStatusChange: orderId: ", orderId);
       const response = await fetch(`${apiUrl}/orders/${orderId}/status`, {
         method: "PUT",
         headers: {
@@ -43,6 +45,7 @@ function ProfileSeller() {
         setRefreshOrders(prev => prev + 1);
       } else {
         const errorData = await response.json();
+        console.log("handleStatusChange: errorData: ", errorData);
         toast.error(
           t("updateFailed", { message: errorData.message || t("unknownError") }),
           { position: "top-right", autoClose: 5000 }

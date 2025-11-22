@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../header/header.js";
-import "./cart_page.css";
 import DeliveryAddressForm from "./delivery_address_form";
 import { useTranslation } from "react-i18next";
 import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Foot from '../foot/foot';
+import "./cart_page.css";
 
 const CartPage = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -143,9 +143,7 @@ const CartPage = () => {
     }
 
     try {
-      // für jede Seller-Gruppe im Warenkorb eine Bestellung anlegen
       for (const [sellerId, items] of Object.entries(groupedCart)) {
-        // Items in das Schema-Format umwandeln
         const formattedItems = items.map((item) => ({
           productId: item.productId,
           color: item.color,
@@ -162,8 +160,8 @@ const CartPage = () => {
           items: formattedItems,
           totalPrice,
           status: [{ update: "pending", date: new Date() }],
-          notes: "", // optional
-          paymentMethod: "Cash on Delivery", // oder z.B. "PayPal"
+          notes: "",
+          paymentMethod: "Cash on Delivery",
         };
 
         const res = await fetch(`${apiUrl}/orders/create`, {
@@ -183,7 +181,7 @@ const CartPage = () => {
       localStorage.removeItem("cart");
       setCart([]);
       setGroupedCart({});
-      navigate("/profile_user"); // oder eine andere Seite
+      navigate("/profile_user");
     } catch (err) {
       console.error(err);
       toast.error(t("orders_created_error"));
@@ -276,22 +274,17 @@ const CartPage = () => {
       <Header />
       <div className="cart-content">
         <h1 className="cart-title">🛍️ {t("cart_page.title")}</h1>
-
-        {/* Cart items grouped by seller */}
         <div className="cart-container">
        {Object.entries(groupedCart).map(([sellerId, items]) => {
-  const seller = sellers[sellerId]; // hole Seller-Infos
+  const seller = sellers[sellerId];
   return (
     <div key={sellerId} className="seller-section">
-      {/* Seller Header */}
       {seller && (
         <div className="seller-header">
           <img src={seller.image} alt={seller.shopName} className="seller-image" />
           <h2 className="seller-name">{seller.shopName}</h2>
         </div>
       )}
-
-      {/* Cart Items */}
       <div className="cart-items">
         {items.map((item, i) => (
           <div key={i} className="cart-item">
@@ -322,8 +315,6 @@ const CartPage = () => {
           </div>
         ))}
       </div>
-
-      {/* Seller subtotal + shipping */}
       <div className="seller-summary">
         <p>
           🚚 {t("cart_page.shipping_cost_once")} {SHIPPING_COST.toFixed(3)} {t("cart_page.price_suf")}
@@ -336,7 +327,6 @@ const CartPage = () => {
   );
 })}
         </div>
-        {/* Cart total */}
 
         <div
           className={`cart-summary ${i18n.language === "ar" ? "rtl" : "ltr"}`}
@@ -347,7 +337,6 @@ const CartPage = () => {
             {calculateTotal().toFixed(3)} {t("cart_page.price_suf")}
           </h2>
 
-          {/* Current Address */}
           {user?.address?.street && !showAddressForm && (
             <div className="current-address">
               <span>
@@ -361,7 +350,6 @@ const CartPage = () => {
               </button>
             </div>
           )}
-        {/* Address Form (inline inside summary) */}
         {showAddressForm && (
           <div className="inline-address-form">
            <DeliveryAddressForm
@@ -371,11 +359,10 @@ const CartPage = () => {
             />
           </div>
         )}
-          {/* Order Button */}
             <button
           className="save-address-button"
-          disabled={!canOrder && !user?.address?.street} // disabled until address saved or exists
-          onClick={() => handle_new_order()} // your order handler
+          disabled={!canOrder && !user?.address?.street}
+          onClick={() => handle_new_order()}
         >
           {t("product_page.submit_order")}
         </button>

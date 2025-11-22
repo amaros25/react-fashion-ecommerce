@@ -1,10 +1,24 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // Füge den Link-Import hier hinzu
 import "./order_items.css";
 
 export default function OrderItem({ item, product, order, t, isLast }) {
+  const navigate = useNavigate();  // Verwende useNavigate anstelle von useHistory
+
+  // Funktion für den Start des Chats mit dem Verkäufer
+  const handleChatWithSeller = () => {
+    // Navigiere zur MainChat-Seite und übergib orderNumber und sellerId
+    navigate('/chat', {
+      state: {
+        newOrderNumber: order.orderNumber,
+        sellerId: order.sellerId, // Der Verkäufer wird aus der Order übernommen
+        newChatType: 'order'
+      }
+    });
+  };
+
   return (
-    <Link to={`/product/${item.productId}`} className="order-item-card clickable">
+    <div className="order-item-card clickable">
       <div className="order-item-left">
         {product?.image?.[0] && (
           <img src={product.image[0]} alt={product.name} className="order-product-image" />
@@ -29,8 +43,16 @@ export default function OrderItem({ item, product, order, t, isLast }) {
               ? t(`order_state.${order.status.slice(-1)[0]?.update}`) || t("order_state.pending")
               : t("order_state.pending")}
           </p>
+
+          {/* Button für den Chat mit dem Verkäufer */}
+          <button className="chat-with-seller-btn" onClick={handleChatWithSeller}>
+            Chat mit Verkäufer
+          </button>
         </div>
       )}
-    </Link>
+
+      {/* Produkt-Link zum Produktdetail */}
+      <Link to={`/product/${item.productId}`} className="product-link" />
+    </div>
   );
 }

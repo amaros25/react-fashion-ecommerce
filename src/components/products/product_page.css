@@ -5,7 +5,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  background-color: #f8f8f8;
+  background-color: #f7f6f6;
+ 
   border-radius: 15px;
 }
 
@@ -19,11 +20,19 @@
 
 .product-main-content {
   display: flex;
-  gap: 30px;          /* Abstand zwischen Bild und Info */
+  gap: 10px;          /* Abstand zwischen Bild und Info */
   align-items: flex-start; /* damit die Tops ausgerichtet sind */
-  flex-wrap: wrap;    /* responsive */
+  flex-wrap: nowrap;    /* responsive */
+ 
 }
  
+ .product-right-column {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .product-buy-box {
   background-color: #fff;
   padding: 20px;
@@ -34,12 +43,9 @@
   gap: 15px;
   height: fit-content;
   min-width: 250px;
+ 
 }
 
-.product-images {
-  flex: 1 1 40%;       /* Bild nimmt ca. 40% Platz */
-  max-width: 500px;    /* optional: max-width um riesige Bilder zu begrenzen */
-}
 
 .product-buy-box select,
 .product-buy-box input {
@@ -73,12 +79,13 @@
 
 /* product_page.css */
 .breadcrumb-container {
-  margin: 10px 20px;
+ 
   font-size: 18px;
   display: flex;
   justify-content: flex-start; /* Standardmäßig links */
   width: 100%; /* Stellt sicher, dass der Container die gesamte Breite einnimmt */
   direction: ltr; /* Standardrichtung für LTR */
+  padding: 10px;
 }
 
 html[dir="rtl"] .breadcrumb-container {
@@ -114,24 +121,33 @@ html[dir="ltr"] .breadcrumb-container {
   color: #333;
 }
 
-@media (max-width: 992px) {
+
+@media (max-width: 768px) {
+  .product-main-content {
+    flex-direction: column;
+  }
+
   .product-page {
     flex-direction: column;
-    padding: 0px 10px;
+    padding: 0px 0px;
+    max-width: 100%;
+    margin: 5px;
   }
  
-  .product-images {
-    flex: 1 1 100%;
-  }
-
-
   .product-buy-box {
     width: 100%;
   }
 }
 
-.product-buy-box button:disabled {
-  background-color: #ccc;   /* graues Aussehen */
-  cursor: not-allowed;      /* Maus zeigt "nicht erlaubt" */
-  opacity: 0.6;             /* optional leicht transparent */
+@media (min-width: 768px) and (max-width: 1025px) {
+ 
+
+
 }
+
+.product-buy-box button:disabled {
+  background-color: #ccc; 
+  cursor: not-allowed;   
+  opacity: 0.6;      
+}
+ 

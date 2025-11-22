@@ -1,0 +1,261 @@
+.main-chat-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 30px auto; /* Abstand oben/unten etwas größer */
+  padding: 30px;     /* mehr Innenabstand für die Box */
+  height: calc(100vh - 60px); /* Höhe anpassen, damit mehr Platz im Container */
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* Container */
+.main-chat {
+  flex: 1 1 auto; /* flex-grow = 1, flex-shrink = 1, flex-basis = auto */
+  min-height: 600px; /* Mindesthöhe für mehr Platz */
+  display: flex;
+  gap: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f7f9fc;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+
+
+/* Sidebar: Chat-Liste */
+.chat-sidebar {
+  flex: 1;
+  background-color: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+}
+
+.new-chat {
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.new-chat select,
+.new-chat input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+.new-chat button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: #4a90e2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.new-chat button:hover {
+  background-color: #357ab8;
+}
+
+.chat-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.chat-card {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.chat-card:hover {
+  background-color: #f0f8ff;
+}
+
+.chat-card.active {
+  background-color: #d4e3f3;
+}
+
+.chat-card div {
+  margin-bottom: 4px;
+}
+
+.chat-date {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+/* Chat Window */
+.chat-window {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden; /* wichtig für Scroll */
+}
+
+.messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-behavior: auto; /* verhindert smooth scroll global */
+}
+
+/* Nachrichten */
+.message {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 20px;
+  position: relative;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  word-wrap: break-word;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: 0.2s;
+  align-self: flex-start; /* Standardmäßig nach links ausrichten */
+}
+
+.message.user {
+  background-color: #48b330;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.message.admin {
+  background-color: #8d1f1f;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.message.user:hover,
+.message.admin:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.msg-date {
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* Input Bereich */
+.message-input {
+  flex-shrink: 0; /* Input bleibt unten */
+  display: flex;
+  padding: 12px;
+  border-top: 1px solid #e0e0e0;
+  gap: 8px;
+  background-color: #fafafa;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  outline: none;
+  transition: 0.2s;
+}
+
+.message-input input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74,144,226,0.2);
+}
+
+.message-input button {
+  padding: 10px 16px;
+  border-radius: 20px;
+  background-color: #4a90e2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.message-input button:hover {
+  background-color: #357ab8;
+}
+
+.load-more-container {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.load-more-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #999;
+  background: white;
+  cursor: pointer;
+}
+
+.load-more-btn:hover {
+  background: #f2f2f2;
+}
+
+
+
+ .message.user {
+  background-color: #67e94a; 
+  align-self: flex-end; 
+  color: #050101; 
+
+}
+
+.message.admin {
+  background-color: #2828c5; 
+  align-self: flex-start; 
+  color: #ccc6c6; 
+
+}
+
+.message:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.msg-date {
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 4px;
+  text-align: right; 
+}
+
+
+.message.unread {
+  font-weight: bold;
+}
+
+.message.read {
+  opacity: 0.7;
+}
+
+.read-indicator,
+.unread-indicator {
+  font-size: 0.50rem;
+  color: #505050; 
+  display: block; 
+}
+
+.unread-indicator {
+  color: rgb(15, 15, 15); 
+}
+
+.read-indicator {
+  color: rgb(15, 15, 15); 
+}

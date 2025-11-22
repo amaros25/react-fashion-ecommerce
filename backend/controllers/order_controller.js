@@ -3,7 +3,6 @@ const Order = require('../models/order')
 const User = require('../models/user');
 const Product = require('../models/product');
  
-//Return Order by ID
 exports.getOrderByID = async (req, res) => {
     try{
         const order = await Order.findById(req.params.id);
@@ -16,12 +15,11 @@ exports.getOrderByID = async (req, res) => {
     }
 };
 
-// Return paginated Orders by SellerID with user and product details
 exports.getOrderBySellerID = async (req, res) => {
   try {
     const sellerId = req.params.sellerId;
-    const page = parseInt(req.query.page) || 1; // Default Seite 1
-    const limit = parseInt(req.query.limit) || 20; // Default 20 pro Seite
+    const page = parseInt(req.query.page) || 1;1
+    const limit = parseInt(req.query.limit) || 20;
     const { status, orderNumber } = req.query; 
  
 
@@ -31,36 +29,29 @@ exports.getOrderBySellerID = async (req, res) => {
 
     const query = { sellerId };
     if (status) {
-      query["status.update"] = status; // Letzter Status in der Liste prüfen
+      query["status.update"] = status;
     }
     if (orderNumber) {
       query.orderNumber = { $regex: orderNumber, $options: "i" };
     }
-
-    // Gesamtanzahl der Bestellungen für Pagination
     const totalCount = await Order.countDocuments(query);
 
     if (totalCount === 0) {
       return res.status(404).json({ message: 'Keine Bestellungen für diesen Verkäufer gefunden' });
     }
 
-    // Bestellungen mit Pagination abrufen
     const orders = await Order.find(query)
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(parseInt(limit))
       .lean();
 
-    // Alle UserIds aus den Bestellungen sammeln
     const userIds = [...new Set(orders.map(o => o.userId.toString()))];
- 
-    // Userdaten abrufen
     const users = await User.find({ _id: { $in: userIds } }).lean();
     const usersMap = {};
     users.forEach(u => {
       usersMap[u._id.toString()] = u;
     });
-     // Alle Produkt-IDs sammeln
     const productIds = [];
     orders.forEach(order => {
       order.items.forEach(item => {
@@ -68,14 +59,12 @@ exports.getOrderBySellerID = async (req, res) => {
       });
     });
     const uniqueProductIds = [...new Set(productIds)];
-     // Produktdaten abrufen
     const products = await Product.find({ _id: { $in: uniqueProductIds } }).lean();
     const productsMap = {};
     products.forEach(p => {
       productsMap[p._id.toString()] = p;
     });
 
-    // Bestellungen mit User- und Produktdetails anreichern
     const enrichedOrders = orders.map(order => ({
       ...order,
       user: usersMap[order.userId.toString()] || null,
@@ -84,7 +73,6 @@ exports.getOrderBySellerID = async (req, res) => {
         product: productsMap[item.productId.toString()] || null,
       })),
     }));
-     // Antwort mit paginierten und angereicherten Bestellungen
     res.json({
       orders: enrichedOrders,
       totalCount,
@@ -97,7 +85,6 @@ exports.getOrderBySellerID = async (req, res) => {
   }
 };
 
-// Return Orders by UserID
 exports.getOrderByUserID = async (req, res) => {
   try {
     const userID = req.params.id;
@@ -121,7 +108,6 @@ exports.getOrderByUserID = async (req, res) => {
   }
 };
 
-// Add a new Order
 exports.createOrder = async(req, res) => {
     try {
         const order = new Order(req.body);
@@ -132,37 +118,25 @@ exports.createOrder = async(req, res) => {
     }
 };
 
-// Update order status by order ID
 exports.updateOrderStatus = async (req, res) => {
   try {
-    const orderId = req.params.id;  // Die Bestellung ID aus der URL
-    const { status } = req.body;    // Der neue Status kommt aus dem Request-Body
-    console.log("🟢 updateOrderStatus orderId: ", orderId);
-    console.log("🟢 updateOrderStatus  status: ", status);
+    const orderId = req.params.id;
+    const { status } = req.body;
     const order = await Order.findById(orderId);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
-
-    // Falls die Bestellung noch keinen Status hat, initialisiere das Array
     if (!order.status) {
       order.status = [];
     }
-
-    // Füge den neuen Status als historisches Update hinzu
     order.status.push({ date: new Date(), update: status });
-
-    // Speichere die geänderte Bestellung
     await order.save();
-
-    // Rückgabe der aktualisierten Bestellung als Antwort
     res.status(200).json(order);
   } catch (error) {
     res.status(500).json({ message: "Error updating order status", error });
   }
 };
 
-// Anzahl der Bestellungen für ein bestimmtes Produkt ermitteln
 exports.getOrderCountByProduct = async (req, res) => {
   try {
     const { productId } = req.params;
@@ -170,10 +144,7 @@ exports.getOrderCountByProduct = async (req, res) => {
     if (!productId) {
       return res.status(400).json({ message: "productId wird benötigt" });
     }
-
-    // Suche alle Bestellungen, die dieses Produkt enthalten
     const count = await Order.countDocuments({ "items.productId": productId });
-
     res.status(200).json({
       productId,
       totalOrders: count,
@@ -193,16 +164,9 @@ exports.getSellerOrderStats = async (req, res) => {
     if (!sellerId) {
       return res.status(400).json({ message: "sellerId wird benötigt" });
     }
-
-    // Alle Bestellungen des Verkäufers
     const orders = await Order.find({ sellerId }).select("status").lean();
-
     const totalOrders = orders.length;
-
-    // Definiere Status, die noch "offen" sind
     const openStatuses = ["pending"];
-
-    // Nur Orders zählen, deren letzter Status noch offen ist
     const openOrders = orders.filter(order => {
       const lastStatus = order.status?.length ? order.status[order.status.length - 1].update : "pending";
       return openStatuses.includes(lastStatus);

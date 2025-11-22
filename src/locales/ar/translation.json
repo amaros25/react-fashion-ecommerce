@@ -172,15 +172,22 @@
       "all": "جميع الحالات",
       "pending": "قيد الانتظار",
       "confirmed": "تم التأكيد",
+      "dont_respond": "المستخدم لا يجيب على الهاتف",
       "shipped": "تم الشحن",
       "delivered": "تم التسليم",
       "received": "تم الاستلام",
+
       "user_cancelled": "تم الإلغاء من قبل المستخدم",
       "seller_cancelled": "تم الإلغاء من قبل البائع",
       "failed_delivery": "فشل في التوصيل",
+      "second_try": "محاولة التسليم الثانية",
+      "third_try": "محاولة التسليم الثالثة",
+      
       "returned_to_sender": "تم إرجاعه إلى المرسل",
       "return_requested": "تم طلب الإرجاع",
       "return_confirmed": "تم تأكيد الإرجاع",
+      "return_rejected": "تم رفض طلب الإرجاع",
+
       "return_shipped": "تم شحن الإرجاع",
       "return_received": "تم استلام الإرجاع"
     },
@@ -239,6 +246,27 @@
   "updateFailed": "حدث خطأ أثناء التحديث: {{message}}",
   "unknownError": "خطأ غير معروف",
   "colors": "الألوان",
-  "stock": "المخزون"
- 
+  "stock": "المخزون",
+   "errors":{
+    "product_infos_loading_failed": "فشل تحميل المنتج. يرجى التحقق من اتصالك بالإنترنت وإعادة المحاولة. إذا استمر المشكلة، يرجى الاتصال بدعم العملاء لدينا.",
+    "product_color_loading_failed": "فشل تحميل ألوان المنتج. يرجى التحقق من اتصالك بالإنترنت وإعادة المحاولة. إذا استمر المشكلة، يرجى الاتصال بدعم العملاء لدينا."
+
+  },
+  "chat":{
+    "loadOlderMessages": "تحميل الرسائل القديمة",
+    "unread": "غير مقروء",
+    "read": "مقروء",
+    "messagePlaceholder": "اكتب رسالة...",
+    "sendButton": "إرسال",
+    "noChat": "اختر محادثة أو ابدأ محادثة جديدة",
+    "noMessages": "لا توجد رسائل",
+    "order": "طلب",
+    "product": "منتج",
+    "lastMessage": "آخر رسالة",
+    "newChatButton": "دردشة جديدة",
+    "newChatPlaceholderOrder": "رقم الطلب",
+    "newChatPlaceholderProduct": "رقم المنتج",
+    "newChatWithSeller": "دردشة جديدة مع البائع",
+    "newChatWithAdmin": "دردشة جديدة مع المشرف"
+  }
 }

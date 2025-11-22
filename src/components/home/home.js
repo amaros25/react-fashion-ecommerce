@@ -9,7 +9,7 @@ import { FilterContext } from '../filter_context/filter_context';
 import ProductCard from '../product_card/product_card';
 import { useParams } from 'react-router-dom'; 
 
-function Home() {
+const Home = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const { category } = useParams(); 
 
