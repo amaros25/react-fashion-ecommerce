@@ -25,7 +25,7 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
   }, [userId]);
 
   const openSelectedChat = async (chatId) => {
-    setCurrentPage(2);
+    setCurrentPage(1);
     try {
       const data = await openChat(chatId, userId, PAGE_LIMIT);
       setActiveChat(data);
@@ -81,7 +81,10 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
     setIsLoadingOlder(true);
     try {
       const data = await loadMoreMessages(activeChat._id, currentPage, PAGE_LIMIT);
-      setActiveChat(prev => ({ ...prev, messages: [...data.messages, ...prev.messages] }));
+      const newMessages = data.messages.filter(msg => 
+          !activeChat.messages.some(existingMsg => existingMsg._id === msg._id)
+      );
+      setActiveChat(prev => ({ ...prev, messages: [...newMessages, ...prev.messages] }));
       setCurrentPage(prev => prev + 1);
       if (data.messages.length < PAGE_LIMIT) setHasMore(false);
     } catch (err) {

@@ -2,25 +2,53 @@
 import React, {useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-const ChatWindow = ({ activeChat, userId, hasMore, loadOlderMessages, sendNewMessage, newMessage, setNewMessage }) => {
+const ChatWindow = ({ 
+  activeChat, 
+  userId, 
+  hasMore, 
+  loadOlderMessages, 
+  sendNewMessage, 
+  newMessage, 
+  setNewMessage,
+  isLoadingOlder
+}) => {
   const { t, i18n } = useTranslation();
   const messagesRef = useRef(null);
+  const wasScrolledToBottom = useRef(true);
 
   useEffect(() => {
-    if (activeChat && messagesRef.current) {
-      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    if (activeChat && messagesRef.current & !isLoadingOlder) {
+      if (wasScrolledToBottom.current) {
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+      }
     }
-  }, [activeChat, newMessage]);
+  }, [activeChat, newMessage, isLoadingOlder]);
+
+  
+  const handleScroll = () => {
+    if (messagesRef.current) {
+      const scrollTop = messagesRef.current.scrollTop;
+      const scrollHeight = messagesRef.current.scrollHeight;
+      const clientHeight = messagesRef.current.clientHeight;
+
+      // Wenn der Benutzer nahe dem unteren Ende des Chats ist, scrollen wir automatisch
+      if (scrollHeight - scrollTop === clientHeight) {
+        wasScrolledToBottom.current = true;
+      } else {
+        wasScrolledToBottom.current = false;
+      }
+    }
+  };
 
   return (
     <div className="chat-window">
       {activeChat ? (
         <>
-          <div className="messages" ref={messagesRef}>
+          <div className="messages" ref={messagesRef} onScroll={handleScroll}>
             {hasMore && (
               <div className="load-more-container">
                 <button className="load-more-btn" onClick={loadOlderMessages}>
-                  Load older messages
+                 {t('chat.loadOlderMessages')}
                 </button>
               </div>
             )}

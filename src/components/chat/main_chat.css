@@ -1,11 +1,11 @@
+ 
 .main-chat-container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 30px auto; 
-  padding: 30px;
-  height: calc(100vh - 60px);
-  display: flex;
-  flex-direction: column;
+    width: 100%; /* Maximum width for mobile devices */
+    max-width: 1400px; /* Maximum width for larger screens (desktop) */
+    margin: 0 auto; /* Center the container horizontally */
+    padding: 20px; /* Inner padding */
+    min-height: 100vh; /* Minimum height to fill the viewport */
+    padding-bottom: 100px; /* Extra bottom padding for footer space */
 }
 
 .main-chat {
