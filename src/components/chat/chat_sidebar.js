@@ -1,29 +1,40 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import "./main_chat.css";
+import "./chat_sidebar.css";
 
 const ChatSidebar = ({
   chats,
   activeChat,
-  openSelectedChat,
   newChatType,
   setNewChatType,
   newChatNumber,
   setNewChatNumber,
   startNewChatAndSendMessage,
   is_chat_from_order_item,
-  setIsChatFromOrderItem
+  setIsChatFromOrderItem,
+  isSidebarHidden,
+  handleOpenChat
 }) => {
+
   const { t } = useTranslation();
-  
+
+
   const handleCancelChat = () => {
     setIsChatFromOrderItem(false);
     setNewChatType("product");
     setNewChatNumber("");
   };
 
+  const chatExists = (chatNumber) => {
+    return chats.some(
+      (chat) => chat.number === chatNumber && (chat.type === newChatType)
+    );
+  };
+
   return (
-    <div className="chat-sidebar">
+    <div className={`chat-sidebar ${isSidebarHidden ? 'hidden' : ''}`}>
       <div className="new-chat">
         <select
           value={newChatType}
@@ -48,8 +59,7 @@ const ChatSidebar = ({
               if (!is_chat_from_order_item) { 
                 setNewChatNumber(e.target.value)
               }
-            }
-            }
+            }}
           />
         )}
         <button
@@ -58,6 +68,11 @@ const ChatSidebar = ({
               toast.error(t('chat.noChat'));
               return;
             }
+            if (chatExists(newChatNumber)) {
+              toast.error(t('chat.chatAlreadyExists'));  // Fehlertoast, wenn der Chat bereits existiert
+              return;
+            }
+
             startNewChatAndSendMessage("");
           }}
         >
@@ -78,7 +93,7 @@ const ChatSidebar = ({
             <div
               key={chat._id}
               className={`chat-card ${activeChat?._id === chat._id ? "active" : ""}`}
-              onClick={() => openSelectedChat(chat._id)}
+              onClick={() => handleOpenChat(chat._id)}
             >
               <div>
                 <strong>{chat.type === "order" ? t('chat.order') : t('chat.product')}</strong>

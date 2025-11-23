@@ -1,6 +1,6 @@
-// ChatWindow.js
 import React, {useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import "./chat_window.css";
 
 const ChatWindow = ({ 
   activeChat, 
@@ -10,28 +10,29 @@ const ChatWindow = ({
   sendNewMessage, 
   newMessage, 
   setNewMessage,
-  isLoadingOlder
+  isLoadingOlder,
+  onBack,
+  isMobile
 }) => {
   const { t, i18n } = useTranslation();
   const messagesRef = useRef(null);
   const wasScrolledToBottom = useRef(true);
+  const isRtl = i18n.dir() == "rtl";
+  
 
   useEffect(() => {
-    if (activeChat && messagesRef.current & !isLoadingOlder) {
+    if (activeChat && messagesRef.current && !isLoadingOlder) {
       if (wasScrolledToBottom.current) {
         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
       }
     }
   }, [activeChat, newMessage, isLoadingOlder]);
 
-  
   const handleScroll = () => {
     if (messagesRef.current) {
       const scrollTop = messagesRef.current.scrollTop;
       const scrollHeight = messagesRef.current.scrollHeight;
       const clientHeight = messagesRef.current.clientHeight;
-
-      // Wenn der Benutzer nahe dem unteren Ende des Chats ist, scrollen wir automatisch
       if (scrollHeight - scrollTop === clientHeight) {
         wasScrolledToBottom.current = true;
       } else {
@@ -44,6 +45,11 @@ const ChatWindow = ({
     <div className="chat-window">
       {activeChat ? (
         <>
+          {isMobile && (
+            <button className="back-button" onClick={onBack}>
+              &larr; {t('chat.backToChats')}
+            </button>
+          )}
           <div className="messages" ref={messagesRef} onScroll={handleScroll}>
             {hasMore && (
               <div className="load-more-container">
@@ -53,17 +59,18 @@ const ChatWindow = ({
               </div>
             )}
             {(activeChat?.messages || []).map((msg, idx) => {
+             console.log("ChatWindow messages", activeChat?.messages)
               const isUserMessage = msg.senderId.toString() === userId;
               return (
               <div
                   key={idx}
-                  className={`message ${isUserMessage ? "user" : "admin"} ${msg.isRead ? "read" : "unread"}`}
+                    className={`message ${isUserMessage ? "user" : "admin"} ${msg.isRead ? "read" : "unread"} ${isRtl ? 'rtl' : ''}`}
                 >
                   {msg.text}
                   <div className="msg-date">
                     {new Date(msg.createdAt).toLocaleTimeString()}
                   </div>
- {                  isUserMessage && !msg.isRead && (
+                    { isUserMessage && !msg.isRead && (
                     <span className="unread-indicator">{t('chat.unread')}</span>
                     )}
                     {isUserMessage && msg.isRead && (
@@ -85,10 +92,14 @@ const ChatWindow = ({
           </div>
         </>
       ) : (
+        <>
         <div className="no-chat">{t('chat.noChat')}</div>  
+        {console.log("ChatWindow activeChat noChat", activeChat)} 
+        </>
+
       )}
     </div>
   );
 };
 
-export default ChatWindow;
+export default ChatWindow

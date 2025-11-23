@@ -11,20 +11,66 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingOlder, setIsLoadingOlder] = useState(false);
   const [newMessage, setNewMessage] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+  const [isSidebarHidden, setIsSidebarHidden] = useState(false);
+  const [isChatWindowActive, setIsChatWindowActive] = useState(false);
+  const [isChatWindowHidden, setIsChatWindowHidden] = useState(false);
+  const [getCurrentChatID, setCurrentChatID] = useState("");
 
   const PAGE_LIMIT = 10;
 
+
+  const handleOpenChat = (chatId) => {
+      console.log("useChats handleOpenChat ID:", chatId);
+        console.log("useChats isMobile:", isMobile);
+      setCurrentChatID(chatId);
+      if (isMobile){
+        setIsSidebarHidden(true);
+        setIsChatWindowHidden(false);
+        setIsChatWindowActive(true);
+      }else{
+        setIsSidebarHidden(false);
+        setIsChatWindowHidden(false);
+      }
+        setIsChatWindowActive(true);
+    };
+  
+  useEffect(() => {
+    console.log("useChats isChatWindowActive:", isChatWindowActive);
+    if ( isChatWindowActive) {
+       openSelectedChat(getCurrentChatID);
+    }
+  }, [isChatWindowActive, getCurrentChatID]);
+
+    // Set the isMobile state based on window width
+  useEffect(() => {
+      const handleResize = () => {
+        console.log("setIsMobile: ", window.innerWidth <= 768);
+        setIsMobile(window.innerWidth <= 768);
+      };
+  
+      handleResize();
+      window.addEventListener("resize", handleResize);
+  
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+  }, []);
+ 
   useEffect(() => {
     if (!userId) return;
     const role = localStorage.getItem("role");
     const sellerIdFromStorage = role === "seller" ? userId : sellerIdFromProps;
 
     fetchChats(role, userId, sellerIdFromStorage)
-      .then(data => setChats(data))
+      .then(data => {
+        setChats(data || []); // Sicherstellen, dass immer ein Array gesetzt wird
+      })
       .catch(console.error);
   }, [userId]);
 
   const openSelectedChat = async (chatId) => {
+    console.log("openSelectedChat chatId: ", chatId);
     setCurrentPage(1);
     try {
       const data = await openChat(chatId, userId, PAGE_LIMIT);
@@ -94,12 +140,30 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
     }
   };
 
+  const handleBackToSidebar = () => {
+      console.log("handleBackToSidebar");
+      setIsSidebarHidden(false);
+      setIsChatWindowHidden(true);
+      setIsChatWindowActive(false); // Deactivate chat window
+  };
+
+
+
+
+
   return {
     chats, activeChat, openSelectedChat,
     newChatType, setNewChatType, newChatNumber, setNewChatNumber,
     isNewChat, setIsNewChat, 
     newMessage, setNewMessage,  
     sendNewMessage, startNewChatAndSendMessage,
-    loadOlderMessages, currentPage, hasMore, isLoadingOlder
+    loadOlderMessages, currentPage, hasMore, isLoadingOlder, isMobile, 
+    isSidebarHidden, 
+    setIsSidebarHidden,
+    handleBackToSidebar,
+    isChatWindowActive,
+    handleOpenChat,
+    setIsChatWindowActive
+ 
   };
 };

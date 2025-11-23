@@ -268,7 +268,7 @@
     "newChatPlaceholderProduct": "رقم المنتج",
     "newChatWithSeller": "دردشة جديدة مع البائع",
     "newChatWithAdmin": "دردشة جديدة مع المشرف",
-    "cancel_with_seller": "إلغاء المحادثة مع البائع"
- 
+    "cancel_with_seller": "إلغاء المحادثة مع البائع",
+    "chatAlreadyExists": "هذه المحادثة موجودة بالفعل"
   }
 }

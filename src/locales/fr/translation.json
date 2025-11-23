@@ -272,7 +272,8 @@
     "newChatPlaceholderProduct": "Numéro de produit",
     "newChatWithSeller": "Nouveau chat avec le vendeur",
     "newChatWithAdmin": "Nouveau chat avec l'administrateur",
-    "cancel_with_seller": "Annuler la chat avec le vendeur"
+    "cancel_with_seller": "Annuler la chat avec le vendeur",
+    "chatAlreadyExists": "Cette conversation existe déjà"
     
   }
 }
