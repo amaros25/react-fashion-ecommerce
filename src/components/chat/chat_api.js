@@ -1,4 +1,3 @@
-// chat_api.js
 export const fetchChats = async (role, userId, sellerId) => {
   try {
     let url = '';

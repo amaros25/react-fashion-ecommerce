@@ -60,7 +60,6 @@
   display: none; 
 }
 
- /* For Desktop and Larger Screens */
 @media (min-width: 769px) {
   .chat-sidebar {
     display: block; 
@@ -74,9 +73,6 @@
   }
 }
 
-/* For Mobile Devices */
-/* For Mobile Devices */
-/* Für Mobile Geräte */
 @media (max-width: 768px) {
   .chat-sidebar {
     display: block;

@@ -69,7 +69,7 @@ const ChatSidebar = ({
               return;
             }
             if (chatExists(newChatNumber)) {
-              toast.error(t('chat.chatAlreadyExists'));  // Fehlertoast, wenn der Chat bereits existiert
+              toast.error(t('chat.chatAlreadyExists'));
               return;
             }
 

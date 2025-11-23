@@ -33,14 +33,8 @@ const MainChat = () => {
 
   return (
     <div className="main-chat-container">
-      <Header />  {/* Header bleibt oben sichtbar */}
+      <Header /> 
       <div className="main-chat">
-        {/* Wenn es ein Desktop ist und das Chat-Fenster nicht aktiv ist, Sidebar immer anzeigen */}
-        <>
-        {console.log("*** LOG: isMobile", chatHook.isMobile)}
-        {console.log("*** LOG: isChatWindowActive", chatHook.isChatWindowActive)}
-        {console.log("*** LOG: isSidebarHidden", chatHook.isSidebarHidden)}
-        </>
         {  !chatHook.isSidebarHidden && (
           <ChatSidebar 
             {...chatHook} 
@@ -48,8 +42,6 @@ const MainChat = () => {
             is_chat_from_order_item={isChatFromOrderItem} 
           />
         )}
-
-        {/* Wenn es ein Mobilgerät ist und das Chat-Fenster aktiv ist, nur Chat-Fenster anzeigen */}
         {chatHook.isMobile && chatHook.isChatWindowActive && (
           <div className="chat-window active">
             <ChatWindow 
@@ -59,8 +51,6 @@ const MainChat = () => {
             />
           </div>
         )}
-
-        {/* Wenn das Chat-Fenster auf einem Desktop aktiv ist, Sidebar nicht ausblenden */}
         {!chatHook.isMobile && chatHook.isChatWindowActive && (
           <div className="chat-window active">
             <ChatWindow 
@@ -71,7 +61,7 @@ const MainChat = () => {
           </div>
         )}
       </div>
-      <Foot />  {/* Footer bleibt unten sichtbar */}
+      <Foot />
     </div>
   );
 };
