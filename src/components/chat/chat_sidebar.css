@@ -1,10 +1,8 @@
 .conversation-list {
   flex-grow: 1;
   overflow-y: auto;
-
   padding-right: 10px;
   box-sizing: border-box;
-
   min-height: 52vh;
   max-height: 52vh;
 }
@@ -65,7 +63,7 @@
 }
 
 .pagination {
-  margin-top: auto;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -94,3 +92,67 @@
   padding: 10px;
   margin-top: 5px;
 }
+
+ 
+
+
+@media (max-width: 350px) {
+  .chat-card div {
+    margin-bottom: 8px;
+  }
+
+  .conversation-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    box-sizing: border-box;
+    min-height: 65vh;
+    max-height: 60vh;
+    
+  }
+
+  .new-chat select,
+  .new-chat input {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+  }
+
+  .pagination {
+    margin-top: 10px;
+  }
+
+}
+
+@media (min-width: 351px) and (max-width: 768px) {
+
+ 
+.chat-card div {
+  margin-bottom: 8px;
+}
+
+.conversation-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+  box-sizing: border-box;
+  min-height: 60vh;
+  max-height: 80vh;
+}
+
+.new-chat select,
+.new-chat input {
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+.pagination {
+  margin-top: 10px;
+}
+
+}
+
+ 

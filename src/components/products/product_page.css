@@ -6,106 +6,126 @@
   flex-wrap: wrap;
   justify-content: center;
   background-color: #f7f6f6;
- 
   border-radius: 15px;
 }
 
 .product-info-main {
-  flex: 1 1 50%;       /* Info nimmt ca. 50% Platz */
+  flex: 1 1 50%;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-
 .product-main-content {
   display: flex;
-  gap: 10px;          /* Abstand zwischen Bild und Info */
-  align-items: flex-start; /* damit die Tops ausgerichtet sind */
-  flex-wrap: nowrap;    /* responsive */
- 
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: nowrap;
 }
- 
- .product-right-column {
-  flex: 1; 
+
+.product-right-column {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-.product-buy-box {
   background-color: #fff;
-  padding: 20px;
+  padding: 15px;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-selection-section {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  height: fit-content;
-  min-width: 250px;
- 
+  gap: 12px;
+  margin-top: 10px;
 }
 
+.selection-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
 
-.product-buy-box select,
-.product-buy-box input {
+.selection-item {
+  flex: 1;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.selection-item label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.selection-item select,
+.selection-item input {
   width: 100%;
-  padding: 8px;
-  margin-top: 5px;
+  padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  font-size: 14px;
 }
 
-.product-buy-box button {
+.buy-button {
   background-color: #0141f1;
   color: white;
-  padding: 10px;
+  padding: 12px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  width: 100%;
 }
 
-.product-buy-box button:hover {
+.buy-button:hover {
   background-color: #023ddf;
+}
+
+.buy-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .product-divider {
   border: none;
   height: 1px;
-  background: #e9e8e8; /* Farbe der Linie */
-  margin: 5px 0;   /* Abstand oben/unten */
+  background: #e9e8e8;
+  margin: 10px 0;
 }
 
 /* product_page.css */
 .breadcrumb-container {
- 
   font-size: 18px;
   display: flex;
-  justify-content: flex-start; /* Standardmäßig links */
-  width: 100%; /* Stellt sicher, dass der Container die gesamte Breite einnimmt */
-  direction: ltr; /* Standardrichtung für LTR */
+  justify-content: flex-start;
+  width: 100%;
+  direction: ltr;
   padding: 10px;
 }
 
 html[dir="rtl"] .breadcrumb-container {
-  justify-content: flex-start; /* Nach rechts ausrichten */
-  text-align: right; /* Text rechts ausrichten */
-  direction: rtl; /* Setzt die Schreibrichtung für RTL */
+  justify-content: flex-start;
+  text-align: right;
+  direction: rtl;
 }
 
-/* LTR-Sprachen (Französisch) nach links ausrichten */
 html[dir="ltr"] .breadcrumb-container {
-  justify-content: flex-start; /* Nach links ausrichten */
-  text-align: left; /* Text links ausrichten */
-  direction: ltr; /* Setzt die Schreibrichtung für LTR */
+  justify-content: flex-start;
+  text-align: left;
+  direction: ltr;
 }
 
 .breadcrumb {
   display: flex;
   gap: 5px;
   font-weight: 500;
-  align-items: center; /* Falls du eine vertikale Ausrichtung wünschst */
+  align-items: center;
 }
 
 .breadcrumb a {
@@ -121,7 +141,6 @@ html[dir="ltr"] .breadcrumb-container {
   color: #333;
 }
 
-
 @media (max-width: 768px) {
   .product-main-content {
     flex-direction: column;
@@ -133,21 +152,14 @@ html[dir="ltr"] .breadcrumb-container {
     max-width: 100%;
     margin: 5px;
   }
- 
-  .product-buy-box {
-    width: 100%;
+
+  .selection-row {
+    flex-direction: column;
+  }
+
+  .selection-item {
+    min-width: 100%;
   }
 }
 
-@media (min-width: 768px) and (max-width: 1025px) {
- 
-
-
-}
-
-.product-buy-box button:disabled {
-  background-color: #ccc; 
-  cursor: not-allowed;   
-  opacity: 0.6;      
-}
- 
+@media (min-width: 768px) and (max-width: 1025px) {}

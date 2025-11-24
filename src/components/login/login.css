@@ -1,3 +1,19 @@
+/* Full page layout */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-page-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background-color: #f7f6f6;
+}
+
 /* Centering the login container */
 .login-container {
   padding: 0;
@@ -5,74 +21,104 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 /* Login form styling */
 .login-form {
-  background-color: rgb(241, 240, 240); /* Light gray background */
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1); /* Slight shadow */
-  width: 100%; /* Make it responsive */
-  max-width: 400px; /* Max width for larger screens */
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
   box-sizing: border-box;
 }
 
 /* Heading (Title) */
 .login-form h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #222;
 }
 
 /* Labels and inputs */
 .login-form label {
   display: block;
-  margin-top: 10px;
-  font-weight: bold;
+  margin-top: 18px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 6px;
 }
 
 .login-form input {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   margin-top: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  border-radius: 8px;
+  border: 1px solid #ddd;
   box-sizing: border-box;
+  font-size: 15px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: #0077cc;
+  box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.1);
 }
 
 /* Submit button */
 .login-form button {
   width: 100%;
-  padding: 10px;
-  margin-top: 20px;
-  background-color: #0077cc; /* Blue color */
+  padding: 14px;
+  margin-top: 28px;
+  background-color: #0077cc;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 .login-form button:hover {
-  background-color: #005fa3; /* Darker blue on hover */
+  background-color: #005fa3;
+}
+
+.login-form button:active {
+  transform: scale(0.98);
 }
 
 /* Error message styling */
 .error {
-  color: red;
+  color: #dc3545;
   margin-top: 10px;
+  margin-bottom: 10px;
   text-align: center;
+  font-size: 14px;
+  background-color: #f8d7da;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #f5c6cb;
 }
 
 /* Link to registration page */
 .register-link {
   text-align: center;
-  margin-top: 15px;
-  font-size: 0.9rem;
+  margin-top: 24px;
+  font-size: 14px;
+  color: #666;
 }
 
 .register-link a {
   color: #0077cc;
   text-decoration: none;
+  font-weight: 600;
 }
 
 .register-link a:hover {
@@ -84,31 +130,13 @@
 
 /* Very small phones */
 @media (max-width: 480px) {
-  .login-form {
-    padding: 15px;
-    font-size: 0.9rem;
+  .login-page-content {
+    padding: 20px 15px;
   }
 
-  .login-form h2 {
-    font-size: 1.3rem;
-  }
-
-  .login-form input,
-  .login-form button {
-    padding: 12px;
-    font-size: 1rem;
-  }
-
-  .register-link {
-    font-size: 0.8rem;
-  }
-}
-
-/* Tablets & small desktops */
-@media (min-width: 481px) and (max-width: 768px) {
   .login-form {
     padding: 25px;
-    max-width: 380px;
+    font-size: 0.9rem;
   }
 
   .login-form h2 {
@@ -117,15 +145,20 @@
 
   .login-form input,
   .login-form button {
-    font-size: 1rem;
+    padding: 11px;
+    font-size: 14px;
+  }
+
+  .register-link {
+    font-size: 13px;
   }
 }
 
-/* Larger screens */
-@media (min-width: 769px) {
+/* Tablets & small desktops */
+@media (min-width: 481px) and (max-width: 768px) {
   .login-form {
-    padding: 30px;
-    max-width: 450px;
+    padding: 35px;
+    max-width: 420px;
   }
 
   .login-form h2 {
@@ -134,6 +167,23 @@
 
   .login-form input,
   .login-form button {
-    font-size: 1.1rem;
+    font-size: 15px;
+  }
+}
+
+/* Larger screens */
+@media (min-width: 769px) {
+  .login-form {
+    padding: 45px;
+    max-width: 480px;
+  }
+
+  .login-form h2 {
+    font-size: 2.2rem;
+  }
+
+  .login-form input,
+  .login-form button {
+    font-size: 15px;
   }
 }

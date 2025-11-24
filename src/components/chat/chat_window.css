@@ -11,7 +11,6 @@
    flex-direction: column;
    gap: 10px;
    scroll-behavior: smooth;
-
    min-height: 70vh;
    max-height: 70vh;
  }
@@ -165,3 +164,107 @@
    font-size: 1.2rem;
    color: #747272;
  }
+
+
+ @media (max-width: 350px) {
+  .messages {
+   flex: 1;
+   padding: 20px;
+   overflow-y: auto;
+   display: flex;
+   flex-direction: column;
+   scroll-behavior: smooth;
+   min-height: 40vh;
+   max-height: 55vh;
+ }
+
+  .message-input {
+   flex-shrink: 0;
+   display: flex;
+   padding: 12px;
+   border-top: 1px solid #e0e0e0;
+   gap: 8px;
+   background-color: #fafafa;
+ }
+
+ .message-input input {
+   flex: 1;
+   padding: 0px 5px;
+   border-radius: 20px;
+   border: 1px solid #ccc;
+   font-size: 0.9rem;
+   outline: none;
+   transition: 0.2s;
+ }
+
+ .message-input input:focus {
+   border-color: #4a90e2;
+   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+ }
+
+ .message-input button {
+   padding: 5px 10px;
+   border-radius: 20px;
+   background-color: #4a90e2;
+   color: #fff;
+   border: none;
+   cursor: pointer;
+   font-weight: 500;
+   transition: 0.2s;
+ }
+
+
+}
+
+@media (min-width: 351px) and (max-width: 400px) {
+
+   .messages {
+   flex: 1;
+   padding: 20px;
+   overflow-y: auto;
+   display: flex;
+   flex-direction: column;
+   scroll-behavior: smooth;
+   min-height: 40vh;
+   max-height: 58vh;
+ }
+ 
+
+}
+
+@media (min-width: 401px) and (max-width: 789px) {
+   .messages {
+   flex: 1;
+   padding: 20px;
+   overflow-y: auto;
+   display: flex;
+   flex-direction: column;
+   scroll-behavior: smooth;
+   min-height: 40vh;
+   max-height: 75vh;
+ }
+}
+
+@media (max-width: 789px) {
+
+  /* Container für Input + Button untereinander */
+  .message-input {
+    flex-direction: column;       /* <-- macht die Elemente untereinander */
+    gap: 10px;
+    padding: 12px;
+  }
+
+  /* Input soll ganze Breite bekommen */
+  .message-input input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 14px;
+  }
+
+  /* Button auch 100% Breite */
+  .message-input button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+  }
+}

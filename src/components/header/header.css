@@ -1,25 +1,33 @@
 /* === Global Header Container === */
 .header {
-  max-width: 1400px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 10px;
+  padding: 0;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  backdrop-filter: blur(10px); /* subtle glass effect */
-  background-color: #eeeeee;
-  border-bottom: 1px solid rgba(223, 47, 47, 0.05);
- 
+  background-color: #ffffff;
+  border-bottom: 1px solid transparent;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
 }
 
 /* === Logo === */
 .logo {
-  font-size: 34px;
-  font-weight: 800;
-  color: #007bff;
-  letter-spacing: -0.5px;
-  transition: transform 0.2s ease, color 0.3s ease;
+  font-size: 50px;
+  /* Large and bold like Zara */
+  font-weight: 900;
+  /* Extra bold */
+  color: #000000;
+  letter-spacing: -2px;
+  /* Tight tracking */
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+  font-family: 'Didot', 'Bodoni MT', 'Times New Roman', serif;
+  /* Fashion serif font */
 }
 
 .logo a {
@@ -28,8 +36,7 @@
 }
 
 .logo:hover {
-  transform: scale(1.05);
-  color: #0056b3;
+  opacity: 0.7;
   cursor: pointer;
 }
 
@@ -37,109 +44,131 @@
 .navbar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 0px 0;
+  align-items: flex-end;
+  /* Align to bottom of logo text */
+  padding: 20px 40px;
   width: 100%;
-
+  box-sizing: border-box;
 }
 
 /* === Navigation Links / Icons === */
 .links {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 25px;
 }
 
+/* Make all icons black and sharp */
 .links img {
-  filter: brightness(0.6);
-  transition: transform 0.2s, filter 0.3s;
+  filter: grayscale(100%) brightness(0);
+  /* Force black */
+  width: 20px !important;
+  /* Smaller, refined icons */
+  height: auto !important;
+  transition: opacity 0.3s ease;
   cursor: pointer;
 }
 
 .links img:hover {
-  transform: scale(1.1);
-  filter: brightness(1);
+  opacity: 0.6;
+  transform: none;
+  /* Remove scale effect for cleaner feel */
 }
 
+/* Language Selector */
 .links select {
   border: none;
   background: transparent;
-  font-size: 14px;
-  color: #333;
-  font-weight: 500;
+  font-size: 11px;
+  color: #000;
+  font-weight: 600;
+  text-transform: uppercase;
   cursor: pointer;
-  padding: 4px;
-  transition: color 0.3s;
-}
-
-.links select:hover {
-  color: #007bff;
+  padding: 0;
+  letter-spacing: 1px;
+  outline: none;
 }
 
 /* === Search Bar === */
 .search-form {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  /* Align right or center? Zara usually has it in menu or corner. We'll keep it central but minimal */
   gap: 10px;
-  max-width: 600px;
+  max-width: 300px;
+  /* Smaller width */
   width: 100%;
-  margin: 15px auto;
-  padding: 5px 10px;
-  background: #e7e7e7;
-  border-radius: 12px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin: 0 40px 10px auto;
+  /* Align to right */
+  padding: 5px 0;
+  background: transparent;
+  border-bottom: 1px solid #000;
+  /* Single underline */
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .search-form input {
   flex: 1;
   border: none;
-  padding: 12px 15px;
-  font-size: 15px;
-  border-radius: 8px;
+  padding: 5px 0;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   outline: none;
   background: transparent;
-
+  color: #000;
 }
 
 .search-form input::placeholder {
-  color: #5a5959;
+  color: #999;
+  text-transform: uppercase;
 }
 
 .search-form button {
-  padding: 10px 20px;
-  font-size: 14px;
+  padding: 5px;
+  font-size: 11px;
   border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 8px;
+  background-color: transparent;
+  color: #000;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: opacity 0.3s;
 }
 
 .search-form button:hover {
-  background-color: #0056b3;
-  transform: translateY(-1px);
+  background-color: transparent;
+  opacity: 0.6;
+  transform: none;
 }
 
 /* === Horizontal Category Navigation === */
 .horizontal-nav {
   position: relative;
   width: 100%;
-  background-color: #eeeeee;
-  padding: 8px 5px;
+  background-color: #ffffff;
+  padding: 10px 40px 20px 40px;
   display: flex;
   align-items: center;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .nav-scroll-list {
   display: flex;
-  gap: 10px;
+  gap: 30px;
   overflow-x: auto;
   scroll-behavior: smooth;
   list-style: none;
   margin: 0;
-  padding: 0 10px;
+  padding: 0;
+  width: 100%;
+  justify-content: flex-start;
+  /* Or center? Zara is usually left or justified */
 }
 
 .nav-scroll-list::-webkit-scrollbar {
@@ -148,192 +177,125 @@
 
 .nav-item {
   flex: 0 0 auto;
-  padding: 10px 18px;
-  border-radius: 20px;
+  padding: 0 0 5px 0;
+  /* Space for underline */
+  border-radius: 0;
   background-color: transparent;
-  color: #333;
-  font-weight: 500;
-  font-size: 15px;
+  color: #000;
+  font-weight: 400;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
-  transition: background 0.3s, color 0.3s, transform 0.2s;
+  transition: opacity 0.3s;
+  border-bottom: 1px solid transparent;
 }
 
 .nav-item:hover {
-  background-color: #f0f4ff;
-  color: #007bff;
-  transform: translateY(-2px);
+  background-color: transparent;
+  color: #000;
+  opacity: 0.6;
+  transform: none;
 }
 
 .nav-item.active {
-  background-color: #007bff;
-  color: #fff;
+  background-color: transparent;
+  color: #000;
   font-weight: 600;
-  box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
+  box-shadow: none;
+  border-bottom: 1px solid #000;
+  /* Minimal underline */
 }
 
 /* === Scroll Buttons for Categories === */
 .scroll-arrow {
   background: white;
   border: none;
-  font-size: 24px;
-  color: #888;
+  font-size: 18px;
+  color: #000;
   cursor: pointer;
-  transition: color 0.2s, transform 0.2s;
+  transition: opacity 0.2s;
   z-index: 1;
-  padding: 5px;
-  background-color: #eeeeee;
+  padding: 0 10px;
+  display: none;
+  /* Hide arrows for cleaner look, user can scroll or swipe */
 }
 
-.scroll-arrow:hover {
-  color: #007bff;
-  transform: scale(1.2);
-}
-
-.scroll-arrow:disabled {
-  color: #ccc;
-  cursor: not-allowed;
-}
+/* Show arrows only if needed or on hover? Let's hide them for a cleaner look as horizontal scroll is intuitive */
 
 /* === Login Popup Overlay === */
 .login-popup-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(255, 255, 255, 0.9);
+  /* White overlay instead of dark */
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 2000;
 }
 
 .login-popup-content {
   background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
+  border: 1px solid #000;
+  border-radius: 0;
+  /* Square corners */
+  padding: 40px;
   position: relative;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
   animation: popupFadeIn 0.3s ease;
 }
 
 @keyframes popupFadeIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* === Responsive Design === */
 @media (max-width: 768px) {
-  /* ... deine anderen mobilen Styles ... */
+  .header {
+    padding: 0;
+  }
 
-.header {
-  max-width: 1400px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 10px;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  backdrop-filter: blur(10px); /* subtle glass effect */
-  background: rgba(255, 255, 255, 0.8);
-  border-bottom: 1px solid rgba(223, 47, 47, 0.05);
- 
-}
+  .navbar {
+    padding: 15px 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .logo {
+    font-size: 32px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .links {
+    width: 100%;
+    justify-content: center;
+    gap: 20px;
+  }
 
   .search-form {
-    display: flex;
-    gap: 8px;                 /* etwas Platz zwischen Input und Button */
-    width: 100%;
-    max-width: 400px;
-    margin: 0px auto;        /* zentriert */
-  }
-
-  .search-form input {
-    width: 100%;
-    font-size: 12px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-  }
-
-  .search-form button {
- 
-    font-size: 13px;
-    border-radius: 10px;
-    max-width: 100px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-
-  .search-form button:hover {
-    background-color: #0056b3;
+    margin: 0 20px 10px 20px;
+    width: auto;
+    max-width: none;
   }
 
   .horizontal-nav {
-    width: 100%;
-    padding: 0; /* remove side padding so text isn’t cut off */
-    margin-top: 10px;
-  }
-.navbar {
-    flex-direction: column;          /* Stack elements vertically */
-    align-items: center;
-    gap: 10px;
+    padding: 0 20px 15px 20px;
   }
 
-  /* Obere Zeile: Logo + Home Icon nebeneinander */
-  .navbar .top-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
+  .nav-scroll-list {
+    gap: 20px;
   }
-
-  /* Untere Zeile: andere Icons in Reihe unter dem Logo */
-  .navbar .bottom-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 18px;
-    width: 100%;
-    flex-wrap: wrap; /* damit sie umbrechen, wenn wenig Platz */
-  }
-
-  /* Alle Icons etwas kleiner, damit sie auf kleine Displays passen */
-  .navbar .bottom-row img,
-  .navbar .top-row img {
-    width: 24px;
-    height: 24px;
-  }
-
-  /* Sprache-Select etwas kleiner */
-  .navbar select {
-    font-size: 13px;
-    padding: 0px;
-  }
- 
-
- .nav-item {
-  flex: 0 0 auto;
-  padding: 10px 10px;
-  border-radius: 20px;
-  background-color: transparent;
-  color: #333;
-  font-weight: 500;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background 0.3s, color 0.3s, transform 0.2s;
-}
- 
-.nav-scroll-list {
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  list-style: none;
-  margin: 0;
-  padding: 0 0px;
-}
-
 }

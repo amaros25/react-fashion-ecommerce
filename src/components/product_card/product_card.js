@@ -1,16 +1,30 @@
-import {useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import './product_card.css';
 
-function ProductCard({product}) {
+function ProductCard({ product }) {
 
   const { t, i18n } = useTranslation();
+  const [currentImage, setCurrentImage] = useState(product.image[0]);
+  const [showPopup, setShowPopup] = useState(false);
+
   const translateColor = (color) => {
-  if (!color) return "";
-  const colorKey = color.toLowerCase();
-  const translated = t(`product_colors.${colorKey}`);
-  return translated !== `product_colors.${colorKey}` ? translated : color;
+    if (!color) return "";
+    const colorKey = color.toLowerCase();
+    const translated = t(`product_colors.${colorKey}`);
+    return translated !== `product_colors.${colorKey}` ? translated : color;
+  };
+
+  const handleExpandClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowPopup(true);
+  };
+
+  const closePopup = (e) => {
+    e.stopPropagation();
+    setShowPopup(false);
   };
 
   useEffect(() => {
@@ -21,29 +35,74 @@ function ProductCard({product}) {
     }
   }, [i18n.language]);
 
+  // Calculate unique color count
+  const uniqueColors = [...new Set(product.sizes.map(s => s.color))].length;
+
+  // Limit thumbnails to 4
+  const thumbnails = product.image.slice(0, 4);
+
   return (
-      <Link 
-            key={product._id} 
-            to={`/product/${product._id}`} 
-            className="product-card-item">
-            <img 
-              src={product.image[0]} 
-              alt={product.name} 
-              className="product-card-image" 
-              loading="lazy"/>
-              <h2>{product.name}</h2>
-          
-              <div className="product-sizes">
-                <p>{t("sizes")}: {product.sizes.map(sizeObj => sizeObj.size).join(", ")}</p>
-              </div> 
-                    
-              <div className="product-sizes">
-                <p>{t("colors")}: {product.sizes.map(sizeObj => translateColor(sizeObj.color)).join(", ")}</p>
-              </div> 
-              <div className="product-card-price">
-                <p>{product.price} DT</p>
-             </div>
-          </Link>
+    <>
+      <div className="product-card-container">
+        <Link
+          key={product._id}
+          to={`/product/${product._id}`}
+          className="product-card-item">
+
+          <div className="product-image-wrapper">
+            <img
+              src={currentImage}
+              alt={product.name}
+              className="product-card-image"
+              loading="lazy" />
+            <div className="expand-icon" onClick={handleExpandClick}>⤢</div>
+          </div>
+        </Link>
+
+        <div className="product-thumbnails">
+          {thumbnails.map((img, index) => (
+            <div
+              key={index}
+              className={`thumbnail-wrapper ${currentImage === img ? 'active' : ''}`}
+              onMouseEnter={() => setCurrentImage(img)}
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentImage(img);
+              }}
+            >
+              <img
+                src={img}
+                alt={`Thumbnail ${index}`}
+                className="thumbnail-image"
+              />
+            </div>
+          ))}
+          {product.image.length > 4 && (
+            <span className="more-images">+{product.image.length - 4}</span>
+          )}
+        </div>
+
+        <Link to={`/product/${product._id}`} className="product-info-link">
+          <div className="product-info">
+            <h2 className="product-name" title={product.name}>{product.name}</h2>
+            <p className="product-color-desc">{t("colors")}: {product.sizes.map(sizeObj => translateColor(sizeObj.color)).join(", ")}</p>
+            <p className="product-color-desc">{t("sizes")}: {product.sizes.map(sizeObj => sizeObj.size).join(", ")}</p>
+            <div className="product-price-row">
+              <span className="product-price">{product.price} DT</span>
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      {showPopup && (
+        <div className="image-popup-overlay" onClick={closePopup}>
+          <div className="image-popup-content" onClick={(e) => e.stopPropagation()}>
+            <span className="close-popup" onClick={closePopup}>&times;</span>
+            <img src={currentImage} alt={product.name} className="image-popup-img" />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

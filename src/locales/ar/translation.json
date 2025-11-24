@@ -190,5 +190,24 @@
       "title": "تطبيقات الهاتف المحمول",
       "content": "قم بتنزيل تطبيق Cmandi لنظامي iOS و Android للتسوق والبيع أثناء التنقل. جرب أفضل ما في الموضة في متناول يدك."
     }
+  },
+    "chat":{
+    "loadOlderMessages": "تحميل الرسائل القديمة",
+    "unread": "غير مقروء",
+    "read": "مقروء",
+    "messagePlaceholder": "اكتب رسالة...",
+    "sendButton": "إرسال",
+    "noChat": "اختر محادثة أو ابدأ محادثة جديدة",
+    "noMessages": "لا توجد رسائل",
+    "order": "طلب",
+    "product": "منتج",
+    "lastMessage": "آخر رسالة",
+    "newChatButton": "دردشة جديدة",
+    "newChatPlaceholderOrder": "رقم الطلب",
+    "newChatPlaceholderProduct": "رقم المنتج",
+    "newChatWithSeller": "دردشة جديدة مع البائع",
+    "newChatWithAdmin": "دردشة جديدة مع المشرف",
+    "cancel_with_seller": "إلغاء المحادثة مع البائع"
+ 
   }
 }
