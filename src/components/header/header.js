@@ -2,10 +2,9 @@ import React, { useRef, useEffect, useState, useContext } from 'react';
 import './header.css';
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Login from '../login/login'; 
-import Register from '../register/register'; 
+import Login from '../login/login';
+import Register from '../register/register';
 import { FilterContext } from '../filter_context/filter_context';
-import { MainChat } from "../chat/main_chat"; // Pfad anpassen
 
 function Header() {
 
@@ -89,7 +88,7 @@ function Header() {
   const handleProfileClick = () => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
- 
+
     if (token) {
       navigate(role === "seller" ? "/profile_seller" : "/profile_user");
     } else {
@@ -163,8 +162,8 @@ function Header() {
               <img src="/icons/home_icon.svg" style={{ width: "26px", height: "35px" }} />
             </Link>
 
-           {/* Chat Icon – nur wenn eingeloggt */}
-              {isLoggedIn && (
+            {/* Chat Icon – nur wenn eingeloggt */}
+            {isLoggedIn && (
               <img
                 src="/icons/chat_icon.svg"
                 style={{ width: "26px", height: "35px", marginLeft: "10px" }}
@@ -183,14 +182,14 @@ function Header() {
             {isLoggedIn ? (
               <img
                 src="/icons/profile_icon.svg"
-                style={{ width: "24px", height: "50px"}}  
+                style={{ width: "24px", height: "50px" }}
                 className="nav-icon"
                 onClick={handleProfileClick}
               />
             ) : (
               <img
                 src="/icons/login_icon.svg"
-                style={{ width: "24px", height: "24px" }} 
+                style={{ width: "24px", height: "24px" }}
                 alt="Login"
                 className="nav-icon"
                 onClick={handleProfileClick}
@@ -201,7 +200,7 @@ function Header() {
             {isLoggedIn && (
               <img
                 src="/icons/logout_icon.svg"
-                style={{ width: "24px", height: "24px" }}  
+                style={{ width: "24px", height: "24px" }}
                 className="nav-icon"
                 onClick={handleLogout}
               />
@@ -258,26 +257,26 @@ function Header() {
           <button className="scroll-arrow right" onClick={() => scroll('right')}>›</button>
         </nav>
       </div>
-    
-        {showLoginPopup && (
-          <div className="login-popup-overlay" onClick={() => setShowLoginPopup(false)}>
-            <div className="login-popup-content" onClick={(e) => e.stopPropagation()}>
-              {isRegistering ? (
-                <Register
-                  closePopup={() => setShowLoginPopup(false)}
-                  switchToLogin={() => setIsRegistering(false)}
-                />
-              ) : (
-                <Login
-                  closePopup={() => setShowLoginPopup(false)}
-                  switchToRegister={() => setIsRegistering(true)}
-                />
-              )}
-            </div>
+
+      {showLoginPopup && (
+        <div className="login-popup-overlay" onClick={() => setShowLoginPopup(false)}>
+          <div className="login-popup-content" onClick={(e) => e.stopPropagation()}>
+            {isRegistering ? (
+              <Register
+                closePopup={() => setShowLoginPopup(false)}
+                switchToLogin={() => setIsRegistering(false)}
+              />
+            ) : (
+              <Login
+                closePopup={() => setShowLoginPopup(false)}
+                switchToRegister={() => setIsRegistering(true)}
+              />
+            )}
           </div>
-        )}
-  
-     </>
+        </div>
+      )}
+
+    </>
   );
 }
 

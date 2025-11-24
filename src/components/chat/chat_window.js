@@ -1,24 +1,24 @@
-import React, {useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import "./chat_window.css";
 
-const ChatWindow = ({ 
-  activeChat, 
-  userId, 
-  hasMore, 
-  loadOlderMessages, 
-  sendNewMessage, 
-  newMessage, 
+const ChatWindow = ({
+  activeChat,
+  userId,
+  hasMore,
+  loadOlderMessages,
+  sendNewMessage,
+  newMessage,
   setNewMessage,
   isLoadingOlder,
-  onBack,
-  isMobile
+  isMobile,
+  handleBackToSidebar
 }) => {
   const { t, i18n } = useTranslation();
   const messagesRef = useRef(null);
   const wasScrolledToBottom = useRef(true);
   const isRtl = i18n.dir() == "rtl";
-  
+
 
   useEffect(() => {
     if (activeChat && messagesRef.current && !isLoadingOlder) {
@@ -42,11 +42,11 @@ const ChatWindow = ({
   };
 
   return (
-    <div className="chat-window">
+    <div className="chat-window-content">
       {activeChat ? (
         <>
           {isMobile && (
-            <button className="back-button" onClick={onBack}>
+            <button className="back-button" onClick={handleBackToSidebar}>
               &larr; {t('chat.backToChats')}
             </button>
           )}
@@ -54,52 +54,49 @@ const ChatWindow = ({
             {hasMore && (
               <div className="load-more-container">
                 <button className="load-more-btn" onClick={loadOlderMessages}>
-                 {t('chat.loadOlderMessages')}
+                  {t('chat.loadOlderMessages')}
                 </button>
               </div>
             )}
             {(activeChat?.messages || []).map((msg, idx) => {
-             console.log("ChatWindow messages", activeChat?.messages)
               const isUserMessage = msg.senderId.toString() === userId;
               return (
-              <div
+                <div
                   key={idx}
-                    className={`message ${isUserMessage ? "user" : "admin"} ${msg.isRead ? "read" : "unread"} ${isRtl ? 'rtl' : ''}`}
+                  className={`message ${isUserMessage ? "user" : "admin"} ${msg.isRead ? "read" : "unread"} ${isRtl ? 'rtl' : ''}`}
                 >
                   {msg.text}
                   <div className="msg-date">
                     {new Date(msg.createdAt).toLocaleTimeString()}
                   </div>
-                    { isUserMessage && !msg.isRead && (
+                  {isUserMessage && !msg.isRead && (
                     <span className="unread-indicator">{t('chat.unread')}</span>
-                    )}
-                    {isUserMessage && msg.isRead && (
-                      <span className="read-indicator">{t('chat.read')}</span>
-                    )}
+                  )}
+                  {isUserMessage && msg.isRead && (
+                    <span className="read-indicator">{t('chat.read')}</span>
+                  )}
                 </div>
               );
             })}
           </div>
           <div className="message-input">
-          <input
-            type="text"
-            placeholder={t('chat.messagePlaceholder')}
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendNewMessage(newMessage)}
-          />
-          <button onClick={() => sendNewMessage(newMessage)}>{t('chat.sendButton')}</button> 
+            <input
+              type="text"
+              placeholder={t('chat.messagePlaceholder')}
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendNewMessage(newMessage)}
+            />
+            <button onClick={() => sendNewMessage(newMessage)}>{t('chat.sendButton')}</button>
           </div>
         </>
       ) : (
         <>
-        <div className="no-chat">{t('chat.noChat')}</div>  
-        {console.log("ChatWindow activeChat noChat", activeChat)} 
+          <div className="no-chat">{t('chat.noChat')}</div>
         </>
-
       )}
     </div>
   );
 };
 
-export default ChatWindow
+export default ChatWindow;

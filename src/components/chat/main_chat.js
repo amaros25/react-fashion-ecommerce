@@ -7,9 +7,9 @@ import ChatSidebar from './chat_sidebar';
 import { useTranslation } from "react-i18next";
 import { useChats } from "./use_chats";
 import "./main_chat.css";
+import { fetchChats } from "./chat_api";
 
 const MainChat = () => {
-  console.log("MainChat");
   const { t, i18n } = useTranslation();
   const location = useLocation();
   const { newOrderNumber: orderNumber, sellerId, newChatType: routeChatType } = location.state || {};
@@ -33,29 +33,29 @@ const MainChat = () => {
 
   return (
     <div className="main-chat-container">
-      <Header /> 
+      <Header />
       <div className="main-chat">
-        {  !chatHook.isSidebarHidden && (
-          <ChatSidebar 
-            {...chatHook} 
+        {!chatHook.isSidebarHidden && (
+          <ChatSidebar
+            {...chatHook}
             startChat={() => chatHook.setIsNewChat(true)}
-            is_chat_from_order_item={isChatFromOrderItem} 
+            is_chat_from_order_item={isChatFromOrderItem}
           />
         )}
         {chatHook.isMobile && chatHook.isChatWindowActive && (
           <div className="chat-window active">
-            <ChatWindow 
-              {...chatHook} 
-              userId={userId} 
+            <ChatWindow
+              {...chatHook}
+              userId={userId}
               onBack={chatHook.handleBackToSidebar}
             />
           </div>
         )}
         {!chatHook.isMobile && chatHook.isChatWindowActive && (
           <div className="chat-window active">
-            <ChatWindow 
-              {...chatHook} 
-              userId={userId} 
+            <ChatWindow
+              {...chatHook}
+              userId={userId}
               onBack={chatHook.handleBackToSidebar}
             />
           </div>

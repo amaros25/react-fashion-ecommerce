@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import "./main_chat.css";
 import "./chat_sidebar.css";
 
 const ChatSidebar = ({
-  chats,
+  chats = [],
   activeChat,
   newChatType,
   setNewChatType,
@@ -15,11 +15,13 @@ const ChatSidebar = ({
   is_chat_from_order_item,
   setIsChatFromOrderItem,
   isSidebarHidden,
-  handleOpenChat
+  handleOpenChat,
+  totalPages,
+  sidebarCurrentPage,
+  setSidebarCurrentPage,
 }) => {
 
   const { t } = useTranslation();
-
 
   const handleCancelChat = () => {
     setIsChatFromOrderItem(false);
@@ -32,6 +34,33 @@ const ChatSidebar = ({
       (chat) => chat.number === chatNumber && (chat.type === newChatType)
     );
   };
+
+  const getPaginationRange = (totalPages, currentPage) => {
+    const maxVisiblePages = 5;
+    let range = [];
+    if (totalPages <= maxVisiblePages) {
+      range = Array.from({ length: totalPages }, (_, index) => index + 1);
+    } else {
+      range = [1];
+      if (currentPage <= 3) {
+        range = [...range, 2, 3, 4];
+      } else if (currentPage >= totalPages - 2) {
+        range = [...range, totalPages - 3, totalPages - 2, totalPages - 1];
+      } else {
+        range = [...range, currentPage - 1, currentPage, currentPage + 1];
+      }
+      range.push(totalPages);
+    }
+    if (range[1] > 2) {
+      range = [1, '...', ...range.slice(1)];
+    }
+    if (range[range.length - 2] < totalPages - 1) {
+      range = [...range.slice(0, -1), '...', totalPages];
+    }
+    return range;
+  };
+
+  const sortedChats = Array.isArray(chats) ? chats.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) : [];
 
   return (
     <div className={`chat-sidebar ${isSidebarHidden ? 'hidden' : ''}`}>
@@ -56,13 +85,14 @@ const ChatSidebar = ({
             placeholder={newChatType === "order" ? t('chat.newChatPlaceholderOrder') : t('chat.newChatPlaceholderProduct')}
             value={newChatNumber}
             onChange={(e) => {
-              if (!is_chat_from_order_item) { 
+              if (!is_chat_from_order_item) {
                 setNewChatNumber(e.target.value)
               }
             }}
           />
         )}
         <button
+          className="chatsidebar-button"
           onClick={() => {
             if (newChatNumber.trim() === "") {
               toast.error(t('chat.noChat'));
@@ -86,8 +116,8 @@ const ChatSidebar = ({
         )}
 
       </div>
-      <div className="chat-list">
-        {chats.map((chat) => {
+      <div className="conversation-list">
+        {sortedChats.map((chat) => {
           const lastMessage = chat.messages?.length > 0 ? chat.messages[chat.messages.length - 1].text : t('chat.noMessages');
           return (
             <div
@@ -111,6 +141,26 @@ const ChatSidebar = ({
           );
         })}
       </div>
+      <div className="pagination">
+        {totalPages > 1 && (
+          getPaginationRange(totalPages, sidebarCurrentPage).map((page, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                if (page !== '...') {
+                  setSidebarCurrentPage(page);  // Seite wechseln
+                }
+              }}
+              className={`page-btn ${sidebarCurrentPage === page ? 'active' : ''}`}
+              disabled={page === '...'}
+            >
+              {page}
+            </button>
+          ))
+        )}
+      </div>
+
+
     </div>
   );
 };

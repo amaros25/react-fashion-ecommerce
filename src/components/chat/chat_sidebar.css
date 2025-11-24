@@ -1,8 +1,12 @@
-
-
-.chat-list {
-  flex: 1;
+.conversation-list {
+  flex-grow: 1;
   overflow-y: auto;
+
+  padding-right: 10px;
+  box-sizing: border-box;
+
+  min-height: 52vh;
+  max-height: 52vh;
 }
 
 .chat-card {
@@ -35,6 +39,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .new-chat select,
@@ -46,7 +51,6 @@
 }
 
 .new-chat button {
-  padding: 8px 12px;
   border-radius: 6px;
   background-color: #4a90e2;
   color: #fff;
@@ -59,6 +63,34 @@
 .new-chat button:hover {
   background-color: #357ab8;
 }
- 
 
+.pagination {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-shrink: 0;
+  padding-bottom: 10px;
+}
 
+.page-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.page-btn.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.page-btn:hover {
+  background-color: #ddd;
+}
+
+.cancel-btn,
+.chatsidebar-button {
+  padding: 10px;
+  margin-top: 5px;
+}

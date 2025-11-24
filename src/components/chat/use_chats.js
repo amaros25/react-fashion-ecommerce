@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { fetchChats, openChat, sendMessage, loadMoreMessages, startNewChat, markMessagesAsRead } from "./chat_api";
 
 export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) => {
-  const [chats, setChats] = useState([]);
+
   const [activeChat, setActiveChat] = useState(null);
   const [newChatType, setNewChatType] = useState(initialType);
   const [newChatNumber, setNewChatNumber] = useState(initialNumber);
   const [isNewChat, setIsNewChat] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingOlder, setIsLoadingOlder] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -17,61 +17,75 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
   const [isChatWindowHidden, setIsChatWindowHidden] = useState(false);
   const [getCurrentChatID, setCurrentChatID] = useState("");
 
-  const PAGE_LIMIT = 10;
+  const [chats, setChats] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [sidebarCurrentPage, setSidebarCurrentPage] = useState(1); // Pagination für Sidebar
+  const [chatWindowCurrentPage, setChatWindowCurrentPage] = useState(1); // Pagination für Chat-Fenster
+  const PAGE_LIMIT = 5;
 
 
   const handleOpenChat = (chatId) => {
-      console.log("useChats handleOpenChat ID:", chatId);
-        console.log("useChats isMobile:", isMobile);
-      setCurrentChatID(chatId);
-      if (isMobile){
-        setIsSidebarHidden(true);
-        setIsChatWindowHidden(false);
-        setIsChatWindowActive(true);
-      }else{
-        setIsSidebarHidden(false);
-        setIsChatWindowHidden(false);
-      }
-        setIsChatWindowActive(true);
-    };
-  
+    setCurrentChatID(chatId);
+    if (isMobile) {
+      setIsSidebarHidden(true);
+      setIsChatWindowHidden(false);
+      setIsChatWindowActive(true);
+    } else {
+      setIsSidebarHidden(false);
+      setIsChatWindowHidden(false);
+    }
+    setIsChatWindowActive(true);
+  };
+
   useEffect(() => {
-    console.log("useChats isChatWindowActive:", isChatWindowActive);
-    if ( isChatWindowActive) {
-       openSelectedChat(getCurrentChatID);
+    if (isChatWindowActive) {
+      openSelectedChat(getCurrentChatID);
     }
   }, [isChatWindowActive, getCurrentChatID]);
 
-    // Set the isMobile state based on window width
   useEffect(() => {
-      const handleResize = () => {
-        console.log("setIsMobile: ", window.innerWidth <= 768);
-        setIsMobile(window.innerWidth <= 768);
-      };
-  
-      handleResize();
-      window.addEventListener("resize", handleResize);
-  
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-  }, []);
- 
-  useEffect(() => {
-    if (!userId) return;
-    const role = localStorage.getItem("role");
-    const sellerIdFromStorage = role === "seller" ? userId : sellerIdFromProps;
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
 
-    fetchChats(role, userId, sellerIdFromStorage)
-      .then(data => {
-        setChats(data || []); // Sicherstellen, dass immer ein Array gesetzt wird
-      })
-      .catch(console.error);
-  }, [userId]);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const loadChats = async () => {
+      const role = localStorage.getItem("role");
+      const sellerIdFromStorage = role === "seller" ? userId : sellerIdFromProps;
+
+      if (userId) {
+        const data = await fetchChats(role, userId, sellerIdFromStorage, newChatType, sidebarCurrentPage);
+        setChats(data.chats);
+        setTotalPages(data.totalPages);
+      }
+    };
+
+    loadChats();
+  }, [userId, sellerIdFromProps, newChatType, sidebarCurrentPage]);
+
+  const handlePageChange = (pageNumber) => {
+    setSidebarCurrentPage(pageNumber);
+  };
+
 
   const openSelectedChat = async (chatId) => {
-    console.log("openSelectedChat chatId: ", chatId);
-    setCurrentPage(1);
+    if (chatId.toString().startsWith("temp_")) {
+      const tempChat = chats.find(c => c._id === chatId);
+      if (tempChat) {
+        setActiveChat(tempChat);
+      }
+      return;
+    }
+
+    setChatWindowCurrentPage(1);
     try {
       const data = await openChat(chatId, userId, PAGE_LIMIT);
       setActiveChat(data);
@@ -85,9 +99,26 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
 
   const sendNewMessage = async (message) => {
     if (!message.trim()) return;
+
     if (isNewChat) {
       await startNewChatAndSendMessage(message);
-    } else if (activeChat?._id) {
+    }
+    else if (activeChat?._id && activeChat._id.toString().startsWith("temp_")) {
+      const role = localStorage.getItem("role");
+      const resolvedSellerId = sellerIdFromProps || (role === "seller" ? userId : null);
+
+      try {
+        const newChatData = await startNewChat(role, userId, resolvedSellerId, activeChat.type, activeChat.number);
+
+        const sentMessageData = await sendMessage(newChatData._id, userId, message);
+
+        setActiveChat(sentMessageData);
+        setChats(prev => prev.map(c => c._id === activeChat._id ? sentMessageData : c));
+      } catch (err) {
+        console.error("Error persisting temp chat:", err);
+      }
+    }
+    else if (activeChat?._id) {
       try {
         const data = await sendMessage(activeChat._id, userId, message);
         setActiveChat(data);
@@ -102,10 +133,29 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
   const startNewChatAndSendMessage = async (message) => {
     const role = localStorage.getItem("role");
     if (!userId) return alert("Kein User-Login gefunden!");
-    try {
- 
-      const resolvedSellerId = sellerIdFromProps || (role === "seller" ? userId : null);
 
+    if (!message || message.trim() === "") {
+      const tempId = "temp_" + Date.now();
+      const tempChat = {
+        _id: tempId,
+        type: newChatType,
+        number: newChatNumber,
+        updatedAt: new Date().toISOString(),
+        messages: [],
+        participants: [userId]
+      };
+
+      setChats(prev => {
+        const newChats = [tempChat, ...prev];
+        return newChats.slice(0, PAGE_LIMIT);
+      });
+      setActiveChat(tempChat);
+      setIsNewChat(false);
+      return;
+    }
+
+    try {
+      const resolvedSellerId = sellerIdFromProps || (role === "seller" ? userId : null);
 
       const newChatData = await startNewChat(role, userId, resolvedSellerId, newChatType, newChatNumber);
       setChats(prev => [newChatData, ...prev]);
@@ -126,12 +176,12 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
     if (!activeChat?._id || !hasMore) return;
     setIsLoadingOlder(true);
     try {
-      const data = await loadMoreMessages(activeChat._id, currentPage, PAGE_LIMIT);
-      const newMessages = data.messages.filter(msg => 
-          !activeChat.messages.some(existingMsg => existingMsg._id === msg._id)
+      const data = await loadMoreMessages(activeChat._id, chatWindowCurrentPage, PAGE_LIMIT);
+      const newMessages = data.messages.filter(msg =>
+        !activeChat.messages.some(existingMsg => existingMsg._id === msg._id)
       );
       setActiveChat(prev => ({ ...prev, messages: [...newMessages, ...prev.messages] }));
-      setCurrentPage(prev => prev + 1);
+      setChatWindowCurrentPage(prev => prev + 1);
       if (data.messages.length < PAGE_LIMIT) setHasMore(false);
     } catch (err) {
       console.error(err);
@@ -141,29 +191,40 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
   };
 
   const handleBackToSidebar = () => {
-      console.log("handleBackToSidebar");
-      setIsSidebarHidden(false);
-      setIsChatWindowHidden(true);
-      setIsChatWindowActive(false); // Deactivate chat window
+    setIsSidebarHidden(false);
+    setIsChatWindowHidden(true);
+    setIsChatWindowActive(false);
   };
 
-
-
-
-
   return {
-    chats, activeChat, openSelectedChat,
-    newChatType, setNewChatType, newChatNumber, setNewChatNumber,
-    isNewChat, setIsNewChat, 
-    newMessage, setNewMessage,  
-    sendNewMessage, startNewChatAndSendMessage,
-    loadOlderMessages, currentPage, hasMore, isLoadingOlder, isMobile, 
-    isSidebarHidden, 
+    chats,
+    activeChat,
+    openSelectedChat,
+    newChatType,
+    setNewChatType,
+    newChatNumber,
+    setNewChatNumber,
+    isNewChat,
+    setIsNewChat,
+    newMessage,
+    setNewMessage,
+    sendNewMessage,
+    startNewChatAndSendMessage,
+    loadOlderMessages,
+    hasMore,
+    isLoadingOlder,
+    isMobile,
+    isSidebarHidden,
     setIsSidebarHidden,
-    handleBackToSidebar,
     isChatWindowActive,
     handleOpenChat,
-    setIsChatWindowActive
- 
+    handlePageChange,
+    totalPages,
+    sidebarCurrentPage,
+    setSidebarCurrentPage,
+    handleBackToSidebar
+
+
+
   };
 };

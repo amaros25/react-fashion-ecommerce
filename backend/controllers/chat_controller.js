@@ -25,7 +25,8 @@ exports.getUserChats = async (req, res) => {
     } else {
       return res.status(400).json({ message: "Ungültige Rolle, bitte überprüfen" });
     }
-
+    const totalChats = await Chat.countDocuments(filter);
+    console.log("totalchat: ", totalChats);
     // Holen der Chats basierend auf dem Filter und der Pagination
     const chats = await Chat.find(filter)
       .sort({ updatedAt: -1 }) // Sortierung nach dem neuesten Chat
@@ -33,7 +34,8 @@ exports.getUserChats = async (req, res) => {
       .limit(Number(limit)) // Maximal 10 Chats pro Seite
       .lean(); // Nur die Rohdaten zurückgeben, keine Mongoose-Instanz
 
-    res.json(chats);
+    const totalPages = Math.ceil(totalChats / limit);
+    res.json({ chats, totalPages, totalChats });
   } catch (error) {
     console.error("Fehler beim Abrufen der Chats:", error);
     res.status(500).json({ message: "Error fetching chats", error });
