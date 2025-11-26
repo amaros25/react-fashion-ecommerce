@@ -86,7 +86,7 @@ function Login() {
               {t("register_quest")}{" "}
               <span
                 onClick={() => navigate("/register")}
-                style={{ color: "#0077cc", cursor: "pointer", textDecoration: "underline" }}
+                style={{ color: "#151718ff", cursor: "pointer", textDecoration: "underline" }}
               >
                 {t("register.title")}
               </span>
