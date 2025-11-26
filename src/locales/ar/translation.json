@@ -191,7 +191,7 @@
       "content": "قم بتنزيل تطبيق Cmandi لنظامي iOS و Android للتسوق والبيع أثناء التنقل. جرب أفضل ما في الموضة في متناول يدك."
     }
   },
-    "chat":{
+  "chat": {
     "loadOlderMessages": "تحميل الرسائل القديمة",
     "unread": "غير مقروء",
     "read": "مقروء",
@@ -208,6 +208,36 @@
     "newChatWithSeller": "دردشة جديدة مع البائع",
     "newChatWithAdmin": "دردشة جديدة مع المشرف",
     "cancel_with_seller": "إلغاء المحادثة مع البائع"
- 
+  },
+  "product_page": {
+    "rating": "التقييم",
+    "size": "المقاس",
+    "color": "اللون",
+    "quantity": "الكمية",
+    "select_size": "اختر المقاس",
+    "select_color": "اختر اللون",
+    "variant_out_of_stock": "هذا الخيار غير متوفر حالياً.",
+    "order_now": "اطلب الآن",
+    "enter_shipping_address": "أدخل عنوان الشحن",
+    "street": "الشارع",
+    "city": "المدينة",
+    "postal_code": "الرمز البريدي",
+    "country": "الدولة",
+    "placing_order": "جاري معالجة الطلب...",
+    "submit_order": "تأكيد الطلب",
+    "cancel": "إلغاء",
+    "order_success": "تم تقديم الطلب بنجاح!",
+    "order_error": "حدث خطأ أثناء معالجة الطلب.",
+    "select_size_first": "يرجى اختيار المقاس أولاً.",
+    "order_create_error": "تعذر إنشاء الطلب.",
+    "select_size_alert": "يرجى اختيار المقاس واللون قبل الإضافة إلى السلة.",
+    "must_login": "يجب تسجيل الدخول لإضافة المنتجات إلى السلة.",
+    "invalid_selection": "اختيار غير صالح. يرجى اختيار مقاس ولون صالحين.",
+    "exceeds_stock": "الكمية تتجاوز المخزون المتاح.",
+    "available": "متوفر",
+    "cart_updated": "تم تحديث السلة بنجاح.",
+    "added_to_cart": "تمت إضافة المنتج إلى السلة.",
+    "add_to_cart": "أضف إلى السلة",
+    "buy_now": "اشتر الآن"
   }
 }

@@ -1,63 +1,52 @@
- .product-images {
-   flex: 1 1 20%;
-   max-width: 45%;
-   padding: 5px;
- }
+.product-images {
+  flex: 1;
+  width: 100%;
+  padding: 0;
+}
 
- .main-image {
-   width: 100%;
-   height: auto;
-   border-radius: 15px;
-   margin-bottom: 15px;
-   margin-top: 5px;
-   max-height: 550px;
-   object-fit: contain;
- }
+.main-image {
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  /* Removing border radius for a cleaner look as per modern design */
+  margin-bottom: 15px;
+  margin-top: 5px;
+  max-height: 700px;
+  /* Increased max-height */
+  object-fit: cover;
+  /* Changed to cover for better aesthetic */
+}
 
+.thumbnail-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
- .thumbnail-row {
-   display: flex;
-   gap: 10px;
-   flex-wrap: wrap;
- }
+.thumbnail {
+  width: 80px;
+  /* Slightly larger thumbnails */
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  /* Square-ish with slight radius */
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
 
- .thumbnail {
-   width: 60px;
-   height: 60px;
-   object-fit: cover;
-   border-radius: 10px;
-   cursor: pointer;
-   border: 2px solid transparent;
-   transition: border 0.2s ease;
-   margin-top: 10px;
- }
+.thumbnail.active {
+  border: 1px solid #000;
+  /* Black border for active state */
+}
 
- .thumbnail.active {
-   border: 2px solid #f1356d;
- }
+@media (max-width: 768px) {
+  .product-images {
+    width: 100%;
+  }
 
-
- @media (max-width: 768px) {
-   .product-images {
-     flex: 1 1 40%;
-     max-width: 100%;
-   }
-
-   .main-image {
-     width: 100%;
-     height: auto;
-     border-radius: 15px;
-     margin-bottom: 15px;
-     margin-top: 10px;
-     max-height: 350px;
-     object-fit: contain;
-   }
-
-   .thumbnail-row {
-     display: flex;
-     gap: 10px;
-     flex-wrap: wrap;
-   }
- }
-
- 
+  .main-image {
+    max-height: 450px;
+  }
+}

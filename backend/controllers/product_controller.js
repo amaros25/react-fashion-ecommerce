@@ -4,7 +4,7 @@ const Order = require("../models/order");
 // Return all top products
 exports.getTopProducts = async (req, res) => {
   try {
-    const top_products = await Product.find({type: 'top'});
+    const top_products = await Product.find({ type: 'top' });
     res.json(top_products);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching products', error });
@@ -72,17 +72,17 @@ exports.getNewProducts = async (req, res) => {
 
 // Return Product by ID
 exports.getProductByID = async (req, res) => {
-    try{
-        const product = await Product.findById(req.params.id);
-        if (!product){
-            return res.status(404).json({ message: 'Product not found' });
-        }
-        res.json(product);
-    }catch(error){
-      res.status(500).json({ message: 'Error fetching product', error });  
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
     }
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching product', error });
+  }
 };
- 
+
 // Return Product by SellerID
 
 exports.getProductBySellerID = async (req, res) => {
@@ -124,36 +124,36 @@ exports.getProductBySellerID = async (req, res) => {
     const productIds = products.map(p => p._id);
 
     const rawOrders = await Order.find({
-  "items.productId": { $in: productIds }
-})
-  .select("orderNumber items status")
-  .lean();
+      "items.productId": { $in: productIds }
+    })
+      .select("orderNumber items status")
+      .lean();
 
-console.log("🧾 Gesamt relevante Orders für diesen Seller:", rawOrders.length);
-rawOrders.forEach(o => {
-  console.log("Order:", o.orderNumber);
-  console.log("  ➤ Status:", o.status.map(s => s.update));
-  console.log("  ➤ Produkte:", o.items.map(i => i.productId.toString()));
-});
+    console.log("🧾 Gesamt relevante Orders für diesen Seller:", rawOrders.length);
+    rawOrders.forEach(o => {
+      console.log("Order:", o.orderNumber);
+      console.log("  ➤ Status:", o.status.map(s => s.update));
+      console.log("  ➤ Produkte:", o.items.map(i => i.productId.toString()));
+    });
     // Order-Aggregation: nur Bestellungen mit diesen Produkten und gültigem Status
-  const orderCounts = await Order.aggregate([
-    // 1️⃣ Nur Orders mit Items, die zu den Produkten des Verkäufers gehören
-    { $match: { "items.productId": { $in: productIds } } },
+    const orderCounts = await Order.aggregate([
+      // 1️⃣ Nur Orders mit Items, die zu den Produkten des Verkäufers gehören
+      { $match: { "items.productId": { $in: productIds } } },
 
-    // 2️⃣ Items auseinandernehmen
-    { $unwind: "$items" },
+      // 2️⃣ Items auseinandernehmen
+      { $unwind: "$items" },
 
-    // 3️⃣ Nur Items zählen, die zum Verkäufer gehören
-    { $match: { "items.productId": { $in: productIds } } },
+      // 3️⃣ Nur Items zählen, die zum Verkäufer gehören
+      { $match: { "items.productId": { $in: productIds } } },
 
-    // 4️⃣ Gruppieren pro Produkt-ID
-    {
-      $group: {
-        _id: "$items.productId",
-        count: { $sum: 1 }, // Menge summieren, oder $sum: 1 für Anzahl der Bestellungen
+      // 4️⃣ Gruppieren pro Produkt-ID
+      {
+        $group: {
+          _id: "$items.productId",
+          count: { $sum: 1 }, // Menge summieren, oder $sum: 1 für Anzahl der Bestellungen
+        },
       },
-    },
-  ]);
+    ]);
     console.log("orderCounts: ", orderCounts)
 
     // Map erstellen
@@ -184,15 +184,53 @@ rawOrders.forEach(o => {
 
 
 // Add a new Product
-exports.createProduct = async(req, res) => {
-    console.log("🟢 : createProduct res:", res);
-    try {
-        const product = new Product(req.body);
-        console.log("🟢 : product:", product);
-        await product.save();
-        res.status(201).json(product);
-    } catch (error) {
-          console.log('Error adding product: ', error);
-        res.status(500).json({ message: 'Error adding product', error });
+exports.createProduct = async (req, res) => {
+  console.log("🟢 : createProduct res:", res);
+  try {
+    const product = new Product(req.body);
+    console.log("🟢 : product:", product);
+    await product.save();
+    res.status(201).json(product);
+  } catch (error) {
+    console.log('Error adding product: ', error);
+    res.status(500).json({ message: 'Error adding product', error });
+  }
+};
+
+// Add a new Review
+exports.addReview = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const { userId, rating, comment } = req.body;
+    const hasBought = await Order.findOne({
+      userId,
+      "items.productId": productId,
+      "status.update": "delivered"
+    });
+
+    if (!hasBought) {
+      return res.status(403).json({
+        message: "you can only rate products you have received."
+      });
     }
+    const product = await Product.findById(productId);
+    const exists = product.reviews.find(r => r.user.toString() === userId);
+
+    if (exists) {
+      return res.status(400).json({ message: "you have already rated this product" });
+    }
+    product.reviews.push({
+      user: userId,
+      rating,
+      comment,
+    });
+
+    await product.save();
+
+    res.json({ message: "success", reviews: product.reviews });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "failed to add review" });
+  }
 };

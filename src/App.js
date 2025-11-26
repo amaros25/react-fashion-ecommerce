@@ -22,7 +22,6 @@ function App() {
 
   return (
     <FilterProvider>
-
       <Router>
         <Routes>
           <Route path="/home" element={<Home />} />
@@ -37,7 +36,6 @@ function App() {
           <Route path="/cart_page" element={<CartPage />} />
           <Route path="/chat" element={<MainChat />} />
           <Route path="/home/:category" element={<Home />} />
-
           {/* Footer Pages */}
           <Route path="/about-us" element={<InfoPage pageKey="about_us" />} />
           <Route path="/sustainability" element={<InfoPage pageKey="sustainability" />} />

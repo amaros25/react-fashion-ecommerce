@@ -99,7 +99,9 @@
     "exceeds_stock": "La quantité dépasse le stock disponible.",
     "available": "disponible",
     "cart_updated": "Panier mis à jour avec succès.",
-    "added_to_cart": "Produit ajouté au panier."
+    "added_to_cart": "Produit ajouté au panier.",
+    "add_to_cart": "Ajouter au panier",
+    "buy_now": "Acheter maintenant"
   },
   "cart_page": {
     "title": "Votre panier",
