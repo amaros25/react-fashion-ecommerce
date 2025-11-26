@@ -238,6 +238,8 @@
     "cart_updated": "تم تحديث السلة بنجاح.",
     "added_to_cart": "تمت إضافة المنتج إلى السلة.",
     "add_to_cart": "أضف إلى السلة",
-    "buy_now": "اشتر الآن"
+    "buy_now": "اشتر الآن",
+    "description": "الوصف",
+    "explore_seller": "استكشف البائع"
   }
 }

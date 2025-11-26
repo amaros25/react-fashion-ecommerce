@@ -60,7 +60,7 @@ function ProductInfoHeader({ product, userId }) {
                 <h1 className="product-title-header-info">{product.name}</h1>
             </div>
             <div className="product-price-rating-row">
-                <span className="product-price">{product.price} DT</span>
+                <span className="product-price-header-info">{product.price} DT</span>
                 <div className="product-rating-container">
                     <div className="product-rating">
                         {[1, 2, 3, 4, 5].map((value) => {

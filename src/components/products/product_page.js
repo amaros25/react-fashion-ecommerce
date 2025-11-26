@@ -240,6 +240,7 @@ function ProductPage() {
 
             {/* Description */}
             <div className="product-description-text">
+              <p className="description-label">{t("product_page.description")}</p>
               <p className={showFullDescription ? "expanded" : "collapsed"}>
                 {product.description}
               </p>

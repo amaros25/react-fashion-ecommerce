@@ -1,10 +1,5 @@
 .product-page {
-
-
-
-
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
-
   width: 100%;
   max-width: 80%;
   min-height: auto;
@@ -187,7 +182,7 @@
 /* Action Buttons */
 .action-buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   /* Vertical stack */
   gap: 15px;
   margin-top: 20px;
@@ -271,6 +266,12 @@
   color: #1a1a1a;
 }
 
+.description-label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .product-main-content {
@@ -296,3 +297,8 @@
     font-size: 2rem;
   }
 }
+
+/* * {  */
+/*   outline: 1px solid rgba(255, 0, 0, 0.2); */
+
+/* } */

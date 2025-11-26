@@ -101,7 +101,9 @@
     "cart_updated": "Panier mis à jour avec succès.",
     "added_to_cart": "Produit ajouté au panier.",
     "add_to_cart": "Ajouter au panier",
-    "buy_now": "Acheter maintenant"
+    "buy_now": "Acheter maintenant",
+    "description": "Description",
+    "explore_seller": "Explorer le vendeur"
   },
   "cart_page": {
     "title": "Votre panier",
