@@ -98,14 +98,15 @@
   font-size: 14px;
   transition: border-color 0.3s ease;
 
-  background-color: transparent;
+  background-color: #f2f2f2;
 
 }
 
 .login-form input:focus {
   outline: none;
   border-bottom: 2px solid #000000;
-  background-color: transparent;
+  background-color: #f2f2f2;
+  ;
 }
 
 .login-form input::placeholder {
@@ -236,4 +237,28 @@
     padding: 10px 0;
     font-size: 13px;
   }
+}
+
+
+.login-form input {
+  background-color: #ECE9E2;
+}
+
+.login-form input:focus {
+  background-color: #ECE9E2;
+}
+
+.login-form input:-webkit-autofill,
+.login-form input:-webkit-autofill:hover,
+.login-form input:-webkit-autofill:focus,
+.login-form input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #f2f2f2 inset !important;
+  box-shadow: 0 0 0 1000px #ECE9E2 inset !important;
+  -webkit-text-fill-color: #000 !important;
+  caret-color: #000 !important;
+}
+
+.login-form input:-moz-autofill {
+  box-shadow: 0 0 0 1000px #ECE9E2 inset !important;
+  -moz-text-fill-color: #000 !important;
 }
