@@ -14,12 +14,15 @@ import InfoPage from './components/info_pages/InfoPage.js';
 import { FilterProvider } from './components/filter_context/filter_context.js';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SeedProducts from './components/new_product/seed_products.js';
+
 import "./i18n";
 
 function App() {
 
   return (
     <FilterProvider>
+
       <Router>
         <Routes>
           <Route path="/home" element={<Home />} />

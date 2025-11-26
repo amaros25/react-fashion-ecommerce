@@ -7,11 +7,11 @@ import Foot from '../foot/foot';
 import Pagination from './pagination.js';
 import { FilterContext } from '../filter_context/filter_context';
 import ProductCard from '../product_card/product_card';
-import { useParams } from 'react-router-dom'; 
+import { useParams } from 'react-router-dom';
 
 const Home = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const { category } = useParams(); 
+  const { category } = useParams();
 
   // Context für die Kategorie und den Suchbegriff
   const { selectedCategory, setSelectedCategory, searchTerm, setSearchTerm } = useContext(FilterContext);
@@ -20,6 +20,7 @@ const Home = () => {
   const [latestProducts, setLatestProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [limit, setLimit] = useState(24);
 
   // Abhängig von der selectedCategory filtern wir die Produkte
   const filteredProducts = selectedCategory
@@ -34,9 +35,28 @@ const Home = () => {
     }
   }, [category, selectedCategory, setSelectedCategory]);
 
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width <= 786) {
+        setLimit(16);
+      } if (width >= 1280) {
+        setLimit(24);
+      } else {
+        setLimit(24);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // initial setzen
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Produkte von der API laden
   useEffect(() => {
-    let url = `${apiUrl}/products/latest?page=${page}`;
+    let url = `${apiUrl}/products/latest?page=${page}&limit=${limit}`;
 
     if (selectedCategory) {
       url += `&category=${selectedCategory}`;
@@ -68,6 +88,14 @@ const Home = () => {
     }
   }, [i18n.language]);
 
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+    scrollup();
+  };
+
+  const scrollup = () => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  };
 
   return (
     <div className="main-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
@@ -78,10 +106,10 @@ const Home = () => {
           <ProductCard key={product._id} product={product} />
         ))}
       </div>
-      <Pagination 
-        page={page} 
-        totalPages={totalPages} 
-        onPageChange={setPage} 
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
       />
       <Foot />
     </div>

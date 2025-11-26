@@ -1,6 +1,8 @@
 /* === Global Header Container === */
 .header {
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   margin: 0 auto;
   padding: 0;
   display: flex;
@@ -45,8 +47,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  /* Align to bottom of logo text */
-  padding: 20px 40px;
+
+  padding: 20px 0%;
   width: 100%;
   box-sizing: border-box;
 }
@@ -151,7 +153,7 @@
   position: relative;
   width: 100%;
   background-color: #ffffff;
-  padding: 10px 40px 20px 40px;
+  padding: 10px 5% 0px 0%;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -267,7 +269,7 @@
   }
 
   .navbar {
-    padding: 15px 20px;
+    padding: 15px 0px;
     flex-wrap: wrap;
     gap: 15px;
   }
@@ -286,7 +288,7 @@
   }
 
   .search-form {
-    margin: 0 20px 10px 20px;
+    margin: 0px 0px 5px 10px;
     width: auto;
     max-width: none;
   }

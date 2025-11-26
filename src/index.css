@@ -3,17 +3,29 @@
 /* base styles */
 * {
   margin: 0px;
+  padding: 0px;
   font-family: "Outfit", sans-serif;
   color: #333;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  /* horizontal Scroll verhindern */
+  overflow-y: auto;
+  /* vertikales Scroll erlauben */
 }
 
 .navbar {
-
-  display: flex;
   align-items: center;
-
-  margin: 0px;
+  width: 100%;
+  margin: 0;
   border-bottom: 1px solid #f2f2f2;
+  box-sizing: border-box;
 }
 
 .navbar h1 {
