@@ -12,6 +12,8 @@ import SellerInfo from "./seller_info.js";
 import Breadcrumb from './breadcrumb.js';
 import "./product_page.css";
 import ProductInfoHeader from "./product_info_header.js";
+import CommentProduct from './commentar_product.js';
+
 function ProductPage() {
 
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -53,6 +55,8 @@ function ProductPage() {
     ? Array.from(new Set(product.sizes.map(s => s.color)))
     : [];
 
+  const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     fetch(`${apiUrl}/products/${id}`)
       .then((res) => res.json())
@@ -86,8 +90,7 @@ function ProductPage() {
       .catch((err) => {
         console.error("Error loading product:", err);
       });
-  }, [id, apiUrl]);
-
+  }, [id, apiUrl, refresh]);
 
   if (!product || !seller) {
     return <LoadingSpinner />;
@@ -253,6 +256,7 @@ function ProductPage() {
                 </button>
               )}
             </div>
+            <CommentProduct product={product} onReviewAdded={() => setRefresh(prev => !prev)} />
 
             {/* Action Buttons */}
             <div className="action-buttons">

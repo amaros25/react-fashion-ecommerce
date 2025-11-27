@@ -143,6 +143,12 @@
   position: relative;
 }
 
+.selected-color-name {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
 /* Size Buttons */
 .size-options {
   display: flex;
@@ -233,6 +239,7 @@
 .product-description-text p.collapsed {
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -277,11 +284,17 @@
   .product-main-content {
     gap: 40px;
   }
+
+  .product-page {
+    max-width: 90%;
+    padding: 15px;
+  }
 }
 
 @media (max-width: 768px) {
   .product-main-content {
     flex-direction: column;
+    gap: 25px;
   }
 
   .product-left-column {
@@ -296,9 +309,95 @@
   .product-title {
     font-size: 2rem;
   }
+
+  .product-page {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .breadcrumb-container {
+    margin-bottom: 20px;
+  }
+
+  .product-selection-section {
+    gap: 20px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .add-to-cart-btn,
+  .buy-now-btn {
+    padding: 16px;
+    font-size: 0.95rem;
+  }
+
+  .seller-section-container {
+    margin-top: 30px;
+    padding-top: 20px;
+  }
 }
 
-/* * {  */
-/*   outline: 1px solid rgba(255, 0, 0, 0.2); */
+@media (max-width: 480px) {
+  .product-page {
+    padding: 10px;
+  }
 
-/* } */
+  .product-main-content {
+    gap: 20px;
+  }
+
+  .breadcrumb-container {
+    margin-bottom: 15px;
+  }
+
+  .product-selection-section {
+    gap: 18px;
+  }
+
+  .selection-label {
+    font-size: 0.85rem;
+  }
+
+  .color-swatch {
+    width: 28px;
+    height: 28px;
+  }
+
+  .size-button {
+    font-size: 0.95rem;
+    min-width: 28px;
+  }
+
+  .action-buttons {
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .add-to-cart-btn,
+  .buy-now-btn {
+    padding: 14px;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+  }
+
+  .product-description-text {
+    font-size: 0.95rem;
+  }
+
+  .description-label {
+    font-size: 0.95rem;
+  }
+
+  .seller-section-container {
+    margin-top: 25px;
+    padding-top: 15px;
+  }
+
+  .seller-section-title {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+}

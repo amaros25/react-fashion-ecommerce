@@ -49,4 +49,25 @@
   .main-image {
     max-height: 450px;
   }
+
+  .thumbnail {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-image {
+    max-height: 350px;
+    margin-bottom: 12px;
+  }
+
+  .thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+
+  .thumbnail-row {
+    gap: 8px;
+  }
 }
