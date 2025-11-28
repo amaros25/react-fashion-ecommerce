@@ -70,19 +70,6 @@ exports.getNewProducts = async (req, res) => {
 };
 
 
-// Return Product by ID
-exports.getProductByID = async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-    res.json(product);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching product', error });
-  }
-};
-
 // Return Product by SellerID
 
 exports.getProductBySellerID = async (req, res) => {
@@ -232,5 +219,41 @@ exports.addReview = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "failed to add review" });
+  }
+};
+
+
+// Return Product by ID
+exports.getProductByID = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching product', error });
+  }
+};
+
+// Return Products by IDs
+
+exports.getProductsByIDs = async (req, res) => {
+  console.log("🟢 : getProductsByIDs req:", req.query);
+  const { ids } = req.query;
+  if (!ids) {
+    return res.status(400).json({ message: "No product IDs provided" });
+  }
+
+  const productIds = ids.split(',');
+
+  try {
+    const products = await Product.find({ _id: { $in: productIds } });
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Products not found" });
+    }
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
   }
 };

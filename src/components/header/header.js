@@ -3,6 +3,8 @@ import './header.css';
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FilterContext } from '../filter_context/filter_context';
+import SavedProducts from '../saved_products/saved_products';
+import { FaRegHeart } from "react-icons/fa";
 
 function Header() {
 
@@ -131,7 +133,9 @@ function Header() {
                 <img src="/icons/empty_cart_icon.svg" style={{ width: "26px", height: "35px" }} />
               </Link>
             )}
-
+            <Link to="/saved_products">
+              <FaRegHeart style={{ width: "26px", height: "35px", marginLeft: "10px" }} />
+            </Link>
             {isLoggedIn ? (
               <img
                 src="/icons/profile_icon.svg"

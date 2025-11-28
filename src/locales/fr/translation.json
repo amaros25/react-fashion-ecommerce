@@ -103,7 +103,9 @@
     "add_to_cart": "Ajouter au panier",
     "buy_now": "Acheter maintenant",
     "description": "Description",
-    "explore_seller": "Explorer le vendeur"
+    "explore_seller": "Explorer le vendeur",
+    "remove_from_saved": "Supprimer de mes favoris",
+    "add_to_saved": "Ajouter aux favoris"
   },
   "cart_page": {
     "title": "Votre panier",
@@ -413,5 +415,9 @@
     "newChatWithSeller": "Nouveau chat avec le vendeur",
     "newChatWithAdmin": "Nouveau chat avec l'administrateur",
     "cancel_with_seller": "Annuler la chat avec le vendeur"
+  },
+  "saved_products": {
+    "title": "Produits sauvegardés",
+    "no_saved_products": "Aucun produit sauvegardé"
   }
 }

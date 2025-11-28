@@ -1,138 +1,94 @@
 /* Container style */
 .container {
     padding: 20px;
-    /* Add padding inside the container */
 }
 
 /* Heading Style */
 h2 {
     text-align: left;
-    /* Align heading text to the left */
     margin-bottom: 20px;
-    /* Space below the heading */
 }
 
 /* Latest Product List - Grid Layout */
 .latest-product-list {
     display: grid;
-    /* Use CSS Grid for responsive grid layout */
-    grid-template-columns: repeat(5, 1fr);
-    /* Default: 5 equal-width columns */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
-    /* Space between grid items */
     padding: 10px 0;
-    /* Vertical padding */
-    min-width: 0;
     max-width: 100%;
-
 }
 
 /* Latest Product Item Styling */
 .latest-product-item {
     background-color: #f0f9fa;
-    /* Light gray-blue background */
     border-radius: 15px;
-    /* Rounded corners */
     padding: 15px;
-    /* Inner spacing */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    /* Light shadow for depth */
     text-align: center;
-    /* Center text inside each product */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    /* Smooth hover transition */
     display: flex;
-    /* Use flexbox inside each product item */
     flex-direction: column;
-    /* Arrange content vertically */
     justify-content: space-between;
-    /* Space content evenly vertically */
     min-width: 0;
-    /* Prevent shrinking */
     max-width: 100%;
     text-decoration: none;
-    /* Remove text decoration */
 }
 
 /* Hover effects for product item */
 .latest-product-item:hover {
     transform: translateY(-5px);
-    /* Slightly lift the product on hover */
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    /* Stronger shadow on hover */
 }
 
 /* Product image style */
 .latest-product-image {
     width: 100%;
-    /* Image fills the width of container */
     height: 300px;
-    /* Fixed image height */
     object-fit: cover;
-    /* Scale image to cover container without distortion */
     border-radius: 10px;
-    /* Rounded corners for images */
     margin-bottom: 15px;
-    /* Space below the image */
 }
 
 /* Product title style */
 .latest-product-item h3 {
     white-space: nowrap;
-    /* Prevent text from wrapping */
     overflow: hidden;
-    /* Hide overflowed text */
     text-overflow: ellipsis;
-    /* Add ellipsis for long titles */
     width: 100%;
     min-width: 0;
-    /* Allow item to shrink */
     color: #444;
-    /* Dark text for better readability */
     text-decoration: none;
-    /* Remove text decoration */
     font-size: 14px;
-    /* Font size for product title */
     margin-bottom: 5px;
-    /* Space below the title */
 }
 
 /* Product description or price style */
 .product-item p {
     font-size: 16px;
-    /* Font size for description/price */
     color: #444;
-    /* Darker text for readability */
 }
 
 /* Product size information style */
 .product-sizes {
     font-size: 13px;
     color: #666;
-    /* Lighter text color */
     margin-top: 3px;
-    /* Space above the product sizes */
 }
 
 /* Media Queries for Responsiveness */
-
-/* Tablet layout - 2 columns */
 @media (max-width: 1024px) {
     .latest-product-list {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
 
     .latest-product-item {
         width: 100%;
-        /* Ensure product items take full width */
     }
 }
 
-/* Mobile layout - 1 column */
 @media (max-width: 768px) {
     .latest-product-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 15px;
     }
 
@@ -155,17 +111,11 @@ h2 {
         object-fit: cover;
         border-radius: 5px;
     }
-
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (max-width: 480px) {
     .latest-product-list {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 3fr));
-    }
-}
-
-@media (min-width: 1024px) {
-    .latest-product-list {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 3fr));
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
     }
 }

@@ -14,8 +14,7 @@ import InfoPage from './components/info_pages/InfoPage.js';
 import { FilterProvider } from './components/filter_context/filter_context.js';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SeedProducts from './components/new_product/seed_products.js';
-
+import SavedProducts from './components/saved_products/saved_products.js';
 import "./i18n";
 
 function App() {
@@ -55,6 +54,7 @@ function App() {
           <Route path="/our-platform" element={<InfoPage pageKey="our_platform" />} />
           <Route path="/press" element={<InfoPage pageKey="press" />} />
           <Route path="/mobile-apps" element={<InfoPage pageKey="mobile_apps" />} />
+          <Route path="/saved_products" element={<SavedProducts />} />
         </Routes>
       </Router>
       <ToastContainer position="top-center" autoClose={3000} theme="colored" />

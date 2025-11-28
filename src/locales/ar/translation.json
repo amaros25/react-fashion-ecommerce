@@ -240,6 +240,12 @@
     "add_to_cart": "أضف إلى السلة",
     "buy_now": "اشتر الآن",
     "description": "الوصف",
-    "explore_seller": "استكشف البائع"
+    "explore_seller": "استكشف البائع",
+    "remove_from_saved": "إزالة من المحفوظات",
+    "add_to_saved": "إضافة إلى المحفوظات"
+  },
+  "saved_products": {
+    "title": "منتجات المحفوظات",
+    "no_saved_products": "لا يوجد منتجات محفوظة"
   }
 }

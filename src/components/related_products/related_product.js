@@ -23,9 +23,10 @@ function RelatedProducts({ category, currentProductId }) {
     if (category) {
       url += `&category=${category}`;
     }
-  if (currentProductId) {
-    url += `&not=${currentProductId}`; // 🚫 Aktuelles Produkt ausschließen
-  }
+    if (currentProductId) {
+      url += `&not=${currentProductId}`; // 🚫 Aktuelles Produkt ausschließen
+    }
+    console.log("url", url);
     fetch(url)
       .then((res) => res.json())
       .then((data) => {

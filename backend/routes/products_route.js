@@ -8,6 +8,10 @@ router.get('/top', productController.getTopProducts);
 // GET: Get the 12 last products when '/api/products/latest' called with productController.getNewProducts
 
 router.get('/latest', productController.getNewProducts);
+
+// GET: Get products by IDs when '/api/products/saved_ids' called with productController.getProductsByIDs
+router.get('/saved_ids', productController.getProductsByIDs);
+
 // GET: Get the product by ID when '/api/products/:id' called with productController.getProductByID
 router.get('/:id', productController.getProductByID);
 
@@ -20,4 +24,4 @@ router.post('/create', productController.createProduct);
 //ADD REVIEW
 router.post("/:id/rate", productController.addReview);
 
-module.exports = router;
+module.exports = router; 

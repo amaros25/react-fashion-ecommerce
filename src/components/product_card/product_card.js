@@ -2,12 +2,49 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import './product_card.css';
+import { BsBookmarkHeart } from "react-icons/bs";
+import { BsBookmarkHeartFill } from "react-icons/bs";
+import { toast } from "react-toastify";
 
-function ProductCard({ product }) {
+function ProductCard({ product, onProductRemoved }) {
 
   const { t, i18n } = useTranslation();
   const [currentImage, setCurrentImage] = useState(product.image[0]);
   const [showPopup, setShowPopup] = useState(false);
+  const userId = localStorage.getItem("userId");
+  const savedProductsKey = `saved_products_${userId}`;
+
+  const getSavedProducts = () => {
+    const saved = localStorage.getItem(savedProductsKey);
+    return saved ? JSON.parse(saved) : [];
+  };
+
+
+  const toggleSavedProduct = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const savedProducts = getSavedProducts();
+    const isProductSaved = savedProducts.includes(product._id);
+
+    if (isProductSaved) {
+      const updatedProducts = savedProducts.filter(id => id !== product._id);
+      localStorage.setItem(savedProductsKey, JSON.stringify(updatedProducts));
+      setIsProductSaved(false);
+      toast.info(t("product_page.remove_from_saved"));
+
+      // Call callback to update parent component
+      if (onProductRemoved) {
+        onProductRemoved(product._id);
+      }
+    } else {
+      // Product add to saved products list
+      savedProducts.push(product._id);
+      localStorage.setItem(savedProductsKey, JSON.stringify(savedProducts));
+      setIsProductSaved(true);
+      toast.success(t("product_page.add_to_saved"));
+    }
+  };
+  const [isProductSaved, setIsProductSaved] = useState(getSavedProducts().includes(product._id));
 
   const translateColor = (color) => {
     if (!color) return "";
@@ -56,6 +93,19 @@ function ProductCard({ product }) {
               className="product-card-image"
               loading="lazy" />
             <div className="expand-icon" onClick={handleExpandClick}>⤢</div>
+
+
+            <div
+              onClick={toggleSavedProduct}
+              className={`save-product-card-icon ${isProductSaved ? 'saved' : ''}`}
+            >
+              <>{console.log(isProductSaved)}</>
+              {isProductSaved ? (
+                <BsBookmarkHeartFill className="star-icon" size={22} /> // Saved
+              ) : (
+                <BsBookmarkHeart className="star-icon" size={22} /> // Not saved
+              )}
+            </div>
           </div>
         </Link>
 

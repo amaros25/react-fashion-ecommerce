@@ -1,18 +1,50 @@
 import React, { useState } from "react";
 import "./product_info_header.css";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { BsBookmarkHeart } from "react-icons/bs";
+import { BsBookmarkHeartFill } from "react-icons/bs";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 function ProductInfoHeader({ product, userId }) {
+    const { t, i18n } = useTranslation();
     const apiUrl = process.env.REACT_APP_API_URL;
-
-    // Lokaler State für Reviews
+    // Reviews : function used to get the reviews of a product
     const reviews = product.reviews || [];
-
-    // Filter nur Reviews mit rating > 0
+    // Filter only reviews with rating > 0
     const ratingsWithValue = reviews.filter(r => r.rating > 0);
     const reviewCount = ratingsWithValue.length;
+    const savedProductsKey = `saved_products_${userId}`;
 
+    // Get saved products : function used to get the saved products list from the local storage
+    const getSavedProducts = () => {
+        const saved = localStorage.getItem(savedProductsKey);
+        console.log("saved products:", saved);
+        return saved ? JSON.parse(saved) : [];
+    };
+
+    // Toggle saved product : function used to add or remove a product from the saved products list
+    const toggleSavedProduct = () => {
+        const savedProducts = getSavedProducts();
+        const isProductSaved = savedProducts.includes(product._id);
+
+        if (isProductSaved) {
+            // Product remove from saved products list
+            const updatedProducts = savedProducts.filter(id => id !== product._id);
+            localStorage.setItem(savedProductsKey, JSON.stringify(updatedProducts));
+            setIsProductSaved(false);
+            toast.info(t("product_page.remove_from_saved"));
+        } else {
+            // Product add to saved products list
+            savedProducts.push(product._id);
+            localStorage.setItem(savedProductsKey, JSON.stringify(savedProducts));
+            setIsProductSaved(true);
+            toast.success(t("product_page.add_to_saved"));
+        }
+    };
+    const [isProductSaved, setIsProductSaved] = useState(getSavedProducts().includes(product._id));
+
+    // Calculate average rating : function used to calculate the average rating of a product
     const averageRating =
         ratingsWithValue.length > 0
             ? ratingsWithValue.reduce((sum, r) => sum + r.rating, 0) / ratingsWithValue.length
@@ -22,7 +54,15 @@ function ProductInfoHeader({ product, userId }) {
         <>
             <div className="product-header-row">
                 <h1 className="product-title-header-info">{product.name}</h1>
+                <div onClick={toggleSavedProduct} className="save-product-icon">
+                    {isProductSaved ? (
+                        <BsBookmarkHeartFill className="star-icon" size={22} /> // Saved
+                    ) : (
+                        <BsBookmarkHeart className="star-icon" size={22} /> // Not saved
+                    )}
+                </div>
             </div>
+
             <div className="product-price-rating-row">
                 <span className="product-price-header-info">{product.price} DT</span>
                 <div className="product-rating-container">
