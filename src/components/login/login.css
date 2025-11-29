@@ -1,14 +1,4 @@
 /* Full page layout */
-.login-page {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
-  max-width: 80%;
-  min-height: auto;
-  padding: 20px;
-}
 
 /* Background with model image */
 .login-page-content {

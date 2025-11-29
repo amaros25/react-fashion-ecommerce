@@ -420,5 +420,34 @@
   "saved_products": {
     "title": "Produits sauvegardés",
     "no_saved_products": "Aucun produit sauvegardé"
-  }
+  },
+  "main-categories": {
+    "mens": "Hommes",
+    "womens": "Femmes",
+    "kids": "Enfants"
+  },
+  "sort_by": "Trier par",
+  "sort": {
+    "newest": "Les plus récents",
+    "oldest": "Les plus anciens",
+    "price_low": "Prix : du moins cher au plus cher",
+    "price_high": "Prix : du plus cher au moins cher",
+    "rating": "Note"
+  },
+  "all-women": "Tout",
+  "all-men": "Tout",
+  "all-kids": "Tout",
+  "clothes": "Vêtements",
+  "shoes": "Chaussures",
+  "accessories": "Accessoires",
+  "jewelry": "Bijoux",
+  "bags": "Sac à main",
+  "watches": "Montres",
+  "other-women": "Autres",
+  "other-mens": "Autres",
+  "other-kids": "Autres",
+  "beauty": "Beauté",
+  "girls-clothing": "Filles",
+  "boys-clothing": "Garçons",
+  "baby-clothing": "Bébés"
 }

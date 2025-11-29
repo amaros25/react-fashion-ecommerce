@@ -1,24 +1,14 @@
 import { useEffect } from "react";
+const randomCategories = [0, 1, 2];
 
-const randomCategories = [
-    "womensClothing",
-    "mensClothing",
-    "shoes",
-    "womensUnderwear",
-    "mensUnderwear",
-    "bags",
-    "kidsClothing",
-    "babyClothing",
-];
+const randomSubCategorie_women = [0, 1, 2, 3, 4, 5];
+const randomSubCategorie_men = [0, 1, 2, 3];
+const randomSubCategorie_kids = [0, 1, 2, 3];
 
 const randomSizes = ["XS", "S", "M", "L", "XL", "42", "33"];
 const randomColors = ["red", "blue", "green", "black", "white", "yellow", "pink"];
 
-const sampleImages = [
-    "/images/test.jpg",
-    "/images/test2.jpg",
-    "/images/test3.jpg"
-];
+const sampleImages = ["/images/test.jpg", "/images/test2.jpg", "/images/test3.jpg"];
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -49,13 +39,27 @@ export default function SeedProducts() {
                     });
                 }
 
+                // Kategorie zufällig auswählen
+                const category = getRandomFromArray(randomCategories);
+
+                // Subkategorie abhängig von Kategorie auswählen
+                let subcategory;
+                if (category === 0) {
+                    subcategory = getRandomFromArray(randomSubCategorie_women);
+                } else if (category === 1) {
+                    subcategory = getRandomFromArray(randomSubCategorie_men);
+                } else {
+                    subcategory = getRandomFromArray(randomSubCategorie_kids);
+                }
+
                 const product = {
                     sellerId: userId,
                     name: `Sample Product ${i + 1}`,
-                    description: `Beschreibung für Produkt ${i + 1}`,
+                    description: `Description Product ${i + 1}`,
                     price: parseFloat((Math.random() * 200 + 10).toFixed(2)),
                     image: sampleImages,
-                    category: getRandomFromArray(randomCategories),
+                    category: category,
+                    subcategory: subcategory,
                     type: "random",
                     sizes: sizes,
                 };
@@ -82,9 +86,8 @@ export default function SeedProducts() {
             }
         }
 
-        // einmal ausführen
         seedProducts();
     }, [apiUrl, userId]);
 
-    return null; // keine UI-Komponente
+    return null;
 }

@@ -5,14 +5,7 @@
 }
 
 /* Main Container */
-.main-container {
-    width: 100%;
-    max-width: 80%;
-    min-height: auto;
-    padding: 20px;
-    box-sizing: border-box;
-    margin: 0 auto;
-}
+
 
 /* Pagination */
 .pagination-container {
@@ -47,12 +40,7 @@
 
 /* Small phones (320px - 480px) */
 @media (max-width: 480px) {
-    .main-container {
-        width: 100%;
-        padding: 8px;
-        max-width: 100%;
-        margin: 0;
-    }
+
 
     .pagination-container {
         gap: 4px;
@@ -68,10 +56,6 @@
 
 /* Medium phones and small tablets (481px - 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
-    .main-container {
-        padding: 12px;
-        max-width: 100%;
-    }
 
     .pagination-container {
         gap: 6px;

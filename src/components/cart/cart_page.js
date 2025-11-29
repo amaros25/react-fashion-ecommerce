@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Header } from "../header/header.js";
 import DeliveryAddressForm from "./delivery_address_form";
 import { useTranslation } from "react-i18next";
 import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
-import Foot from '../foot/foot';
 import "./cart_page.css";
 
 const CartPage = () => {
@@ -67,7 +65,7 @@ const CartPage = () => {
 
         // Show address form if no address exists
         if (data.address) {
-            console.log("🟢 address", data.address);
+          console.log("🟢 address", data.address);
           setDeliveryAddresses({
             street: data.address.street || "",
             city: data.address.city || "",
@@ -77,7 +75,7 @@ const CartPage = () => {
         } else {
           setShowAddressForm(true);
         }
-          console.log("🟢 deliveryAddresses", deliveryAddresses);
+        console.log("🟢 deliveryAddresses", deliveryAddresses);
       } catch (err) {
         console.error(err);
       }
@@ -139,7 +137,7 @@ const CartPage = () => {
 
     if (!user?.address?.street) {
       toast.error(t("enter_address_first"));
-      return; 
+      return;
     }
 
     try {
@@ -224,28 +222,28 @@ const CartPage = () => {
   // -------------------------------
 
   const handleSaveAddress = async (newData) => {
-  try {
-    const res = await fetch(`${apiUrl}/users/${userId}/updateContact`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(newData),
-    });
+    try {
+      const res = await fetch(`${apiUrl}/users/${userId}/updateContact`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newData),
+      });
 
-    if (!res.ok) throw new Error("Failed to save contact info");
+      if (!res.ok) throw new Error("Failed to save contact info");
 
-    const updated = await res.json();
-    setUser(updated.user);
-    setDeliveryAddresses(updated.user.address);
-    setShowAddressForm(false);
-    toast.info(t("address_saved"));
-  } catch (err) {
-    console.error(err);
+      const updated = await res.json();
+      setUser(updated.user);
+      setDeliveryAddresses(updated.user.address);
+      setShowAddressForm(false);
+      toast.info(t("address_saved"));
+    } catch (err) {
+      console.error(err);
       toast.error(t("address_save_error"));
-  }
-};
+    }
+  };
 
 
   // -------------------------------
@@ -255,12 +253,9 @@ const CartPage = () => {
     return (
       <div className="cart-page">
         <div className="cart-content">
-         <div className="cart-empty">
-          <Header />
-          <h2>🛒 {t("cart_page.empty_cart")}</h2>
-        </div>
-      
-        <Foot />
+          <div className="cart-empty">
+            <h2>🛒 {t("cart_page.empty_cart")}</h2>
+          </div>
         </div>
       </div>
     );
@@ -271,68 +266,67 @@ const CartPage = () => {
   // -------------------------------
   return (
     <div className="cart-page">
-      <Header />
       <div className="cart-content">
         <h1 className="cart-title">🛍️ {t("cart_page.title")}</h1>
         <div className="cart-container">
-       {Object.entries(groupedCart).map(([sellerId, items]) => {
-  const seller = sellers[sellerId];
-  return (
-    <div key={sellerId} className="seller-section">
-      {seller && (
-        <div className="seller-header">
-          <img src={seller.image} alt={seller.shopName} className="seller-image" />
-          <h2 className="seller-name">{seller.shopName}</h2>
-        </div>
-      )}
-      <div className="cart-items">
-        {items.map((item, i) => (
-          <div key={i} className="cart-item">
-            <img
-              src={item.image}
-              alt={item.name}
-              className="cart-item-image"
-              onClick={() => handleGoToProduct(item.productId)}
-            />
-            <div
-              className="cart-item-info"
-              onClick={() => handleGoToProduct(item.productId)}
-            >
-              <h3 className="cart-item-name">{item.name}</h3>
-              <p className="cart-item-details">
-                Size: {item.size} | Color: {item.color}
-              </p>
-              <p className="cart-item-price">
-                {item.quantity} × {item.price.toFixed(3)} {t("cart_page.price_suf")}
-              </p>
-            </div>
-            <button
-              className="remove-button"
-              onClick={() => handleRemoveItem(sellerId, i)}
-            >
-              <FaTrash size={18} color="red" />
-            </button>
-          </div>
-        ))}
-      </div>
-      <div className="seller-summary">
-        <p>
-          🚚 {t("cart_page.shipping_cost_once")} {SHIPPING_COST.toFixed(3)} {t("cart_page.price_suf")}
-        </p>
-        <h3>
-          {t("cart_page.seller_subtotal")} {calculateSellerTotal(items).toFixed(3)} {t("cart_page.price_suf")}
-        </h3>
-      </div>
-    </div>
-  );
-})}
+          {Object.entries(groupedCart).map(([sellerId, items]) => {
+            const seller = sellers[sellerId];
+            return (
+              <div key={sellerId} className="seller-section">
+                {seller && (
+                  <div className="seller-header">
+                    <img src={seller.image} alt={seller.shopName} className="seller-image" />
+                    <h2 className="seller-name">{seller.shopName}</h2>
+                  </div>
+                )}
+                <div className="cart-items">
+                  {items.map((item, i) => (
+                    <div key={i} className="cart-item">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="cart-item-image"
+                        onClick={() => handleGoToProduct(item.productId)}
+                      />
+                      <div
+                        className="cart-item-info"
+                        onClick={() => handleGoToProduct(item.productId)}
+                      >
+                        <h3 className="cart-item-name">{item.name}</h3>
+                        <p className="cart-item-details">
+                          Size: {item.size} | Color: {item.color}
+                        </p>
+                        <p className="cart-item-price">
+                          {item.quantity} × {item.price.toFixed(3)} {t("cart_page.price_suf")}
+                        </p>
+                      </div>
+                      <button
+                        className="remove-button"
+                        onClick={() => handleRemoveItem(sellerId, i)}
+                      >
+                        <FaTrash size={18} color="red" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="seller-summary">
+                  <p>
+                    🚚 {t("cart_page.shipping_cost_once")} {SHIPPING_COST.toFixed(3)} {t("cart_page.price_suf")}
+                  </p>
+                  <h3>
+                    {t("cart_page.seller_subtotal")} {calculateSellerTotal(items).toFixed(3)} {t("cart_page.price_suf")}
+                  </h3>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         <div
           className={`cart-summary ${i18n.language === "ar" ? "rtl" : "ltr"}`}
         >
-        
-        <h2 className="total-price">
+
+          <h2 className="total-price">
             {t("cart_page.total_price")}
             {calculateTotal().toFixed(3)} {t("cart_page.price_suf")}
           </h2>
@@ -350,28 +344,27 @@ const CartPage = () => {
               </button>
             </div>
           )}
-        {showAddressForm && (
-          <div className="inline-address-form">
-           <DeliveryAddressForm
-              address={deliveryAddresses}
-              phone={user?.phone}
-              onSaveAddress={handleSaveAddress}
-            />
-          </div>
-        )}
-            <button
-          className="save-address-button"
-          disabled={!canOrder && !user?.address?.street}
-          onClick={() => handle_new_order()}
-        >
-          {t("product_page.submit_order")}
-        </button>
+          {showAddressForm && (
+            <div className="inline-address-form">
+              <DeliveryAddressForm
+                address={deliveryAddresses}
+                phone={user?.phone}
+                onSaveAddress={handleSaveAddress}
+              />
+            </div>
+          )}
+          <button
+            className="save-address-button"
+            disabled={!canOrder && !user?.address?.street}
+            onClick={() => handle_new_order()}
+          >
+            {t("product_page.submit_order")}
+          </button>
 
         </div>
 
- 
+
       </div>
-      <Foot />
     </div>
   );
 };

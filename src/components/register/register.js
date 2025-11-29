@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./register.css";
 import { useTranslation } from "react-i18next";
 import ImageSelectUpload from '../new_product/image_select_upload.js';
-import { Header } from "../header/header.js";
-import Foot from "../foot/foot";
+
 
 function Register() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -144,7 +143,6 @@ function Register() {
 
   return (
     <div className="register-page">
-      <Header />
 
       <div className="register-page-content">
         <div className="register-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
@@ -243,8 +241,6 @@ function Register() {
           </form>
         </div>
       </div>
-
-      <Foot />
     </div>
   );
 }

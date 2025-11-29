@@ -3,8 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import "./saved_products.css";
 import ProductCard from '../product_card/product_card';
-import { Header } from '../header/header';
-import Foot from '../foot/foot';
 
 
 function SavedProducts() {
@@ -54,7 +52,7 @@ function SavedProducts() {
 
     return (
         <div className="main-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-            <Header />
+
 
             <h2 className="saved-title">{t("saved_products.title")}</h2>
 
@@ -73,7 +71,6 @@ function SavedProducts() {
             </div>
 
 
-            <Foot />
         </div>
     );
 

@@ -55,7 +55,7 @@ function Login() {
 
   return (
     <div className="login-page">
-      <Header />
+
 
       <div className="login-page-content">
         <div className="login-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
@@ -95,7 +95,7 @@ function Login() {
         </div>
       </div>
 
-      <Foot />
+
     </div>
   );
 }

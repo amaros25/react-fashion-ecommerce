@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./seller_orders.css";  // für Styles
-import Header from "../header/header.js";
 
 function SellerOrders() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -63,7 +62,7 @@ function SellerOrders() {
 
   return (
     <div className="seller-orders-container">
- 
+
       <h2>Manage Orders</h2>
       <table className="orders-table">
         <thead>

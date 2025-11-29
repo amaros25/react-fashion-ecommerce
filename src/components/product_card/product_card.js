@@ -13,7 +13,6 @@ function ProductCard({ product, onProductRemoved }) {
   const [showPopup, setShowPopup] = useState(false);
   const userId = localStorage.getItem("userId");
   const savedProductsKey = `saved_products_${userId}`;
-  console.log(savedProductsKey);
   const getSavedProducts = () => {
     const saved = localStorage.getItem(savedProductsKey);
     return saved ? JSON.parse(saved) : [];
@@ -103,7 +102,6 @@ function ProductCard({ product, onProductRemoved }) {
               onClick={toggleSavedProduct}
               className={`save-product-card-icon ${isProductSaved ? 'saved' : ''}`}
             >
-              <>{console.log(isProductSaved)}</>
               {isProductSaved ? (
                 <BsBookmarkHeartFill className="star-icon" size={22} /> // Saved
               ) : (

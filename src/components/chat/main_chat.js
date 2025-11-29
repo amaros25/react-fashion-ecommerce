@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Header } from '../header/header';
-import Foot from '../foot/foot';
+
 import ChatWindow from './chat_window';
 import ChatSidebar from './chat_sidebar';
 import { useTranslation } from "react-i18next";
@@ -33,7 +32,7 @@ const MainChat = () => {
 
   return (
     <div className="main-chat-container">
-      <Header />
+
       <div className="main-chat">
         {!chatHook.isSidebarHidden && (
           <ChatSidebar
@@ -61,7 +60,6 @@ const MainChat = () => {
           </div>
         )}
       </div>
-      <Foot />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Header } from '../header/header';
-import Foot from '../foot/foot';
+
 import './InfoPage.css';
 
 const InfoPage = ({ pageKey }) => {
@@ -35,7 +34,7 @@ const InfoPage = ({ pageKey }) => {
 
     return (
         <div className="info-page-wrapper">
-            <Header />
+
             <div className="info-page-container">
                 <h1>{t(`footer_pages.${pageKey}.title`)}</h1>
 
@@ -51,7 +50,7 @@ const InfoPage = ({ pageKey }) => {
                     {renderSections()}
                 </div>
             </div>
-            <Foot />
+
         </div>
     );
 };

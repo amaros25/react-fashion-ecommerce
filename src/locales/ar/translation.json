@@ -248,5 +248,34 @@
   "saved_products": {
     "title": "منتجات المحفوظات",
     "no_saved_products": "لا يوجد منتجات محفوظة"
-  }
+  },
+  "main-categories": {
+    "mens": "رجال",
+    "womens": "نساء",
+    "kids": "أطفال"
+  },
+  "sort": {
+    "newest": "الأحدث",
+    "oldest": "الأقدم",
+    "price_low": "السعر: من الأقل إلى الأعلى",
+    "price_high": "السعر: من الأعلى إلى الأقل",
+    "rating": "التقييم"
+  },
+  "sort_by": "ترتيب حسب",
+  "all-women": "كل",
+  "all-men": "كل",
+  "all-kids": "كل",
+  "clothes": "الملابس",
+  "shoes": "الأحذية",
+  "accessories": "الإكسسوارات",
+  "jewelry": "المجوهرات",
+  "bags": "الحقائب",
+  "watches": "الساعات",
+  "other-women": "أخرى",
+  "other-mens": "أخرى",
+  "other-kids": "أخرى",
+  "beauty": "الجمال",
+  "girls-clothing": " الفتيات",
+  "boys-clothing": "الأولاد",
+  "baby-clothing": "الرضع"
 }

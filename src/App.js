@@ -17,11 +17,16 @@ import "react-toastify/dist/ReactToastify.css";
 import SavedProducts from './components/saved_products/saved_products.js';
 import "./i18n";
 
+import { Header } from "./components/header/header";
+import Foot from "./components/foot/foot";
+import SeedProducts from './components/new_product/seed_products.js';
 function App() {
 
   return (
     <FilterProvider>
+
       <Router>
+        <Header />
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Home />} />
@@ -34,7 +39,9 @@ function App() {
           <Route path="/seller_orders" element={<SellerOrders />} />
           <Route path="/cart_page" element={<CartPage />} />
           <Route path="/chat" element={<MainChat />} />
+          <Route path="/home/:category/:subcategory" element={<Home />} />
           <Route path="/home/:category" element={<Home />} />
+
           {/* Footer Pages */}
           <Route path="/about-us" element={<InfoPage pageKey="about_us" />} />
           <Route path="/sustainability" element={<InfoPage pageKey="sustainability" />} />
@@ -56,6 +63,7 @@ function App() {
           <Route path="/mobile-apps" element={<InfoPage pageKey="mobile_apps" />} />
           <Route path="/saved_products" element={<SavedProducts />} />
         </Routes>
+        <Foot />
       </Router>
       <ToastContainer position="top-center" autoClose={3000} theme="colored" />
 

@@ -14,60 +14,95 @@ exports.getTopProducts = async (req, res) => {
 // Controller function to get new products with pagination and optional category filter
 exports.getNewProducts = async (req, res) => {
   try {
-    // Extract page, limit, and category from the request query parameters
-    const page = parseInt(req.query.page) || 1;  // Default to page 1 if no page is provided
-    const limit = parseInt(req.query.limit) || 15;  // Default to 12 products per page if not specified
-    const category = req.query.category;  // Category filter (if any)
-    const search = req.query.search;  // Suchbegriff aus Query
-    const skip = (page - 1) * limit;  // Calculate how many items to skip for pagination
-    const not = req.query.not; // 👈 Aktuelles Produkt ausschließen
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 15;
+    const category = req.query.category !== undefined ? Number(req.query.category) : null;
+    const subcategory = req.query.subcategory !== undefined ? Number(req.query.subcategory) : null;
+    console.log("getNewProducts category: ", category);
+    console.log("getNewProducts subcategory: ", subcategory);
+    const search = req.query.search;
+    const not = req.query.not;
+    const sortBy = req.query.sort || 'newest';
+    const skip = (page - 1) * limit;
 
-    // Initialize an empty filter object
-    const filter = {};
+    // Filter erstellen
+    const match = {};
 
-    // If a category is provided in the query, add it to the filter
-    if (category) {
-      filter.category = category;
+    // CATEGORY FILTER (als number)
+    if (category !== null && !isNaN(category)) {
+      match.category = category;
     }
-    if (not) {
-      // 🚫 Produkt mit dieser ID ausschließen
-      filter._id = { $ne: not };
+
+    // SUBCATEGORY FILTER (als number)
+    if (subcategory !== null && !isNaN(subcategory)) {
+      match.subcategory = subcategory;
     }
+
+    if (not) match._id = { $ne: not };
     if (search) {
-      // Suche Wörter splitten (nach Leerzeichen)
       const searchWords = search.trim().split(/\s+/);
-
-      // Für jedes Wort ein RegExp Match im Feld "name" (case insensitive)
-      filter.$and = searchWords.map(word => ({
+      match.$and = searchWords.map(word => ({
         name: { $regex: word, $options: 'i' }
       }));
     }
-    // Get the total number of products that match the filter (to calculate pagination)
-    const total = await Product.countDocuments(filter);
 
-    // Get the total number of products without any filters (i.e., all products in the database)
-    const totalAllProducts = await Product.countDocuments();  // Total products without any filters
+    // Aggregation Pipeline
+    const pipeline = [
+      { $match: match },
+      {
+        $addFields: {
+          avgRating: { $avg: "$reviews.rating" } // Durchschnitt berechnen
+        }
+      }
+    ];
 
-    // Get the actual products based on the filter, sorting by creation date in descending order
-    // Skip products based on the current page, and limit to the specified number per page
-    const new_products = await Product.find(filter)
-      .sort({ createdAt: -1 })  // Sort products by creation date (newest first)
-      .skip(skip)  // Skip the products that are already on previous pages
-      .limit(limit);  // Limit to the number of products per page
+    // Sortierung hinzufügen
+    if (sortBy === 'price_asc') {
+      pipeline.push({ $sort: { price: 1 } });
+    } else if (sortBy === 'price_desc') {
+      pipeline.push({ $sort: { price: -1 } });
+    } else if (sortBy === 'rating') {
+      // Sortierung: Produkte mit Bewertung zuerst, danach avgRating absteigend, dann Produkte ohne Bewertung ans Ende
+      pipeline.push({
+        $sort: {
+          avgRating: -1,
+          createdAt: -1 // optional: gleiche avgRating -> neueste zuerst
+        }
+      });
+      // Produkte ohne Bewertung ans Ende verschieben
+      pipeline.unshift({
+        $addFields: {
+          hasRating: { $cond: [{ $gt: [{ $size: "$reviews" }, 0] }, 1, 0] }
+        }
+      });
+      pipeline.push({ $sort: { hasRating: -1, avgRating: -1, createdAt: -1 } });
+    } else { // newest
+      pipeline.push({ $sort: { createdAt: -1 } });
+    }
 
-    // Send the response with the products, pagination info (current page, total pages, and total items)
+    // Pagination
+    pipeline.push({ $skip: skip });
+    pipeline.push({ $limit: limit });
+
+    const new_products = await Product.aggregate(pipeline);
+    console.log("new_products: ", new_products);
+    // Total count für Pagination
+    const total = await Product.countDocuments(match);
+    const totalAllProducts = await Product.countDocuments();
+
     res.json({
       products: new_products,
-      page,  // Current page
-      totalPages: Math.ceil(total / limit),  // Calculate total pages
-      totalItems: total,  // Total number of matching products
-      totalAllProducts,  // Total number of products in the database (without filter)
+      page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      totalAllProducts
     });
   } catch (error) {
-    // If there's an error, return a 500 status with the error message
     res.status(500).json({ message: 'Error fetching products', error });
   }
 };
+
+
 
 
 // Return Product by SellerID

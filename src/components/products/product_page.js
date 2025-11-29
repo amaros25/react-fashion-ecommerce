@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { Header } from '../header/header.js';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./loading_spinner.js";
 import RelatedProducts from "../related_products/related_product.js"
-import Foot from '../foot/foot';
 import ProductImage from './product_images.js'
 import SellerInfo from "./seller_info.js";
 import Breadcrumb from './breadcrumb.js';
@@ -178,7 +176,6 @@ function ProductPage() {
 
   return (
     <div className="product-page">
-      <Header />
 
       <div className="breadcrumb-container">
         <Breadcrumb category={product.category} productName={product.name} />
@@ -293,7 +290,6 @@ function ProductPage() {
         currentProductId={product._id}
       />
 
-      <Foot />
     </div>
   );
 }
