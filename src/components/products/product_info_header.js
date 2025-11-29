@@ -27,7 +27,10 @@ function ProductInfoHeader({ product, userId }) {
     const toggleSavedProduct = () => {
         const savedProducts = getSavedProducts();
         const isProductSaved = savedProducts.includes(product._id);
-
+        if (!userId) {
+            toast.info(t("product_page.login_to_save"));
+            return;
+        }
         if (isProductSaved) {
             // Product remove from saved products list
             const updatedProducts = savedProducts.filter(id => id !== product._id);

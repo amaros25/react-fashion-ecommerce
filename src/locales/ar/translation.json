@@ -242,7 +242,8 @@
     "description": "الوصف",
     "explore_seller": "استكشف البائع",
     "remove_from_saved": "إزالة من المحفوظات",
-    "add_to_saved": "إضافة إلى المحفوظات"
+    "add_to_saved": "إضافة إلى المحفوظات",
+    "login_to_save": "يجب تسجيل الدخول لإضافة المنتجات إلى المحفوظات."
   },
   "saved_products": {
     "title": "منتجات المحفوظات",

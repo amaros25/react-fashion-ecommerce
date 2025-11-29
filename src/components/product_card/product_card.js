@@ -13,7 +13,7 @@ function ProductCard({ product, onProductRemoved }) {
   const [showPopup, setShowPopup] = useState(false);
   const userId = localStorage.getItem("userId");
   const savedProductsKey = `saved_products_${userId}`;
-
+  console.log(savedProductsKey);
   const getSavedProducts = () => {
     const saved = localStorage.getItem(savedProductsKey);
     return saved ? JSON.parse(saved) : [];
@@ -38,10 +38,14 @@ function ProductCard({ product, onProductRemoved }) {
       }
     } else {
       // Product add to saved products list
-      savedProducts.push(product._id);
-      localStorage.setItem(savedProductsKey, JSON.stringify(savedProducts));
-      setIsProductSaved(true);
-      toast.success(t("product_page.add_to_saved"));
+      if (userId) {
+        savedProducts.push(product._id);
+        localStorage.setItem(savedProductsKey, JSON.stringify(savedProducts));
+        setIsProductSaved(true);
+        toast.success(t("product_page.add_to_saved"));
+      } else {
+        toast.info(t("product_page.login_to_save"));
+      }
     }
   };
   const [isProductSaved, setIsProductSaved] = useState(getSavedProducts().includes(product._id));
