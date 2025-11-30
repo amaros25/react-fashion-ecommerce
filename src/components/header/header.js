@@ -2,47 +2,53 @@ import React, { useRef, useEffect, useState, useContext } from 'react';
 import './header.css';
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Login from '../login/login'; 
-import Register from '../register/register'; 
 import { FilterContext } from '../filter_context/filter_context';
+import { FaRegHeart } from "react-icons/fa";
+import { RiShoppingCart2Line } from "react-icons/ri";
+import { RiShoppingCart2Fill } from "react-icons/ri";
+import { IoHomeOutline } from "react-icons/io5";
+import { IoHomeSharp } from "react-icons/io5";
+import { FaHeart } from "react-icons/fa";
+import { FaUser } from "react-icons/fa6";
+import { FaRegUser } from "react-icons/fa6";
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import { IoChatboxEllipses } from "react-icons/io5";
 
 function Header() {
-  const location = useLocation(); // Used to detect the current page path
+
+  const location = useLocation();
+  const activePath = location.pathname;
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const scrollRef = useRef(null);
 
-  // Access shared search & filter states from context
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+
   const {
-    selectedCategory,
-    setSelectedCategory,
     handleSearch,
     searchTerm,
-    setSearchTerm
+    setSearchTerm,
+    sortBy,
+    setSortBy
   } = useContext(FilterContext);
 
-  // UI-related states
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginPopup, setShowLoginPopup] = useState(false);
-  const [isRegistering, setIsRegistering] = useState(false);
-  const scrollRef = useRef(null);
   const [role, setRole] = useState(null);
 
- 
-
-  // All available product category keys
   const categoryKeys = [
-    "womensClothing", "mensClothing", "shoes",
-    "womensUnderwear", "mensUnderwear", "bags",
-    "kidsClothing", "babyClothing"
+    "womens", "mens", "kids"
   ];
 
-  /**
-   * Handle click on a category.
-   * - Clears the search term if necessary.
-   * - Navigates to the correct category route.
-   * - Updates the selected category in context.
-   */
+  const subCategories = {
+    womens: ["all-women", "clothes", "shoes", "bags", "accessories", "beauty", "other-women"],
+    mens: ["all-men", "clothes", "shoes", "accessories", "other-mens"],
+    kids: ["all-kids", "girls-clothing", "boys-clothing", "baby-clothing", "other-kids"]
+  };
+
   const handleCategoryClick = (categoryKey) => {
+    console.log("categoryKey: ", categoryKey);
+
     if (searchTerm) {
       setSearchTerm("");
       handleSearch("");
@@ -50,19 +56,29 @@ function Header() {
 
     if (categoryKey === "") {
       navigate("/home");
-    } else {
-      navigate(`/home/${categoryKey}`);
+      setSelectedCategory("");
+      setSelectedSubCategory("");
+      return;
     }
-
-    // Delay setting the category to avoid timing issues during navigation
-    setTimeout(() => {
-      setSelectedCategory(categoryKey);
-    }, 100);
+    setSelectedCategory(categoryKey);
+    const firstSub = subCategories[categoryKey][0];
+    navigate(`/home/${categoryKey}/${firstSub}`);
   };
 
-  /**
-   * Scroll the horizontal category navigation bar left or right.
-   */
+  const handleHomeClick = () => {
+    setSelectedCategory("");
+    setSelectedSubCategory("");
+  };
+
+  const handleClickOnPage = (e, path) => {
+    if (activePath === path) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+  };
+
   const scroll = (direction) => {
     if (scrollRef.current) {
       const scrollAmount = 650;
@@ -73,46 +89,43 @@ function Header() {
     }
   };
 
-  /**
-   * Check if the user is logged in by verifying if a token exists in localStorage.
-   */
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedRole = localStorage.getItem("role");
+    console.log("token: ", token);
+    console.log("storedRole: ", storedRole);
     setRole(storedRole);
     setIsLoggedIn(!!token);
   }, []);
 
-  /**
-   * Handle profile icon click:
-   * - If logged in, navigate to the appropriate profile page.
-   * - Otherwise, show the login popup.
-   */
+  // Sync selectedSubCategory with URL and selectedCategory
+  useEffect(() => {
+    const pathParts = activePath.split('/');
+    const subcategoryFromUrl = pathParts[3]; // /home/category/subcategory
+
+    if (selectedCategory && subCategories[selectedCategory]) {
+      if (subcategoryFromUrl && subCategories[selectedCategory].includes(subcategoryFromUrl)) {
+        setSelectedSubCategory(subcategoryFromUrl);
+      } else {
+        // If no valid subcategory in URL, set to first one
+        setSelectedSubCategory(subCategories[selectedCategory][0]);
+      }
+    } else {
+      setSelectedSubCategory("");
+    }
+  }, [selectedCategory, activePath]);
+
   const handleProfileClick = () => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
- 
+
     if (token) {
       navigate(role === "seller" ? "/profile_seller" : "/profile_user");
     } else {
-      setShowLoginPopup(true);
+      navigate("/login");
     }
   };
 
-  /**
-   * Log out the user:
-   * - Clear all data in localStorage.
-   * - Update state and return to the home page.
-   */
-  const handleLogout = () => {
-    localStorage.clear();
-    setIsLoggedIn(false);
-    navigate("/");
-  };
-
-  /**
-   * Handle text direction (RTL/LTR) when changing languages.
-   */
   useEffect(() => {
     if (i18n.language === 'ar') {
       document.body.classList.add('rtl');
@@ -121,25 +134,16 @@ function Header() {
     }
   }, [i18n.language]);
 
-  /**
-   * Switch between Arabic (RTL) and French (LTR).
-   */
   const changeLanguage = (lang) => {
     i18n.changeLanguage(lang);
     document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.body.classList.toggle('rtl');
   };
 
-  /**
-   * Handle search submission:
-   * - If not currently on /home, navigate to /home first.
-   * - Then execute the search.
-   */
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-
-    if (!location.pathname.startsWith("/home")) {
+    if (!activePath.startsWith("/home")) {
       navigate("/home");
-      // Wait a short time to ensure Home is rendered before triggering the search
       setTimeout(() => {
         handleSearch(searchTerm);
       }, 100);
@@ -148,135 +152,158 @@ function Header() {
     }
   };
 
-  // Optional: function for a Help page (currently commented out)
-  const handleHelpClick = () => {
-    navigate("/help");
-  };
-
   return (
     <>
       <div className="header" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-        {/* === TOP NAVIGATION BAR === */}
-        <nav className="navbar">
-          {/* Logo redirects to home */}
-          <h1 className="logo">
-            <Link to="/home" onClick={() => handleCategoryClick("")}>
+        <nav className="navbar-header">
+          <h1 className="logo-header">
+            <Link to="/home" onClick={(e) => {
+              handleClickOnPage(e, "/home");
+              handleHomeClick(e);
+            }}>
               {t("myshop")}
             </Link>
           </h1>
-
-          {/* === Navigation Icons (Home, Cart, Profile, etc.) === */}
-          <div className="links">
-            <Link to="/home">
-              <img src="/icons/home_icon.svg" style={{ width: "26px", height: "35px" }} />
+          <div className="links-header">
+            <Link to="/home" onClick={(e) => {
+              handleClickOnPage(e, "/home");
+              handleHomeClick(e);
+            }}>
+              {activePath.startsWith("/home")
+                ? <IoHomeSharp className='nav-icon-header' />
+                : <IoHomeOutline className='nav-icon-header' />
+              }
             </Link>
-
-       
-            {role !== "seller" && (
-              <Link to="/cart_page">
-                <img src="/icons/empty_cart_icon.svg" style={{ width: "26px", height: "35px" }} />
+            {isLoggedIn && (
+              <Link to="/chat" onClick={(e) => handleClickOnPage(e, "/chat")}>
+                {activePath === "/chat"
+                  ? <IoChatboxEllipses className='nav-icon-header' />
+                  : <IoChatboxEllipsesOutline className='nav-icon-header' />
+                }
               </Link>
             )}
-
-            {/* Show different icons depending on login status */}
-            {isLoggedIn ? (
-              <img
-                src="/icons/profile_icon.svg"
-                style={{ width: "24px", height: "50px"}}  
-                className="nav-icon"
-                onClick={handleProfileClick}
-              />
+            {role !== "seller" && (
+              <Link to="/cart_page" onClick={(e) => handleClickOnPage(e, "/cart_page")}>
+                {activePath === "/cart_page"
+                  ? <RiShoppingCart2Fill className='nav-icon-header' />
+                  : <RiShoppingCart2Line className='nav-icon-header' />
+                }
+              </Link>
+            )}
+            <Link to="/saved_products" onClick={(e) => handleClickOnPage(e, "/saved_products")}>
+              {activePath === "/saved_products"
+                ? <FaHeart className='nav-icon-header' />
+                : <FaRegHeart className='nav-icon-header' />
+              }
+            </Link>
+            {localStorage.getItem("userId") ? (
+              activePath === "/profile_user"
+                ? <FaUser className='nav-icon-user-header' onClick={handleProfileClick} />
+                : <FaRegUser className='nav-icon-user-header' onClick={handleProfileClick} />
             ) : (
-              <img
-                src="/icons/login_icon.svg"
-                style={{ width: "24px", height: "24px" }} 
-                alt="Login"
-                className="nav-icon"
-                onClick={handleProfileClick}
-              />
+
+              activePath === "/login"
+                ? <FaUser className='nav-icon-user-header' onClick={handleProfileClick} />
+                : <FaRegUser className='nav-icon-user-header' onClick={handleProfileClick} />
+
+
             )}
 
-            {/* Logout icon only visible when logged in */}
-            {isLoggedIn && (
-              <img
-                src="/icons/logout_icon.svg"
-                style={{ width: "24px", height: "24px" }}  
-                className="nav-icon"
-                onClick={handleLogout}
-              />
-            )}
-
-            {/* Language selector (French/Arabic) */}
             <select
               onChange={(e) => changeLanguage(e.target.value)}
               value={i18n.language}
-              style={{ marginLeft: '15px', marginTop: '10px', cursor: 'pointer' }}
+              className="language-select-header"
             >
-              <option value="fr">Fr</option>
-              <option value="ar">Ar</option>
+              <option value="fr">Français</option>
+              <option value="ar">العربية</option>
+              <option value="en">English</option>
             </select>
           </div>
         </nav>
 
-        {/* === SEARCH BAR === */}
-        <form onSubmit={handleSearchSubmit} className="search-form">
-          <input
-            type="text"
-            placeholder={t("search_product")}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button type="submit">{t("search")}</button>
-        </form>
+        {activePath.startsWith("/home") && (
+          <form onSubmit={handleSearchSubmit} className="search-form-header">
+            <input
+              type="text"
+              placeholder={t("search_product")}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button type="submit">{t("search")}</button>
+          </form>
+        )}
 
-        {/* === HORIZONTAL CATEGORY NAVIGATION === */}
-        <nav className="horizontal-nav">
-          <button className="scroll-arrow left" onClick={() => scroll('left')}>‹</button>
 
-          <ul className="nav-scroll-list" ref={scrollRef}>
-            {/* "Home" category */}
+        <nav className="horizontal-nav-header">
+          <button className="scroll-arrow-header left" onClick={() => scroll('left')}>‹</button>
+          <ul className="nav-header-scroll-list-header" ref={scrollRef}>
             <li
-              className={`nav-item ${selectedCategory === "" ? "active" : ""}`}
-              onClick={() => handleCategoryClick("")}
+              className={`nav-header-item-header ${selectedCategory === "" ? "active" : ""}`}
+              onClick={(e) => {
+                handleClickOnPage(e, "/home");
+                handleCategoryClick("");
+                handleHomeClick(e);
+              }}
             >
               {t("home")}
             </li>
-
-            {/* Loop through all categories */}
             {categoryKeys.map((key, index) => (
               <li
                 key={index}
-                className={`nav-item ${selectedCategory === key ? "active" : ""}`}
+                className={`nav-header-item-header ${selectedCategory === key ? "active" : ""}`}
                 onClick={() => handleCategoryClick(key)}
               >
-                {t(`categories.${key}`)}
+                {t(`main-categories.${key}`)}
               </li>
             ))}
           </ul>
-
-          <button className="scroll-arrow right" onClick={() => scroll('right')}>›</button>
+          <button className="scroll-arrow-header right" onClick={() => scroll('right')}>›</button>
         </nav>
-      </div>
-    
-        {showLoginPopup && (
-          <div className="login-popup-overlay" onClick={() => setShowLoginPopup(false)}>
-            <div className="login-popup-content" onClick={(e) => e.stopPropagation()}>
-              {isRegistering ? (
-                <Register
-                  closePopup={() => setShowLoginPopup(false)}
-                  switchToLogin={() => setIsRegistering(false)}
-                />
-              ) : (
-                <Login
-                  closePopup={() => setShowLoginPopup(false)}
-                  switchToRegister={() => setIsRegistering(true)}
-                />
-              )}
-            </div>
+
+        {activePath.startsWith("/home") && (
+          <div className="sort-container-header">
+            <label htmlFor="sort-select" className="sort-label-header">{t("sort_by")}:</label>
+            <select
+              id="sort-select"
+              className="sort-select-header"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="newest">{t("sort.newest")}</option>
+              <option value="price_asc">{t("sort.price_low")}</option>
+              <option value="price_desc">{t("sort.price_high")}</option>
+              <option value="rating">{t("sort.rating")}</option>
+            </select>
           </div>
         )}
-  
-     </>
+        {/* Submenu Section */}
+
+        {selectedCategory && activePath.startsWith("/home") && (
+
+          <div className="submenu-container-header">
+            <ul className="submenu-list-header">
+              {subCategories[selectedCategory].map((sub, index) => {
+
+                return (
+
+                  <li key={index}
+                    className={`submenu-item-header ${selectedSubCategory === sub ? "active" : ""}`}
+                    onClick={() => setSelectedSubCategory(sub)}
+
+                  >
+                    <Link to={`/home/${selectedCategory}/${sub}`}>
+                      {t(sub)}
+                    </Link>
+                  </li>
+                );
+              }
+
+              )}
+            </ul>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 

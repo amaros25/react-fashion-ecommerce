@@ -8,18 +8,28 @@ function generateProductNumber() {
   return `PR-${randomLetter}${randomNum}`; // z.B. PR-A47291
 }
 
+// 📝 Bewertung Schema
+const reviewSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true },
+  rating: { type: Number, min: 1, max: 5, required: true },
+  comment: { type: String },
+  createdAt: { type: Date, default: Date.now }
+});
+
+// 🛒 Produkt Schema
 const productSchema = new mongoose.Schema({
   sellerId: { type: mongoose.Schema.Types.ObjectId, ref: "sellers", required: true },
-  productNumber: { type: String, unique: true, required: true }, // <-- NEU
+  productNumber: { type: String, unique: true, required: true },
 
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
   image: [{ type: String, required: true }],
-  category: { type: String, required: true },
+  category: { type: Number, required: true },
+  subcategory: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now },
   type: { type: String, required: false },
-  rating: { type: Number, default: 0 },
+  reviews: [reviewSchema],
   sizes: [
     {
       size: { type: String, required: true },
@@ -43,9 +53,12 @@ productSchema.pre("validate", async function (next) {
     }
 
     this.productNumber = newNumber;
-   // console.log('OrderController validate: productNumber: ', productNumber);
+    // console.log('OrderController validate: productNumber: ', productNumber);
   }
   next();
 });
+
+
+
 
 module.exports = mongoose.model("Product", productSchema);

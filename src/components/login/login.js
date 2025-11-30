@@ -1,44 +1,36 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Navigation hook for routing after login
-import "./login.css"; // Styles for login form
-import { useTranslation } from "react-i18next"; // Translation hook for i18n support
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "./login.css";
+import { useTranslation } from "react-i18next";
+import { Header } from "../header/header.js";
+import Foot from "../foot/foot";
 
-function Login({ closePopup, switchToRegister }) {
-  const apiUrl = process.env.REACT_APP_API_URL; // Backend API base URL
-  const { t, i18n } = useTranslation(); // Translation and language direction
-  const navigate = useNavigate(); // For programmatic navigation
+function Login() {
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
-  // Local state for form inputs and error message
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState("");
 
-  /**
-   * Handles login form submission
-   * Sends email and password to backend to authenticate
-   */
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
 
     try {
-      // POST request to login endpoint with email and password
       const res = await fetch(`${apiUrl}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
-      // If response is not OK, throw an error with localized message
       if (!res.ok) {
         throw new Error(t("login_failed"));
       }
 
-      closePopup(); // Close the login popup/modal on success
-
-      // Parse JSON response
       const data = await res.json();
       console.log("Login Data : ", data);
-      // Save auth token and user info in localStorage for session management
+
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.userId);
@@ -50,58 +42,60 @@ function Login({ closePopup, switchToRegister }) {
         firstName: data.firstName,
         lastName: data.lastName,
       }));
-      // Navigate user based on their role
+
       if (data.role === "seller") {
         navigate("/profile_seller");
       } else {
         navigate("/profile_user");
       }
     } catch (err) {
-      // Display any error messages to user
       setError(err.message);
     }
   };
 
   return (
-    <div className="login-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h2>{t("login")}</h2>
+    <div className="login-page">
 
-        {/* Show error message if login fails */}
-        {error && <p className="error">{error}</p>}
 
-        {/* Email input */}
-        <label>{t("email")}</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+      <div className="login-page-content">
+        <div className="login-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+          <form className="login-form" onSubmit={handleSubmit}>
+            <h2>{t("login")}</h2>
 
-        {/* Password input */}
-        <label>{t("password")}</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+            {error && <p className="error">{error}</p>}
 
-        {/* Submit button */}
-        <button type="submit">{t("login_start")}</button>
+            <label>{t("email")}</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-        {/* Link to switch to Register component */}
-        <p className="register-link">
-          {t("register_quest")}{" "}
-          <span
-            onClick={switchToRegister}
-            style={{ color: "#0077cc", cursor: "pointer", textDecoration: "underline" }}
-          >
-            {t("register.title")}
-          </span>
-        </p>
-      </form>
+            <label>{t("password")}</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <button type="submit">{t("login_start")}</button>
+
+            <p className="register-link">
+              {t("register_quest")}{" "}
+              <span
+                onClick={() => navigate("/register")}
+                style={{ color: "#151718ff", cursor: "pointer", textDecoration: "underline" }}
+              >
+                {t("register.title")}
+              </span>
+            </p>
+          </form>
+        </div>
+      </div>
+
+
     </div>
   );
 }

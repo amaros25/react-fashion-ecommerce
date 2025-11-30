@@ -9,6 +9,7 @@ const sellerRoutes = require("./routes/sellers_route");
 const userRoutes = require("./routes/user_route");
 const uploadRoutes = require('./routes/upload_route');
 const orderRoutes = require('./routes/orders_route');
+const chatRoutes = require('./routes/chat_route'); 
 
 const path = require('path');  
 
@@ -29,6 +30,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/chats', chatRoutes);
 
 app.use(
   cors({

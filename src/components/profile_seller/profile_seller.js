@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Header } from "../header/header.js";
 import "./profile_seller.css";
 import AddProduct from "../new_product/add_product";
 import SellerProducts from "./seller_products";
@@ -21,10 +20,27 @@ function ProfileSeller() {
   const [loading, setLoading] = useState(false);
   const [refreshOrders, setRefreshOrders] = useState(0);
 
+
+  const handleLogout = () => {
+    // localStorage.clear();
+    // setIsLoggedIn(false);
+    // navigate("/");
+  };
+  {/* {isLoggedIn && (
+  <img
+    src="/icons/logout_icon.svg"
+    style={{ width: "24px", height: "24px" }}
+    className="nav-icon"
+    onClick={handleLogout}
+  />
+)} */}
+
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-     // setLoading(true);
-
+      // setLoading(true);
+      console.log("handleStatusChange: newStatus: ", newStatus);
+      console.log("handleStatusChange: apiUrl: ", apiUrl);
+      console.log("handleStatusChange: orderId: ", orderId);
       const response = await fetch(`${apiUrl}/orders/${orderId}/status`, {
         method: "PUT",
         headers: {
@@ -43,6 +59,7 @@ function ProfileSeller() {
         setRefreshOrders(prev => prev + 1);
       } else {
         const errorData = await response.json();
+        console.log("handleStatusChange: errorData: ", errorData);
         toast.error(
           t("updateFailed", { message: errorData.message || t("unknownError") }),
           { position: "top-right", autoClose: 5000 }
@@ -72,14 +89,13 @@ function ProfileSeller() {
       fetchSeller();
     }
   }, [userId, token, fetchSeller]);
-  
+
   if (!seller) {
     return <LoadingSpinner />;
   }
 
   return (
     <div className="profile-seller-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-      <Header />
       <ProfileSellerHeader
         seller={seller}
         apiUrl={apiUrl}
@@ -129,7 +145,7 @@ function ProfileSeller() {
           <SellerOrders
             sellerId={userId}
             handleStatusChange={handleStatusChange}
-            refreshTrigger={refreshOrders} 
+            refreshTrigger={refreshOrders}
           />
         )}
         {activeTab === "add_new_product" && <AddProduct />}

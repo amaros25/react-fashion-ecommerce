@@ -28,7 +28,13 @@ function AddProduct() {
   });
 
   const colors = t("product_colors", { returnObjects: true });
+  const categoryKeys = ["womens", "mens", "kids"];
 
+  const subCategories = {
+    womens: ["clothes", "shoes", "bags", "accessories", "beauty", "other-women"],
+    mens: ["clothes", "shoes", "accessories", "other-mens"],
+    kids: ["girls-clothing", "boys-lothing", "baby-clothing", "other-kids"]
+  };
   const [status, setStatus] = useState({
     visible: false,
     loading: false,
@@ -107,6 +113,8 @@ function AddProduct() {
 
       const productData = {
         ...formData,
+        category: Number(formData.category),
+        subcategory: Number(formData.subcategory),
         sizes: productSizes,
         sellerId: userId,
         price: parseFloat(formData.price),
@@ -136,26 +144,52 @@ function AddProduct() {
     >
       <form onSubmit={handleSubmit} className="add-product-form">
         <ImageSelectUpload onImageChange={handleImageChange} maximages={3} />
+        {/* CATEGORY */}
         <select
           name="category"
           value={formData.category}
-          onChange={handleChange}
+          onChange={(e) => {
+            const catIndex = parseInt(e.target.value);
+            setFormData(prev => ({
+              ...prev,
+              category: catIndex,
+              subcategory: ""   // reset subcategory when category changes
+            }));
+          }}
           required
         >
           <option value="">{t("select_category")}</option>
-          <option value="womensClothing">
-            {t("categories.womensClothing")}
-          </option>
-          <option value="mensClothing">{t("categories.mensClothing")}</option>
-          <option value="shoes">{t("categories.shoes")}</option>
-          <option value="womensUnderwear">
-            {t("categories.womensUnderwear")}
-          </option>
-          <option value="mensUnderwear">{t("categories.mensUnderwear")}</option>
-          <option value="bags">{t("categories.bags")}</option>
-          <option value="kidsClothing">{t("categories.kidsClothing")}</option>
-          <option value="babyClothing">{t("categories.babyClothing")}</option>
+
+          {categoryKeys.map((cat, index) => (
+            <option key={cat} value={index}>
+              {t(`categories.${cat}`)}
+            </option>
+          ))}
         </select>
+
+
+        {/* SUBCATEGORY */}
+        {formData.category !== "" && (
+          <select
+            name="subcategory"
+            value={formData.subcategory}
+            onChange={(e) =>
+              setFormData(prev => ({
+                ...prev,
+                subcategory: parseInt(e.target.value)
+              }))
+            }
+            required
+          >
+            <option value="">{t("select_subcategory")}</option>
+
+            {subCategories[categoryKeys[formData.category]].map((sub, index) => (
+              <option key={index} value={index}>
+                {t(`subcategories.${sub}`)}
+              </option>
+            ))}
+          </select>
+        )}
 
         <input
           type="text"

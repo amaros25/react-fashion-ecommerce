@@ -27,7 +27,7 @@
     "bestOrders": "Meilleures Commandes",
     "popularCategories": "Catégories Populaires"
   },
-   "tabs_seller":  {
+  "tabs_seller": {
     "products": "Produits",
     "openOrders": "Commandes ouvertes",
     "allOrders": "Toutes les commandes"
@@ -35,16 +35,15 @@
   "add_new_product": "Nouveau produit",
   "new_products": "",
   "alter_max_images": "Un maximum de 3 images peut être sélectionné !",
-  "max_images_selected":  "Un maximum de 3 images ont été sélectionnées.",
+  "max_images_selected": "Un maximum de 3 images ont été sélectionnées.",
   "product_images_max": "Images du produit (max. 3):",
   "choose_files": "Sélectionner des fichiers",
-  "search_product" : "Rechercher un article",
+  "search_product": "Rechercher un article",
   "search": "rechercher",
   "email": "E-mail",
   "password": "Mot de passe",
   "login_start": "Se connecter",
   "register_quest": "Pas encore de compte ?",
- 
   "login_failed": "Échec de la connexion",
   "register": {
     "title": "S'inscrire",
@@ -70,9 +69,9 @@
       "uploadProfileImage": "Veuillez télécharger une image de profil.",
       "enterPhone": "Veuillez entrer un numéro de téléphone.",
       "registrationFailed": "Échec de l'inscription"
-    }   
+    }
   },
-   "sizes": "Tailles",
+  "sizes": "Tailles",
   "product_page": {
     "rating": "Note",
     "size": "Taille",
@@ -92,7 +91,6 @@
     "cancel": "Annuler",
     "order_success": "Commande passée avec succès !",
     "order_error": "Erreur lors de la commande.",
- 
     "select_size_first": "Veuillez d'abord choisir une taille.",
     "order_create_error": "La commande n'a pas pu être créée.",
     "select_size_alert": "Veuillez sélectionner une taille et une couleur avant d’ajouter au panier.",
@@ -101,9 +99,16 @@
     "exceeds_stock": "La quantité dépasse le stock disponible.",
     "available": "disponible",
     "cart_updated": "Panier mis à jour avec succès.",
-    "added_to_cart": "Produit ajouté au panier."
+    "added_to_cart": "Produit ajouté au panier.",
+    "add_to_cart": "Ajouter au panier",
+    "buy_now": "Acheter maintenant",
+    "description": "Description",
+    "explore_seller": "Explorer le vendeur",
+    "remove_from_saved": "Supprimer de mes favoris",
+    "add_to_saved": "Ajouter aux favoris",
+    "login_to_save": "Vous devez vous connecter pour ajouter des produits à vos favoris."
   },
-   "cart_page": {
+  "cart_page": {
     "title": "Votre panier",
     "empty_cart": "Votre panier est vide.",
     "shipping_cost_once": "Frais de livraison (une seule fois) :",
@@ -117,14 +122,12 @@
     "cancel_position": "Annuler",
     "price_suf": "DT",
     "Change": "Modifier l’adresse / le téléphone"
- 
   },
- 
   "phone": "Téléphone",
   "address": "Adresse",
   "total_orders": "Commandes totales",
   "open_orders": "Commandes ouvertes",
-    "loading_profile": "Chargement du profil",
+  "loading_profile": "Chargement du profil",
   "your_orders": "Vos commandes",
   "no_orders_yet": "Aucune commande.",
   "order_id": "Numéro de commande",
@@ -134,13 +137,11 @@
   "colors": "Couleurs",
   "quantity": "Quantité",
   "price": "Prix",
-
   "status": "Statut",
   "pending": "En attente",
   "orderNumber": "Numéro de commande",
   "orderDate": "Date de commande",
   "productName": "Nom du produit",
- 
   "totalPrice": "Prix total",
   "currentStatus": "Statut actuel",
   "lastUpdate": "Dernière mise à jour",
@@ -151,7 +152,6 @@
   "noUser": "Pas d'utilisateur",
   "noPhone": "Pas de téléphone",
   "noAddress": "Pas d'adresse",
- 
   "productColor": "Couleur du produit",
   "productSize": "Taille du produit",
   "product_color": {
@@ -172,24 +172,26 @@
     "Indigo": "Indigo",
     "Turquoise": "Turquoise"
   },
-  "order_state":{
+  "order_state": {
     "all": "Tous les statuts",
     "pending": "En attente",
     "confirmed": "Confirmé",
+    "dont_respond": "L'utilisateur ne répond pas au téléphone",
     "shipped": "Expédié",
     "delivered": "Livré",
     "received": "Reçu",
-
     "user_cancelled": "Annulé",
     "seller_cancelled": "Annulé par le vendeur",
     "failed_delivery": "Échec de livraison",
-    "returned_to_sender": "Retour à l'expéditeur",
+    "second_try": "Deuxième tentative de livraison",
+    "third_try": "Troisième tentative de livraison",
     "return_requested": "Retour demandé",
     "return_confirmed": "Retour confirmé",
+    "return_rejected": "Retour refusé",
     "return_shipped": "Retour expédié",
-    "return_received": "Retour reçu"
+    "return_received": "Retour reçu",
+    "returned_to_sender": "Retour à l'expéditeur"
   },
- 
   "no_products_found": "Aucun produit trouvé",
   "number": "N°",
   "times_ordered": "fois commandé",
@@ -198,7 +200,7 @@
   "searchOrderNumber": "Rechercher par numéro d'ordre (ex. : O123456)",
   "filter": "Filtrer",
   "noOrders": "Aucune commande",
-  "product_colors":{
+  "product_colors": {
     "red": "Rouge",
     "blue": "Bleu",
     "green": "Vert",
@@ -243,6 +245,209 @@
   "statusUpdated": "Statut mis à jour avec succès: {{status}}",
   "updateFailed": "Échec de la mise à jour: {{message}}",
   "unknownError": "Erreur inconnue",
-  "stock": "Stock"
-  
+  "stock": "Stock",
+  "errors": {
+    "product_infos_loading_failed": "Échec du chargement du produit. Veuillez vérifier votre connexion Internet et réessayer. Si le problème persiste, contactez notre support client.",
+    "product_color_loading_failed": "Échec du chargement des couleurs du produit. Veuillez vérifier votre connexion Internet et réessayer. Si le problème persiste, contactez notre support client."
+  },
+  "footer_pages": {
+    "about_us": {
+      "title": "À Propos de Nous",
+      "content": "Bienvenue chez Cmandi, votre destination privilégiée pour une mode durable et élégante. Nous croyons que le style ne doit jamais se faire au détriment de notre planète.",
+      "sections": [
+        {
+          "title": "Notre Mission",
+          "content": "Révolutionner l'industrie de la mode en connectant des consommateurs conscients avec des vendeurs éthiques, promouvant une économie circulaire où chaque vêtement raconte une histoire."
+        },
+        {
+          "title": "Notre Vision",
+          "content": "Un monde où la mode est inclusive, durable et accessible à tous. Nous nous efforçons de permettre aux individus de s'exprimer à travers des pièces uniques et de haute qualité."
+        }
+      ]
+    },
+    "sustainability": {
+      "title": "Durabilité",
+      "content": "Chez Cmandi, la durabilité est au cœur de tout ce que nous faisons. Nous nous engageons à réduire notre empreinte carbone et à promouvoir des pratiques écologiques.",
+      "sections": [
+        {
+          "title": "Notre Engagement",
+          "list": [
+            "Initiatives d'emballage zéro déchet.",
+            "Soutien aux artisans locaux et aux petites entreprises.",
+            "Promotion de la mode de seconde main et vintage pour réduire les déchets textiles.",
+            "Options d'expédition neutres en carbone."
+          ]
+        }
+      ]
+    },
+    "advertising": {
+      "title": "Publicité",
+      "content": "Associez-vous à Cmandi pour atteindre un public diversifié et engagé de passionnés de mode. Nos solutions publicitaires sont conçues pour aider votre marque à se développer.",
+      "sections": [
+        {
+          "title": "Pourquoi faire de la publicité avec nous ?",
+          "list": [
+            "Portée ciblée vers des consommateurs soucieux de la mode.",
+            "Taux d'engagement élevés sur notre plateforme.",
+            "Formats publicitaires personnalisables pour répondre à vos objectifs de campagne.",
+            "Analyses et rapports détaillés."
+          ]
+        }
+      ]
+    },
+    "accessibility": {
+      "title": "Accessibilité",
+      "content": "Nous nous engageons à garantir que notre site Web est accessible à tous, y compris aux personnes handicapées. Nous améliorons continuellement notre expérience utilisateur pour respecter les normes WCAG."
+    },
+    "how_it_works": {
+      "title": "Comment ça marche",
+      "content": "Acheter et vendre sur Cmandi est simple, sécurisé et amusant. Suivez ces étapes faciles pour commencer.",
+      "sections": [
+        {
+          "title": "1. Créer un compte",
+          "content": "Commencez par créer votre compte gratuit. Cliquez sur 'Se connecter' puis sur 'S'inscrire'. Remplissez vos coordonnées pour rejoindre notre communauté.",
+          "image": "/images/screenshot_register.png"
+        },
+        {
+          "title": "2. Se connecter et Explorer",
+          "content": "Connectez-vous à votre compte pour accéder aux fonctionnalités personnalisées. Parcourez des milliers d'articles uniques de vendeurs du monde entier.",
+          "image": "/images/screenshot_login.png"
+        },
+        {
+          "title": "3. Trouver et Commander",
+          "content": "Vous avez trouvé quelque chose que vous aimez ? Cliquez sur 'Ajouter au panier' ou 'Acheter maintenant'. Notre processus de paiement sécurisé garantit la sécurité de votre transaction.",
+          "image": "/images/screenshot_order.png"
+        },
+        {
+          "title": "4. Suivre votre commande",
+          "content": "Restez informé de votre achat. Vous pouvez suivre l'état de votre commande depuis votre profil pendant son acheminement vers vous.",
+          "image": "/images/step_delivery.png"
+        }
+      ]
+    },
+    "article_verification": {
+      "title": "Vérification des Articles",
+      "content": "Achetez en toute confiance en sachant que les articles de luxe sur Cmandi sont vérifiés par notre équipe d'experts pour garantir leur authenticité.",
+      "sections": [
+        {
+          "title": "Notre Processus",
+          "list": [
+            "Inspection physique des articles de grande valeur.",
+            "Authentification numérique utilisant la technologie IA.",
+            "Vérification de l'historique et de la réputation du vendeur."
+          ]
+        }
+      ]
+    },
+    "info_board": {
+      "title": "Tableau d'Information",
+      "content": "Restez informé des dernières nouvelles, annonces et directives communautaires de l'équipe Cmandi."
+    },
+    "help_center": {
+      "title": "Centre d'Aide",
+      "content": "Besoin d'aide ? Notre Centre d'Aide est là pour vous soutenir 24/7 avec des réponses aux questions fréquentes et des canaux d'assistance directe."
+    },
+    "sell": {
+      "title": "Vendre sur Cmandi",
+      "content": "Transformez votre garde-robe en argent. Vendre sur Cmandi est facile et gratifiant.",
+      "sections": [
+        {
+          "title": "Comment Vendre",
+          "list": [
+            "Créez un compte vendeur gratuit.",
+            "Téléchargez des photos claires et une description détaillée.",
+            "Fixez votre prix et vos options d'expédition.",
+            "Expédiez l'article une fois vendu et soyez payé !"
+          ]
+        }
+      ]
+    },
+    "buy": {
+      "title": "Acheter sur Cmandi",
+      "content": "Découvrez des pièces de mode uniques à des prix imbattables. Profitez d'une expérience d'achat sûre et fluide."
+    },
+    "trust_safety": {
+      "title": "Confiance et Sécurité",
+      "content": "Votre sécurité est notre priorité absolue. Nous utilisons des mesures de sécurité de pointe pour protéger vos données et vos transactions."
+    },
+    "privacy_center": {
+      "title": "Centre de Confidentialité",
+      "content": "Apprenez comment nous collectons, utilisons et protégeons vos informations personnelles. Nous nous engageons à la transparence et à la confidentialité des utilisateurs."
+    },
+    "cookie_notices": {
+      "title": "Avis sur les Cookies",
+      "content": "Nous utilisons des cookies pour améliorer votre expérience de navigation, analyser le trafic du site et proposer du contenu personnalisé."
+    },
+    "cookie_settings": {
+      "title": "Paramètres des Cookies",
+      "content": "Gérez vos préférences en matière de cookies. Vous pouvez choisir d'autoriser ou de bloquer les cookies à tout moment."
+    },
+    "terms_conditions": {
+      "title": "Termes et Conditions",
+      "content": "Veuillez lire attentivement nos Termes et Conditions avant d'utiliser notre plateforme. Ces termes régissent votre accès et votre utilisation de Cmandi."
+    },
+    "our_platform": {
+      "title": "Notre Plateforme",
+      "content": "Cmandi est construit sur une technologie de pointe pour offrir une expérience d'achat rapide, fiable et agréable à notre communauté mondiale."
+    },
+    "press": {
+      "title": "Presse",
+      "content": "Pour les demandes médias, les dossiers de presse et les dernières nouvelles sur Cmandi, veuillez contacter notre équipe presse."
+    },
+    "mobile_apps": {
+      "title": "Applications Mobiles",
+      "content": "Téléchargez l'application Cmandi pour iOS et Android pour acheter et vendre en déplacement. Découvrez le meilleur de la mode au bout de vos doigts."
+    }
+  },
+  "chat": {
+    "loadOlderMessages": "Charger les messages anciens",
+    "unread": "Non lu",
+    "read": "Lu",
+    "messagePlaceholder": "Écrire un message...",
+    "sendButton": "Envoyer",
+    "noChat": "Choisissez un chat ou commencez un nouveau",
+    "noMessages": "Aucun message",
+    "order": "Commande",
+    "product": "Produit",
+    "lastMessage": "Dernier message",
+    "newChatButton": "Nouveau chat",
+    "newChatPlaceholderOrder": "Numéro de commande",
+    "newChatPlaceholderProduct": "Numéro de produit",
+    "newChatWithSeller": "Nouveau chat avec le vendeur",
+    "newChatWithAdmin": "Nouveau chat avec l'administrateur",
+    "cancel_with_seller": "Annuler la chat avec le vendeur"
+  },
+  "saved_products": {
+    "title": "Produits sauvegardés",
+    "no_saved_products": "Aucun produit sauvegardé"
+  },
+  "main-categories": {
+    "mens": "Hommes",
+    "womens": "Femmes",
+    "kids": "Enfants"
+  },
+  "sort_by": "Trier par",
+  "sort": {
+    "newest": "Les plus récents",
+    "oldest": "Les plus anciens",
+    "price_low": "Prix : du moins cher au plus cher",
+    "price_high": "Prix : du plus cher au moins cher",
+    "rating": "Note"
+  },
+  "all-women": "Tout",
+  "all-men": "Tout",
+  "all-kids": "Tout",
+  "clothes": "Vêtements",
+  "shoes": "Chaussures",
+  "accessories": "Accessoires",
+  "jewelry": "Bijoux",
+  "bags": "Sac à main",
+  "watches": "Montres",
+  "other-women": "Autres",
+  "other-mens": "Autres",
+  "other-kids": "Autres",
+  "beauty": "Beauté",
+  "girls-clothing": "Filles",
+  "boys-clothing": "Garçons",
+  "baby-clothing": "Bébés"
 }

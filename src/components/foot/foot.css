@@ -1,10 +1,13 @@
 .footer-container {
-  background-color: #f1efef;
+  background-color: #eeeeee;
   color: #eee;
   padding: 40px 20px 20px;
-  width: 100%;        /* volle Breite */
-  max-width: none;    /* Begrenzung entfernen */
-  margin: 0;          /* zentrierung aufheben */
+  width: 100%;
+  /* volle Breite */
+  max-width: none;
+  /* Begrenzung entfernen */
+  margin: 0;
+  /* zentrierung aufheben */
 }
 
 .footer-columns {
@@ -95,4 +98,25 @@
 
 .footer-horizontal-menu li:hover {
   color: #00aaff;
+}
+
+
+@media (max-width: 480px) {
+  .footer-horizontal-menu ul {
+    flex-wrap: wrap;
+    /* Elemente umbrechen */
+    gap: 10px;
+    /* kleineren Abstand */
+    justify-content: center;
+  }
+
+  .footer-horizontal-menu li {
+    font-size: 0.8rem;
+    /* Schrift ggf. kleiner */
+  }
+
+  .footer-container {
+    padding: 20px 10px 20px;
+    /* Padding verkleinern */
+  }
 }

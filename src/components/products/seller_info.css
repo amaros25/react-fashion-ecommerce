@@ -1,65 +1,109 @@
-
-.seller-info {
-  background-color: #fff;
- 
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: flex-start;
-}
-
-.seller-details {
+.seller-info-card {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  transition: transform 0.2s;
 }
 
-.seller-image {
-  width: 80px;
-  height: 80px;
+.seller-info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.seller-card-image {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #f1356d;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.seller-name {
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.seller-info h3 {
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.seller-rating {
-  font-size: 16px;
-  color: #f1356d;
-}
-
-.star-rating {
+.seller-card-details {
   display: flex;
-  gap: 3px;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.star-rating .star {
-  color: #f1356d;
-  font-size: 18px;
+.seller-card-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
 }
 
-.seller-city {
-  margin-top: 8px;
+.seller-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.seller-card-owner {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.seller-card-location {
   display: flex;
   align-items: center;
-  gap: 5px; /* Abstand zwischen Icon und Text */
-  font-size: 16px;
-  color: #555;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #888;
 }
 
-.city-icon {
-  color: #f1356d; /* Icon-Farbe */
-  font-size: 20px;
+.location-icon {
+  color: #888;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .seller-info-card {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .seller-card-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .seller-card-name {
+    font-size: 0.95rem;
+  }
+
+  .seller-card-owner {
+    font-size: 0.8rem;
+  }
+
+  .seller-card-location {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .seller-info-card {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .seller-card-image {
+    width: 45px;
+    height: 45px;
+  }
+
+  .seller-card-name {
+    font-size: 0.9rem;
+  }
+
+  .seller-card-owner {
+    font-size: 0.75rem;
+  }
+
+  .seller-card-location {
+    font-size: 0.7rem;
+  }
 }

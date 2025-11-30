@@ -5,28 +5,7 @@
 }
 
 /* Main Container */
-.main-container {
-    width: 100%; /* Maximum width for mobile devices */
-    max-width: 1400px; /* Maximum width for larger screens (desktop) */
-    margin: 0 auto; /* Center the container horizontally */
-    padding: 20px; /* Inner padding */
-    min-height: 100vh; /* Minimum height to fill the viewport */
-    padding-bottom: 100px; /* Extra bottom padding for footer space */
-}
 
-/* Body Styles */
-body {
-    margin: 0px; /* Remove default margin */
-    padding: 0px; /* Remove default padding */
-    box-sizing: border-box; /* Include padding and border in the element's total width/height */
-    font-family: sans-serif; /* Sans-serif font for a clean look */
-    background-color: #f8f8f8; /* Light background color */
-}
-
-/* Box-Sizing for all elements */
-*, *::before, *::after {
-    box-sizing: inherit;
-}
 
 /* Pagination */
 .pagination-container {
@@ -56,3 +35,42 @@ body {
     user-select: none;
 }
 
+
+/* === Responsive Design === */
+
+/* Small phones (320px - 480px) */
+@media (max-width: 480px) {
+
+
+    .pagination-container {
+        gap: 4px;
+        margin: 15px 0;
+        flex-wrap: wrap;
+    }
+
+    .pagination-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+/* Medium phones and small tablets (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+
+    .pagination-container {
+        gap: 6px;
+        margin: 18px 0;
+    }
+
+    .pagination-button {
+        padding: 7px 11px;
+        font-size: 13px;
+    }
+}
+
+
+
+/* * {  */
+/*   outline: 1px solid rgba(255, 0, 0, 0.2); */
+
+/* } */

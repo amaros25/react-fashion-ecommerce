@@ -239,7 +239,9 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger}) {
 
           <div className="status-update">
             {/* Nur anzeigen, wenn der letzte Status NICHT seller_cancelled ist */}
-            {order.status?.slice(-1)[0]?.update !== "seller_cancelled" && (
+            {order.status?.slice(-1)[0]?.update !== "seller_cancelled" &&
+                order.status?.slice(-1)[0]?.update !== "delivered" &&
+                order.status?.slice(-1)[0]?.update !== "return_received" &&  (
               <div className="status-update-container">
                 <StatusSelect order={order} onStatusChange={onStatusChange} ref={selectRef} />
                 <button

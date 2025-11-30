@@ -8,7 +8,7 @@ const Breadcrumb = ({ category, productName }) => {
   return (
     <div className="breadcrumb">
       <Link to="/">{t("home")}</Link> &gt;
-      {/* Link zu /home/:category */}
+ 
       <Link to={`/home/${category}`}>{t(`categories.${category}`)}</Link> &gt;
       <span>{productName}</span>
     </div>

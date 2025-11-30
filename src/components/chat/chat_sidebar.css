@@ -1,0 +1,158 @@
+.conversation-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+  box-sizing: border-box;
+  min-height: 52vh;
+  max-height: 52vh;
+}
+
+.chat-card {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.chat-card:hover {
+  background-color: #f0f8ff;
+}
+
+.chat-card.active {
+  background-color: #d4e3f3;
+}
+
+.chat-card div {
+  margin-bottom: 4px;
+}
+
+.chat-date {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.new-chat {
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.new-chat select,
+.new-chat input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+.new-chat button {
+  border-radius: 6px;
+  background-color: #4a90e2;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.new-chat button:hover {
+  background-color: #357ab8;
+}
+
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-shrink: 0;
+  padding-bottom: 10px;
+}
+
+.page-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.page-btn.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.page-btn:hover {
+  background-color: #ddd;
+}
+
+.cancel-btn,
+.chatsidebar-button {
+  padding: 10px;
+  margin-top: 5px;
+}
+
+ 
+
+
+@media (max-width: 350px) {
+  .chat-card div {
+    margin-bottom: 8px;
+  }
+
+  .conversation-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    box-sizing: border-box;
+    min-height: 65vh;
+    max-height: 60vh;
+    
+  }
+
+  .new-chat select,
+  .new-chat input {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+  }
+
+  .pagination {
+    margin-top: 10px;
+  }
+
+}
+
+@media (min-width: 351px) and (max-width: 768px) {
+
+ 
+.chat-card div {
+  margin-bottom: 8px;
+}
+
+.conversation-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+  box-sizing: border-box;
+  min-height: 60vh;
+  max-height: 80vh;
+}
+
+.new-chat select,
+.new-chat input {
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+.pagination {
+  margin-top: 10px;
+}
+
+}
+
+ 

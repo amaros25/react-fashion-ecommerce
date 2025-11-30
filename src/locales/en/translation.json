@@ -1,43 +1,24 @@
 {
-  "myshop": "My Shop",
+  "myshop": "Cmandi",
+  "search_product": "Search for products...",
+  "search": "Search",
   "home": "Home",
-  "profile": "Profile",
   "login": "Login",
-  "logout": "Logout",
-  "newProducts": "New Products",
-  "select_category": "Select a category",
-  "categories": {
-    "womensClothing": "Women's Clothing",
-    "mensClothing": "Men's Clothing",
-    "shoes": "Shoes",
-    "womensUnderwear": "Women's Underwear",
-    "mensUnderwear": "Men's Underwear",
-    "bags": "Bags & Accessories",
-    "kidsClothing": "Kids' Clothing",
-    "babyClothing": "Baby Clothing"
-  },
-  "categoryBanner": {
-    "bestOffers": "Best Offers",
-    "bestOrders": "Best Orders",
-    "popularCategories": "Popular Categories"
-  },
-  "tabs_seller": {
-    "products": "Products",
-    "openOrders": "Open Orders",
-    "allOrders": "All Orders"
-  },
-  "add_new_product": "Add New Product",
-  "alter_max_images": "A maximum of 3 images may be selected!",
-  "max_images_selected":  "A maximum of 3 images have been selected.",
-  "product_images_max": "Product Images (max. 3):",
-  "search_product" : "Search item",
-  "login_failed": "Login failed",
-
-   "register": {
+  "hero_title": "Elevate Your Style",
+  "hero_subtitle": "Discover the latest trends in sustainable fashion.",
+  "shop_now": "Shop Now",
+  "shop_by_category": "Shop by Category",
+  "latest_arrivals": "Latest Arrivals",
+  "search_results": "Search Results",
+  "login_start": "Sign In",
+  "login_failed": "Login failed. Please check your credentials.",
+  "email": "Email",
+  "password": "Password",
+  "register_quest": "Don't have an account?",
+  "register": {
     "title": "Register",
-    "role": "Role",
-    "selectRole": "Select your role",
-    "shoper": "Shoper (regular user)",
+    "role": "I am a...",
+    "shoper": "Shopper",
     "seller": "Seller",
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -46,140 +27,195 @@
     "phone": "Phone Number",
     "shopName": "Shop Name",
     "address": "Address",
-    "profileImageOptional": "Profile Image (optional)",
-    "profileImageRequired": "Profile Image (required)",
-    "removeImage": "Remove Image",
+    "profileImageOptional": "Profile Image (Optional)",
+    "profileImageRequired": "Profile Image (Required)",
     "submit": "Register",
-    "alreadyRegistered": "Already registered?",
-    "login": "Login",
-    "error": {
-      "fillShopNameAddress": "Please fill in shop name and address.",
-      "uploadProfileImage": "Please upload a profile image.",
-      "enterPhone": "Please enter phone number.",
-      "registrationFailed": "Registration failed"
+    "alreadyRegistered": "Already have an account?"
+  },
+  "categories": {
+    "womensClothing": "Women's Clothing",
+    "mensClothing": "Men's Clothing",
+    "shoes": "Shoes",
+    "womensUnderwear": "Lingerie",
+    "mensUnderwear": "Underwear",
+    "bags": "Bags",
+    "kidsClothing": "Kids",
+    "babyClothing": "Baby"
+  },
+  "footer_pages": {
+    "about_us": {
+      "title": "About Us",
+      "content": "Welcome to Cmandi, your premier destination for sustainable and stylish fashion. We believe that style should never come at the expense of our planet.",
+      "sections": [
+        "womensClothing": "Women's Clothing",
+        "mensClothing": "Men's Clothing",
+        "shoes": "Shoes",
+        "womensUnderwear": "Lingerie",
+        "mensUnderwear": "Underwear",
+        "bags": "Bags",
+        "kidsClothing": "Kids",
+        "babyClothing": "Baby"
+      },
+      "footer_pages": {
+        "about_us": {
+          "title": "About Us",
+          "content": "Welcome to Cmandi, your premier destination for sustainable and stylish fashion. We believe that style should never come at the expense of our planet.",
+          "sections": [
+            {
+              "title": "Our Mission",
+              "content": "To revolutionize the fashion industry by connecting conscious consumers with ethical sellers, promoting a circular economy where every piece of clothing tells a story."
+            },
+            {
+              "title": "Our Vision",
+              "content": "A world where fashion is inclusive, sustainable, and accessible to everyone. We strive to empower individuals to express themselves through unique, high-quality pieces."
+            }
+          ]
+        },
+        "sustainability": {
+          "title": "Sustainability",
+          "content": "At Cmandi, sustainability is at the core of everything we do. We are committed to reducing our carbon footprint and promoting eco-friendly practices.",
+          "sections": [
+            {
+              "title": "Our Commitment",
+              "list": [
+                "Zero-waste packaging initiatives.",
+                "Supporting local artisans and small businesses.",
+                "Promoting second-hand and vintage fashion to reduce textile waste.",
+                "Carbon-neutral shipping options."
+              ]
+            }
+          ]
+        },
+        "advertising": {
+          "title": "Advertising",
+          "content": "Partner with Cmandi to reach a diverse and engaged audience of fashion enthusiasts. Our advertising solutions are designed to help your brand grow.",
+          "sections": [
+            {
+              "title": "Why Advertise with Us?",
+              "list": [
+                "Targeted reach to fashion-conscious consumers.",
+                "High engagement rates across our platform.",
+                "Customizable ad formats to suit your campaign goals.",
+                "Detailed analytics and reporting."
+              ]
+            }
+          ]
+        },
+        "accessibility": {
+          "title": "Accessibility",
+          "content": "We are dedicated to ensuring that our website is accessible to everyone, including individuals with disabilities. We continuously improve our user experience to meet WCAG standards."
+        },
+        "how_it_works": {
+          "title": "How It Works",
+          "content": "Buying and selling on Cmandi is simple, secure, and fun. Follow these easy steps to get started.",
+          "sections": [
+            {
+              "title": "1. Create an Account",
+              "content": "Start by creating your free account. Click on 'Sign In' and then 'Register'. Fill in your details to join our community.",
+              "image": "/images/screenshot_register.png"
+            },
+            {
+              "title": "2. Login & Explore",
+              "content": "Log in to your account to access personalized features. Browse thousands of unique items from sellers around the world.",
+              "image": "/images/screenshot_login.png"
+            },
+            {
+              "title": "3. Find & Order",
+              "content": "Found something you love? Click 'Add to Cart' or 'Buy Now'. Our secure checkout process ensures your payment is safe.",
+              "image": "/images/screenshot_order.png"
+            },
+            {
+              "title": "4. Track Your Order",
+              "content": "Stay updated on your purchase. You can track your order status from your profile as it makes its way to you.",
+              "image": "/images/step_delivery.png"
+            }
+          ]
+        },
+        "article_verification": {
+          "title": "Article Verification",
+          "content": "Shop with confidence knowing that luxury items on Cmandi are verified by our team of experts to ensure authenticity.",
+          "sections": [
+            {
+              "title": "Our Process",
+              "list": [
+                "Physical inspection of high-value items.",
+                "Digital authentication using AI technology.",
+                "Verification of seller history and reputation."
+              ]
+            }
+          ]
+        },
+        "info_board": {
+          "title": "Info Board",
+          "content": "Stay updated with the latest news, announcements, and community guidelines from the Cmandi team."
+        },
+        "help_center": {
+          "title": "Help Center",
+          "content": "Need assistance? Our Help Center is here to support you 24/7 with answers to frequently asked questions and direct support channels."
+        },
+        "sell": {
+          "title": "Sell on Cmandi",
+          "content": "Turn your closet into cash. Selling on Cmandi is easy and rewarding.",
+          "sections": [
+            {
+              "title": "How to Sell",
+              "list": [
+                "Create a free seller account.",
+                "Upload clear photos and a detailed description.",
+                "Set your price and shipping options.",
+                "Ship the item once it sells and get paid!"
+              ]
+            }
+          ]
+        },
+        "buy": {
+          "title": "Buy on Cmandi",
+          "content": "Discover unique fashion pieces at unbeatable prices. Enjoy a safe and seamless shopping experience."
+        },
+        "trust_safety": {
+          "title": "Trust & Safety",
+          "content": "Your safety is our top priority. We employ state-of-the-art security measures to protect your data and transactions."
+        },
+        "privacy_center": {
+          "title": "Privacy Center",
+          "content": "Learn how we collect, use, and protect your personal information. We are committed to transparency and user privacy."
+        },
+        "cookie_notices": {
+          "title": "Cookie Notices",
+          "content": "We use cookies to enhance your browsing experience, analyze site traffic, and serve personalized content."
+        },
+        "cookie_settings": {
+          "title": "Cookie Settings",
+          "content": "Manage your cookie preferences. You can choose which cookies to allow or block at any time."
+        },
+        "terms_conditions": {
+          "title": "Terms & Conditions",
+          "content": "Please read our Terms & Conditions carefully before using our platform. These terms govern your access and use of Cmandi."
+        },
+        "our_platform": {
+          "title": "Our Platform",
+          "content": "Cmandi is built on cutting-edge technology to provide a fast, reliable, and enjoyable shopping experience for our global community."
+        },
+        "press": {
+          "title": "Press",
+          "content": "For media inquiries, press kits, and latest news about Cmandi, please contact our press team."
+        },
+        "mobile_apps": {
+          "title": "Mobile Apps",
+          "content": "Download the Cmandi app for iOS and Android to shop and sell on the go. Experience the best of fashion at your fingertips."
+        }
+      }
     }
+      "title": "Our Platform",
+    "content": "Cmandi is built on cutting-edge technology to provide a fast, reliable, and enjoyable shopping experience for our global community."
   },
-    "sizes": "Sizes",
-
-  "product_page": {
-    "rating": "Rating",
-    "size": "Size",
-    "color": "Color",
-    "quantity": "Quantity",
-    "select_size": "Select size",
-    "select_color": "Select color",
-    "variant_out_of_stock": "This variant is out of stock.",
-    "order_now": "Order Now",
-    "enter_shipping_address": "Enter Shipping Address",
-    "street": "Street",
-    "city": "City",
-    "postal_code": "Postal Code",
-    "country": "Country",
-    "placing_order": "Placing Order...",
-    "submit_order": "Submit Order",
-    "cancel": "Cancel",
-    "order_success": "Order placed successfully!",
-    "order_error": "Error placing the order.",
- 
-    "select_size_first": "Please select a size first.",
-    "order_create_error": "Order could not be created.",
-    "select_size_alert": "Please select both a size and a color before adding to cart.",
-    "must_login": "You must be logged in to add products to your cart.",
-    "invalid_selection": "Invalid selection. Please choose a valid size and color.",
-    "exceeds_stock": "Quantity exceeds available stock.",
-    "available": "available",
-    "cart_updated": "Cart updated successfully.",
-    "added_to_cart": "Product added to your cart."
- 
+  "press": {
+    "title": "Press",
+    "content": "For media inquiries, press kits, and latest news about Cmandi, please contact our press team."
   },
-  "cart_page": {
-    "title": "Your Cart",
-    "empty_cart": "Your cart is empty.",
-    "shipping_cost_once": "Shipping cost (one-time):",
-    "seller_subtotal": "Subtotal (incl. shipping)",
-    "total_price": "Total price:",
-    "gps_denied": "GPS access denied",
-    "geolocation_unsupported": "Geolocation is not supported by your browser",
-    "current_position": "Your current position",
-    "use_my_position": "Use my position",
-    "confirm_position": "Confirm",
-    "cancel_position": "Cancel",
-    "price_suf": "DT",
-    "Change": "Change Address"
-  },
-  "email": "Email",
-  "phone": "Phone",
-  "address": "Address",
-  "total_orders": "Total Orders",
-  "open_orders": "Open Orders",
-    "loading_profile": "Loading profile",
-  "your_orders": "Your Orders",
-  "no_orders_yet": "You have no orders yet.",
-  "order_id": "Order ID",
-  "loading_product": "Loading product...",
-  "size": "Size",
-  "color": "Color",
-  "quantity": "Quantity",
-  "price": "Price",
-  "status": "Status",
-  "pending": "Pending",
-  "orderNumber": "Order Number",
-  "orderDate": "Order Date",
-  "productName": "Product Name",
- 
-  "totalPrice": "Total Price",
-  "currentStatus": "Current Status",
-  "lastUpdate": "Last Update",
-  "confirmed": "Confirmed",
-  "shipped": "Shipped",
-  "delivered": "Delivered",
-  "cancelled": "Cancelled",
-  "noUser": "No User",
-  "noPhone": "No Phone",
-  "noAddress": "No Address"
- ,
-  "order_state": {
-    "all": "All States",
-    "pending": "Pending",
-    "confirmed": "Confirmed",
-    "shipped": "Shipped",
-    "delivered": "Delivered",
-    "received": "Received",
-    "user_cancelled": "Cancelled by user",
-    "seller_cancelled": "Cancelled by seller",
-    "failed_delivery": "Failed delivery",
-    "returned_to_sender": "Returned to sender",
-    "return_requested": "Return requested",
-    "return_confirmed": "Return confirmed",
-    "return_shipped": "Return shipped",
-    "return_received": "Return received"
-  },
-  "productColor": "Product Color",
-  "productSize": "Product Size",
-  "product_color": {
-    "Red": "Red",
-    "Blue": "Blue",
-    "Green": "Green",
-    "Yellow": "Yellow",
-    "Black": "Black",
-    "White": "White",
-    "Orange": "Orange",
-    "Purple": "Purple",
-    "Pink": "Pink",
-    "Brown": "Brown",
-    "Gray": "Gray",
-    "Beige": "Beige",
-    "Teal": "Teal",
-    "Violet": "Violet",
-    "Indigo": "Indigo",
-    "Turquoise": "Turquoise"
-  },
-  "no_products_found": "No products found",
-  "number": "Nr",
-  "times_ordered": "times ordered",
-  "error_loading_products": "Error loading products",
-  "search_product_by_id": "Search by product number (e.g., PR-123456)",
-   "searchOrderNumber": "Search by order number (e.g., O123456)",
-  "filter": "Filter",
-  "noOrders": "No orders"
+  "mobile_apps": {
+    "title": "Mobile Apps",
+    "content": "Download the Cmandi app for iOS and Android to shop and sell on the go. Experience the best of fashion at your fingertips."
   }
+}
+}

@@ -4,17 +4,16 @@ import "./register.css";
 import { useTranslation } from "react-i18next";
 import ImageSelectUpload from '../new_product/image_select_upload.js';
 
-function Register({ closePopup, switchToLogin }) {
+
+function Register() {
   const apiUrl = process.env.REACT_APP_API_URL;
   const cloudName = process.env.REACT_APP_CLOUD_NAME;
   const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
-  const { t, i18n } = useTranslation();  // i18n hook for translations and language direction
-  const navigate = useNavigate(); // navigate for routing (not currently used)
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
-  // State for user role, default to "shoper"
   const [role, setRole] = useState("shoper");
 
-  // State to hold form input values
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -25,19 +24,14 @@ function Register({ closePopup, switchToLogin }) {
     address: "",
   });
 
-  // State for selected image file and its preview URL
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-
-  // State to store and display error messages
   const [error, setError] = useState("");
 
-  // Generic input change handler for form fields
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle role change - reset form and image states
   const handleRoleChange = (e) => {
     setRole(e.target.value);
     setImageFile(null);
@@ -54,13 +48,10 @@ function Register({ closePopup, switchToLogin }) {
     setError("");
   };
 
-  // Handle image selection from child component
-  // Receives an array of files; use the first one if available
   const handleImageChange = (files) => {
     const file = files && files.length > 0 ? files[0] : null;
     if (file) {
       setImageFile(file);
-      // Create a preview image URL using FileReader
       const reader = new FileReader();
       reader.onload = () => setImagePreview(reader.result);
       reader.readAsDataURL(file);
@@ -70,33 +61,29 @@ function Register({ closePopup, switchToLogin }) {
     }
   };
 
-  // Form submission handler - validates, uploads image, sends data to backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // Validation depending on role
     if (role === "seller") {
       if (!formData.shopName || !formData.address) {
-        setError("Bitte Shop Name und Adresse ausfüllen."); // "Please fill shop name and address."
+        setError(t("register.error.fillShopNameAddress"));
         return;
       }
       if (!imageFile) {
-        setError("Bitte ein Profilbild hochladen."); // "Please upload a profile image."
+        setError(t("register.error.uploadProfileImage"));
         return;
       }
     }
     if (role === "shoper") {
       if (!formData.phone) {
-        setError("Bitte Telefonnummer eingeben."); // "Please enter a phone number."
+        setError(t("register.error.enterPhone"));
         return;
       }
     }
 
     try {
-      // Upload image if selected
       let imageUrl = "";
-
 
       if (imageFile) {
         const formData = new FormData();
@@ -111,10 +98,9 @@ function Register({ closePopup, switchToLogin }) {
         if (!res.ok) throw new Error("Image upload failed");
 
         const data = await res.json();
-        imageUrl = data.secure_url;  
+        imageUrl = data.secure_url;
       }
-    
-      // Prepare API endpoint and payload based on role
+
       let endpoint = "";
       let payload = {};
 
@@ -137,123 +123,124 @@ function Register({ closePopup, switchToLogin }) {
           email: formData.email,
           password: formData.password,
           phone: formData.phone,
-          image: imageUrl || "", // image is optional here
+          image: imageUrl || "",
         };
       }
 
-      // Send registration data to backend
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error("Registrierung fehlgeschlagen"); // "Registration failed"
-      closePopup();
-      switchToLogin(); // switch to login view after success
+      if (!res.ok) throw new Error(t("register.error.registrationFailed"));
+
+      navigate("/login");
     } catch (err) {
       setError(err.message);
     }
   };
 
   return (
-    <div className="register-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-      <form className="register-form" onSubmit={handleSubmit}>
-        <h2>{t("register.title")}</h2>
-        {error && <p className="error">{error}</p>}
+    <div className="register-page">
 
-        {/* Role selection */}
-        <label>{t("register.role")}</label>
-        <select value={role} onChange={handleRoleChange}>
-          <option value="shoper">{t("register.shoper")}</option>
-          <option value="seller">{t("register.seller")}</option>
-        </select>
+      <div className="register-page-content">
+        <div className="register-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+          <form className="register-form" onSubmit={handleSubmit}>
+            <h2>{t("register.title")}</h2>
+            {error && <p className="error">{error}</p>}
 
-        {/* Basic user info inputs */}
-        <label>{t("register.firstName")}</label>
-        <input
-          type="text"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-        />
-        <label>{t("register.lastName")}</label>
-        <input
-          type="text"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-        />
-        <label>{t("register.email")}</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <label>{t("register.password")}</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+            <label>{t("register.role")}</label>
+            <select value={role} onChange={handleRoleChange}>
+              <option value="shoper">{t("register.shoper")}</option>
+              <option value="seller">{t("register.seller")}</option>
+            </select>
 
-        {/* Role-specific fields */}
-        {role === "shoper" && (
-          <>
-            <label>{t("register.phone")}</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-            <label>{t("register.profileImageOptional")}</label>
-            <ImageSelectUpload onImageChange={handleImageChange} maximages={1} />
-          </>
-        )}
-
-        {role === "seller" && (
-          <>
-            <label>{t("register.shopName")}</label>
+            <label>{t("register.firstName")}</label>
             <input
               type="text"
-              name="shopName"
-              value={formData.shopName}
+              name="firstName"
+              value={formData.firstName}
               onChange={handleChange}
               required
             />
-            <label>{t("register.address")}</label>
+            <label>{t("register.lastName")}</label>
             <input
               type="text"
-              name="address"
-              value={formData.address}
+              name="lastName"
+              value={formData.lastName}
               onChange={handleChange}
               required
             />
-            <label>{t("register.profileImageRequired")}</label>
-            <ImageSelectUpload onImageChange={handleImageChange} maximages={1} />
-          </>
-        )}
+            <label>{t("register.email")}</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <label>{t("register.password")}</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
 
-        <button type="submit">{t("register.submit")}</button>
+            {role === "shoper" && (
+              <>
+                <label>{t("register.phone")}</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                />
+                <label>{t("register.profileImageOptional")}</label>
+                <ImageSelectUpload onImageChange={handleImageChange} maximages={1} />
+              </>
+            )}
 
-        <p className="login-link">
-          {t("register.alreadyRegistered")}
-          <span
-            onClick={switchToLogin}
-            style={{ color: "#0077cc", cursor: "pointer", textDecoration: "underline" }}
-          >
-            {t("login")}
-          </span>
-        </p>
-      </form>
+            {role === "seller" && (
+              <>
+                <label>{t("register.shopName")}</label>
+                <input
+                  type="text"
+                  name="shopName"
+                  value={formData.shopName}
+                  onChange={handleChange}
+                  required
+                />
+                <label>{t("register.address")}</label>
+                <input
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  required
+                />
+                <label>{t("register.profileImageRequired")}</label>
+                <ImageSelectUpload onImageChange={handleImageChange} maximages={1} />
+              </>
+            )}
+
+            <button type="submit">{t("register.submit")}</button>
+
+            <p className="login-link">
+              {t("register.alreadyRegistered")}
+              <span
+                onClick={() => navigate("/login")}
+                style={{ color: "#0077cc", cursor: "pointer", textDecoration: "underline" }}
+              >
+                {t("login")}
+              </span>
+            </p>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

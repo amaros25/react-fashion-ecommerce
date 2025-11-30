@@ -1,32 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 /* base styles */
 * {
   margin: 0px;
-  font-family: "Quicksand";
+  padding: 0px;
+  font-family: "Outfit", sans-serif;
+
   color: #333;
+  box-sizing: border-box;
 }
-.navbar {
- 
-  display: flex;
-  align-items: center;
- 
-  margin: 0px;
-  border-bottom: 1px solid #f2f2f2;
+
+body {
+
+  width: 100%;
+  max-width: 80%;
+  min-height: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 0 auto;
+
 }
-.navbar h1 {
-  color: #2a68ec;
+
+@media (max-width: 1025px) {
+  body {
+    padding: 10px;
+    max-width: 100%;
+  }
 }
- 
-.navbar a {
-  padding: 5px;
-}
-.navbar a:hover {
-  color: #2a68ec;
-}
- 
- 
- 
- 
- 
- 

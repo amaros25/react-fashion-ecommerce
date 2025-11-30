@@ -1,17 +1,16 @@
-import React, {useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import "./product_page.css";
-import { Header } from '../header/header.js';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./loading_spinner.js";
 import RelatedProducts from "../related_products/related_product.js"
-import Foot from '../foot/foot';
-import  ProductImage from './product_images.js'
-import ProductInfo from "./product_info";
+import ProductImage from './product_images.js'
 import SellerInfo from "./seller_info.js";
 import Breadcrumb from './breadcrumb.js';
+import "./product_page.css";
+import ProductInfoHeader from "./product_info_header.js";
+import CommentProduct from './commentar_product.js';
 
 function ProductPage() {
 
@@ -20,72 +19,51 @@ function ProductPage() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState("");
-  const [size, setSize] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [seller, setSeller] = useState(null);
   const [role, setRole] = useState(localStorage.getItem("role")?.toLowerCase());
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const userId = localStorage.getItem("userId");
+  // New State for UI
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [comment, setComment] = useState("");
 
   useEffect(() => {
     const direction = i18n.language === "ar" ? "rtl" : "ltr";
     document.documentElement.setAttribute("dir", direction);
-    console.log(`Language is set to ${i18n.language}, dir is now: ${direction}`);
   }, [i18n.language]);
 
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
-  const [address, setAddress] = useState({
-    street: "",
-    city: "",
-    postalCode: "",
-    country: "",
-  });
-
-
- 
 
   useEffect(() => {
-      if (role === "seller") {
-          toast.error(t("seller_cannot_buy_alter"));
-        }
-    }, []);
-
-
-
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
-    function getStockForSelection() {
-    if (!selectedSize || !selectedColor || !product?.sizes) return 0;
-
-    const match = product.sizes.find(
-      (s) =>
-        s.size.trim().toLowerCase() === selectedSize.trim().toLowerCase() &&
-        s.color.trim().toLowerCase() === selectedColor.trim().toLowerCase()
-    );
-
-    return match ? match.stock : 0;
-  }
+    if (role === "seller") {
+      toast.error(t("seller_cannot_buy_alter"));
+    }
+  }, [role, t]);
 
   const availableSizes = product?.sizes
     ? Array.from(new Set(product.sizes.map(s => s.size)))
     : [];
- 
-  const availableColors = product?.sizes && selectedSize
-    ? product.sizes
-        .filter((s) => s.size.trim().toLowerCase() === selectedSize.trim().toLowerCase())
-        .map((s) => s.color)
+
+  const availableColors = product?.sizes
+    ? Array.from(new Set(product.sizes.map(s => s.color)))
     : [];
- 
-  const uniqueColors = Array.from(new Set(availableColors));
+
+  const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     fetch(`${apiUrl}/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
         if (Array.isArray(data.image) && data.image.length > 0) {
-          setMainImage(data.image[0]); 
+          setMainImage(data.image[0]);
         } else if (data.image) {
-          setMainImage(data.image ); 
+          setMainImage(data.image);
         }
 
         if (data.sellerId) {
@@ -104,194 +82,214 @@ function ProductPage() {
               setSeller(null);
             });
         } else {
-          console.error("No sellerId found in the product!");
           setSeller(null);
         }
       })
       .catch((err) => {
         console.error("Error loading product:", err);
       });
-  }, [id]);
-
+  }, [id, apiUrl, refresh]);
 
   if (!product || !seller) {
     return <LoadingSpinner />;
   }
 
-  const handleBuyClick = () => {
-  if (role === "seller") {
-    toast.error(t("seller_cannot_buy_alter"));
-    return;
-  }
-  if (!selectedSize || !selectedColor) {
-    toast.warn(t("product_page.select_size_alert"));
-    return;
-  }
+  const handleBuyClick = (buyNow = false) => {
+    if (role === "seller") {
+      toast.error(t("seller_cannot_buy_alter"));
+      return;
+    }
+    if (!selectedSize || !selectedColor) {
+      toast.warn(t("product_page.select_size_alert"));
+      return;
+    }
 
-  if (!isLoggedIn) {
-    toast.info(t("product_page.must_login"));
-    return;
-  }
+    if (!isLoggedIn) {
+      toast.info(t("product_page.must_login"));
+      return;
+    }
 
-  const stockInfo = product.sizes.find(
-    (s) => s.size === selectedSize && s.color === selectedColor
-  );
+    const stockInfo = product.sizes.find(
+      (s) => s.size === selectedSize && s.color === selectedColor
+    );
 
-  if (!stockInfo) {
-    toast.error(t("product_page.invalid_selection"));
-    return;
-  }
+    if (!stockInfo) {
+      toast.error(t("product_page.invalid_selection"));
+      return;
+    }
 
-  if (quantity > stockInfo.stock) {
-    toast.error(`${t("product_page.exceeds_stock")} (${stockInfo.stock} ${t("product_page.available")})`);
+    if (quantity > stockInfo.stock) {
+      toast.error(`${t("product_page.exceeds_stock")} (${stockInfo.stock} ${t("product_page.available")})`);
+      return;
+    }
 
-    return;
-  }
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const newItem = {
+      productId: product._id,
+      name: product.name,
+      price: product.price,
+      image: mainImage,
+      size: selectedSize,
+      color: selectedColor,
+      quantity: quantity,
+      sellerId: seller._id,
+    };
 
-  const newItem = {
-    productId: product._id,
-    name: product.name,
-    price: product.price,
-    image: mainImage,
-    size: selectedSize,
-    color: selectedColor,
-    quantity: quantity,
-    sellerId: seller._id,
+    const existingIndex = cart.findIndex(
+      (item) =>
+        item.productId === newItem.productId &&
+        item.size === newItem.size &&
+        item.color === newItem.color
+    );
+
+    if (existingIndex >= 0) {
+      const totalQuantity = cart[existingIndex].quantity + newItem.quantity;
+      cart[existingIndex].quantity = totalQuantity;
+      if (!buyNow) toast.success(t("product_page.cart_updated"));
+    } else {
+      cart.push(newItem);
+      if (!buyNow) toast.success(t("product_page.added_to_cart"));
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    if (buyNow) {
+      navigate("/cart_page");
+    }
   };
 
-  // Prüfen, ob Item schon im Cart existiert
-  const existingIndex = cart.findIndex(
-    (item) =>
-      item.productId === newItem.productId &&
-      item.size === newItem.size &&
-      item.color === newItem.color
-  );
+  // Check availability for color based on selected size
+  const isColorAvailable = (color) => {
+    if (!selectedSize) return true;
+    return product.sizes.some(s => s.size === selectedSize && s.color === color && s.stock > 0);
+  };
 
-  if (existingIndex >= 0) {
-    const totalQuantity = cart[existingIndex].quantity + newItem.quantity;
- 
-    // Menge erhöhen
-    cart[existingIndex].quantity = totalQuantity;
-    toast.success(t("product_page.cart_updated"));
-  } else {
-    // Neu hinzufügen
-    cart.push(newItem);
-   }
+  // Check availability for size based on selected color
+  const isSizeAvailable = (size) => {
+    if (!selectedColor) return true;
+    return product.sizes.some(s => s.size === size && s.color === selectedColor && s.stock > 0);
+  };
 
-  localStorage.setItem("cart", JSON.stringify(cart));
-  toast.success(t("product_page.added_to_cart"));
-  navigate("/cart_page");
-};
+
+
+
   return (
     <div className="product-page">
-      <Header /> 
-    <div className="breadcrumb-container">
+
+      <div className="breadcrumb-container">
         <Breadcrumb category={product.category} productName={product.name} />
       </div>
-        <div className="product-main-content"> 
-      <ProductImage
-        mainImage={mainImage}
-        setMainImage={setMainImage}
-        product={product}
-      />
-      <div className="product-info-main">
 
-      <ProductInfo product={product} />
-
-        <div className="product-buy-box">
-
-          <div className="selection">
-            <div className="selection-row" style={{ display: "flex", gap: "1rem" }}>
-              <div className="selection">
-                <label>{t("product_page.size")}:</label>
-                <select
-                  value={selectedSize}
-                  onChange={(e) => {
-                    setSelectedSize(e.target.value);
-                    setSelectedColor(""); 
-                    setQuantity(0); 
-                  }}
-                >
-                  <option value="">{t("product_page.select_size")}</option>
-                  {availableSizes.map((sizeOption, index) => (
-                    <option key={index} value={sizeOption}>
-                      {sizeOption}
-                    </option>
-                  ))}
-                </select>
-              </div>
-           <div className="selection">
-              <label>{t("product_page.color")}:</label>
-              <select
-                value={selectedColor}
-                onChange={(e) => {
-                  if (!selectedSize) {
-                    alert(t("product_page.select_size_first"));
-                    return;
-                  }
-                  setSelectedColor(e.target.value);
-                }}
-                disabled={!selectedSize}
-              >
-                <option value="">{t("product_page.select_color")}</option>
-                {uniqueColors.map((color, index) => (
-                  <option key={index} 
-                  value= {color}>  {t(`product_colors.${color.toLowerCase()}`, { defaultValue: color })}
-                  </option>
-                ))}
-              </select>
-            </div>
-          <div className="selection">
-     <div className="selection">
-        <label>{t("product_page.quantity")}:</label>
-        <input
-          type="number"
-          min="1"
-          max={getStockForSelection()}
-          value={quantity}
-          onChange={(e) => {
-            const val = Number(e.target.value);
-            const stock = getStockForSelection();
-            if (val > stock) {
-              alert(`Maximal verfügbar: ${stock}`);
-              setQuantity(stock);
-            } else {
-              setQuantity(val);
-            }
-          }}
-          disabled={getStockForSelection() === 0}
-        />
-        {getStockForSelection() === 0 && selectedSize && selectedColor && (
-        <p style={{ color: "red", fontSize: "0.9rem" }}>
-          {t("variant_out_of_stock")}
-        </p>
-        )}
-      </div>
-          </div>
-            </div>
-          </div>
-          <button className="buy-button" 
-            onClick={handleBuyClick} 
-            disabled={role === "seller"}
-          >
-            {t("product_page.submit_order")}
-          </button>
-       
+      <div className="product-main-content">
+        {/* Left Column: Images */}
+        <div className="product-left-column">
+          <ProductImage
+            mainImage={mainImage}
+            setMainImage={setMainImage}
+            product={product}
+          />
         </div>
-        <hr className="product-divider" />
 
-          <SellerInfo seller={seller} />
-    </div>
+        {/* Right Column: Info & Actions */}
+        <div className="product-right-column">
+          <ProductInfoHeader product={product} userId={userId} />
 
+
+          <div className="product-selection-section">
+
+            {/* Size Selection */}
+            <div className="selection-group">
+              <label className="selection-label">{t("product_page.size")}</label>
+              <div className="size-options">
+                {availableSizes.map((sizeOption, index) => (
+                  <button
+                    key={index}
+                    className={`size-button ${selectedSize === sizeOption ? 'selected' : ''} ${!isSizeAvailable(sizeOption) ? 'disabled' : ''}`}
+                    onClick={() => setSelectedSize(sizeOption)}
+                    disabled={!isSizeAvailable(sizeOption)}
+                  >
+                    {sizeOption}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Color Selection */}
+            <div className="selection-group">
+              <label className="selection-label">{t("product_page.color")}</label>
+              <div className="color-options">
+                {availableColors.map((color, index) => (
+                  <div
+                    key={index}
+                    className={`color-swatch-container ${selectedColor === color ? 'selected' : ''}`}
+                    onClick={() => setSelectedColor(color)}
+                  >
+                    <div
+                      className="color-swatch"
+                      style={{ backgroundColor: color.toLowerCase() }}
+                      title={color}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="selected-color-name">
+                {selectedColor && <span>{selectedColor}</span>}
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="product-description-text">
+              <p className="description-label">{t("product_page.description")}</p>
+              <p className={showFullDescription ? "expanded" : "collapsed"}>
+                {product.description}
+              </p>
+              {product.description && product.description.length > 150 && (
+                <button
+                  className="show-more-btn"
+                  onClick={() => setShowFullDescription(!showFullDescription)}
+                >
+                  {showFullDescription ? "Show Less" : "Show More"}
+                </button>
+              )}
+            </div>
+            <CommentProduct product={product} onReviewAdded={() => setRefresh(prev => !prev)} />
+
+            {/* Action Buttons */}
+            <div className="action-buttons">
+              <button
+                className="add-to-cart-btn"
+                onClick={() => handleBuyClick(false)}
+                disabled={role === "seller"}
+              >
+                {t("product_page.add_to_cart")}
+              </button>
+              <button
+                className="buy-now-btn"
+                onClick={() => handleBuyClick(true)}
+                disabled={role === "seller"}
+              >
+                {t("product_page.buy_now")}
+              </button>
+            </div>
+
+
+
+            {/* Seller Info Section */}
+            <div className="seller-section-container">
+              <h3 className="seller-section-title">{t("product_page.explore_seller")}</h3>
+              <SellerInfo seller={seller} />
+            </div>
+
+          </div>
+        </div>
       </div>
 
-    <RelatedProducts 
-      category={product.category} 
-      currentProductId={product._id} 
-    />
-      <Foot/>
+      <RelatedProducts
+        category={product.category}
+        currentProductId={product._id}
+      />
+
     </div>
   );
 }

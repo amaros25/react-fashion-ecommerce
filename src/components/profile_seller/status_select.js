@@ -1,6 +1,8 @@
 import React, { forwardRef } from "react";
 import { useTranslation } from "react-i18next";
 
+
+
 const StatusSelect = forwardRef(({ order, onStatusChange }, ref) => {
   const { t } = useTranslation();
 
@@ -9,19 +11,50 @@ const StatusSelect = forwardRef(({ order, onStatusChange }, ref) => {
       case "pending":
         return [
           { value: "confirmed", label: t("order_state.confirmed") },
+          { value: "dont_respond", label: t("order_state.dont_respond") },
           { value: "seller_cancelled", label: t("order_state.seller_cancelled") },
         ];
+      case "dont_respond":
+        return [
+          { value: "confirmed", label: t("order_state.confirmed") },
+          { value: "seller_cancelled", label: t("order_state.seller_cancelled") },
+        ];
+
       case "confirmed":
         return [
-          { value: "shipped", label: t("order_state.shipped") },
           { value: "seller_cancelled", label: t("order_state.seller_cancelled") },
+          { value: "shipped", label: t("order_state.shipped") },
+
         ];
       case "shipped":
         return [
-          { value: "delivered", label: t("order_state.delivered") },
+ 
           { value: "failed_delivery", label: t("order_state.failed_delivery") },
         ];
-      case "delivered":
+
+// Failed delivery
+      case "failed_delivery":
+        return [
+          { value: "second_try", label: t("order_state.second_try") },
+          { value: "seller_cancelled", label: t("order_state.seller_cancelled") },
+          { value: "delivered", label: t("order_state.delivered") },
+        ];
+
+      case "second_try":
+        return [
+          { value: "third_try", label: t("order_state.third_try") },
+          { value: "seller_cancelled", label: t("order_state.seller_cancelled") },
+            { value: "delivered", label: t("order_state.delivered") },
+        ];
+      case "third_try":
+        return [
+ 
+          { value: "seller_cancelled", label: t("order_state.seller_cancelled") },
+          { value: "delivered", label: t("order_state.delivered") },
+        ];
+
+//User want to send back
+      case "return_requested":
         return [
           { value: "return_confirmed", label: t("order_state.return_confirmed") },
           { value: "return_received", label: t("order_state.return_received") },

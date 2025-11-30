@@ -2,49 +2,92 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useTranslation } from "react-i18next";
 import './home.css';
 import '../products/new_product_list.css';
-import { Header } from '../header/header';
-import Foot from '../foot/foot';
 import Pagination from './pagination.js';
 import { FilterContext } from '../filter_context/filter_context';
 import ProductCard from '../product_card/product_card';
-import { useParams } from 'react-router-dom'; 
+import { useParams } from 'react-router-dom';
 
-function Home() {
+const Home = () => {
+  const { t, i18n } = useTranslation();
   const apiUrl = process.env.REACT_APP_API_URL;
-  const { category } = useParams(); 
+  const { category, subcategory } = useParams();
 
   // Context für die Kategorie und den Suchbegriff
-  const { selectedCategory, setSelectedCategory, searchTerm, setSearchTerm } = useContext(FilterContext);
-  const { t, i18n } = useTranslation();
+  const { searchTerm, setSearchTerm, sortBy } = useContext(FilterContext);
+
+  const categoryKeys = [
+    "womens", "mens", "kids"
+  ];
+  const subCategories = {
+    womens: ["all-women", "clothes", "shoes", "bags", "accessories", "beauty", "other-women"],
+    mens: ["all-men", "clothes", "shoes", "accessories", "other-mens"],
+    kids: ["all-kids", "girls-clothing", "boy-c lothing", "baby-clothing", "other-kids"]
+  };
+
+  const urlCategory =
+    categoryKeys.includes(category) ? categoryKeys.indexOf(category) : null;
+
+  const urlSubcategory =
+    category && subcategory && subCategories[category]
+      ? subCategories[category].indexOf(subcategory)
+      : null;
+
+  console.log("=> urlCategory:", urlCategory, "=> urlSubcategory:", urlSubcategory);
 
   const [latestProducts, setLatestProducts] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [limit, setLimit] = useState(24);
 
-  // Abhängig von der selectedCategory filtern wir die Produkte
-  const filteredProducts = selectedCategory
-    ? latestProducts.filter(p => p.category === selectedCategory)
-    : latestProducts;
 
-  // useEffect zum Setzen der Kategorie basierend auf der URL
   useEffect(() => {
-    if (category && category !== selectedCategory) {
-      setSelectedCategory(category);
-      setPage(1);
-    }
-  }, [category, selectedCategory, setSelectedCategory]);
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width <= 786) {
+        setLimit(16);
+      } if (width >= 1280) {
+        setLimit(24);
+      } else {
+        setLimit(24);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // initial setzen
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+
 
   // Produkte von der API laden
   useEffect(() => {
-    let url = `${apiUrl}/products/latest?page=${page}`;
+    setLatestProducts([]);
+    setTotalPages(0);
 
-    if (selectedCategory) {
-      url += `&category=${selectedCategory}`;
+    let url = `${apiUrl}/products/latest?page=${page}&limit=${limit}`;
+
+    // Send numeric category if available
+    if (urlCategory !== null && !isNaN(urlCategory)) {
+      url += `&category=${urlCategory}`;
+    }
+
+    // Send numeric subcategory if available
+    // urlSubcategory 0 = "all-*" (z.B. "all-women") -> send nothing (get all)
+    // urlSubcategory 1+ = specific subcategory -> send index-1 (because first real subcategory is index 0 in DB)
+    if (urlSubcategory !== null && !isNaN(urlSubcategory) && urlSubcategory > 0) {
+      url += `&subcategory=${urlSubcategory - 1}`;
     }
 
     if (searchTerm) {
       url += `&search=${encodeURIComponent(searchTerm)}`;
     }
+
+    if (sortBy) {
+      url += `&sort=${sortBy}`;
+    }
+
+    console.log("Fetching products with URL:", url);
 
     fetch(url)
       .then(res => res.json())
@@ -54,11 +97,11 @@ function Home() {
           setTotalPages(data.totalPages);
         } else {
           setLatestProducts([]);
-          setTotalPages(1);
+          setTotalPages(0);
         }
       })
       .catch(err => console.error('Error fetching latest products:', err));
-  }, [page, selectedCategory, searchTerm, apiUrl]);
+  }, [page, urlCategory, urlSubcategory, searchTerm, sortBy, apiUrl, limit]);
 
   useEffect(() => {
     if (i18n.language === 'ar') {
@@ -68,22 +111,30 @@ function Home() {
     }
   }, [i18n.language]);
 
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+    scrollup();
+  };
+
+  const scrollup = () => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  };
 
   return (
     <div className="main-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-      <Header />
       {/* {searchTerm === "" && selectedCategory === "" && <TopBannerSlider />} */}
       <div className="latest-product-list">
-        {filteredProducts.map((product) => (
+        {latestProducts.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
       </div>
-      <Pagination 
-        page={page} 
-        totalPages={totalPages} 
-        onPageChange={setPage} 
-      />
-      <Foot />
+      {latestProducts.length > 0 && (
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }
