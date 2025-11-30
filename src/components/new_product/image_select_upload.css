@@ -1,97 +1,151 @@
 .image-upload-container {
-  display: flex; /* Use flexbox layout to position items */
-  flex-direction: row; /* Align images and button in a row (horizontally) */
-  align-items: flex-start; /* Align items (images and button) at the top */
-  gap: 20x; /* Create space between the button and image previews */
+  display: flex;
+  /* Use flexbox layout to position items */
+  flex-direction: row;
+  /* Align images and button in a row (horizontally) */
+  align-items: flex-start;
+  /* Align items (images and button) at the top */
+  gap: 20x;
+  /* Create space between the button and image previews */
 }
 
 .image-upload {
-  display: flex; /* Use flexbox layout for the upload container */
-  flex-direction: column; /* Arrange the button and warning vertically (in a column) */
-  align-items: flex-start; /* Align items (button and warning) to the left */
+  display: flex;
+  /* Use flexbox layout for the upload container */
+  flex-direction: column;
+  /* Arrange the button and warning vertically (in a column) */
+  align-items: flex-start;
+  /* Align items (button and warning) to the left */
 }
 
 .file-label {
-  margin-right: 10px; /* Add space to the right of the label */
+  margin-right: 10px;
+  /* Add space to the right of the label */
 }
 
 .file-input {
-  display: none; /* Hide the default file input button */
+  display: none;
+  /* Hide the default file input button */
 }
 
-.file-input + .file-label {
-  background-color: #1a0fbd; /* Set the background color of the label */
-  color: white; /* Set the label text color to white */
-  padding: 10px 20px; /* Add padding inside the label */
-  border-radius: 5px; /* Round the corners of the label */
-  cursor: pointer; /* Make the label clickable */
-  font-size: 16px; /* Set font size of the label text */
+.file-input+.file-label {
+  background-color: #1a0fbd;
+  /* Set the background color of the label */
+  color: white;
+  /* Set the label text color to white */
+  padding: 10px 20px;
+  /* Add padding inside the label */
+  border-radius: 5px;
+  /* Round the corners of the label */
+  cursor: pointer;
+  /* Make the label clickable */
+  font-size: 16px;
+  /* Set font size of the label text */
 }
 
 .image-preview {
-  display: flex; /* Use flexbox for image preview layout */
-  flex-wrap: wrap; /* Allow the images to wrap to the next line if they overflow */
-  gap: 30px; /* Add space between image previews */
-  justify-content: left; /* Center images horizontally */
-  align-items: center; /* Center images vertically */
-  flex-grow: 1; /* Make the container flexible to take available space */
-  position: relative; /* Enable absolute positioning for child elements (e.g., delete button) */
-  height: 100px; /* Ensure the container has a fixed height */
+  display: flex;
+  /* Use flexbox for image preview layout */
+  flex-wrap: wrap;
+  /* Allow the images to wrap to the next line if they overflow */
+  gap: 30px;
+  /* Add space between image previews */
+  justify-content: left;
+  /* Center images horizontally */
+  align-items: center;
+  /* Center images vertically */
+  flex-grow: 1;
+  /* Make the container flexible to take available space */
+  position: relative;
+  /* Enable absolute positioning for child elements (e.g., delete button) */
+  height: 100px;
+  /* Ensure the container has a fixed height */
   margin-left: 30px;
 }
 
 .image-container {
-  position: relative; /* Allow the delete button to be positioned relative to the image */
+  position: relative;
+  /* Allow the delete button to be positioned relative to the image */
 }
 
 .image-thumbnail {
-  width: 90px; /* Set the width of the image preview */
-  height: 90px; /* Set the height of the image preview */
-  object-fit: cover; /* Ensure the image covers the thumbnail without stretching */
-  border-radius: 5px; /* Round the corners of the image preview */
-  border: 1px solid #5f91f0; /* Add a light border around the image */
+  width: 90px;
+  /* Set the width of the image preview */
+  height: 90px;
+  /* Set the height of the image preview */
+  object-fit: cover;
+  /* Ensure the image covers the thumbnail without stretching */
+  border-radius: 5px;
+  /* Round the corners of the image preview */
+  border: 1px solid #5f91f0;
+  /* Add a light border around the image */
 }
 
 .delete-button-image {
-  position: absolute; /* Position the delete button absolutely within the image container */
-  top: 1px; /* Place the delete button 1px from the top of the container */
-  right: 1px; /* Place the delete button 1px from the right of the container */
-  background-color: rgb(71, 88, 236); /* Set the delete button background to black */
-  color: white; /* Set the delete button text color to white */
-  border: none; /* Remove any border from the delete button */
-  border-radius: 10%; /* Make the delete button circular */
-  width: 15px; /* Set the width of the delete button */
-  height:  15px; /* Set the height of the delete button */
-  display: flex; /* Use flexbox to center the content inside the button */
-  justify-content: center; /* Center the content horizontally inside the button */
-  align-items: center; /* Center the content vertically inside the button */
-  cursor: pointer; /* Make the button clickable */
-  font-size: 15px; /* Set the font size of the button text */
+  position: absolute;
+  /* Position the delete button absolutely within the image container */
+  top: 1px;
+  /* Place the delete button 1px from the top of the container */
+  right: 1px;
+  /* Place the delete button 1px from the right of the container */
+  background-color: rgb(71, 88, 236);
+  /* Set the delete button background to black */
+  color: white;
+  /* Set the delete button text color to white */
+  border: none;
+  /* Remove any border from the delete button */
+  border-radius: 10%;
+  /* Make the delete button circular */
+  width: 15px;
+  /* Set the width of the delete button */
+  height: 15px;
+  /* Set the height of the delete button */
+  display: flex;
+  /* Use flexbox to center the content inside the button */
+  justify-content: center;
+  /* Center the content horizontally inside the button */
+  align-items: center;
+  /* Center the content vertically inside the button */
+  cursor: pointer;
+  /* Make the button clickable */
+  font-size: 15px;
+  /* Set the font size of the button text */
 }
 
 .delete-button-image:hover {
-  background-color: rgb(212, 10, 10); /* Change the background color to red when the button is hovered */
-   color: rgb(15, 13, 13); /* Set the delete button text color to white */
+  background-color: rgb(212, 10, 10);
+  /* Change the background color to red when the button is hovered */
+  color: rgb(15, 13, 13);
+  /* Set the delete button text color to white */
 }
 
 .image-preview p {
-  font-size: 12px; /* Set the font size of the paragraph text inside the image preview */
-  color: #c5c359; /* Set the text color of the paragraph to a light green */
-  font-size: 25px; /* This seems to be a conflict (double font-size) - the correct font size will be 25px, but it should be adjusted */
+  font-size: 12px;
+  /* Set the font size of the paragraph text inside the image preview */
+  color: #c5c359;
+  /* Set the text color of the paragraph to a light green */
+  font-size: 25px;
+  /* This seems to be a conflict (double font-size) - the correct font size will be 25px, but it should be adjusted */
 }
 
 .max-images-warning {
-  color: rgb(221, 10, 10); /* Set the text color to red for the "Max images" warning */
-  font-size: 15px; /* Set the font size of the warning text */
-  margin-top: 5px; /* Add a small margin to the top of the warning text */
+  color: rgb(221, 10, 10);
+  /* Set the text color to red for the "Max images" warning */
+  font-size: 15px;
+  /* Set the font size of the warning text */
+  margin-top: 5px;
+  /* Add a small margin to the top of the warning text */
 }
 
 .images-infos {
-  color: rgb(21, 11, 160); /* Set the text color to blue for the info text */
-  font-size: 15px; /* Set the font size of the info text */
-  margin-top: 5px; /* Add a small margin to the top of the info text */
+  color: rgb(21, 11, 160);
+  /* Set the text color to blue for the info text */
+  font-size: 15px;
+  /* Set the font size of the info text */
+  margin-top: 5px;
+  /* Add a small margin to the top of the info text */
 }
- 
+
 .hidden-file-input {
   display: none;
 }
@@ -106,6 +160,7 @@
   cursor: pointer;
   font-size: 16px;
 }
+
 .file-info {
   margin-top: 5px;
   font-size: 14px;
@@ -128,7 +183,7 @@
   background-color: #e8f4ff;
 }
 
- 
+
 .image-preview.single-preview {
   flex-direction: column;
   align-items: flex-start;

@@ -81,6 +81,7 @@ function ProfileSeller() {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
+    console.log("data", data);
     setSeller(data);
   }, [userId, token]);
 

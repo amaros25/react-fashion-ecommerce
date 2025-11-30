@@ -30,7 +30,32 @@
     "profileImageOptional": "صورة الملف الشخصي (اختياري)",
     "profileImageRequired": "صورة الملف الشخصي (مطلوب)",
     "submit": "تسجيل",
-    "alreadyRegistered": "لديك حساب بالفعل؟"
+    "alreadyRegistered": "لديك حساب بالفعل؟",
+    "login": "تسجيل الدخول",
+    "acceptTerms": "En vous inscrivant, vous confirmez avoir lu et accepté les <a href='{{cmandiLink}}'>Conditions Générales de Vente</a> et la <a href='{{privacyLink}}'>Politique de Confidentialité</a>, et être âgé(e) de 18 ans ou plus.",
+    "city": "المدينة",
+    "subCity": "المنطقة",
+    "success": "تم التسجيل بنجاح!",
+    "error": {
+      "fillShopNameAddress": "الرجاء إدخال اسم المتجر",
+      "uploadProfileImage": "الرجاء إدخال صورة ملف الشخصي",
+      "enterPhone": "الرجاء إدخال رقم الهاتف",
+      "registrationFailed": "فشل التسجيل",
+      "acceptTerms": "Vous devez accepter les CGV et la politique de confidentialité pour continuer.",
+      "firstNameRequired": "الرجاء إدخال الاسم الأول.",
+      "lastNameRequired": "الرجاء إدخال الاسم الأخير.",
+      "emailRequired": "الرجاء إدخال البريد الإلكتروني.",
+      "passwordRequired": "الرجاء إدخال كلمة المرور.",
+      "phoneRequired": "الرجاء إدخال رقم الهاتف.",
+      "addressRequired": "الرجاء إدخال العنوان.",
+      "cityRequired": "الرجاء إدخال المدينة.",
+      "subCityRequired": "الرجاء إدخال المنطقة.",
+      "passwordStrength": "الرجاء إدخال كلمة مرور قوية (أقل من 8 أحرف، حرف كبير، حرف صغير، رقم وحرف خاص).",
+      "invalidLastName": "الرجاء إدخال اسم عائلة صحيح.",
+      "invalidFirstName": "الرجاء إدخال اسم صحيح.",
+      "invalidPhone": "الرجاء إدخال رقم هاتف صحيح. ",
+      "userAlreadyExists": "المستخدم موجود بالفعل."
+    }
   },
   "categories": {
     "womensClothing": "ملابس نسائية",

@@ -37,7 +37,7 @@
   "alter_max_images": "Un maximum de 3 images peut être sélectionné !",
   "max_images_selected": "Un maximum de 3 images ont été sélectionnées.",
   "product_images_max": "Images du produit (max. 3):",
-  "choose_files": "Sélectionner des fichiers",
+  "choose_files": "Choisir une photo",
   "search_product": "Rechercher un article",
   "search": "rechercher",
   "email": "E-mail",
@@ -64,11 +64,29 @@
     "submit": "S'inscrire",
     "alreadyRegistered": "Déjà inscrit ?",
     "login": "Connexion",
+    "acceptTerms": "En vous inscrivant, vous confirmez avoir lu et accepté les <a href='{{cmandiLink}}'>Conditions Générales de Vente</a> et la <a href='{{privacyLink}}'>Politique de Confidentialité</a>, et être âgé(e) de 18 ans ou plus.",
+    "city": "Ville",
+    "subCity": "Délégation",
+    "success": "Inscription reussie!",
     "error": {
-      "fillShopNameAddress": "Veuillez renseigner le nom de la boutique et l'adresse.",
+      "fillShopNameAddress": "Veuillez renseigner le nom de la boutique",
       "uploadProfileImage": "Veuillez télécharger une image de profil.",
       "enterPhone": "Veuillez entrer un numéro de téléphone.",
-      "registrationFailed": "Échec de l'inscription"
+      "registrationFailed": "Échec de l'inscription",
+      "acceptTerms": "Vous devez accepter les CGV et la politique de confidentialité pour continuer.",
+      "firstNameRequired": "Veuillez entrer le prénom.",
+      "lastNameRequired": "Veuillez entrer le nom de famille.",
+      "emailRequired": "Veuillez entrer l'email.",
+      "passwordRequired": "Veuillez entrer le mot de passe.",
+      "phoneRequired": "Veuillez entrer le numéro de téléphone.",
+      "addressRequired": "Veuillez entrer l'adresse.",
+      "cityRequired": "Veuillez entrer la ville.",
+      "subCityRequired": "Veuillez entrer la délégation.",
+      "passwordStrength": "Veuillez entrer un mot de passe fort (au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial).",
+      "invalidLastName": "Veuillez entrer un nom de famille valide.",
+      "invalidFirstName": "Veuillez entrer un prénom valide.",
+      "invalidPhone": "Veuillez entrer un numéro de téléphone valide.",
+      "userAlreadyExists": "L'utilisateur existe déjà."
     }
   },
   "sizes": "Tailles",
@@ -449,5 +467,7 @@
   "beauty": "Beauté",
   "girls-clothing": "Filles",
   "boys-clothing": "Garçons",
-  "baby-clothing": "Bébés"
+  "baby-clothing": "Bébés",
+  "selectCity": "Choisissez une ville",
+  "selectSubCity": "Choisissez une Délégation"
 }

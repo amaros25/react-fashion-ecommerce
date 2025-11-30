@@ -8,7 +8,7 @@ exports.getAllUsers = async (req, res) => {
     const users = await User.find();
     res.json(users);
   } catch (err) {
-    res.status(500).json({ message: "Fehler beim Abrufen der Benutzer", error: err });
+    res.status(500).json({ message: "server error" });
   }
 };
 
@@ -16,67 +16,101 @@ exports.getAllUsers = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: "Benutzer nicht gefunden" });
+    if (!user) return res.status(404).json({ message: "user not found" });
     res.json(user);
   } catch (err) {
-    res.status(500).json({ message: "Fehler beim Abrufen des Benutzers", error: err });
+    res.status(500).json({ message: "server error" });
   }
 };
 
-// Neuen Benutzer erstellen (Registrierung)
+// Create new user
 exports.createUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, phone } = req.body;
+    const { firstName, lastName, email, password, phone, address } = req.body;
+    console.log("firstName", firstName);
+    console.log("lastName", lastName);
+    console.log("email", email);
+    console.log("password", password);
+    console.log("phone", phone);
+    console.log("address", address);
 
-    // Passwort hashen
+    let phoneNumber = null;
+    if (Array.isArray(phone) && phone.length > 0) {
+      phoneNumber = phone[0].phone;
+    } else if (typeof phone === 'object' && phone.phone) {
+      phoneNumber = phone.phone;
+    } else {
+      phoneNumber = phone;
+    }
+    const existingUser = await User.findOne({
+      $or: [
+        { email },
+        { 'phone.phone': phoneNumber },
+      ]
+    });
+
+    if (existingUser) {
+      console.log("User already exists");
+      return res.status(400).json({ message: "user already exists" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({ firstName, lastName, email, password: hashedPassword, phone });
+
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      phone: phone,
+      address: address,
+    });
+
     await newUser.save();
 
-    res.status(201).json({ message: "User erstellt" });
+    res.status(201).json({ message: "user created successfully" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Serverfehler" });
+    res.status(500).json({ message: "server error" });
   }
 };
 
-
 // Adresse und Telefonnummer des Users aktualisieren
-exports.updateContact = async (req, res) => {
+exports.updateUser = async (req, res) => {
   try {
     const userId = req.params.id; // aus der URL
     const { address, phone } = req.body; // Adresse & Telefonnummer kommen direkt aus Body
 
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "Benutzer nicht gefunden" });
+      return res.status(404).json({ message: "user not found" });
     }
 
     // Wenn address übergeben wurde → Felder aktualisieren
     if (address) {
       user.address = {
-        street: address.street || user.address?.street,
-        postalCode: address.postalCode || user.address?.postalCode,
+        address: address.address || user.address?.address,
         city: address.city || user.address?.city,
+        subCity: address.subCity || user.address?.subCity,
+        dateModified: new Date(),
       };
     }
 
     // Wenn phone übergeben wurde → aktualisieren
     if (phone) {
-      user.phone = phone;
+      user.phone = [{ phone: phone, dateModified: new Date() }];
     }
 
     await user.save();
 
     res.status(200).json({
-      message: "Adresse und Telefonnummer aktualisiert",
+      message: "user updated successfully",
       user,
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      message: "Fehler beim Aktualisieren der Adresse oder Telefonnummer",
+      message: "server error",
       error: err.message,
     });
   }

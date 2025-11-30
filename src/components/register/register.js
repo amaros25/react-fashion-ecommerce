@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./register.css";
 import { useTranslation } from "react-i18next";
 import ImageSelectUpload from '../new_product/image_select_upload.js';
-
+import { toast } from "react-toastify";
+import { cities, citiesData } from '../const/cities';
 
 function Register() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -18,6 +19,10 @@ function Register() {
   const [subCities, setSubCities] = useState([]);
   const [selectedCityIndex, setSelectedCityIndex] = useState(null);
   const [selectedSubCityIndex, setSelectedSubCityIndex] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [error, setError] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
 
   const [formData, setFormData] = useState({
@@ -30,167 +35,21 @@ function Register() {
     address: "",
   });
 
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [error, setError] = useState("");
+
+
+  const handleCheckboxChange = () => {
+    setAcceptedTerms(!acceptedTerms);
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const cities = [
-    "Ariana", "Ben Arous", "Bizerte", "Béja", "Gabès", "Gafsa", "Jendouba",
-    "Kairouan", "Kasserine", "Kébili", "La Manouba", "Le Kef",
-    "Mahdia", "Monastir", "Médenine", "Nabeul", "Sfax", "Sidi Bouzid",
-    "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"
-  ];
 
-  const citiesData = {
-    "Ariana": [
-      "Sidi Thabet", "Riadh Andalous", "Raoued", "Nouvelle Ariana", "Mnihla",
-      "Les Jardins El Menzah 2", "Les Jardins El Menzah 1", "La Soukra",
-      "Kalâat Andalous", "Jardins El Menzah", "Ghazela", "Ettadhamen",
-      "Ennasr", "El Menzah 8", "El Menzah 7", "El Menzah 6", "El Menzah 5",
-      "Dar Fadhal", "Cité Hedi Nouira", "Cité Ennasr 2", "Cité Ennasr 1",
-      "Cite Ennkhilet", "Chotrana 3", "Chotrana 2", "Chotrana 1", "Chotrana",
-      "Charguia 2", "Charguia 1", "Borj Louzir", "Autres Villes",
-      "Ariana Ville", "Ariana Essoughra", "Ariana"
-    ],
-    "Ben Arous": [
-      "Sidi Rezig", "Radès", "Mégrine", "Mornag", "Mohamedia",
-      "Medina Jedida", "Hammam Lif", "Hammam Chott", "Fouchana",
-      "Ezzahra", "El Mourouj 6", "El Mourouj 5", "El Mourouj 4",
-      "El Mourouj 3", "El Mourouj 1", "El Mourouj", "Boumhel",
-      "Borj Cedria", "Ben Arous", "Autres Villes"
-    ],
-    "Bizerte": [
-      "Zarzouna", "Utique", "Tinja", "Sejenane", "Ras Jebel",
-      "Menzel Jemil", "Menzel Bourguiba", "Mateur", "Ghezala",
-      "Ghar El Melh", "El Alia", "Djoumime", "Bizerte Sud",
-      "Bizerte Nord", "Bizerte", "Autres Villes"
-    ],
-    "Béja": [
-      "Téboursouk", "Thibar", "Testour", "Nefza", "Medjez El Bab",
-      "Goubellat", "El Ksar", "Béja Sud", "Béja Nord", "Béja",
-      "Amdoun", "Autres Villes"
-    ],
-    "Gabès": [
-      "Nouvelle Matmata", "Métouia", "Matmata", "Mareth", "Ghanouch",
-      "Gabès Sud", "Gabès Ouest", "Gabès Médina", "Gabès", "El Hamma",
-      "Autres Villes"
-    ],
-    "Gafsa": [
-      "Sidi Aïch", "Sened", "Redeyef", "Oum El Araies", "Métlaoui",
-      "Mdhila", "Gafsa Sud", "Gafsa Nord", "Gafsa", "El Ksar",
-      "El Guettar", "Belkhir", "Autres Villes"
-    ],
-    "Jendouba": [
-      "Tabarka", "Oued Meliz", "Jendouba Nord", "Jendouba",
-      "Ghardimaou", "Fernana", "Bou Salem", "Balta Bou Aouane",
-      "Ain Draham", "Autres Villes"
-    ],
-    "Kairouan": [
-      "Sbikha", "Nasrallah", "Kairouan Sud", "Kairouan Nord", "Kairouan",
-      "Hajeb El Ayoun", "Haffouz", "El Ouslatia", "El Alâa", "Echrarda",
-      "Chebika", "Bouhajla", "Autres Villes"
-    ],
-    "Kasserine": [
-      "Thala", "Sbiba", "Sbeïtla", "Majel Bel Abbès", "Kasserine Sud",
-      "Kasserine Nord", "Kasserine", "Hidra", "Hassi Ferid", "Fériana",
-      "Foussana", "Ezzouhour", "El Ayoun", "Djedeliane", "Autres Villes"
-    ],
-    "Kébili": [
-      "Souk Lahad", "Kébili Sud", "Kébili Nord", "Kébili", "Faouar",
-      "Douz Sud", "Douz Nord", "Autres Villes"
-    ],
-    "La Manouba": [
-      "Tebourba", "Oued Ellil", "Mornaguia", "Menzel El Habib", "Manouba Ville",
-      "La Manouba", "El Battan", "Douar Hicher", "Djedeida", "Denden",
-      "Borj El Amri", "Autres Villes"
-    ],
-    "Le Kef": [
-      "Tajerouine", "Sakiet Sidi Youssef", "Nebeur", "Le Kef", "Kef Ouest",
-      "Kef Est", "Kalâat Snan", "Kalâat Khasbah", "Es Sers", "El Ksour",
-      "Djerissa", "Dahmani", "Autres Villes"
-    ],
-    "Mahdia": [
-      "Sidi Alouane", "Ouled Chamekh", "Melloulèche", "Mahdia", "Ksour Essef",
-      "Hebira", "Essouassi", "El Jem", "Chorbane", "Chebba", "Bou Merdès",
-      "Autres Villes"
-    ],
-    "Monastir": [
-      "Zéramdine", "Téboulba", "Sayada Lamta Bou Hajar", "Sahline", "Ouerdanine",
-      "Monastir", "Monastir", "Moknine", "Ksibet El Médiouni", "Ksar Hellal",
-      "Jemmal", "Beni Hassen", "Bembla", "Bekalta", "Autres Villes"
-    ],
-    "Médenine": [
-      "Zarzis", "Wled Amor", "Touta", "Tezdaine", "Temlel", "Tawrit",
-      "Sidi Makhloulf", "M’guersa", "Médenine Sud", "Médenine Nord", "Médenine",
-      "Mezzraya", "Melita", "Mai", "Mahboubine", "Khazroun", "Hedade", "Gizen",
-      "Fatou", "Djerba Midoun", "Djerba Houmt Souk", "Djerba Ajim", "Chebabia",
-      "Boughrara", "Beni Khedech", "Ben Gardane", "Arkou", "Aghir", "Autres Villes"
-    ],
-    "Nabeul": [
-      "Yasmine Hammamet", "Takelsa", "Soliman", "Nabeul", "Mrezga",
-      "Menzel Temime", "Menzel Bouzelfa", "Kélibia", "Korba", "Hammamet Nord",
-      "Hammamet Centre", "Hammamet", "Hammam Ghezèze", "Grombalia", "El Mida",
-      "El Haouaria", "Dar Châabane El Fehri", "Béni Khiar", "Béni Khalled",
-      "Bou Argoub", "Autres Villes"
-    ],
-    "Sfax": [
-      "Thyna", "Skhira", "Sfax Ville", "Sfax Médina", "Sfax",
-      "Sakiet Ezzit", "Sakiet Eddaïer", "Route Tunis", "Route TANIOUR",
-      "Route Soukra", "Route SOKRA", "ROUTE SALTANIA", "Route MHARZA",
-      "Route Menzel Chaker", "Route Mehdia", "Route MANZEL CHAKER", "Route GREMDA",
-      "Route El Ain", "Route El Afrane", "Route de l'aéroport", "Route de GABES",
-      "Menzel Chaker", "Mahrès", "Kerkennah", "Jebiniana", "Ghraiba",
-      "El Hencha", "El Amra", "Bir Ali Ben Khalifa", "Agareb", "Autres Villes"
-    ],
-    "Sidi Bouzid": [
-      "Souk Jedid", "Sidi Bouzid Ouest", "Sidi Bouzid Est", "Sidi Bouzid",
-      "Sidi Ali Ben Aoun", "Regueb", "Ouled Haffouz", "Mezzouna",
-      "Menzel Bouzaiane", "Meknassy", "Jilma", "Cebbala Ouled Asker",
-      "Bir El Hafey", "Autres Villes"
-    ],
-    "Siliana": [
-      "Siliana Sud", "Siliana Nord", "Siliana", "Sidi Bou Rouis",
-      "Rouhia", "Makthar", "Kesra", "Gaâfour", "El Krib",
-      "El Aroussa", "Bou Arada", "Bargou", "Autres Villes"
-    ],
-    "Sousse": [
-      "Zaouit Ksibat Thrayett", "Sousse Sidi Abdelhamid", "Sousse Riadh",
-      "Sousse Médina", "Sousse Jawhara", "Sousse corniche", "Sousse",
-      "Sidi El Héni", "Sidi Bou Ali", "Sahloul", "M Saken", "Kondar",
-      "Khzema", "Kantaoui", "Kalaâ Sghira", "Kalaâ Kebira", "Hergla",
-      "Hammam Sousse", "Enfidha", "Chatt mariem", "Bouficha", "Akouda",
-      "Autres Villes"
-    ],
-    "Tataouine": [
-      "Tataouine Sud", "Tataouine Nord", "Tataouine", "Smâr", "Remada",
-      "Ghomrassen", "Dehiba", "Bir Lahmar", "Autres Villes"
-    ],
-    "Tozeur": [
-      "Tozeur", "Tameghza", "Nefta", "Hazoua",
-      "Degache", "Autres Villes"
-    ],
-    "Tunis": [
-      "Tunis Belvedere", "Tunis", "Séjoumi", "Sidi Hassine", "Sidi El Béchir",
-      "Sidi Daoud", "Sidi Bou Said", "Médina", "Mutuelleville", "Montplaisir",
-      "Monfleury", "Menzah", "Manar", "Le Kram", "Le Bardo", "Lac 2", "Lac 1",
-      "La Marsa", "La Goulette", "L Aouina", "Ksar Said", "Kheireddine Pacha",
-      "Khaznadar", "Jardins De Carthage", "Hraïria", "Gammarth", "Ezzouhour",
-      "Ettahrir", "El Ouardia", "El Omrane Supérieur", "El Omrane", "El Menzah 9",
-      "El Menzah 4", "El Menzah 1", "El Manar 2", "El Manar 1", "El Kabaria",
-      "Djebel Jelloud", "Cité Olympique", "Cité jardin", "Cité El Khadra",
-      "Centre Ville Lafayette", "Centre Urbain Nord", "Carthage", "Bellevue",
-      "Bab Souika", "Alain Savary", "Ain Zaghouen",
-      "Ain Zaghouan Sud", "Ain Zaghouan Nord", "Agba", "Autres Villes"
-    ],
-    "Zaghouan": [
-      "Zaghouen", "Saouaf", "Ez Zeriba", "En Nadhour",
-      "El Fahs", "Bir Mchergua", "Autres Villes"
-    ]
-  };
 
+  const isValidEmail = (email) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email);
+  const isStrongPassword = (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
+  const isValidPhone = (phone) => /^[0-9]{8,15}$/.test(phone);
+  const isValidName = (name) => /^[a-zA-Z\s]+$/.test(name);
 
   const handleCityChange = (e) => {
     const cityIndex = e.target.selectedIndex - 1;
@@ -208,8 +67,8 @@ function Register() {
     setSelectedSubCityIndex(subCityIndex);
   };
 
-  const handleRoleChange = (e) => {
-    setRole(e.target.value);
+  const handleRoleChange = (newRole) => {
+    setRole(newRole);
     setImageFile(null);
     setImagePreview(null);
     setFormData({
@@ -237,27 +96,101 @@ function Register() {
     }
   };
 
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
+    if (!formData.firstName) {
+      setError(t("register.error.firstNameRequired"));
+      toast.error(t("register.error.firstNameRequired"));
+      return;
+    }
+
+    if (formData.firstName.length < 4 || !isValidName(formData.firstName)) {
+      setError(t("register.error.invalidFirstName"));
+      toast.error(t("register.error.invalidFirstName"));
+      return;
+    }
+    if (!formData.lastName) {
+      setError(t("register.error.lastNameRequired"));
+      toast.error(t("register.error.lastNameRequired"));
+      return;
+    }
+    if (formData.lastName.length < 4 || !isValidName(formData.lastName)) {
+      setError(t("register.error.invalidLastName"));
+      toast.error(t("register.error.invalidLastName"));
+      return;
+    }
+
+    if (!formData.email || !isValidEmail(formData.email)) {
+      setError(t("register.error.emailRequired"));
+      toast.error(t("register.error.emailRequired"));
+      return;
+    }
+
+    if (!formData.password) {
+      setError(t("register.error.passwordRequired"));
+      toast.error(t("register.error.passwordRequired"));
+      return;
+    }
+
+    if (!isStrongPassword(formData.password)) {
+      setError(t("register.error.passwordStrength"));
+      toast.error(t("register.error.passwordStrength"));
+      return;
+    }
+    if (!formData.phone) {
+      setError(t("register.error.phoneRequired"));
+      toast.error(t("register.error.phoneRequired"));
+      return;
+    }
+
+    if (!isValidPhone(formData.phone)) {
+      setError(t("register.error.invalidPhone"));
+      toast.error(t("register.error.invalidPhone"));
+      return;
+    }
+
+    if (!formData.address) {
+      setError(t("register.error.addressRequired"));
+      toast.error(t("register.error.addressRequired"));
+      return;
+    }
+
+    if (!selectedCity) {
+      setError(t("register.error.cityRequired"));
+      toast.error(t("register.error.cityRequired"));
+      return;
+    }
+
+    if (!selectedSubCity) {
+      setError(t("register.error.subCityRequired"));
+      toast.error(t("register.error.subCityRequired"));
+      return;
+    }
+
+
+
     if (role === "seller") {
-      if (!formData.shopName || !formData.address) {
+      if (!formData.shopName) {
         setError(t("register.error.fillShopNameAddress"));
+        toast.error(t("register.error.fillShopNameAddress"));
         return;
       }
       if (!imageFile) {
         setError(t("register.error.uploadProfileImage"));
+        toast.error(t("register.error.uploadProfileImage"));
         return;
       }
     }
-    if (role === "shoper") {
-      if (!formData.phone) {
-        setError(t("register.error.enterPhone"));
-        return;
-      }
+    if (!acceptedTerms) {
+      setError(t("register.error.acceptTerms"));
+      toast.error(t("register.error.acceptTerms"));
+      return;
     }
-
     try {
       let imageUrl = "";
 
@@ -295,7 +228,10 @@ function Register() {
             dateModified: new Date()
           }
           ] : [],
-          phone: formData.phone ? [{ phone: formData.phone, dateModified: new Date() }] : [],
+          phone: formData.phone ? [{
+            phone: formData.phone,
+            dateModified: new Date()
+          }] : [],
           image: imageUrl,
           active: false,
           lastOnline: new Date(),
@@ -314,7 +250,10 @@ function Register() {
             dateModified: new Date()
           }
           ] : [],
-          phone: formData.phone ? [{ phone: formData.phone, dateModified: new Date() }] : [],
+          phone: formData.phone ? [{
+            phone: formData.phone,
+            dateModified: new Date()
+          }] : [],
           image: imageUrl || "",
           active: true,
           lastOnline: new Date(),
@@ -326,12 +265,26 @@ function Register() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-
-      if (!res.ok) throw new Error(t("register.error.registrationFailed"));
-
+      const responseText = await res.text();
+      if (!res.ok) {
+        let errorData = {};
+        try {
+          errorData = JSON.parse(responseText);
+        } catch (jsonError) {
+          errorData = { message: "unknown error" };
+        }
+        throw new Error(errorData.message || "unknown error");
+      }
+      toast.success(t("register.success"));
       navigate("/login");
     } catch (err) {
-      setError(err.message);
+      if (err.message === "user already exists") {
+        setError(t("register.error.userAlreadyExists"));
+        toast.error(t("register.error.userAlreadyExists"));
+      } else {
+        setError(err.message);
+        toast.error(err.message)
+      }
     }
   };
 
@@ -339,16 +292,25 @@ function Register() {
     <div className="register-page">
 
       <div className="register-page-content">
-        <div className="register-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-          <form className="register-form" onSubmit={handleSubmit}>
+        <div className="register-container" dir={i18n.language === "ar" ? "rtl" : "ltr"} >
+          <form className="register-form" onSubmit={handleSubmit} lang={i18n.language}>
             <h2>{t("register.title")}</h2>
             {error && <p className="error">{error}</p>}
 
-            <label>{t("register.role")}</label>
-            <select value={role} onChange={handleRoleChange}>
-              <option value="shoper">{t("register.shoper")}</option>
-              <option value="seller">{t("register.seller")}</option>
-            </select>
+            <div className="role-selection">
+              <div
+                className={`role-option ${role === 'shoper' ? 'active' : ''}`}
+                onClick={() => handleRoleChange('shoper')}
+              >
+                {t("register.shoper")}
+              </div>
+              <div
+                className={`role-option ${role === 'seller' ? 'active' : ''}`}
+                onClick={() => handleRoleChange('seller')}
+              >
+                {t("register.seller")}
+              </div>
+            </div>
 
             <label>{t("register.firstName")}</label>
             <input
@@ -356,7 +318,6 @@ function Register() {
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
-              required
             />
             <label>{t("register.lastName")}</label>
             <input
@@ -364,7 +325,6 @@ function Register() {
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
-              required
             />
             <label>{t("register.email")}</label>
             <input
@@ -372,7 +332,6 @@ function Register() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              required
             />
             <label>{t("register.password")}</label>
             <input
@@ -380,7 +339,6 @@ function Register() {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              required
             />
             <label>{t("register.phone")}</label>
             <input
@@ -388,7 +346,6 @@ function Register() {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              required
             />
             <label>{t("register.address")}</label>
             <input
@@ -396,11 +353,10 @@ function Register() {
               name="address"
               value={formData.address}
               onChange={handleChange}
-              required
             />
             <label>{t("register.city")}</label>
-            <select name="city" value={selectedCity || ''} onChange={handleCityChange} required>
-              <option value="">-- {t("selectCity")} --</option>
+            <select name="city" value={selectedCity || ''} onChange={handleCityChange}>
+              <option value="">{t("selectCity")}</option>
               {cities.map((city, index) => (
                 <option key={index} value={city}>
                   {city}
@@ -411,8 +367,8 @@ function Register() {
             {selectedCity && (
               <>
                 <label>{t("register.subCity")}</label>
-                <select name="subCity" value={selectedSubCity || ''} onChange={handleSubCityChange} required>
-                  <option value="">-- {t("selectSubCity")} --</option>
+                <select name="subCity" value={selectedSubCity || ''} onChange={handleSubCityChange}>
+                  <option value="">{t("selectSubCity")}</option>
                   {subCities.map((subCity, index) => (
                     <option key={index} value={subCity}>
                       {subCity}
@@ -437,7 +393,6 @@ function Register() {
                   name="shopName"
                   value={formData.shopName}
                   onChange={handleChange}
-                  required
                 />
 
 
@@ -446,17 +401,36 @@ function Register() {
               </>
             )}
 
+            <div className="terms-checkbox">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={acceptedTerms}
+                  onChange={handleCheckboxChange}
+                />
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: t("register.acceptTerms", {
+                      cmandiLink: "/agb",
+                      privacyLink: "/data_protection"
+                    })
+                  }}
+                />
+              </label>
+            </div>
+
             <button type="submit">{t("register.submit")}</button>
 
             <p className="login-link">
               {t("register.alreadyRegistered")}
               <span
                 onClick={() => navigate("/login")}
-                style={{ color: "#0077cc", cursor: "pointer", textDecoration: "underline" }}
               >
                 {t("login")}
               </span>
             </p>
+
+
           </form>
         </div>
       </div>

@@ -1,19 +1,12 @@
 import "./profile_seller_header.css";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
-} from "recharts";
+
 import React, { useState, useEffect } from "react";
+import { cities, citiesData } from '../const/cities';
 
 function ProfileSellerHeader({ seller, apiUrl, token }) {
 
   const [stats, setStats] = useState({ openOrders: 0, totalOrders: 0 });
-useEffect(() => {
+  useEffect(() => {
     if (!seller?._id) return;
 
     const fetchStats = async () => {
@@ -33,20 +26,29 @@ useEffect(() => {
 
   return (
     <div className="profile-header">
-      {/* Linke Profilseite */}
       <div className="profile-left">
         <img src={seller.image} alt={seller.shopName} className="profile-image" />
         <h2 className="shop-name">{seller.shopName}</h2>
         <h3>
           {seller.firstName} {seller.lastName}
         </h3>
-        <p>{seller.address}</p>
+        {seller.address && seller.address.length > 0 ? (
+          <p>
+            {seller.address[seller.address.length - 1].address} &nbsp;
+            {citiesData[cities[seller.address[seller.address.length - 1].city]][seller.address[seller.address.length - 1].subCity]} &nbsp;
+            {cities[seller.address[seller.address.length - 1].city]}
+          </p>
+        ) : (
+          <p>No address available</p>
+        )}
         <p>{seller.email}</p>
-        <p>{seller.phone}</p>
+        {seller.phone && seller.phone.length > 0 ? (
+          <p>{seller.phone[seller.phone.length - 1].phone}</p>
+        ) : (
+          <p>No phone available</p>
+        )}
       </div>
-      {/* Rechte Seite (eigene Cards, nicht verschachtelt) */}
       <div className="right-content">
-        {/* === Orders Card === */}
         <div className="order-stats-card">
           <div className="stat-item">
             <h4>Open Orders</h4>

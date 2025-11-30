@@ -20,6 +20,8 @@ import "./i18n";
 import { Header } from "./components/header/header";
 import Foot from "./components/foot/foot";
 import SeedProducts from './components/new_product/seed_products.js';
+import Agb from './components/info_pages/agb.js';
+import DataProtection from './components/info_pages/data_protection.js';
 function App() {
 
   return (
@@ -62,6 +64,8 @@ function App() {
           <Route path="/press" element={<InfoPage pageKey="press" />} />
           <Route path="/mobile-apps" element={<InfoPage pageKey="mobile_apps" />} />
           <Route path="/saved_products" element={<SavedProducts />} />
+          <Route path="/agb" element={<Agb />} />
+          <Route path="/data_protection" element={<DataProtection />} />
         </Routes>
         <Foot />
       </Router>
