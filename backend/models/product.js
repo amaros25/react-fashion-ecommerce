@@ -8,7 +8,7 @@ function generateProductNumber() {
   return `PR-${randomLetter}${randomNum}`; // z.B. PR-A47291
 }
 
-// 📝 Bewertung Schema
+// 📝 Review Schema
 const reviewSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true },
   rating: { type: Number, min: 1, max: 5, required: true },
