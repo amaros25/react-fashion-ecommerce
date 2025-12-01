@@ -34,13 +34,14 @@ function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.userId);
-
       localStorage.setItem("userData", JSON.stringify({
         email: data.email,
         phone: data.phone,
-        address: data.address,
         firstName: data.firstName,
         lastName: data.lastName,
+        address: data.address,
+        city: data.city,
+        subCity: data.subCity,
       }));
 
       if (data.role === "seller") {

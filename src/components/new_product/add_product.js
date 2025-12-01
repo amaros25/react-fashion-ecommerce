@@ -112,6 +112,7 @@ function AddProduct() {
         sellerId: userId,
         price: parseFloat(formData.price),
         image: imageUrls,
+        delprice: parseFloat(formData.shipment_price),
         state: 0
       };
       const res = await fetch(`${apiUrl}/products/create`, {
@@ -170,8 +171,22 @@ function AddProduct() {
                   required
                   onChange={handleChange}
                 />
-                <span className="currency-symbol">€</span>
+                <span className="currency-symbol">TND</span>
               </div>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>{t("product_shipement_price")}</label>
+            <div className="price-input-wrapper">
+              <input
+                type="number"
+                name="shipment_price"
+                placeholder="0.00"
+                required
+                onChange={handleChange}
+              />
+              <span className="currency-symbol">TND</span>
             </div>
           </div>
 

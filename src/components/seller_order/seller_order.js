@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "./seller_orders.css";  // für Styles
+import { ORDER_STATUS, ORDER_STATUS_LABELS } from "../const/order_status";
+import "./seller_orders.css";
 
 function SellerOrders() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -18,10 +19,10 @@ function SellerOrders() {
         if (!res.ok) throw new Error("Failed to fetch orders");
         const data = await res.json();
 
-        // Sortiere nach Datum neueste zuerst (angenommen createdAt gibt's)
-        data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        // Sortiere nach Datum neueste zuerst
+        data.orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-        setOrders(data);
+        setOrders(data.orders);
       } catch (err) {
         console.error(err);
       } finally {
@@ -30,7 +31,7 @@ function SellerOrders() {
     };
 
     fetchOrders();
-  }, [userId, token]);
+  }, [userId, token, apiUrl]);
 
   // Status ändern
   const handleStatusChange = async (orderId, newStatus) => {
@@ -41,7 +42,7 @@ function SellerOrders() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ status: parseInt(newStatus) }),
       });
 
       if (!res.ok) throw new Error("Failed to update status");
@@ -49,9 +50,15 @@ function SellerOrders() {
       // Update lokal die Orders, um UI zu aktualisieren
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
-          order._id === orderId ? { ...order, status: newStatus } : order
+          order._id === orderId
+            ? {
+              ...order,
+              status: [...order.status, { update: parseInt(newStatus), date: new Date() }],
+            }
+            : order
         )
       );
+      // Optional: Toast success
     } catch (err) {
       alert("Error updating order status");
       console.error(err);
@@ -62,7 +69,6 @@ function SellerOrders() {
 
   return (
     <div className="seller-orders-container">
-
       <h2>Manage Orders</h2>
       <table className="orders-table">
         <thead>
@@ -78,40 +84,52 @@ function SellerOrders() {
         </thead>
         <tbody>
           {orders.map((order) => {
-            const lastStatus = order.status?.slice(-1)[0]?.update || "pending";
+            const lastStatusObj = order.status?.slice(-1)[0];
+            const lastStatus = lastStatusObj ? lastStatusObj.update : ORDER_STATUS.PENDING;
             const createdAt = new Date(order.createdAt).toLocaleString();
 
             return (
               <tr key={order._id}>
                 <td>{createdAt}</td>
-                <td>{order.productID?.name || "Unknown"}</td>
                 <td>
-                  {order.sizes.map((s) => (
-                    <div key={s.size}>
-                      {s.size} - {s.quantity}
+                  {order.items.map((item, idx) => (
+                    <div key={idx}>{item.product?.name || "Unknown"}</div>
+                  ))}
+                </td>
+                <td>
+                  {order.items.map((item, idx) => (
+                    <div key={idx}>
+                      {item.size} - {item.quantity}
                     </div>
                   ))}
                 </td>
                 <td>
-                  {order.shippingAddress.street}, {order.shippingAddress.city},{" "}
-                  {order.shippingAddress.postalCode}, {order.shippingAddress.country}
+                  {order.user?.address?.street}, {order.user?.address?.city},{" "}
+                  {order.user?.address?.postalCode}
                 </td>
                 <td>
-                  {order.userId?.firstName} {order.userId?.lastName} <br />
-                  Tel: {order.userId?.phone} <br />
-                  Email: {order.userId?.email}
+                  {order.user?.firstName} {order.user?.lastName} <br />
+                  Tel: {order.user?.phone} <br />
+                  Email: {order.user?.email}
                 </td>
-                <td>{lastStatus}</td>
+                <td>
+                  <span className={`status-badge status-${lastStatus}`}>
+                    {ORDER_STATUS_LABELS[lastStatus]}
+                  </span>
+                </td>
                 <td>
                   <select
                     value={lastStatus}
                     onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                    className="status-select"
                   >
-                    <option value="pending">Pending</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="cancelled">Cancelled</option>
+                    <option value={ORDER_STATUS.PENDING}>Pending</option>
+                    <option value={ORDER_STATUS.CONFIRMED}>Confirmed</option>
+                    <option value={ORDER_STATUS.READY_TO_PICKUP}>Ready to Pickup</option>
+                    <option value={ORDER_STATUS.PICKED_UP}>Picked Up</option>
+                    <option value={ORDER_STATUS.SHIPPED}>Shipped</option>
+                    <option value={ORDER_STATUS.DELIVERED}>Delivered</option>
+                    <option value={ORDER_STATUS.CANCELLED}>Cancelled</option>
                   </select>
                 </td>
               </tr>

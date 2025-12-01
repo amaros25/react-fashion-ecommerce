@@ -60,6 +60,7 @@ function ProductPage() {
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
+        console.log(data);
         if (Array.isArray(data.image) && data.image.length > 0) {
           setMainImage(data.image[0]);
         } else if (data.image) {
@@ -129,6 +130,7 @@ function ProductPage() {
       productId: product._id,
       name: product.name,
       price: product.price,
+      delprice: product.delprice || 0,
       image: mainImage,
       size: selectedSize,
       color: selectedColor,
@@ -182,7 +184,7 @@ function ProductPage() {
     <div className="product-page">
 
       <div className="breadcrumb-container">
-        <Breadcrumb category={product.category} productName={product.name} />
+        <Breadcrumb category={product.category} subCategory={product.subcategory} productName={product.name} />
       </div>
 
       <div className="product-main-content">

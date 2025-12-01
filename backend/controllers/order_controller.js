@@ -2,26 +2,26 @@ const mongoose = require('mongoose')
 const Order = require('../models/order')
 const User = require('../models/user');
 const Product = require('../models/product');
- 
+
 exports.getOrderByID = async (req, res) => {
-    try{
-        const order = await Order.findById(req.params.id);
-        if (!order){
-            return res.status(404).json({ message: 'Order not found' });
-        }
-        res.json(order);
-    }catch(error){
-      res.status(500).json({ message: 'Error fetching order', error });  
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
     }
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching order', error });
+  }
 };
 
 exports.getOrderBySellerID = async (req, res) => {
   try {
     const sellerId = req.params.sellerId;
-    const page = parseInt(req.query.page) || 1;1
+    const page = parseInt(req.query.page) || 1; 1
     const limit = parseInt(req.query.limit) || 20;
-    const { status, orderNumber } = req.query; 
- 
+    const { status, orderNumber } = req.query;
+
 
     if (!sellerId) {
       return res.status(400).json({ message: 'sellerId wird benötigt' });
@@ -108,14 +108,14 @@ exports.getOrderByUserID = async (req, res) => {
   }
 };
 
-exports.createOrder = async(req, res) => {
-    try {
-        const order = new Order(req.body);
-        await order.save();
-        res.status(201).json(order);
-    } catch (error) {
-        res.status(500).json({ message: 'Error adding order', error });
-    }
+exports.createOrder = async (req, res) => {
+  try {
+    const order = new Order(req.body);
+    await order.save();
+    res.status(201).json(order);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding order', error });
+  }
 };
 
 exports.updateOrderStatus = async (req, res) => {
@@ -166,9 +166,9 @@ exports.getSellerOrderStats = async (req, res) => {
     }
     const orders = await Order.find({ sellerId }).select("status").lean();
     const totalOrders = orders.length;
-    const openStatuses = ["pending"];
+    const openStatuses = [0]; // 0 = Pending
     const openOrders = orders.filter(order => {
-      const lastStatus = order.status?.length ? order.status[order.status.length - 1].update : "pending";
+      const lastStatus = order.status?.length ? order.status[order.status.length - 1].update : 0;
       return openStatuses.includes(lastStatus);
     });
 

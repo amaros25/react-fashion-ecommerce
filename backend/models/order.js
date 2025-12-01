@@ -35,35 +35,15 @@ const orderSchema = new mongoose.Schema({
   totalPrice: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now },
   deliveredAt: { type: Date },
+
   trackingNumber: { type: String },
   paymentMethod: { type: String },
+  is_delivery: { type: Boolean, default: true },
 
   status: [
     {
       date: { type: Date, default: Date.now },
-      update: { 
-        type: String, 
-        enum: [
-          'pending',
-          'confirmed',
-          'dont_respond',
-          'shipped',
-          'delivered',
-          'received',
-          'user_cancelled',
-          'seller_cancelled',
-          'failed_delivery',
-          'second_try',
-          'third_try',
-          'returned_to_sender',
-          'return_requested',
-          'return_rejected',
-          'return_confirmed',
-          'return_shipped',
-          'return_received',
-          ],
-        default: 'pending' 
-    }
+      update: { type: Number, default: 0 }
     }
   ],
   order_coupon: { type: String },

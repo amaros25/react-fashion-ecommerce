@@ -39,14 +39,14 @@ export default function ProfileUser() {
       <UserProfileHeader user={user} totalOrders={totalOrders} openOrders={openOrders} t={t} />
 
       <h3>📦 {t("your_orders")}</h3>
-      <ProfileUserOrders
+      {/* <ProfileUserOrders
         orders={orders}
         products={products}
         totalPages={totalPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         t={t}
-      />
+      /> */}
 
     </div>
   );

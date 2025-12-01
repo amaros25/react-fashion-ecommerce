@@ -24,22 +24,23 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
 
   useEffect(() => {
     // Initialize form data from user
-    if (user.address && user.address.length > 0) {
-      const lastAddress = user.address[user.address.length - 1];
+    if (user.address) {
+
+
       setFormData(prev => ({
         ...prev,
-        address: lastAddress.address,
-        city: cities[lastAddress.city],
-        subCity: citiesData[cities[lastAddress.city]]?.[lastAddress.subCity] || ""
+        address: user.address,
+        city: cities[user.city],
+        subCity: citiesData[cities[user.city]]?.[user.subCity] || ""
       }));
-      if (cities[lastAddress.city]) {
-        setSubCities(citiesData[cities[lastAddress.city]] || []);
+      if (cities[user.city]) {
+        setSubCities(citiesData[cities[user.city]] || []);
       }
     }
-    if (user.phone && user.phone.length > 0) {
+    if (user.phone) {
       setFormData(prev => ({
         ...prev,
-        phone: user.phone[user.phone.length - 1].phone
+        phone: user.phone
       }));
     }
   }, [user]);
@@ -139,22 +140,20 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
               <div className="user-contact-info-grid">
                 <div className="user-contact-item">
                   <FaMapMarkerAlt className="user-contact-icon" />
-                  {user.address && user.address.length > 0 ? (
+                  {user.address && user.city ? (
                     <span>
-                      {user.address[user.address.length - 1].address},&nbsp;
-                      {citiesData[cities[user.address[user.address.length - 1].city]][user.address[user.address.length - 1].subCity]},&nbsp;
-                      {cities[user.address[user.address.length - 1].city]}
+                      {user.address},{user.subCity && ` ${user.subCity},`} {user.city}
                     </span>
                   ) : (
-                    <span>No address set</span>
+                    <span>{t("cart_page.no_address_set")}</span>
                   )}
                 </div>
                 <div className="user-contact-item">
                   <FaPhone className="user-contact-icon" />
-                  {user.phone && user.phone.length > 0 ? (
-                    <span>{user.phone[user.phone.length - 1].phone}</span>
+                  {user.phone ? (
+                    <span>{user.phone}</span>
                   ) : (
-                    <span>No phone set</span>
+                    <span>{t("cart_page.no_phone_set")}</span>
                   )}
                 </div>
               </div>

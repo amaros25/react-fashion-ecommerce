@@ -28,6 +28,19 @@ const login = async (req, res) => {
 
     const token = jwt.sign({ id: user._id, role }, JWT_SECRET, { expiresIn: "1d" });
 
+    const lastAddress =
+      Array.isArray(user.address) && user.address.length > 0
+        ? user.address[user.address.length - 1]
+        : null;
+
+    const lastPhone =
+      Array.isArray(user.phone) && user.phone.length > 0
+        ? user.phone[user.phone.length - 1]
+        : null;
+    console.log("lastPhone : ", lastPhone.phone);
+    console.log("lastAddress : ", lastAddress.address);
+    console.log("lastAddress : ", lastAddress.city);
+    console.log("lastAddress : ", lastAddress.subCity);
     res.json({
       token,
       role,
@@ -35,8 +48,10 @@ const login = async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      phone: user.phone,
-      address: user.address
+      phone: lastPhone.phone,
+      address: lastAddress.address,
+      city: lastAddress.city,
+      subCity: lastAddress.subCity,
     });
   } catch (err) {
     console.error(err);

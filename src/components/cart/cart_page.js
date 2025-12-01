@@ -1,98 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import DeliveryAddressForm from "./delivery_address_form";
 import { useTranslation } from "react-i18next";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaArrowRight, FaShoppingBag, FaStore } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { ORDER_STATUS } from "../const/order_status";
+import { fetchSellers, createMultipleOrders } from "./api";
 import "./cart_page.css";
 
 const CartPage = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
   const { t, i18n } = useTranslation();
-  const SHIPPING_COST = 7.5;
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
-
-  // -------------------------------
-  // State variables
-  // -------------------------------
-  const [user, setUser] = useState(null); // stores user info
   const navigate = useNavigate();
-  const [cart, setCart] = useState([]); // stores all cart items
-  const [groupedCart, setGroupedCart] = useState({}); // grouped by seller
-  const [showAddressForm, setShowAddressForm] = useState(false); // toggle delivery address form
-  const [canOrder, setCanOrder] = useState(false);
 
-  const [deliveryAddresses, setDeliveryAddresses] = useState({
-    street: "",
-    city: "",
-    postalCode: "",
-  });
-
+  const [cart, setCart] = useState([]);
+  const [groupedCart, setGroupedCart] = useState({});
   const [sellers, setSellers] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDelivery, setIsDelivery] = useState(true);
+  const [user, setUser] = useState(null);
 
+  // Fetch Sellers
   useEffect(() => {
-    const fetchSellers = async () => {
+    const loadSellers = async () => {
       try {
-        const res = await fetch(`${apiUrl}/sellers`);
-        const data = await res.json();
-        // map sellerId => seller object
-        const sellerMap = data.reduce((acc, seller) => {
-          acc[seller._id] = seller;
-          return acc;
-        }, {});
+        const sellerMap = await fetchSellers();
         setSellers(sellerMap);
       } catch (err) {
         console.error(err);
       }
     };
-    fetchSellers();
+    loadSellers();
   }, []);
 
-
-  // -------------------------------
-  // Fetch user data on mount
-  // -------------------------------
+  // Load User Data from localStorage
   useEffect(() => {
-    const fetchUser = async () => {
+    const userData = localStorage.getItem("userData");
+    if (userData) {
       try {
-        const res = await fetch(`${apiUrl}/users/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-        setUser(data);
-        console.log("🟢 user data:", data);
-
-        // Show address form if no address exists
-        if (data.address) {
-          console.log("🟢 address", data.address);
-          setDeliveryAddresses({
-            street: data.address.street || "",
-            city: data.address.city || "",
-            postalCode: data.address.postalCode || "",
-          });
-          setShowAddressForm(false);
-        } else {
-          setShowAddressForm(true);
-        }
-        console.log("🟢 deliveryAddresses", deliveryAddresses);
+        const parsedData = JSON.parse(userData);
+        setUser(parsedData);
       } catch (err) {
-        console.error(err);
+        console.error("Error parsing user data:", err);
       }
-    };
-    fetchUser();
+    }
   }, []);
 
-  // -------------------------------
-  // Set text direction based on language
-  // -------------------------------
-  useEffect(() => {
-    document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
-  }, [i18n.language]);
-
-  // -------------------------------
-  // Load cart from localStorage and group by seller
-  // -------------------------------
+  // Load Cart
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(savedCart);
@@ -105,9 +59,7 @@ const CartPage = () => {
     setGroupedCart(grouped);
   }, []);
 
-  // -------------------------------
-  // Remove item from cart
-  // -------------------------------
+  // Remove Item
   const handleRemoveItem = (sellerId, index) => {
     const updatedGroup = groupedCart[sellerId].filter((_, i) => i !== index);
     const newCart = cart.filter(
@@ -129,53 +81,24 @@ const CartPage = () => {
     }
   };
 
-  const handle_new_order = async () => {
+  // Submit Order
+  const handleNewOrder = async () => {
     if (!userId || !token) {
       toast.error(t("product_page.must_login"));
+      navigate("/login");
       return;
     }
 
-    // if (!user?.address?.street) {
-    //   toast.error(t("enter_address_first"));
-    //   return;
-    // }
+    if (isDelivery && (!user?.address || !user?.city)) {
+      toast.error(t("cart_page.address_required") || "Please add your delivery address first");
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
-      for (const [sellerId, items] of Object.entries(groupedCart)) {
-        const formattedItems = items.map((item) => ({
-          productId: item.productId,
-          color: item.color,
-          size: item.size,
-          quantity: item.quantity,
-        }));
-
-        const totalPrice =
-          items.reduce((sum, i) => sum + i.price * i.quantity, 0) + SHIPPING_COST;
-
-        const orderData = {
-          userId,
-          sellerId,
-          items: formattedItems,
-          totalPrice,
-          status: [{ update: "pending", date: new Date() }],
-          notes: "",
-          paymentMethod: "Cash on Delivery",
-        };
-
-        const res = await fetch(`${apiUrl}/orders/create`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(orderData),
-        });
-
-        if (!res.ok) {
-          throw new Error(`Fehler beim Erstellen der Bestellung für Seller ${sellerId}`);
-        }
-      }
-      toast.error(t("orders_created_success"));
+      await createMultipleOrders(groupedCart, userId, token, ORDER_STATUS.PENDING, isDelivery);
+      toast.success(t("orders_created_success"));
       localStorage.removeItem("cart");
       setCart([]);
       setGroupedCart({});
@@ -183,187 +106,177 @@ const CartPage = () => {
     } catch (err) {
       console.error(err);
       toast.error(t("orders_created_error"));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // -------------------------------
-  // Navigate to product page
-  // -------------------------------
-  const handleGoToProduct = (productId) => {
-    navigate(`/product/${productId}`);
-  };
-
-  // -------------------------------
-  // Calculate subtotal for a seller (including shipping once)
-  // -------------------------------
   const calculateSellerTotal = (sellerItems) => {
     const subtotal = sellerItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-    return subtotal + SHIPPING_COST;
+    const shippingCost = isDelivery ? sellerItems.reduce((sum, item) => sum + (item.delprice || 0), 0) : 0;
+    return subtotal + shippingCost;
   };
 
-  // -------------------------------
-  // Calculate total for all sellers
-  // -------------------------------
   const calculateTotal = () => {
     return Object.entries(groupedCart).reduce((total, [_, items]) => {
       const sellerSubtotal = items.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
       );
-      return total + sellerSubtotal + SHIPPING_COST;
+      const shippingCost = isDelivery ? items.reduce((sum, item) => sum + (item.delprice || 0), 0) : 0;
+      return total + sellerSubtotal + shippingCost;
     }, 0);
   };
 
-  // -------------------------------
-  // Save delivery address to backend
-  // -------------------------------
-
-  const handleSaveAddress = async (newData) => {
-    try {
-      const res = await fetch(`${apiUrl}/users/${userId}/updateContact`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(newData),
-      });
-
-      if (!res.ok) throw new Error("Failed to save contact info");
-
-      const updated = await res.json();
-      setUser(updated.user);
-      setDeliveryAddresses(updated.user.address);
-      setShowAddressForm(false);
-      toast.info(t("address_saved"));
-    } catch (err) {
-      console.error(err);
-      toast.error(t("address_save_error"));
-    }
-  };
-
-
-  // -------------------------------
-  // Render empty cart view
-  // -------------------------------
   if (cart.length === 0) {
     return (
-      <div className="cart-page">
-        <div className="cart-content">
-          <div className="cart-empty">
-            <h2>🛒 {t("cart_page.empty_cart")}</h2>
-          </div>
+      <div className="cart-page-empty">
+        <div className="empty-state">
+          <FaShoppingBag className="empty-icon" />
+          <h2>{t("cart_page.empty_cart")}</h2>
+          <p>{t("cart_page.empty_desc") || "Looks like you haven't added anything to your cart yet."}</p>
+          <button onClick={() => navigate("/")} className="continue-shopping-btn">
+            {t("cart_page.continue_shopping") || "Continue Shopping"}
+          </button>
         </div>
       </div>
     );
   }
 
-  // -------------------------------
-  // Render cart page
-  // -------------------------------
   return (
-    <div className="cart-page">
-      <div className="cart-content">
-        <h1 className="cart-title">🛍️ {t("cart_page.title")}</h1>
-        <div className="cart-container">
+    <div className="cart-page-container">
+      <div className="cart-header">
+        <h1>{t("cart_page.title")}</h1>
+        <span className="item-count">{cart.length} {t("cart_page.items") || "Items"}</span>
+      </div>
+
+      <div className="cart-layout">
+        <div className="cart-items-section">
           {Object.entries(groupedCart).map(([sellerId, items]) => {
             const seller = sellers[sellerId];
             return (
-              <div key={sellerId} className="seller-section">
+              <div key={sellerId} className="seller-group">
                 {seller && (
-                  <div className="seller-header">
-                    <img src={seller.image} alt={seller.shopName} className="seller-image" />
-                    <h2 className="seller-name">{seller.shopName}</h2>
+                  <div className="seller-header-modern">
+                    <FaStore className="store-icon" />
+                    <span className="cart-seller-name">{seller.shopName}</span>
                   </div>
                 )}
-                <div className="cart-items">
+                <div className="items-list">
                   {items.map((item, i) => (
-                    <div key={i} className="cart-item">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="cart-item-image"
-                        onClick={() => handleGoToProduct(item.productId)}
-                      />
-                      <div
-                        className="cart-item-info"
-                        onClick={() => handleGoToProduct(item.productId)}
-                      >
-                        <h3 className="cart-item-name">{item.name}</h3>
-                        <p className="cart-item-details">
-                          Size: {item.size} | Color: {item.color}
-                        </p>
-                        <p className="cart-item-price">
-                          {item.quantity} × {item.price.toFixed(3)} {t("cart_page.price_suf")}
-                        </p>
+                    <div key={i} className="cart-item-modern">
+                      <div className="item-image-wrapper" onClick={() => navigate(`/product/${item.productId}`)}>
+                        <img src={item.image} alt={item.name} />
                       </div>
-                      <button
-                        className="remove-button"
-                        onClick={() => handleRemoveItem(sellerId, i)}
-                      >
-                        <FaTrash size={18} color="red" />
-                      </button>
+                      <div className="item-details">
+                        <div className="item-info-top">
+                          <h3 onClick={() => navigate(`/product/${item.productId}`)}>{item.name}</h3>
+                          <button
+                            className="remove-btn-modern"
+                            onClick={() => handleRemoveItem(sellerId, i)}
+                            aria-label="Remove item"
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                        <div className="item-specs">
+                          <span className="spec-badge">{item.size}</span>
+                          <span className="spec-badge" style={{ backgroundColor: item.color }}></span>
+                        </div>
+                        <div className="item-price-row">
+                          <span className="quantity">Qty: {item.quantity}</span>
+                          <span className="price">
+                            {(item.price * item.quantity).toFixed(3)} {t("cart_page.price_suf")}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
-                <div className="seller-summary">
-                  <p>
-                    🚚 {t("cart_page.shipping_cost_once")} {SHIPPING_COST.toFixed(3)} {t("cart_page.price_suf")}
-                  </p>
-                  <h3>
-                    {t("cart_page.seller_subtotal")} {calculateSellerTotal(items).toFixed(3)} {t("cart_page.price_suf")}
-                  </h3>
+                <div className="seller-subtotal">
+                  <span>{t("cart_page.shipping")}: {items.reduce((sum, item) => sum + (item.delprice || 0), 0).toFixed(3)} {t("cart_page.price_suf")}</span>
+                  <span className="subtotal-val">
+                    {t("cart_page.subtotal")}: {calculateSellerTotal(items).toFixed(3)} {t("cart_page.price_suf")}
+                  </span>
                 </div>
               </div>
             );
           })}
         </div>
 
-        <div
-          className={`cart-summary ${i18n.language === "ar" ? "rtl" : "ltr"}`}
-        >
+        <div className="cart-summary-section">
+          <div className="summary-card">
+            <h2>{t("cart_page.order_summary")}</h2>
 
-          <h2 className="total-price">
-            {t("cart_page.total_price")}
-            {calculateTotal().toFixed(3)} {t("cart_page.price_suf")}
-          </h2>
-
-          {/* {user?.address?.street && !showAddressForm && (
-            <div className="current-address">
-              <span>
-                {user.address.street}, {user.address.postalCode} {user.address.city}
-              </span>
+            {/* Delivery/Pickup Toggle */}
+            <div className="delivery-toggle">
               <button
-                className="change-address-btn"
-                onClick={() => setShowAddressForm(true)}
+                className={`toggle-btn ${isDelivery ? 'active' : ''}`}
+                onClick={() => setIsDelivery(true)}
               >
-                {t("cart_page.Change")}
+                🚚 {t("cart_page.delivery") || "Delivery"}
+              </button>
+              <button
+                className={`toggle-btn ${!isDelivery ? 'active' : ''}`}
+                onClick={() => setIsDelivery(false)}
+              >
+                🏪 {t("cart_page.pickup") || "Pickup"}
               </button>
             </div>
-          )}
-          {showAddressForm && (
-            <div className="inline-address-form">
-              <DeliveryAddressForm
-                address={deliveryAddresses}
-                phone={user?.phone}
-                onSaveAddress={handleSaveAddress}
-              />
+
+            {/* Delivery Address */}
+            {isDelivery && user?.address && user?.city && (
+              <div className="delivery-address">
+                <p className="address-label">📍 {t("cart_page.delivery_address") || "Delivery Address"}:</p>
+                <p className="address-text">
+                  {user.address}, {user.subCity && `${user.subCity}, `}{user.city}
+                </p>
+                {user.phone && (
+                  <p className="address-text">
+                    📞 {user.phone}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {isDelivery && (!user?.address || !user?.city) && (
+              <div className="address-warning">
+                ⚠️ {t("cart_page.add_address") || "Please add your delivery address in your profile"}
+              </div>
+            )}
+
+            <div className="summary-row">
+              <span>{t("cart_page.subtotal")}</span>
+              <span>{cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(3)} {t("cart_page.price_suf")}</span>
             </div>
-          )} */}
-          <button
-            className="save-address-button"
+            {isDelivery && (
+              <div className="summary-row">
+                <span>{t("cart_page.shipping")}</span>
+                <span>{cart.reduce((sum, item) => sum + (item.delprice || 0), 0).toFixed(3)} {t("cart_page.price_suf")}</span>
+              </div>
+            )}
+            <div className="divider"></div>
+            <div className="summary-row total">
+              <span>{t("cart_page.total")}</span>
+              <span>{calculateTotal().toFixed(3)} {t("cart_page.price_suf")}</span>
+            </div>
 
-            onClick={() => handle_new_order()}
-          >
-            {t("product_page.submit_order")}
-          </button>
-
+            <button
+              className="checkout-btn"
+              onClick={handleNewOrder}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Processing..." : t("product_page.submit_order")}
+              {!isSubmitting && <FaArrowRight />}
+            </button>
+            {/* <p className="secure-checkout-text">
+              🔒 Secure Checkout
+            </p> */}
+          </div>
         </div>
-
-
       </div>
     </div>
   );
