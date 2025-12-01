@@ -10,6 +10,7 @@ import AddProduct from './components/new_product/add_product.js';
 import CartPage from './components/cart/cart_page.js';
 import MainChat from './components/chat/main_chat.js';
 import InfoPage from './components/info_pages/InfoPage.js';
+import ShopPage from './components/shop/ShopPage.js';
 
 import { FilterProvider } from './components/filter_context/filter_context.js';
 import { ToastContainer } from "react-toastify";
@@ -22,6 +23,7 @@ import Foot from "./components/foot/foot";
 import SeedProducts from './components/new_product/seed_products.js';
 import Agb from './components/info_pages/agb.js';
 import DataProtection from './components/info_pages/data_protection.js';
+
 function App() {
 
   return (
@@ -41,6 +43,7 @@ function App() {
           <Route path="/seller_orders" element={<SellerOrders />} />
           <Route path="/cart_page" element={<CartPage />} />
           <Route path="/chat" element={<MainChat />} />
+          <Route path="/shop/:sellerId" element={<ShopPage />} />
           <Route path="/home/:category/:subcategory" element={<Home />} />
           <Route path="/home/:category" element={<Home />} />
 

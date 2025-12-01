@@ -38,6 +38,11 @@ const productSchema = new mongoose.Schema({
     },
   ],
   discountedPercent: { type: Number, default: 0 },
+  states: [{
+    state: { type: Number, required: true, default: 0 },
+    createdAt: { type: Date, default: Date.now },
+  }
+  ]
 });
 
 // ⚙️ Automatisch Produktnummer generieren, wenn keine vorhanden ist

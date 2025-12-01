@@ -469,5 +469,12 @@
   "boys-clothing": "Garçons",
   "baby-clothing": "Bébés",
   "selectCity": "Choisissez une ville",
-  "selectSubCity": "Choisissez une Délégation"
+  "selectSubCity": "Choisissez une Délégation",
+  "product_state": {
+    "pending": "En attente d'approbation",
+    "active": "Actif",
+    "blocked": "Bloqué",
+    "deleted": "Supprimé",
+    "unknown": "Inconnu"
+  }
 }

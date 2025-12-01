@@ -75,6 +75,41 @@
     transition: color 0.2s ease;
 }
 
+.current-state-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    margin: 0;
+}
+
+/* Farben */
+.state-pending {
+    background: #ffe9a8;
+    color: #9a7a00;
+}
+
+.state-active {
+    background: #c8f7c5;
+    color: #1e6f1e;
+}
+
+.state-blocked {
+    background: #ffd0d0;
+    color: #9b1c1c;
+}
+
+.state-deleted {
+    background: #e0e0e0;
+    color: #555;
+}
+
+.state-unknown {
+    background: #ddd;
+    color: #666;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .product-main-content {

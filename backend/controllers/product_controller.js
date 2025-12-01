@@ -45,6 +45,12 @@ exports.getNewProducts = async (req, res) => {
         name: { $regex: word, $options: 'i' }
       }));
     }
+    match.$expr = {
+      $eq: [
+        { $last: "$states.state" },
+        1
+      ]
+    };
 
     // Aggregation Pipeline
     const pipeline = [

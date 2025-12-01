@@ -41,6 +41,26 @@ function SellerProducts({ sellerId, apiUrl, token }) {
     if (sellerId) fetchProducts(currentPage);
   }, [sellerId, currentPage]);
 
+  const getStateLabel = (state) => {
+    switch (state) {
+      case 0: return t("product_state.pending");
+      case 1: return t("product_state.active");
+      case 2: return t("product_state.blocked");
+      case 3: return t("product_state.deleted");
+      default: return t("product_state.unknown");
+    }
+  };
+
+  const getStateClass = (state) => {
+    switch (state) {
+      case 0: return "state-pending";
+      case 1: return "state-active";
+      case 2: return "state-blocked";
+      case 3: return "state-deleted";
+      default: return "state-unknown";
+    }
+  };
+
   return (
     <div
       className="seller-products-container"
@@ -100,7 +120,11 @@ function SellerProducts({ sellerId, apiUrl, token }) {
                   <span className="date-added">
                     Added: {new Date(product.createdAt).toLocaleDateString(i18n.language)}
                   </span>
+                  <span className={`current-state-badge ${getStateClass(product.states?.[product.states.length - 1]?.state)}`}>
+                    {getStateLabel(product.states?.[product.states.length - 1]?.state)}
+                  </span>
                 </div>
+
               </div>
             </div>
           ))

@@ -53,19 +53,44 @@ function ProductInfoHeader({ product, userId }) {
             ? ratingsWithValue.reduce((sum, r) => sum + r.rating, 0) / ratingsWithValue.length
             : 0;
 
+
+    const getStateLabel = (state) => {
+        switch (state) {
+            case 0: return t("product_state.pending");
+            case 1: return t("product_state.active");
+            case 2: return t("product_state.blocked");
+            case 3: return t("product_state.deleted");
+            default: return t("product_state.unknown");
+        }
+    };
+
+    const getStateClass = (state) => {
+        switch (state) {
+            case 0: return "state-pending";
+            case 1: return "state-active";
+            case 2: return "state-blocked";
+            case 3: return "state-deleted";
+            default: return "state-unknown";
+        }
+    };
     return (
         <>
-            <div className="product-header-row">
-                <h1 className="product-title-header-info">{product.name}</h1>
-                <div onClick={toggleSavedProduct} className="save-product-icon">
-                    {isProductSaved ? (
-                        <BsBookmarkHeartFill className="star-icon" size={22} /> // Saved
-                    ) : (
-                        <BsBookmarkHeart className="star-icon" size={22} /> // Not saved
-                    )}
-                </div>
-            </div>
+            <div className="product-header-column">
+                <div className="product-header-row">
+                    <h1 className="product-title-header-info">{product.name}</h1>
+                    <div onClick={toggleSavedProduct} className="save-product-icon">
+                        {isProductSaved ? (
+                            <BsBookmarkHeartFill className="star-icon" size={22} /> // Saved
+                        ) : (
+                            <BsBookmarkHeart className="star-icon" size={22} /> // Not saved
+                        )}
+                    </div>
 
+                </div>
+                <span className={`current-state-badge ${getStateClass(product.states?.[product.states.length - 1]?.state)}`}>
+                    {getStateLabel(product.states?.[product.states.length - 1]?.state)}
+                </span>
+            </div>
             <div className="product-price-rating-row">
                 <span className="product-price-header-info">{product.price} DT</span>
                 <div className="product-rating-container">

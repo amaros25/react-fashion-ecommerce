@@ -1,0 +1,234 @@
+/* Shop Page Container */
+.shop-page-container {
+    max-width: 100%;
+    margin: 0 auto;
+    min-height: 100vh;
+    background-color: #fcfcfc;
+    font-family: 'Outfit', sans-serif;
+    color: #333;
+}
+
+/* Hero Section */
+.shop-header {
+    position: relative;
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    padding: 80px 20px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid #eaeaea;
+    margin-bottom: 60px;
+}
+
+.shop-header-image {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+.shop-header-info {
+    max-width: 800px;
+    width: 100%;
+}
+
+.shop-name {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #111;
+    letter-spacing: -1px;
+    line-height: 1.2;
+}
+
+.seller-name {
+    font-size: 1.1rem;
+    color: #666;
+    margin: 0 0 20px 0;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.seller-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #888;
+    font-size: 0.95rem;
+}
+
+/* Stats & Rating */
+.shop-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.shop-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    padding: 8px 16px;
+    border-radius: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.shop-rating .star {
+    color: #e4e5e9;
+}
+
+.shop-rating .star.filled {
+    color: #ffc107;
+}
+
+.rating-value {
+    font-weight: 700;
+    color: #111;
+    font-size: 1.1rem;
+}
+
+.review-count {
+    color: #666;
+    font-size: 0.9rem;
+    margin-left: 5px;
+}
+
+/* Rate Seller Section */
+.rate-seller-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s ease;
+}
+
+.rate-seller-section:hover {
+    transform: translateY(-2px);
+}
+
+.rate-seller-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #999;
+}
+
+.interactive-stars {
+    display: flex;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.interactive-stars .star {
+    transition: transform 0.2s, color 0.2s;
+}
+
+.interactive-stars .star:hover {
+    transform: scale(1.2);
+}
+
+/* Products Section */
+.shop-products {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+}
+
+.shop-products-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 40px;
+    color: #111;
+    text-align: left;
+    position: relative;
+    padding-left: 15px;
+}
+
+.shop-products-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 24px;
+    background-color: #111;
+    border-radius: 2px;
+}
+
+.shop-product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 40px;
+    width: 100%;
+}
+
+/* Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .shop-product-grid {
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .shop-header {
+        padding: 60px 20px 40px;
+    }
+
+    .shop-name {
+        font-size: 2.2rem;
+    }
+
+    .shop-product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .shop-products {
+        padding: 0 20px 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .shop-name {
+        font-size: 1.8rem;
+    }
+
+    .shop-header-image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .shop-product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .shop-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

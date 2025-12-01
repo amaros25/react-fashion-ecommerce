@@ -173,6 +173,10 @@ function ProductPage() {
 
 
 
+  const canOrderProduct = () => {
+    const lastState = product.states?.[product.states.length - 1]?.state;
+    return role !== "seller" && lastState === 1;
+  };
 
   return (
     <div className="product-page">
@@ -257,14 +261,15 @@ function ProductPage() {
               <button
                 className="add-to-cart-btn"
                 onClick={() => handleBuyClick(false)}
-                disabled={role === "seller"}
+
+                disabled={!canOrderProduct()}
               >
                 {t("product_page.add_to_cart")}
               </button>
               <button
                 className="buy-now-btn"
                 onClick={() => handleBuyClick(true)}
-                disabled={role === "seller"}
+                disabled={!canOrderProduct()}
               >
                 {t("product_page.buy_now")}
               </button>
@@ -273,7 +278,11 @@ function ProductPage() {
 
 
             {/* Seller Info Section */}
-            <div className="seller-section-container">
+            <div
+              className="seller-section-container"
+              onClick={() => seller && seller._id && navigate(`/shop/${seller._id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <h3 className="seller-section-title">{t("product_page.explore_seller")}</h3>
               <SellerInfo seller={seller} />
             </div>

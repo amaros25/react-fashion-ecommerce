@@ -302,5 +302,12 @@
   "beauty": "الجمال",
   "girls-clothing": " الفتيات",
   "boys-clothing": "الأولاد",
-  "baby-clothing": "الرضع"
+  "baby-clothing": "الرضع",
+  "product_state": {
+    "pending": "قيد الموافقة",
+    "active": "نشط",
+    "blocked": "محظور",
+    "deleted": "محذوف",
+    "unknown": "غير معروف"
+  }
 }

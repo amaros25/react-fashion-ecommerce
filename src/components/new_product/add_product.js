@@ -112,6 +112,7 @@ function AddProduct() {
         sellerId: userId,
         price: parseFloat(formData.price),
         image: imageUrls,
+        state: 0
       };
       const res = await fetch(`${apiUrl}/products/create`, {
         method: "POST",
