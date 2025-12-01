@@ -225,8 +225,14 @@ const CartPage = () => {
               >
                 🏪 {t("cart_page.pickup") || "Pickup"}
               </button>
+
             </div>
 
+            {!isDelivery && (
+              <div className="pickup-info">
+                {t("cart_page.pickup_info")}
+              </div>
+            )}
             {/* Delivery Address */}
             {isDelivery && user?.address && user?.city && (
               <div className="delivery-address">
@@ -244,7 +250,7 @@ const CartPage = () => {
 
             {isDelivery && (!user?.address || !user?.city) && (
               <div className="address-warning">
-                ⚠️ {t("cart_page.add_address") || "Please add your delivery address in your profile"}
+                ⚠️ {t("cart_page.add_address") || t("cart_page.missed_address_add_in_profile")}
               </div>
             )}
 

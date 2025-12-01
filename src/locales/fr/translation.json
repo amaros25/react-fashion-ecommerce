@@ -155,7 +155,8 @@
     "missed_address_add_in_profile": "Veuillez ajouter votre adresse de livraison dans votre profil",
     "no_address_set": "Aucune adresse définie",
     "no_phone_set": "Aucun téléphone défini",
-    "address_required": "Veuillez d'abord ajouter votre adresse de livraison"
+    "address_required": "Veuillez d'abord ajouter votre adresse de livraison",
+    "pickup_info": "L'adresse de la boutique du vendeur sera affichée après la confirmation du vendeur."
   },
   "phone": "Téléphone",
   "address": "Adresse",
