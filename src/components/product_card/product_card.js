@@ -137,7 +137,16 @@ function ProductCard({ product, onProductRemoved }) {
         <Link to={`/product/${product._id}`} className="product-info-link">
           <div className="product-info">
             <h2 className="product-name" title={product.name}>{product.name}</h2>
-            <p className="product-color-desc">{t("colors")}: {product.sizes.map(sizeObj => translateColor(sizeObj.color)).join(", ")}</p>
+            <div className="product-colors-display">
+              {[...new Set(product.sizes.map(s => s.color))].map((color, index) => (
+                <div
+                  key={index}
+                  className="color-swatch-small"
+                  style={{ backgroundColor: color }}
+                  title={color}
+                />
+              ))}
+            </div>
             <p className="product-color-desc">{t("sizes")}: {product.sizes.map(sizeObj => sizeObj.size).join(", ")}</p>
             <div className="product-price-row">
               <span className="product-price">{product.price} DT</span>

@@ -32,36 +32,21 @@ export default function ProfileUser() {
     (o) => o.status?.length && o.status[o.status.length - 1].update !== "delivered"
   ).length;
 
-  const handleLogout = () => {
-    localStorage.clear();
 
-    navigate("/home");
-  };
-  {/* {isLoggedIn && (
-  <img
-    src="/icons/logout_icon.svg"
-    style={{ width: "24px", height: "24px" }}
-    className="nav-icon"
-    onClick={handleLogout}
-  />
-)} */}
 
   return (
     <div className="profile-user-container">
       <UserProfileHeader user={user} totalOrders={totalOrders} openOrders={openOrders} t={t} />
-      <button className="logout-btn" onClick={handleLogout}>
-        <img src="/icons/logout_icon.svg" alt="logout" />
-        {t("logout")}
-      </button>
+
       <h3>📦 {t("your_orders")}</h3>
-      {/* <ProfileUserOrders
+      <ProfileUserOrders
         orders={orders}
         products={products}
         totalPages={totalPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         t={t}
-      /> */}
+      />
 
     </div>
   );

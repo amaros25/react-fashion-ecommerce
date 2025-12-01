@@ -12,12 +12,12 @@ router.get("/:chatId", chatController.getChatById);
 // POST neue Nachricht
 router.post("/:chatId/message", chatController.addMessage);
 
- 
 // POST neuen Chat starten
 router.post("/create", chatController.createChat);
 
 router.patch("/:chatId/messages/read", chatController.updateReadStatus);
 
- 
+// GET unread message count for seller
+router.get("/unread/seller/:sellerId", chatController.getUnreadCount);
 
 module.exports = router;

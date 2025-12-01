@@ -233,9 +233,6 @@ function ProductPage() {
                   </div>
                 ))}
               </div>
-              <div className="selected-color-name">
-                {selectedColor && <span>{selectedColor}</span>}
-              </div>
             </div>
 
             {/* Description */}

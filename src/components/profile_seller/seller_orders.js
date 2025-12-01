@@ -3,8 +3,9 @@ import "./seller_orders.css";
 import StatusSelect from "./status_select";
 import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../products/loading_spinner";
+import { FaSearch, FaFilter, FaCalendarAlt, FaUser, FaMapMarkerAlt, FaBox } from "react-icons/fa";
 
-function SellerOrders({ sellerId, handleStatusChange, refreshTrigger}) {
+function SellerOrders({ sellerId, handleStatusChange, refreshTrigger }) {
   const { t, i18n } = useTranslation();
   const apiUrl = process.env.REACT_APP_API_URL;
   const [loading, setLoading] = useState(false);
@@ -53,38 +54,6 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger}) {
   }, [sellerId, currentPage, filterStatus, searchOrder, apiUrl]);
 
   useEffect(() => {
-    async function fetchOrders() {
-      setLoading(true); // Spinner starten
-      try {
-        const res = await fetch(
-          `${apiUrl}/orders/seller/${sellerId}?page=${currentPage}&limit=${ordersPerPage}`
-        );
-        const data = await res.json();
-
-        // Standardwert für status setzen
-        const ordersWithDefaultStatus = data.orders.map(order => ({
-        ...order,
-        status: order.status || [] // Falls status nicht gesetzt, leeren Array verwenden
-        }));
-
-        // Erwartet: { orders: [...], totalCount: number }
-        setOrders(data.orders);
-        setTotalPages(Math.ceil(data.totalCount / ordersPerPage));
-      } catch (error) {
-        console.error("Error loading orders:", error);
-        setOrders([]);
-        setTotalPages(1);
-      } finally {
-      setLoading(false);  
-    }
-    }
-
-    if (sellerId) {
-      fetchOrders();
-    }
-  }, [sellerId, currentPage, apiUrl]);
-
-  useEffect(() => {
     fetchOrders();
   }, [fetchOrders, refreshTrigger]);
 
@@ -95,15 +64,18 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger}) {
 
   // Funktion zur Übersetzung der Farbe
   const translateColor = (color) => {
-  // Standardfarben: aus deinen Übersetzungen
-  const translated = t(`product_colors.${color.toLowerCase()}`, { defaultValue: color });
-  return translated;
-};
+    // Check if it's a hex code
+    if (color && color.startsWith('#')) {
+      return <span className="color-dot" style={{ backgroundColor: color }} title={color}></span>;
+    }
+    const translated = t(`product_colors.${color?.toLowerCase()}`, { defaultValue: color });
+    return translated;
+  };
 
   // Seitenwechsel
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Array für Seitenzahlen (Optional: max 5 Seiten anzeigen)
+  // Array für Seitenzahlen
   const pageNumbers = [];
   const maxPagesToShow = 5;
   let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
@@ -115,178 +87,177 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger}) {
     pageNumbers.push(i);
   }
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'delivered': return 'green';
+      case 'shipped': return 'blue';
+      case 'confirmed': return 'purple';
+      case 'pending': return 'orange';
+      case 'cancelled':
+      case 'user_cancelled':
+      case 'seller_cancelled': return 'red';
+      default: return 'gray';
+    }
+  };
 
   return (
     <div
-      className="order-container"
+      className="seller-orders-container"
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
     >
-      <div className="order-filter-card">
-        <input
-          type="text"
-          placeholder={t("searchOrderNumber")}
-          value={searchOrder}
-          onChange={(e) => setSearchOrder(e.target.value)}
-          className="search-input"
-        />
+      <div className="orders-toolbar">
+        <div className="search-box">
+          <FaSearch className="icon" />
+          <input
+            type="text"
+            placeholder={t("searchOrderNumber")}
+            value={searchOrder}
+            onChange={(e) => setSearchOrder(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleFilter()}
+          />
+        </div>
 
-        <select
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-          className="filter-select"
-        >
-          <option value="">{t("order_state.all")}</option>
-          <option value="pending">{t("order_state.pending")}</option>
-          <option value="confirmed">{t("order_state.confirmed")}</option>
-          <option value="shipped">{t("order_state.shipped")}</option>
-          <option value="delivered">{t("order_state.delivered")}</option>
-          <option value="received">{t("order_state.received")}</option>
-          <option value="user_cancelled">
-            {t("order_state.user_cancelled")}
-          </option>
-          <option value="seller_cancelled">
-            {t("order_state.seller_cancelled")}
-          </option>
-          <option value="failed_delivery">
-            {t("order_state.failed_delivery")}
-          </option>
-          <option value="returned_to_sender">
-            {t("order_state.returned_to_sender")}
-          </option>
-          <option value="return_requested">
-            {t("order_state.return_requested")}
-          </option>
-          <option value="return_confirmed">
-            {t("order_state.return_confirmed")}
-          </option>
-          <option value="return_shipped">
-            {t("order_state.return_shipped")}
-          </option>
-          <option value="return_received">
-            {t("order_state.return_received")}
-          </option>
-        </select>
-
-        <button onClick={handleFilter} className="filter-button">
-          {t("filter")}
-        </button>
+        <div className="filter-box">
+          <FaFilter className="icon" />
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+          >
+            <option value="">{t("order_state.all")}</option>
+            <option value="pending">{t("order_state.pending")}</option>
+            <option value="confirmed">{t("order_state.confirmed")}</option>
+            <option value="shipped">{t("order_state.shipped")}</option>
+            <option value="delivered">{t("order_state.delivered")}</option>
+            <option value="user_cancelled">{t("order_state.user_cancelled")}</option>
+            <option value="seller_cancelled">{t("order_state.seller_cancelled")}</option>
+          </select>
+          <button onClick={handleFilter} className="apply-btn">{t("filter")}</button>
+        </div>
       </div>
 
-      {!loading && orders.length === 0 && (
-        <p className="no-orders-message">{t("noOrders")}</p>
-      )}
-
-      {orders.map((order) => (
-        <div key={order._id} className="order-card">
-          <div className="order-header">
-            <div className="order-number">
-              {t("orderNumber")}: {order.orderNumber}
-            </div>
-            <div className="order-date">
-              {t("orderDate")}: {new Date(order.createdAt).toLocaleDateString()}
-            </div>
+      <div className="orders-list">
+        {!loading && orders.length === 0 && (
+          <div className="empty-state">
+            <FaBox className="empty-icon" />
+            <p>{t("noOrders")}</p>
           </div>
+        )}
 
-          <div className="order-details">
-            <div className="product-details">
-              {order.items && Array.isArray(order.items) && order.items.map((item, index) => (
-                <div key={index} className="product-item">
-                  <img
-                    src={item.product?.image?.[0] || ""}
-                    alt={item.product?.name || t("productName")}
-                    className="product-image"
-                  />
-                  <div className="product-info-container">
-                    <span className="product-title">
-                      {item.product?.name || t("productName")}
-                    </span>
-                  <div className="product-info-chips">
-                    <span className="chip">{t("productColor")}: {translateColor(item.color)}</span>
-                    <span className="chip">{t("productSize")}: {item.size}</span>
-                    <span className="chip">{t("quantity")}: {item.quantity}</span>
+        {orders.map((order) => {
+          const currentStatus = order.status && Array.isArray(order.status) && order.status.length > 0
+            ? order.status.slice(-1)[0]?.update
+            : "pending";
+
+          return (
+            <div key={order._id} className="order-item-card">
+              <div className="order-header-row">
+                <div className="order-id-group">
+                  <span className="order-label">Order</span>
+                  <span className="order-id">#{order.orderNumber}</span>
+                </div>
+                <div className={`status-badge ${getStatusColor(currentStatus)}`}>
+                  {t(`order_state.${currentStatus}`) || currentStatus}
+                </div>
+              </div>
+
+              <div className="order-body">
+                <div className="order-products">
+                  {order.items && Array.isArray(order.items) && order.items.map((item, index) => (
+                    <div key={index} className="product-row">
+                      <img
+                        src={item.product?.image?.[0] || ""}
+                        alt={item.product?.name}
+                        className="product-thumb"
+                      />
+                      <div className="product-details-text">
+                        <span className="product-name">{item.product?.name || t("productName")}</span>
+                        <div className="product-specs">
+                          <span>Size: {item.size}</span>
+                          <span className="dot">•</span>
+                          <span className="color-spec">Color: {translateColor(item.color)}</span>
+                          <span className="dot">•</span>
+                          <span>Qty: {item.quantity}</span>
+                        </div>
+                      </div>
+                      <div className="product-price-display">
+                        {(item.product?.price * item.quantity).toFixed(2)} €
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="order-customer-info">
+                  <div className="info-group">
+                    <FaUser className="info-icon" />
+                    <div>
+                      <span className="info-label">Customer</span>
+                      <p>{order.user ? `${order.user.firstName} ${order.user.lastName}` : t("noUser")}</p>
+                      <p className="sub-text">{order.user?.phone || t("noPhone")}</p>
+                    </div>
                   </div>
-                    <div className="product-price">
-                       {(item.product?.price * item.quantity).toFixed(2) || "0.00"}  {t("price_suf")} 
-                    </div>
-                      <div className="user-info">
-                    <div className="user-name">
-                      {order.user
-                        ? `${order.user.firstName} ${order.user.lastName}`
-                        : t("noUser")}
-                    </div>
-                    <div className="user-contact">
-                      {order.user?.phone || t("noPhone")}
-                    </div>
-                    <div className="user-address">
-                      {order.user?.address
-                        ? `${order.user.address.street}, ${order.user.address.postalCode} ${order.user.address.city}`
-                        : t("noAddress")}
+                  <div className="info-group">
+                    <FaMapMarkerAlt className="info-icon" />
+                    <div>
+                      <span className="info-label">Shipping Address</span>
+                      <p>{order.user?.address ? `${order.user.address.street}` : t("noAddress")}</p>
+                      <p className="sub-text">
+                        {order.user?.address ? `${order.user.address.postalCode} ${order.user.address.city}` : ""}
+                      </p>
                     </div>
                   </div>
+                  <div className="info-group">
+                    <FaCalendarAlt className="info-icon" />
+                    <div>
+                      <span className="info-label">Date</span>
+                      <p>{new Date(order.createdAt).toLocaleDateString()}</p>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
-
-          
-          </div>
-
-          <div className="total-price">
-            <div className="price">
-              {t("totalPrice")}: € {order.totalPrice.toFixed(2)}
-            </div>
-          </div>
-
-          <div className="status-update">
-            {/* Nur anzeigen, wenn der letzte Status NICHT seller_cancelled ist */}
-            {order.status?.slice(-1)[0]?.update !== "seller_cancelled" &&
-                order.status?.slice(-1)[0]?.update !== "delivered" &&
-                order.status?.slice(-1)[0]?.update !== "return_received" &&  (
-              <div className="status-update-container">
-                <StatusSelect order={order} onStatusChange={onStatusChange} ref={selectRef} />
-                <button
-                  className="update-button"
-                  onClick={() => {
-                    const newStatus = selectRef.current.value;
-                    handleStatusChange(order._id, newStatus);
-                  }}
-                >
-                  {t("update")}
-                </button>
               </div>
-            )}
 
-            <div className="status-info">
-              <div>
-            <strong>{t("currentStatus")}:</strong>{" "}
-            {order.status && Array.isArray(order.status) && order.status.length > 0
-              ? t(`order_state.${order.status.slice(-1)[0]?.update}`) || t("order_state.pending")
-              : t("order_state.pending")}
-          </div>
-              <div>
-                  <strong>{t("lastUpdate")}:</strong>{" "}
-              {order.status && Array.isArray(order.status) && order.status.length > 0
-                ? order.status.slice(-1)[0]?.date
-                  ? new Date(order.status.slice(-1)[0].date).toLocaleDateString()
-                  : t("noUpdate")
-                : t("noUpdate")}
+              <div className="order-footer">
+                <div className="total-amount">
+                  <span>Total Amount:</span>
+                  <span className="amount">€ {order.totalPrice.toFixed(2)}</span>
+                </div>
+
+                <div className="status-actions">
+                  {currentStatus !== "seller_cancelled" &&
+                    currentStatus !== "delivered" &&
+                    currentStatus !== "return_received" && (
+                      <div className="update-status-wrapper">
+                        <StatusSelect order={order} onStatusChange={onStatusChange} ref={selectRef} />
+                        <button
+                          className="update-btn"
+                          onClick={() => {
+                            const newStatus = selectRef.current.value;
+                            handleStatusChange(order._id, newStatus);
+                          }}
+                        >
+                          {t("update")}
+                        </button>
+                      </div>
+                    )}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      ))}
-
-      <div className="pagination">
-        {pageNumbers.map((number) => (
-          <button
-            key={number}
-            onClick={() => paginate(number)}
-            className={number === currentPage ? "active" : ""}
-          >
-            {number}
-          </button>
-        ))}
+          );
+        })}
       </div>
+
+      {totalPages > 1 && (
+        <div className="pagination-container">
+          {pageNumbers.map((number) => (
+            <button
+              key={number}
+              onClick={() => paginate(number)}
+              className={`page-btn ${number === currentPage ? "active" : ""}`}
+            >
+              {number}
+            </button>
+          ))}
+        </div>
+      )}
       {loading && <LoadingSpinner />}
     </div>
   );

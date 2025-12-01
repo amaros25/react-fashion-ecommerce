@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import "./seller_products.css";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../products/loading_spinner";
+import { FaSearch, FaBoxOpen } from "react-icons/fa";
 
 function SellerProducts({ sellerId, apiUrl, token }) {
   const { t, i18n } = useTranslation();
@@ -12,11 +13,11 @@ function SellerProducts({ sellerId, apiUrl, token }) {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 6;
+  const limit = 8; // Increased limit for better grid view
 
   const fetchProducts = async (page = 1) => {
     try {
-      setLoading(true); // Spinner starten
+      setLoading(true);
       const res = await fetch(
         `${apiUrl}/products/seller/${sellerId}?page=${page}&limit=${limit}&search=${encodeURIComponent(
           search
@@ -31,8 +32,8 @@ function SellerProducts({ sellerId, apiUrl, token }) {
     } catch (err) {
       console.error(t("error_loading_products"), err);
       setProducts([]);
-    }finally {
-      setLoading(false);  
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,72 +46,81 @@ function SellerProducts({ sellerId, apiUrl, token }) {
       className="seller-products-container"
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
     >
-      <div className="product-filter-card">
-        <input
-          type="text"
-          placeholder={t("search_product_by_id")}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <button onClick={() => fetchProducts(1)}>🔍</button>
+      <div className="products-header-actions">
+        <div className="search-wrapper">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder={t("search_product_by_id")}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && fetchProducts(1)}
+          />
+        </div>
       </div>
 
-      <div className="product-list">
-  {!loading && products.length === 0 ? (
-      <p style={{ textAlign: "center" }}>{t("no_products_found")}</p>
-      ) : (
-        products.map((product) => (
-          <div
-            key={product._id}
-            className="product-card"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate(`/product/${product._id}`)}
-          >
-            <div className="product-image-wrapper">
-              <img
-                src={product.image?.[0]}
-                alt={product.name}
-                className="product-image"
-              />
-              <span className="product-number">
-                {product.productNumber || "–"}
-              </span>
-            </div>
-
-            <div className="product-info">
-              <h4>{product.name}</h4>
-              <p className="price">
-                {product.price
-                  ? `${product.price} ${t("cart_page.price_suf")}`
-                  : t("price_not_available")}
-              </p>
-              <p className="order-count">
-                🛒{" "}
-                {product.orderCount > 0
-                  ? `${product.orderCount}× ${t("times_ordered")}`
-                  : t("no_orders_yet")}
-              </p>
-            </div>
-
-            <span className="product-date">
-              {new Date(product.createdAt).toLocaleDateString(i18n.language)}
-            </span>
+      <div className="product-list-grid">
+        {!loading && products.length === 0 ? (
+          <div className="no-products-state">
+            <FaBoxOpen className="no-products-icon" />
+            <p>{t("no_products_found")}</p>
           </div>
-        ))
-      )}
+        ) : (
+          products.map((product) => (
+            <div
+              key={product._id}
+              className="premium-product-card"
+              onClick={() => navigate(`/product/${product._id}`)}
+            >
+              <div className="card-image-container">
+                <img
+                  src={product.image?.[0]}
+                  alt={product.name}
+                  className="card-image"
+                />
+                <div className="card-overlay">
+                  <span className="view-details-btn">View Details</span>
+                </div>
+                {product.productNumber && (
+                  <span className="product-badge">{product.productNumber}</span>
+                )}
+              </div>
+
+              <div className="card-content">
+                <h4 className="card-title">{product.name}</h4>
+                <div className="card-meta">
+                  <span className="card-price">
+                    {product.price ? `${product.price} €` : t("price_not_available")}
+                  </span>
+                  <span className="card-orders">
+                    {product.orderCount > 0 ? `${product.orderCount} Orders` : "No orders"}
+                  </span>
+                </div>
+                <div className="card-footer">
+                  <span className="date-added">
+                    Added: {new Date(product.createdAt).toLocaleDateString(i18n.language)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
-      <div className="pagination">
-        {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => setCurrentPage(i + 1)}
-            className={i + 1 === currentPage ? "active" : ""}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
+      {totalPages > 1 && (
+        <div className="pagination-container">
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`page-btn ${i + 1 === currentPage ? "active" : ""}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+      )}
+
       {loading && <LoadingSpinner />}
     </div>
   );

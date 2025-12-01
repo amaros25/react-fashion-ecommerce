@@ -160,6 +160,26 @@
     margin: 1px 0;
 }
 
+.product-colors-display {
+    display: flex;
+    gap: 8px;
+    margin: 6px 0;
+    align-items: center;
+}
+
+.color-swatch-small {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #000;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.color-swatch-small:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 .product-price-row {
     margin-top: 8px;
     display: flex;

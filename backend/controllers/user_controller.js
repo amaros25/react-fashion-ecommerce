@@ -78,27 +78,30 @@ exports.createUser = async (req, res) => {
 // Adresse und Telefonnummer des Users aktualisieren
 exports.updateUser = async (req, res) => {
   try {
-    const userId = req.params.id; // aus der URL
-    const { address, phone } = req.body; // Adresse & Telefonnummer kommen direkt aus Body
+    const userId = req.params.id;
+    const { address, phone } = req.body;
 
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "user not found" });
     }
 
-    // Wenn address übergeben wurde → Felder aktualisieren
+    // Push new address to array
     if (address) {
-      user.address = {
-        address: address.address || user.address?.address,
-        city: address.city || user.address?.city,
-        subCity: address.subCity || user.address?.subCity,
-        dateModified: new Date(),
-      };
+      user.address.push({
+        address: address.address,
+        city: address.city,
+        subCity: address.subCity,
+        dateModified: new Date()
+      });
     }
 
-    // Wenn phone übergeben wurde → aktualisieren
+    // Push new phone to array
     if (phone) {
-      user.phone = [{ phone: phone, dateModified: new Date() }];
+      user.phone.push({
+        phone: phone,
+        dateModified: new Date()
+      });
     }
 
     await user.save();

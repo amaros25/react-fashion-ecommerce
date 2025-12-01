@@ -89,3 +89,49 @@ exports.createSeller = async (req, res) => {
     res.status(500).json({ message: "server error" });
   }
 };
+
+// Update Seller (Address & Phone)
+exports.updateSeller = async (req, res) => {
+  try {
+    const { address, phone } = req.body;
+    const seller = await Seller.findById(req.params.id);
+
+    if (!seller) {
+      return res.status(404).json({ message: "Seller not found" });
+    }
+
+    if (address) {
+      // Add new address to the array
+      seller.address.push({
+        address: address.address,
+        city: address.city,
+        subCity: address.subCity,
+        dateModified: new Date()
+      });
+    }
+
+    if (phone) {
+      // Add new phone to the array
+      seller.phone.push({
+        phone: phone,
+        dateModified: new Date()
+      });
+    }
+
+    await seller.save();
+
+    // Return the updated seller with the latest address/phone
+    // We need to re-fetch or manually construct the response to match getSellerById format if needed
+    // But for now, returning the updated seller object is fine. 
+    // Ideally we return the specific updated fields or the whole object.
+
+    // Let's format it similar to getSellerById for consistency on the frontend if it expects the "latest" one flattened
+    // But getSellerById flattens it. Here we return the raw object usually, but let's just return the full updated doc.
+
+    res.json(seller);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error updating seller", error: err });
+  }
+};

@@ -135,10 +135,10 @@ const CartPage = () => {
       return;
     }
 
-    if (!user?.address?.street) {
-      toast.error(t("enter_address_first"));
-      return;
-    }
+    // if (!user?.address?.street) {
+    //   toast.error(t("enter_address_first"));
+    //   return;
+    // }
 
     try {
       for (const [sellerId, items] of Object.entries(groupedCart)) {
@@ -331,7 +331,7 @@ const CartPage = () => {
             {calculateTotal().toFixed(3)} {t("cart_page.price_suf")}
           </h2>
 
-          {user?.address?.street && !showAddressForm && (
+          {/* {user?.address?.street && !showAddressForm && (
             <div className="current-address">
               <span>
                 {user.address.street}, {user.address.postalCode} {user.address.city}
@@ -352,10 +352,10 @@ const CartPage = () => {
                 onSaveAddress={handleSaveAddress}
               />
             </div>
-          )}
+          )} */}
           <button
             className="save-address-button"
-            disabled={!canOrder && !user?.address?.street}
+
             onClick={() => handle_new_order()}
           >
             {t("product_page.submit_order")}

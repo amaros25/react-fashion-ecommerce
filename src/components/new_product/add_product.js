@@ -4,6 +4,7 @@ import "./add_product.css";
 import ImageSelectUpload from "./image_select_upload.js";
 import { useTranslation } from "react-i18next";
 import UploadStatus from "./upload_status";
+import { FaPlus, FaTrash, FaPalette } from "react-icons/fa";
 
 function AddProduct() {
   const { t, i18n } = useTranslation();
@@ -24,10 +25,9 @@ function AddProduct() {
     price: "",
     category: "",
     type: "",
-    sizes: [{ size: "", stock: 0, color: "" }],
+    sizes: [{ size: "", stock: 0, color: "#000000" }], // Default color black
   });
 
-  const colors = t("product_colors", { returnObjects: true });
   const categoryKeys = ["womens", "mens", "kids"];
 
   const subCategories = {
@@ -50,15 +50,22 @@ function AddProduct() {
 
   const handleSizeChange = (index, field, value) => {
     const newSizes = [...formData.sizes];
-    newSizes[index][field] = field === "stock" ? parseInt(value) : value;
+    newSizes[index][field] = field === "stock" ? parseInt(value) || 0 : value;
     setFormData({ ...formData, sizes: newSizes });
   };
 
   const addSizeField = () => {
     setFormData((prev) => ({
       ...prev,
-      sizes: [...prev.sizes, { size: "", stock: 0, color: "" }],
+      sizes: [...prev.sizes, { size: "", stock: 0, color: "#000000" }],
     }));
+  };
+
+  const removeSizeField = (index) => {
+    if (formData.sizes.length > 1) {
+      const newSizes = formData.sizes.filter((_, i) => i !== index);
+      setFormData({ ...formData, sizes: newSizes });
+    }
   };
 
   const handleImageChange = (files) => {
@@ -75,11 +82,6 @@ function AddProduct() {
     Promise.all(previewPromises).then((imgs) => {
       setImagePreviews(imgs);
     });
-  };
-
-  const removeImage = (index) => {
-    setImageFiles((prev) => prev.filter((_, i) => i !== index));
-    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -101,21 +103,12 @@ function AddProduct() {
         const data = await res.json();
         imageUrls.push(data.secure_url);
       }
-      console.log("🟢 image upload imageUrls: ", imageUrls);
-
-      const productSizes = formData.sizes.map(size => {
-        // Wenn "other" ausgewählt und eine benutzerdefinierte Farbe eingegeben wurde, dann die customColor verwenden
-        if (size.color === "other" && size.customColor) {
-          return { ...size, color: size.customColor };  // Die benutzerdefinierte Farbe ersetzen
-        }
-        return size;
-      });
 
       const productData = {
         ...formData,
         category: Number(formData.category),
         subcategory: Number(formData.subcategory),
-        sizes: productSizes,
+        sizes: formData.sizes, // Sizes now contain hex codes directly
         sellerId: userId,
         price: parseFloat(formData.price),
         image: imageUrls,
@@ -142,131 +135,166 @@ function AddProduct() {
       className="add-product-container"
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
     >
+      <div className="add-product-header">
+        <h2>{t("post_product")}</h2>
+        <p>Create a new listing for your shop</p>
+      </div>
+
       <form onSubmit={handleSubmit} className="add-product-form">
-        <ImageSelectUpload onImageChange={handleImageChange} maximages={3} />
-        {/* CATEGORY */}
-        <select
-          name="category"
-          value={formData.category}
-          onChange={(e) => {
-            const catIndex = parseInt(e.target.value);
-            setFormData(prev => ({
-              ...prev,
-              category: catIndex,
-              subcategory: ""   // reset subcategory when category changes
-            }));
-          }}
-          required
-        >
-          <option value="">{t("select_category")}</option>
+        <div className="form-section">
+          <h3>Product Images</h3>
+          <ImageSelectUpload onImageChange={handleImageChange} maximages={5} />
+        </div>
 
-          {categoryKeys.map((cat, index) => (
-            <option key={cat} value={index}>
-              {t(`categories.${cat}`)}
-            </option>
-          ))}
-        </select>
-
-
-        {/* SUBCATEGORY */}
-        {formData.category !== "" && (
-          <select
-            name="subcategory"
-            value={formData.subcategory}
-            onChange={(e) =>
-              setFormData(prev => ({
-                ...prev,
-                subcategory: parseInt(e.target.value)
-              }))
-            }
-            required
-          >
-            <option value="">{t("select_subcategory")}</option>
-
-            {subCategories[categoryKeys[formData.category]].map((sub, index) => (
-              <option key={index} value={index}>
-                {t(`subcategories.${sub}`)}
-              </option>
-            ))}
-          </select>
-        )}
-
-        <input
-          type="text"
-          name="name"
-          placeholder={t("product_name")}
-          required
-          onChange={handleChange}
-        />
-        <textarea
-          name="description"
-          placeholder={t("product_description")}
-          required
-          onChange={handleChange}
-        />
-        <input
-          type="number"
-          name="price"
-          placeholder={t("product_price")}
-          required
-          onChange={handleChange}
-        />
-
-        <h4>{t("size_stock_color")}</h4>
-        {formData.sizes.map((size, index) => (
-          <div key={index} className="size-field">
-            <input
-              type="text"
-              placeholder={t("size_exp")}
-              value={size.size}
-              onChange={(e) => handleSizeChange(index, "size", e.target.value)}
-              required
-            />
-            <input
-              type="number"
-              placeholder="Stock"
-              value={size.stock}
-              onChange={(e) => handleSizeChange(index, "stock", e.target.value)}
-              required
-            />
-
-            {/* Color Dropdown */}
-            <select
-              name="color"
-              value={size.color}
-              onChange={(e) => handleSizeChange(index, "color", e.target.value)}
-              required
-            >
-              <option value="">{t("select_color")}</option>
-              {Object.keys(colors).map((colorKey) => (
-                <option key={colorKey} value={colorKey}>
-                  {colors[colorKey]}{" "}
-                  {/* Zeigt den Namen der Farbe in der aktuellen Sprache */}
-                </option>
-              ))}
-              <option value="other">{t("other")}</option>
-            </select>
-
-            {/* Input for custom color */}
-            {size.color === "other" && (
+        <div className="form-section">
+          <h3>Basic Information</h3>
+          <div className="form-row">
+            <div className="form-group">
+              <label>{t("product_name")}</label>
               <input
                 type="text"
-                placeholder={t("enter_custom_color")}
-                value={size.customColor || ""}
-                onChange={(e) =>
-                  handleSizeChange(index, "customColor", e.target.value)
-                }
+                name="name"
+                placeholder="e.g. Summer Floral Dress"
+                required
+                onChange={handleChange}
               />
+            </div>
+            <div className="form-group">
+              <label>{t("product_price")}</label>
+              <div className="price-input-wrapper">
+                <input
+                  type="number"
+                  name="price"
+                  placeholder="0.00"
+                  required
+                  onChange={handleChange}
+                />
+                <span className="currency-symbol">€</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>{t("product_description")}</label>
+            <textarea
+              name="description"
+              placeholder="Describe your product..."
+              required
+              onChange={handleChange}
+              rows="4"
+            />
+          </div>
+        </div>
+
+        <div className="form-section">
+          <h3>Category</h3>
+          <div className="form-row">
+            <div className="form-group">
+              <label>{t("select_category")}</label>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={(e) => {
+                  const catIndex = parseInt(e.target.value);
+                  setFormData(prev => ({
+                    ...prev,
+                    category: catIndex,
+                    subcategory: ""
+                  }));
+                }}
+                required
+              >
+                <option value="">Select Category</option>
+                {categoryKeys.map((cat, index) => (
+                  <option key={cat} value={index}>
+                    {t(`categories.${cat}`)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {formData.category !== "" && (
+              <div className="form-group">
+                <label>{t("select_subcategory")}</label>
+                <select
+                  name="subcategory"
+                  value={formData.subcategory}
+                  onChange={(e) =>
+                    setFormData(prev => ({
+                      ...prev,
+                      subcategory: parseInt(e.target.value)
+                    }))
+                  }
+                  required
+                >
+                  <option value="">Select Subcategory</option>
+                  {subCategories[categoryKeys[formData.category]].map((sub, index) => (
+                    <option key={index} value={index}>
+                      {t(`subcategories.${sub}`)}
+                    </option>
+                  ))}
+                </select>
+              </div>
             )}
           </div>
-        ))}
+        </div>
 
-        <button type="button" onClick={addSizeField}>
-          + {t("add_another_size")}
-        </button>
+        <div className="form-section">
+          <div className="section-header">
+            <h3>Variants (Size & Color)</h3>
+          </div>
+
+          <div className="variants-list">
+            {formData.sizes.map((size, index) => (
+              <div key={index} className="variant-row">
+                <div className="form-group size-input">
+                  <label>{t("size_exp")}</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. M, 38"
+                    value={size.size}
+                    onChange={(e) => handleSizeChange(index, "size", e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="form-group stock-input">
+                  <label>Stock</label>
+                  <input
+                    type="number"
+                    placeholder="0"
+                    value={size.stock}
+                    onChange={(e) => handleSizeChange(index, "stock", e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="form-group color-input">
+                  <label>{t("productColor")}</label>
+                  <div className="color-picker-wrapper">
+                    <input
+                      type="color"
+                      value={size.color}
+                      onChange={(e) => handleSizeChange(index, "color", e.target.value)}
+                      required
+                    />
+                    <span className="color-code">{size.color}</span>
+                  </div>
+                </div>
+                {formData.sizes.length > 1 && (
+                  <button type="button" className="remove-variant-btn" onClick={() => removeSizeField(index)}>
+                    <FaTrash />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <button type="button" className="add-variant-btn" onClick={addSizeField}>
+            <FaPlus /> {t("add_another_size")}
+          </button>
+        </div>
 
         <div className="submit-button-wrapper">
-          <button type="submit">{t("post_product")}</button>
+          <button type="submit" className="submit-btn">{t("post_product")}</button>
         </div>
       </form>
       <UploadStatus status={status} />

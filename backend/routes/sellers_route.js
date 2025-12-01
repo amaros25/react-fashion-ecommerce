@@ -11,5 +11,8 @@ router.get('/:id', sellerController.getSellerById);
 // POST: Add a new seller when '/api/sellers/create' is called with sellerController.createSeller
 router.post('/create', sellerController.createSeller);
 
+// PUT: Update seller (address/phone)
+router.put('/:id', sellerController.updateSeller);
+
 // Export the router so it can be used in the main app
 module.exports = router;
