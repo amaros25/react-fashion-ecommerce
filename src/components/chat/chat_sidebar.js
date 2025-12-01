@@ -64,7 +64,7 @@ const ChatSidebar = ({
 
   return (
     <div className={`chat-sidebar ${isSidebarHidden ? 'hidden' : ''}`}>
-      <div className="new-chat">
+      {/* <div className="new-chat">
         <select
           value={newChatType}
           onChange={(e) => {
@@ -115,7 +115,7 @@ const ChatSidebar = ({
           </button>
         )}
 
-      </div>
+      </div> */}
       <div className="conversation-list">
         {sortedChats.map((chat) => {
           const lastMessage = chat.messages?.length > 0 ? chat.messages[chat.messages.length - 1].text : t('chat.noMessages');
