@@ -38,7 +38,6 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
 
     const fetchStats = async () => {
       try {
-        console.log("fetchStats seller._id: ", seller._id);
         // Fetch Order Stats
         const resOrders = await fetch(`${apiUrl}/orders/stats/${seller._id}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -58,7 +57,6 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
           headers: { Authorization: `Bearer ${token}` },
         });
         const dataMessages = await resMessages.json();
-        console.log("unreadMessages: ", dataMessages);
         setUnreadMessages(dataMessages.unreadCount || 0);
 
       } catch (err) {

@@ -29,11 +29,18 @@
   gap: 4px;
 }
 
+.seller-name-rating {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .seller-card-name {
   font-size: 1rem;
   font-weight: 600;
   color: #1a1a1a;
   margin: 0;
+
 }
 
 .seller-card-meta {
@@ -57,6 +64,23 @@
 
 .location-icon {
   color: #888;
+}
+
+.seller-rating-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seller-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.star {
+  color: #ffc107;
+  transition: color 0.2s;
 }
 
 /* Mobile Responsive */
