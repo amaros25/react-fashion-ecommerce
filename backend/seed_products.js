@@ -3,7 +3,7 @@ const Product = require("./models/product");
 const Seller = require("./models/seller");
 
 // MongoDB URI
-const MONGO_URI = "mongodb+srv://amaros:hQ.cLUQWM4nmcvx@products.uobdbkb.mongodb.net/online_shop?retryWrites=true&w=majority&appName=products";
+
 
 // Seller Emails
 const SELLER_EMAILS = [
