@@ -17,7 +17,32 @@ exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "user not found" });
-    res.json(user);
+
+    let lastAddress = "";
+    let lastPhone = "";
+    if (Array.isArray(user.address) && user.address.length > 0) {
+      lastAddress = user.address[user.address.length - 1];
+    } else {
+      return res.status(400).json({ message: "user has no address" });
+    }
+    if (Array.isArray(user.phone) && user.phone.length > 0) {
+      lastPhone = user.phone[user.phone.length - 1];
+    } else {
+      return res.status(400).json({ message: "user has no phone" });
+    }
+
+    res.json({
+      userId: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: lastPhone.phone,
+      address: lastAddress.address,
+      city: lastAddress.city,
+      subCity: lastAddress.subCity,
+      active: user.active,
+
+    });
   } catch (err) {
     res.status(500).json({ message: "server error" });
   }

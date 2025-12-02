@@ -2,7 +2,11 @@ import React from "react";
 import OrderCard from "./order_card";
 
 export default function ProfileUserOrders({ orders, products, totalPages, currentPage, setCurrentPage, t }) {
-  if (orders.length === 0) return <p>{t("no_orders_yet")}</p>;
+  if (orders.length === 0) return (
+    <div className="no-orders-placeholder">
+      <p>{t("no_orders_yet")}</p>
+    </div>
+  );
 
   return (
     <>

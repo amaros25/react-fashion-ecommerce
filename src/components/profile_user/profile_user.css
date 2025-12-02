@@ -1,186 +1,113 @@
- .profile-header {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   gap: 15px;
-   padding: 20px;
-   background: #f5f5f5;
-   border-radius: 12px;
-   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-   margin-bottom: 20px;
- }
+.profile-user-page {
+  min-height: 100vh;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+}
 
- .profile-avatar {
-   width: 100px;
-   height: 100px;
-   flex-shrink: 0;
- }
+.profile-user-container {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
- .profile-image {
-   width: 100%;
-   height: 100%;
-   border-radius: 50%;
-   object-fit: cover;
-   border: 2px solid #ddd;
- }
+/* Header Section Override/Adjustment if needed */
+.profile-header {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid #f0f0f0;
+}
 
- .default-avatar-icon {
-   width: 100px;
-   height: 100px;
-   color: #bbb;
- }
+@media(min-width: 768px) {
+  .profile-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px;
+    gap: 30px;
+  }
+}
 
- .profile-info {
-   text-align: center;
- }
+/* Content Section */
+.profile-content-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
- .profile-info h2 {
-   margin: 0 0 5px 0;
-   font-size: 1.5rem;
-   font-weight: 600;
- }
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
 
- .profile-info p {
-   margin: 2px 0;
-   color: #555;
-   font-size: 0.95rem;
- }
+.section-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  white-space: nowrap;
+}
 
- .profile-cards-container {
-   display: flex;
-   flex-direction: column;
-   gap: 15px;
-   width: 100%;
-   margin-top: 20px;
- }
+.section-line {
+  height: 1px;
+  background-color: #e5e7eb;
+  width: 100%;
+}
 
- .profile-card {
-   background-color: #fff;
-   padding: 15px 20px;
-   border-radius: 12px;
-   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-   flex: 1;
-   display: flex;
-   flex-direction: column;
-   gap: 5px;
-   text-align: center;
- }
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  gap: 8px;
+}
 
- .profile-card h4 {
-   margin: 0 0 5px 0;
-   font-size: 1rem;
-   color: #333;
- }
+.pagination button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #4b5563;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
- .profile-card p {
-   margin: 0;
-   font-size: 0.95rem;
-   color: #555;
-   line-height: 1.3;
- }
+.pagination button:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
 
- .product-list {
-   display: grid;
-   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-   gap: 20px;
- }
+.pagination button.active {
+  background: #111827;
+  /* Dark elegant active state */
+  color: #ffffff;
+  border-color: #111827;
+}
 
- .product-card {
-   background-color: #fff;
-   padding: 15px;
-   border-radius: 10px;
-   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-   text-align: center;
- }
+/* Global resets for this scope */
+a,
+p,
+h2,
+h4,
+span,
+li {
+  text-decoration: none;
+}
 
- .product-card img {
-   width: 100%;
-   height: 150px;
-   object-fit: cover;
-   border-radius: 5px;
- }
-
- .product-card h4 {
-   margin: 10px 0 5px;
- }
-
- .product-card p {
-   margin: 5px 0;
-   color: #555;
- }
-
- .orders-list {
-   display: flex;
-   flex-direction: column;
-   gap: 10px;
-   margin-top: 10px;
- }
-
- .order-item-card {
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
-   padding: 10px 0;
-   border-top: 1px solid #eee;
-   cursor: pointer;
-   transition: background 0.2s;
- }
-
- .pagination {
-   display: flex;
-   justify-content: center;
-   margin-top: 20px;
-   gap: 5px;
- }
-
- .pagination button {
-   padding: 5px 10px;
-   border: 1px solid #ccc;
-   background: white;
-   cursor: pointer;
- }
-
- .pagination button.active {
-   background: #007bff;
-   color: white;
-   border-color: #007bff;
- }
-
- .profile-card p,
- .profile-card h4 {
-   text-decoration: none;
- }
-
- .profile-card a {
-   text-decoration: none;
-   color: inherit;
- }
-
- a,
- p,
- h2,
- h4,
- span,
- li {
-   text-decoration: none;
- }
-
- @media(min-width: 768px) {
-   .profile-header {
-     flex-direction: row;
-     align-items: flex-start;
-     justify-content: flex-start;
-   }
-
-   .profile-info {
-     text-align: left;
-     margin-left: 20px;
-   }
-
-   .profile-cards-container {
-     flex-direction: row;
-     gap: 20px;
-     margin-top: 0;
-     margin-left: 20px;
-   }
- }
+.profile-card a {
+  color: inherit;
+}

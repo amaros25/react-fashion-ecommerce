@@ -102,15 +102,7 @@ function ProfileSeller() {
         apiUrl={apiUrl}
         token={token}
       />
-      <nav
-        style={{
-          display: "flex",
-          gap: "20px",
-          marginBottom: "20px",
-          cursor: "pointer",
-          justifyContent: "center",
-        }}
-      >
+      <nav className="seller-profile-nav">
         {["add_new_product", "products", "allOrders"].map((tab) => {
           let label = "";
           if (tab === "add_new_product") label = t(t("add_new_product"));
@@ -121,17 +113,7 @@ function ProfileSeller() {
             <div
               key={tab}
               onClick={() => setActiveTab(tab)}
-              style={{
-                padding: "10px 20px",
-                borderBottom:
-                  activeTab === tab
-                    ? "3px solid #007bff"
-                    : "3px solid transparent",
-                fontWeight: activeTab === tab ? "bold" : "normal",
-                color: activeTab === tab ? "#007bff" : "#555",
-                transition: "all 0.3s ease",
-                userSelect: "none",
-              }}
+              className={`seller-nav-item ${activeTab === tab ? "active" : ""}`}
             >
               {label}
             </div>

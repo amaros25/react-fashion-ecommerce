@@ -1,58 +1,75 @@
 import React from "react";
-import { useNavigate, Link } from "react-router-dom"; // Füge den Link-Import hier hinzu
+import { useNavigate, Link } from "react-router-dom";
 import "./order_items.css";
 
 export default function OrderItem({ item, product, order, t, isLast }) {
-  const navigate = useNavigate();  // Verwende useNavigate anstelle von useHistory
+  const navigate = useNavigate();
 
-  // Funktion für den Start des Chats mit dem Verkäufer
-  const handleChatWithSeller = () => {
-    // Navigiere zur MainChat-Seite und übergib orderNumber und sellerId
+  const handleChatWithSeller = (e) => {
+    e.preventDefault(); // Prevent navigation to product page
+    e.stopPropagation();
     navigate('/chat', {
       state: {
         newOrderNumber: order.orderNumber,
-        sellerId: order.sellerId, // Der Verkäufer wird aus der Order übernommen
+        sellerId: order.sellerId,
         newChatType: 'order'
       }
     });
   };
 
+  // Helper to determine if color is hex
+  const isHexColor = (color) => /^#[0-9A-F]{6}$/i.test(color);
+
   return (
-    <div className="order-item-card clickable">
-      <div className="order-item-left">
-        {product?.image?.[0] && (
-          <img src={product.image[0]} alt={product.name} className="order-product-image" />
-        )}
-        <div className="order-product-info">
-          <p className="order-product-title">{product?.name || t("loading_product")}</p>
-          <div className="order-product-variants">
-            <span>{t("size")}: {item.size}</span>
-            <span>{t("color")}: {t(`product_colors.${item.color.toLowerCase()}`, { defaultValue: item.color })}</span>
-            <span>{t("quantity")}: {item.quantity}</span>
+    <Link to={`/product/${item.productId}`} className="order-item-link">
+      <div className="order-item-card">
+        <div className="order-item-left">
+          <div className="order-item-image-container">
+            {product?.image?.[0] ? (
+              <img src={product.image[0]} alt={product.name} className="order-product-image" />
+            ) : (
+              <div className="order-product-placeholder"></div>
+            )}
+          </div>
+
+          <div className="order-product-info">
+            <p className="order-product-title">{product?.name || t("loading_product")}</p>
+
+            <div className="order-product-variants">
+              <div className="variant-item">
+                <span className="variant-label">{t("size")}:</span>
+                <span className="variant-value">{item.size}</span>
+              </div>
+
+              <div className="variant-item">
+                <span className="variant-label">{t("color")}:</span>
+                {isHexColor(item.color) ? (
+                  <span
+                    className="color-swatch"
+                    style={{ backgroundColor: item.color }}
+                    title={item.color}
+                  ></span>
+                ) : (
+                  <span className="variant-value">
+                    {t(`product_colors.${item.color.toLowerCase()}`, { defaultValue: item.color })}
+                  </span>
+                )}
+              </div>
+
+              <div className="variant-item">
+                <span className="variant-label">{t("quantity")}:</span>
+                <span className="variant-value">{item.quantity}</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      {isLast && (
-        <div className="order-item-right">
-          <p className="order-info">
-            <strong>{t("price")}:</strong> €{order.totalPrice.toFixed(2)}
-          </p>
-          <p className="order-info">
-            <strong>{t("status")}:</strong>
-            {order.status && Array.isArray(order.status) && order.status.length > 0
-              ? t(`order_state.${order.status.slice(-1)[0]?.update}`) || t("order_state.pending")
-              : t("order_state.pending")}
-          </p>
 
-          {/* Button für den Chat mit dem Verkäufer */}
+        <div className="order-item-right">
           <button className="chat-with-seller-btn" onClick={handleChatWithSeller}>
-            Chat mit Verkäufer
+            {t("chat_seller") || "Chat with Seller"}
           </button>
         </div>
-      )}
-
-      {/* Produkt-Link zum Produktdetail */}
-      <Link to={`/product/${item.productId}`} className="product-link" />
-    </div>
+      </div>
+    </Link>
   );
 }

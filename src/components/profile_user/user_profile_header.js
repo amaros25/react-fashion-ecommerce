@@ -23,10 +23,9 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
   const [subCities, setSubCities] = useState([]);
 
   useEffect(() => {
-    // Initialize form data from user
+    console.log("ProfileHeader user phone", user.phone);
+    console.log("ProfileHeader user address", user.address);
     if (user.address) {
-
-
       setFormData(prev => ({
         ...prev,
         address: user.address,
@@ -112,89 +111,56 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
         <div className="user-inactive-banner">
           <FaExclamationTriangle />
           <span>
-            Your account is currently inactive. Please contact the admin to reactivate your account.
-            You cannot place orders or chat with sellers.
+            {t("account_inactive_msg") || "Your account is currently inactive. Please contact admin."}
           </span>
         </div>
       )}
 
-      <div className="user-profile-header-card">
-        <div className="user-profile-cover">
-          <div className="user-cover-pattern"></div>
-          <div className="user-cover-gradient"></div>
-        </div>
-
-        <div className="user-profile-content-wrapper">
-          <div className="user-profile-main-section">
-            <div className="user-profile-image-wrapper">
-              <div className="user-profile-image-container">
-                <img src={user.image || '/default-avatar.png'} alt={user.firstName} className="user-profile-image" />
-              </div>
-              <div className="user-status-indicator"></div>
+      <div className="user-profile-minimal-card">
+        <div className="user-profile-top-row">
+          <div className="user-profile-identity">
+            <div className="user-avatar-minimal">
+              <img src={user.image || '/default-avatar.png'} alt={user.firstName} />
             </div>
+            <div className="user-info-minimal">
+              <h1 className="user-name-minimal">{user.firstName} {user.lastName}</h1>
+              <p className="user-email-minimal">{user.email}</p>
 
-            <div className="user-profile-info-block">
-              <h1 className="user-name">{user.firstName} {user.lastName}</h1>
-              <p className="user-email">{user.email}</p>
-
-              <div className="user-contact-info-grid">
-                <div className="user-contact-item">
-                  <FaMapMarkerAlt className="user-contact-icon" />
-                  {user.address && user.city ? (
-                    <span>
-                      {user.address},{user.subCity && ` ${user.subCity},`} {user.city}
-                    </span>
-                  ) : (
-                    <span>{t("cart_page.no_address_set")}</span>
-                  )}
-                </div>
-                <div className="user-contact-item">
-                  <FaPhone className="user-contact-icon" />
-                  {user.phone ? (
-                    <span>{user.phone}</span>
-                  ) : (
-                    <span>{t("cart_page.no_phone_set")}</span>
-                  )}
-                </div>
+              <div className="user-contact-minimal">
+                {user.phone && <span className="contact-pill"><FaPhone size={10} /> {user.phone}</span>}
+                {(user.address || user.city) && (
+                  <span className="contact-pill">
+                    <FaMapMarkerAlt size={10} />
+                    {[user.address, citiesData[cities[user.city]][user.subCity], cities[user.city]].filter(Boolean).join(', ')}
+                  </span>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="user-profile-actions-section">
-            <button className="user-action-btn messenger-btn" onClick={() => navigate('/chat')}>
-              <div className="icon-wrapper">
-                <FaCommentDots />
-                {unreadMessages > 0 && <span className="notification-badge">{unreadMessages}</span>}
-              </div>
-              Messages
+          <div className="user-actions-minimal">
+            <button className="action-btn-minimal" onClick={() => navigate('/chat')}>
+              {t("messages") || "MESSAGES"}
+              {unreadMessages > 0 && <span className="badge-dot"></span>}
             </button>
-            <button className="user-action-btn settings-btn" onClick={() => setShowSettings(true)}>
-              <FaCog /> Settings
+            <button className="action-btn-minimal" onClick={() => setShowSettings(true)}>
+              {t("settings") || "SETTINGS"}
             </button>
-            <button className="user-action-btn logout-btn" onClick={handleLogout}>
-              <FaSignOutAlt /> Logout
+            <button className="action-btn-minimal logout" onClick={handleLogout}>
+              {t("logout") || "LOGOUT"}
             </button>
           </div>
         </div>
 
-        <div className="user-stats-dashboard">
-          <div className="user-stat-box">
-            <div className="user-stat-icon-circle green">
-              <FaShoppingBag />
-            </div>
-            <div className="user-stat-details">
-              <span className="user-stat-number">{totalOrders}</span>
-              <span className="user-stat-label">Total Orders</span>
-            </div>
+        <div className="user-stats-minimal">
+          <div className="stat-item-minimal">
+            <span className="stat-value">{totalOrders}</span>
+            <span className="stat-label">{t("total_orders") || "Total Orders"}</span>
           </div>
-          <div className="user-stat-box">
-            <div className="user-stat-icon-circle orange">
-              <FaExclamationTriangle />
-            </div>
-            <div className="user-stat-details">
-              <span className="user-stat-number">{openOrders}</span>
-              <span className="user-stat-label">Open Orders</span>
-            </div>
+          <div className="stat-separator"></div>
+          <div className="stat-item-minimal">
+            <span className="stat-value">{openOrders}</span>
+            <span className="stat-label">{t("open_orders") || "Open Orders"}</span>
           </div>
         </div>
       </div>
@@ -204,13 +170,13 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
         <div className="user-modal-overlay">
           <div className="user-modal-content">
             <div className="user-modal-header">
-              <h2>Edit Profile Settings</h2>
+              <h2>{t("edit_profile") || "Edit Profile"}</h2>
               <button className="user-close-modal-btn" onClick={() => setShowSettings(false)}>&times;</button>
             </div>
 
             <div className="user-modal-body">
               <div className="user-form-group">
-                <label>Phone Number</label>
+                <label>{t("phone_number") || "Phone Number"}</label>
                 <input
                   type="text"
                   name="phone"
@@ -220,7 +186,7 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
                 />
               </div>
               <div className="user-form-group">
-                <label>Street Address</label>
+                <label>{t("street_address") || "Street Address"}</label>
                 <input
                   type="text"
                   name="address"
@@ -231,16 +197,16 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
               </div>
               <div className="user-form-row">
                 <div className="user-form-group half">
-                  <label>City</label>
+                  <label>{t("city") || "City"}</label>
                   <select name="city" value={formData.city} onChange={handleCityChange}>
-                    <option value="">Select City</option>
+                    <option value="">{t("select_city") || "Select City"}</option>
                     {cities.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div className="user-form-group half">
-                  <label>SubCity</label>
+                  <label>{t("subcity") || "SubCity"}</label>
                   <select name="subCity" value={formData.subCity} onChange={handleInputChange}>
-                    <option value="">Select SubCity</option>
+                    <option value="">{t("select_subcity") || "Select SubCity"}</option>
                     {subCities.map(sc => <option key={sc} value={sc}>{sc}</option>)}
                   </select>
                 </div>
@@ -249,11 +215,11 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
 
             <div className="user-modal-footer">
               <button className="user-delete-account-link" onClick={handleDeleteAccount}>
-                <FaTrash /> Delete Account
+                <FaTrash /> {t("delete_account") || "Delete Account"}
               </button>
               <div className="user-modal-actions-right">
-                <button className="user-cancel-btn" onClick={() => setShowSettings(false)}>Cancel</button>
-                <button className="user-save-btn" onClick={handleUpdate}>Save Changes</button>
+                <button className="user-cancel-btn" onClick={() => setShowSettings(false)}>{t("cancel") || "Cancel"}</button>
+                <button className="user-save-btn" onClick={handleUpdate}>{t("save_changes") || "Save Changes"}</button>
               </div>
             </div>
           </div>

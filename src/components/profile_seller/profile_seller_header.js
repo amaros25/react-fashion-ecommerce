@@ -150,129 +150,95 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
   };
 
   return (
-    <div className="profile-header-container">
+    <div className="seller-profile-header-container">
       {!seller.active && (
-        <div className="inactive-banner">
+        <div className="seller-inactive-banner">
           <FaExclamationTriangle />
           <span>
-            Your account is currently inactive. Please contact the admin to reactivate your account.
-            You cannot post products or manage orders.
+            {t("account_inactive_msg") || "Your account is currently inactive. Please contact admin."}
           </span>
         </div>
       )}
 
-      <div className="profile-header-card">
-        <div className="profile-cover">
-          <div className="cover-pattern"></div>
-          <div className="cover-gradient"></div>
-        </div>
-
-        <div className="profile-content-wrapper">
-          <div className="profile-main-section">
-            <div className="profile-image-wrapper">
-              <div className="profile-image-container">
-                <img src={seller.image} alt={seller.shopName} className="profile-image" />
-              </div>
-              <div className="status-indicator"></div>
+      <div className="seller-profile-minimal-card">
+        <div className="seller-profile-top-row">
+          <div className="seller-profile-identity">
+            <div className="seller-avatar-minimal">
+              <img src={seller.image || '/default-avatar.png'} alt={seller.shopName} />
             </div>
-
-            <div className="profile-info-block">
-              <div className="shop-title-row">
-                <h1 className="shop-name">{seller.shopName}</h1>
-                <div className="rating-badge">
-                  <FaStar className="star-icon" />
-                  <span className="rating-score">{avgRating}</span>
-                  <span className="rating-total">({reviewCount})</span>
+            <div className="seller-info-minimal">
+              <div className="seller-name-row">
+                <h1 className="seller-name-minimal">{seller.shopName}</h1>
+                <div className="seller-rating-minimal">
+                  <FaStar className="star-icon-minimal" />
+                  <span>{avgRating}</span>
+                  <span className="rating-count">({reviewCount})</span>
                 </div>
               </div>
+              <p className="seller-email-minimal">{seller.firstName} {seller.lastName}</p>
 
-              <p className="seller-fullname">{seller.firstName} {seller.lastName}</p>
-
-              <div className="contact-info-grid">
-                <div className="contact-item">
-                  <FaMapMarkerAlt className="contact-icon" />
-                  {seller.address && seller.address.length > 0 ? (
-                    <span>
-                      {seller.address[seller.address.length - 1].address},&nbsp;
-                      {citiesData[cities[seller.address[seller.address.length - 1].city]][seller.address[seller.address.length - 1].subCity]},&nbsp;
-                      {cities[seller.address[seller.address.length - 1].city]}
-                    </span>
-                  ) : (
-                    <span>No address set</span>
-                  )}
-                </div>
-                <div className="contact-item">
-                  <FaPhone className="contact-icon" />
-                  {seller.phone && seller.phone.length > 0 ? (
-                    <span>{seller.phone[seller.phone.length - 1].phone}</span>
-                  ) : (
-                    <span>No phone set</span>
-                  )}
-                </div>
+              <div className="seller-contact-minimal">
+                {seller.phone && seller.phone.length > 0 && (
+                  <span className="contact-pill">
+                    <FaPhone size={10} /> {seller.phone[seller.phone.length - 1].phone}
+                  </span>
+                )}
+                {seller.address && seller.address.length > 0 && (
+                  <span className="contact-pill">
+                    <FaMapMarkerAlt size={10} />
+                    {seller.address[seller.address.length - 1].address},&nbsp;
+                    {citiesData[cities[seller.address[seller.address.length - 1].city]][seller.address[seller.address.length - 1].subCity]},&nbsp;
+                    {cities[seller.address[seller.address.length - 1].city]}
+                  </span>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="profile-actions-section">
-            <button className="action-btn messenger-btn" onClick={() => navigate('/chat')}>
-              <div className="icon-wrapper">
-                <FaCommentDots />
-                {unreadMessages > 0 && <span className="notification-badge">{unreadMessages}</span>}
-              </div>
-              Messages
+          <div className="seller-actions-minimal">
+            <button className="action-btn-minimal" onClick={() => navigate('/chat')}>
+              {t("messages") || "MESSAGES"}
+              {unreadMessages > 0 && <span className="badge-dot"></span>}
             </button>
-            <button className="action-btn settings-btn" onClick={() => setShowSettings(true)}>
-              <FaCog /> Settings
+            <button className="action-btn-minimal" onClick={() => setShowSettings(true)}>
+              {t("settings") || "SETTINGS"}
             </button>
-            <button className="action-btn logout-btn" onClick={handleLogout}>
-              <FaSignOutAlt /> Logout
+            <button className="action-btn-minimal logout" onClick={handleLogout}>
+              {t("logout") || "LOGOUT"}
             </button>
           </div>
         </div>
 
-        <div className="stats-dashboard">
-          <div className="stat-box">
-            <div className="stat-icon-circle blue">
-              <FaBoxOpen />
-            </div>
-            <div className="stat-details">
-              <span className="stat-number">{productCount}</span>
-              <span className="stat-label">Products</span>
-            </div>
+        <div className="seller-stats-minimal">
+          <div className="stat-item-minimal">
+            <span className="stat-value">{productCount}</span>
+            <span className="stat-label">{t("products") || "Products"}</span>
           </div>
-          <div className="stat-box">
-            <div className="stat-icon-circle green">
-              <FaShoppingBag />
-            </div>
-            <div className="stat-details">
-              <span className="stat-number">{stats.totalOrders}</span>
-              <span className="stat-label">Total Orders</span>
-            </div>
+          <div className="stat-separator"></div>
+          <div className="stat-item-minimal">
+            <span className="stat-value">{stats.totalOrders}</span>
+            <span className="stat-label">{t("total_orders") || "Total Orders"}</span>
           </div>
-          <div className="stat-box">
-            <div className="stat-icon-circle orange">
-              <FaExclamationTriangle />
-            </div>
-            <div className="stat-details">
-              <span className="stat-number">{stats.openOrders}</span>
-              <span className="stat-label">Open Orders</span>
-            </div>
+          <div className="stat-separator"></div>
+          <div className="stat-item-minimal">
+            <span className="stat-value">{stats.openOrders}</span>
+            <span className="stat-label">{t("open_orders") || "Open Orders"}</span>
           </div>
         </div>
       </div>
 
       {/* Settings Modal */}
       {showSettings && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>Edit Profile Settings</h2>
-              <button className="close-modal-btn" onClick={() => setShowSettings(false)}>&times;</button>
+        <div className="seller-modal-overlay">
+          <div className="seller-modal-content">
+            <div className="seller-modal-header">
+              <h2>{t("edit_profile") || "Edit Profile"}</h2>
+              <button className="seller-close-modal-btn" onClick={() => setShowSettings(false)}>&times;</button>
             </div>
 
-            <div className="modal-body">
-              <div className="form-group">
-                <label>Phone Number</label>
+            <div className="seller-modal-body">
+              <div className="seller-form-group">
+                <label>{t("phone_number") || "Phone Number"}</label>
                 <input
                   type="text"
                   name="phone"
@@ -281,8 +247,8 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
                   placeholder="Enter your phone number"
                 />
               </div>
-              <div className="form-group">
-                <label>Street Address</label>
+              <div className="seller-form-group">
+                <label>{t("street_address") || "Street Address"}</label>
                 <input
                   type="text"
                   name="address"
@@ -291,31 +257,31 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
                   placeholder="Enter your street address"
                 />
               </div>
-              <div className="form-row">
-                <div className="form-group half">
-                  <label>City</label>
+              <div className="seller-form-row">
+                <div className="seller-form-group half">
+                  <label>{t("city") || "City"}</label>
                   <select name="city" value={formData.city} onChange={handleCityChange}>
-                    <option value="">Select City</option>
+                    <option value="">{t("select_city") || "Select City"}</option>
                     {cities.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
-                <div className="form-group half">
-                  <label>SubCity</label>
+                <div className="seller-form-group half">
+                  <label>{t("subcity") || "SubCity"}</label>
                   <select name="subCity" value={formData.subCity} onChange={handleInputChange}>
-                    <option value="">Select SubCity</option>
+                    <option value="">{t("select_subcity") || "Select SubCity"}</option>
                     {subCities.map(sc => <option key={sc} value={sc}>{sc}</option>)}
                   </select>
                 </div>
               </div>
             </div>
 
-            <div className="modal-footer">
-              <button className="delete-account-link" onClick={handleDeleteAccount}>
-                <FaTrash /> Delete Account
+            <div className="seller-modal-footer">
+              <button className="seller-delete-account-link" onClick={handleDeleteAccount}>
+                <FaTrash /> {t("delete_account") || "Delete Account"}
               </button>
-              <div className="modal-actions-right">
-                <button className="cancel-btn" onClick={() => setShowSettings(false)}>Cancel</button>
-                <button className="save-btn" onClick={handleUpdate}>Save Changes</button>
+              <div className="seller-modal-actions-right">
+                <button className="seller-cancel-btn" onClick={() => setShowSettings(false)}>{t("cancel") || "Cancel"}</button>
+                <button className="seller-save-btn" onClick={handleUpdate}>{t("save_changes") || "Save Changes"}</button>
               </div>
             </div>
           </div>

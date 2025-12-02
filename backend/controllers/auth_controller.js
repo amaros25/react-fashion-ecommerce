@@ -18,29 +18,27 @@ const login = async (req, res) => {
     }
 
     if (!user) {
-      return res.status(400).json({ message: "Benutzer nicht gefunden" });
+      return res.status(400).json({ message: "user not found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Falsches Passwort" });
+      return res.status(400).json({ message: "wrong password" });
     }
 
     const token = jwt.sign({ id: user._id, role }, JWT_SECRET, { expiresIn: "1d" });
-
-    const lastAddress =
-      Array.isArray(user.address) && user.address.length > 0
-        ? user.address[user.address.length - 1]
-        : null;
-
-    const lastPhone =
-      Array.isArray(user.phone) && user.phone.length > 0
-        ? user.phone[user.phone.length - 1]
-        : null;
-    console.log("lastPhone : ", lastPhone.phone);
-    console.log("lastAddress : ", lastAddress.address);
-    console.log("lastAddress : ", lastAddress.city);
-    console.log("lastAddress : ", lastAddress.subCity);
+    let lastAddress = "";
+    let lastPhone = "";
+    if (Array.isArray(user.address) && user.address.length > 0) {
+      lastAddress = user.address[user.address.length - 1];
+    } else {
+      return res.status(400).json({ message: "user has no address" });
+    }
+    if (Array.isArray(user.phone) && user.phone.length > 0) {
+      lastPhone = user.phone[user.phone.length - 1];
+    } else {
+      return res.status(400).json({ message: "user has no phone" });
+    }
     res.json({
       token,
       role,
@@ -55,8 +53,8 @@ const login = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Serverfehler" });
+    res.status(500).json({ message: "server error" });
   }
 };
 
-module.exports = login; // <-- nur so exportieren
+module.exports = login;

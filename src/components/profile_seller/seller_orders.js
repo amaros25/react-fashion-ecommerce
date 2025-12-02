@@ -1,28 +1,42 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "./seller_orders.css";
-import StatusSelect from "./status_select";
 import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../products/loading_spinner";
-import { FaSearch, FaFilter, FaCalendarAlt, FaUser, FaMapMarkerAlt, FaBox } from "react-icons/fa";
+import { FaSearch, FaFilter, FaBoxOpen } from "react-icons/fa";
+import SellerOrderCard from "./seller_order_card";
+import { ORDER_STATUS } from "../const/order_status";
 
 function SellerOrders({ sellerId, handleStatusChange, refreshTrigger }) {
+  // ... existing code ...
+
+  const getStatusColor = (status) => {
+    // Handle both string and integer status
+    if (status === 'pending' || status === ORDER_STATUS.PENDING) return 'orange';
+    if (status === 'confirmed' || status === ORDER_STATUS.CONFIRMED) return 'purple';
+    if (status === 'shipped' || status === ORDER_STATUS.SHIPPED) return 'blue';
+    if (status === 'delivered' || status === ORDER_STATUS.DELIVERED) return 'green';
+    if (status === 'user_cancelled' || status === ORDER_STATUS.CANCELLED_USER) return 'red';
+    if (status === 'seller_cancelled' || status === ORDER_STATUS.CANCELLED_SELLER) return 'red';
+    if (status === 'picked_up' || status === ORDER_STATUS.PICKED_UP) return 'green';
+    if (status === 'ready_pickup' || status === ORDER_STATUS.READY_TO_PICKUP) return 'blue';
+
+    return 'gray';
+  };
   const { t, i18n } = useTranslation();
   const apiUrl = process.env.REACT_APP_API_URL;
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([]);
-  const [statusUpdates, setStatusUpdates] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const ordersPerPage = 5;
   const [searchOrder, setSearchOrder] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
-  const selectRef = useRef(null);
+  const [products, setProducts] = useState({}); // Cache for products if needed, or pass from parent if available
 
   const handleFilter = () => {
     setCurrentPage(1);
     fetchOrders();
   };
-
 
   const fetchOrders = useCallback(async () => {
     if (!sellerId) return;
@@ -44,6 +58,10 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger }) {
       const data = await res.json();
       setOrders(data.orders || []);
       setTotalPages(Math.ceil(data.totalCount / ordersPerPage));
+
+      // Ideally we should fetch product details for these orders if they are not fully populated
+      // But assuming order.items contains product details as per previous code
+
     } catch (error) {
       console.error("Error loading orders:", error);
       setOrders([]);
@@ -56,21 +74,6 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger }) {
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders, refreshTrigger]);
-
-  // Status im lokalen State aktualisieren
-  const onStatusChange = (orderId, newStatus) => {
-    setStatusUpdates((prev) => ({ ...prev, [orderId]: newStatus }));
-  };
-
-  // Funktion zur Übersetzung der Farbe
-  const translateColor = (color) => {
-    // Check if it's a hex code
-    if (color && color.startsWith('#')) {
-      return <span className="color-dot" style={{ backgroundColor: color }} title={color}></span>;
-    }
-    const translated = t(`product_colors.${color?.toLowerCase()}`, { defaultValue: color });
-    return translated;
-  };
 
   // Seitenwechsel
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -86,19 +89,6 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger }) {
   for (let i = startPage; i <= endPage; i++) {
     pageNumbers.push(i);
   }
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'delivered': return 'green';
-      case 'shipped': return 'blue';
-      case 'confirmed': return 'purple';
-      case 'pending': return 'orange';
-      case 'cancelled':
-      case 'user_cancelled':
-      case 'seller_cancelled': return 'red';
-      default: return 'gray';
-    }
-  };
 
   return (
     <div
@@ -138,111 +128,20 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger }) {
       <div className="orders-list">
         {!loading && orders.length === 0 && (
           <div className="empty-state">
-            <FaBox className="empty-icon" />
+            <FaBoxOpen className="empty-icon" />
             <p>{t("noOrders")}</p>
           </div>
         )}
 
-        {orders.map((order) => {
-          const currentStatus = order.status && Array.isArray(order.status) && order.status.length > 0
-            ? order.status.slice(-1)[0]?.update
-            : "pending";
-
-          return (
-            <div key={order._id} className="order-item-card">
-              <div className="order-header-row">
-                <div className="order-id-group">
-                  <span className="order-label">Order</span>
-                  <span className="order-id">#{order.orderNumber}</span>
-                </div>
-                <div className={`status-badge ${getStatusColor(currentStatus)}`}>
-                  {t(`order_state.${currentStatus}`) || currentStatus}
-                </div>
-              </div>
-
-              <div className="order-body">
-                <div className="order-products">
-                  {order.items && Array.isArray(order.items) && order.items.map((item, index) => (
-                    <div key={index} className="product-row">
-                      <img
-                        src={item.product?.image?.[0] || ""}
-                        alt={item.product?.name}
-                        className="product-thumb"
-                      />
-                      <div className="product-details-text">
-                        <span className="product-name">{item.product?.name || t("productName")}</span>
-                        <div className="product-specs">
-                          <span>Size: {item.size}</span>
-                          <span className="dot">•</span>
-                          <span className="color-spec">Color: {translateColor(item.color)}</span>
-                          <span className="dot">•</span>
-                          <span>Qty: {item.quantity}</span>
-                        </div>
-                      </div>
-                      <div className="product-price-display">
-                        {(item.product?.price * item.quantity).toFixed(2)} €
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="order-customer-info">
-                  <div className="info-group">
-                    <FaUser className="info-icon" />
-                    <div>
-                      <span className="info-label">Customer</span>
-                      <p>{order.user ? `${order.user.firstName} ${order.user.lastName}` : t("noUser")}</p>
-                      <p className="sub-text">{order.user?.phone || t("noPhone")}</p>
-                    </div>
-                  </div>
-                  <div className="info-group">
-                    <FaMapMarkerAlt className="info-icon" />
-                    <div>
-                      <span className="info-label">Shipping Address</span>
-                      <p>{order.user?.address ? `${order.user.address.street}` : t("noAddress")}</p>
-                      <p className="sub-text">
-                        {order.user?.address ? `${order.user.address.postalCode} ${order.user.address.city}` : ""}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="info-group">
-                    <FaCalendarAlt className="info-icon" />
-                    <div>
-                      <span className="info-label">Date</span>
-                      <p>{new Date(order.createdAt).toLocaleDateString()}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="order-footer">
-                <div className="total-amount">
-                  <span>Total Amount:</span>
-                  <span className="amount">€ {order.totalPrice.toFixed(2)}</span>
-                </div>
-
-                <div className="status-actions">
-                  {currentStatus !== "seller_cancelled" &&
-                    currentStatus !== "delivered" &&
-                    currentStatus !== "return_received" && (
-                      <div className="update-status-wrapper">
-                        <StatusSelect order={order} onStatusChange={onStatusChange} ref={selectRef} />
-                        <button
-                          className="update-btn"
-                          onClick={() => {
-                            const newStatus = selectRef.current.value;
-                            handleStatusChange(order._id, newStatus);
-                          }}
-                        >
-                          {t("update")}
-                        </button>
-                      </div>
-                    )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {orders.map((order) => (
+          <SellerOrderCard
+            key={order._id}
+            order={order}
+            products={products} // Passing empty object if not used inside, but keeping signature
+            t={t}
+            onStatusChange={handleStatusChange}
+          />
+        ))}
       </div>
 
       {totalPages > 1 && (
