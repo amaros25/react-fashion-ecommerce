@@ -11,7 +11,7 @@ import { fetchChats } from "./chat_api";
 const MainChat = () => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
-  const { newOrderNumber: orderNumber, sellerId, newChatType: routeChatType } = location.state || {};
+  const { newOrderNumber: orderNumber, sellerId, partnerId, newChatType: routeChatType } = location.state || {};
   const [userId, setUserId] = useState(null);
   const [isChatFromOrderItem, setIsChatFromOrderItem] = useState(false);
 
@@ -28,7 +28,7 @@ const MainChat = () => {
     }
   }, [orderNumber]);
 
-  const chatHook = useChats(userId, sellerId, routeChatType || "product", orderNumber || "");
+  const chatHook = useChats(userId, partnerId || sellerId, routeChatType || "product", orderNumber || "");
 
   return (
     <div className="main-chat-container">

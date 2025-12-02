@@ -2,17 +2,27 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./order_items.css";
 
-export default function OrderItem({ item, product, order, t, isLast }) {
+export default function OrderItem({ item, product, order, t, isLast, chatRole = 'seller' }) {
   const navigate = useNavigate();
 
-  const handleChatWithSeller = (e) => {
-    e.preventDefault(); // Prevent navigation to product page
+  const handleChat = (e) => {
+    e.preventDefault();
     e.stopPropagation();
+
+    const isSellerView = chatRole === 'buyer';
+    const targetId = isSellerView ? order.user?._id : order.sellerId;
+    const chatType = 'order';
+
+    if (!targetId) {
+      console.error("Chat target ID not found");
+      return;
+    }
+
     navigate('/chat', {
       state: {
         newOrderNumber: order.orderNumber,
-        sellerId: order.sellerId,
-        newChatType: 'order'
+        partnerId: targetId,
+        newChatType: chatType
       }
     });
   };
@@ -65,9 +75,11 @@ export default function OrderItem({ item, product, order, t, isLast }) {
         </div>
 
         <div className="order-item-right">
-          <button className="chat-with-seller-btn" onClick={handleChatWithSeller}>
-            {t("chat_seller") || "Chat with Seller"}
-          </button>
+          {isLast && (
+            <button className="chat-with-seller-btn" onClick={handleChat}>
+              {chatRole === 'buyer' ? (t("chat_user") || "Chat with User") : (t("chat_seller") || "Chat with Seller")}
+            </button>
+          )}
         </div>
       </div>
     </Link>

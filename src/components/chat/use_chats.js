@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchChats, openChat, sendMessage, loadMoreMessages, startNewChat, markMessagesAsRead } from "./chat_api";
 
-export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) => {
+export const useChats = (userId, partnerId, initialType, initialNumber) => {
 
   const [activeChat, setActiveChat] = useState(null);
   const [newChatType, setNewChatType] = useState(initialType);
@@ -59,17 +59,51 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
   useEffect(() => {
     const loadChats = async () => {
       const role = localStorage.getItem("role");
-      const sellerIdFromStorage = role === "seller" ? userId : sellerIdFromProps;
+      const sellerIdFromStorage = role === "seller" ? userId : partnerId;
 
       if (userId) {
         const data = await fetchChats(role, userId, sellerIdFromStorage, newChatType, sidebarCurrentPage);
-        setChats(data.chats);
+        let currentChats = data.chats;
+
+        // Check for initial chat from navigation (only on first load or when initialNumber changes)
+        if (initialNumber && initialType) {
+          const existingChat = currentChats.find(c => c.number === initialNumber && c.type === initialType);
+
+          if (existingChat) {
+            // If it exists, we just set it as active if it's not already
+            if (activeChat?._id !== existingChat._id) {
+              setActiveChat(existingChat);
+              handleOpenChat(existingChat._id);
+            }
+          } else {
+            // Create temp chat if it doesn't exist
+            const tempId = "temp_" + Date.now();
+            // Check if we already have this temp chat in state to avoid duplicates on re-renders
+            const alreadyExists = chats.find(c => c.number === initialNumber && c.type === initialType && c._id.startsWith("temp_"));
+
+            if (!alreadyExists) {
+              const tempChat = {
+                _id: tempId,
+                type: initialType,
+                number: initialNumber,
+                updatedAt: new Date().toISOString(),
+                messages: [],
+                participants: [userId]
+              };
+              currentChats = [tempChat, ...currentChats];
+              setActiveChat(tempChat);
+              handleOpenChat(tempId);
+            }
+          }
+        }
+
+        setChats(currentChats);
         setTotalPages(data.totalPages);
       }
     };
 
     loadChats();
-  }, [userId, sellerIdFromProps, newChatType, sidebarCurrentPage]);
+  }, [userId, partnerId, newChatType, sidebarCurrentPage, initialNumber, initialType]);
 
   const handlePageChange = (pageNumber) => {
     setSidebarCurrentPage(pageNumber);
@@ -105,10 +139,16 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
     }
     else if (activeChat?._id && activeChat._id.toString().startsWith("temp_")) {
       const role = localStorage.getItem("role");
-      const resolvedSellerId = sellerIdFromProps || (role === "seller" ? userId : null);
-
       try {
-        const newChatData = await startNewChat(role, userId, resolvedSellerId, activeChat.type, activeChat.number);
+        let payloadUserId = userId;
+        let payloadSellerId = partnerId;
+
+        if (role === "seller") {
+          payloadUserId = partnerId;
+          payloadSellerId = userId;
+        }
+
+        const newChatData = await startNewChat(role, payloadUserId, payloadSellerId, activeChat.type, activeChat.number);
 
         const sentMessageData = await sendMessage(newChatData._id, userId, message);
 
@@ -155,9 +195,15 @@ export const useChats = (userId, sellerIdFromProps, initialType, initialNumber) 
     }
 
     try {
-      const resolvedSellerId = sellerIdFromProps || (role === "seller" ? userId : null);
+      let payloadUserId = userId;
+      let payloadSellerId = partnerId;
 
-      const newChatData = await startNewChat(role, userId, resolvedSellerId, newChatType, newChatNumber);
+      if (role === "seller") {
+        payloadUserId = partnerId;
+        payloadSellerId = userId;
+      }
+
+      const newChatData = await startNewChat(role, payloadUserId, payloadSellerId, newChatType, newChatNumber);
       setChats(prev => [newChatData, ...prev]);
       setActiveChat(newChatData);
 

@@ -105,17 +105,107 @@
 }
 
 @media (max-width: 768px) {
+  .seller-orders-container {
+    padding: 0 8px;
+  }
+
   .orders-toolbar {
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
+    margin-bottom: 15px;
   }
 
   .search-box,
   .filter-box {
     width: 100%;
+    padding: 7px 10px;
+  }
+
+  .search-box input,
+  .filter-box select {
+    font-size: 0.9rem;
   }
 
   .search-box input {
     width: 100%;
+  }
+
+  .apply-btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+
+  .orders-list {
+    gap: 15px;
+  }
+
+  .empty-state {
+    padding: 40px 15px;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+  }
+
+  .pagination-container {
+    margin-top: 20px;
+    gap: 6px;
+  }
+
+  .page-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .seller-orders-container {
+    padding: 0 6px;
+  }
+
+  .orders-toolbar {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .search-box,
+  .filter-box {
+    padding: 6px 8px;
+  }
+
+  .search-box input,
+  .filter-box select {
+    font-size: 0.85rem;
+  }
+
+  .apply-btn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .orders-list {
+    gap: 12px;
+  }
+
+  .empty-state {
+    padding: 30px 10px;
+    font-size: 0.9rem;
+  }
+
+  .empty-icon {
+    font-size: 2rem;
+  }
+
+  .pagination-container {
+    margin-top: 15px;
+    gap: 4px;
+  }
+
+  .page-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
   }
 }

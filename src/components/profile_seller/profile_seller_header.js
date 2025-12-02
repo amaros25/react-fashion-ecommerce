@@ -57,6 +57,7 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
           headers: { Authorization: `Bearer ${token}` },
         });
         const dataMessages = await resMessages.json();
+        console.log("ProfileSellerHeader unreadCount: ", dataMessages.unreadCount);
         setUnreadMessages(dataMessages.unreadCount || 0);
 
       } catch (err) {
@@ -198,7 +199,7 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
           <div className="seller-actions-minimal">
             <button className="action-btn-minimal" onClick={() => navigate('/chat')}>
               {t("messages") || "MESSAGES"}
-              {unreadMessages > 0 && <span className="badge-dot"></span>}
+              {unreadMessages > 0 && <span className="badge-count">{unreadMessages}</span>}
             </button>
             <button className="action-btn-minimal" onClick={() => setShowSettings(true)}>
               {t("settings") || "SETTINGS"}

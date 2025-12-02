@@ -107,6 +107,21 @@
   color: #111827;
 }
 
+@media (max-width: 768px) {
+  .order-item-image-container {
+    width: 65px;
+    height: 65px;
+  }
+
+  .order-product-title {
+    font-size: 0.9rem;
+  }
+
+  .order-product-variants {
+    font-size: 0.8rem;
+  }
+}
+
 @media (max-width: 600px) {
   .order-item-card {
     flex-direction: column;
@@ -114,9 +129,26 @@
     gap: 12px;
   }
 
+  .order-item-image-container {
+    width: 60px;
+    height: 60px;
+  }
+
+  .order-product-title {
+    font-size: 0.85rem;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
   .order-item-right {
     width: 100%;
     display: flex;
     justify-content: flex-end;
+  }
+
+  .chat-with-seller-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
   }
 }

@@ -42,7 +42,21 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
         phone: user.phone
       }));
     }
-  }, [user]);
+
+    const fetchUnreadMessages = async () => {
+      if (!user._id) return;
+      try {
+        const resMessages = await fetch(`${apiUrl}/chats/unread/user/${user._id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const dataMessages = await resMessages.json();
+        setUnreadMessages(dataMessages.unreadCount || 0);
+      } catch (err) {
+        console.error("Error fetching unread messages:", err);
+      }
+    };
+    fetchUnreadMessages();
+  }, [user, apiUrl, token]);
 
   const handleCityChange = (e) => {
     const cityName = e.target.value;
@@ -141,7 +155,7 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
           <div className="user-actions-minimal">
             <button className="action-btn-minimal" onClick={() => navigate('/chat')}>
               {t("messages") || "MESSAGES"}
-              {unreadMessages > 0 && <span className="badge-dot"></span>}
+              {unreadMessages > 0 && <span className="badge-count">{unreadMessages}</span>}
             </button>
             <button className="action-btn-minimal" onClick={() => setShowSettings(true)}>
               {t("settings") || "SETTINGS"}

@@ -13,7 +13,7 @@ function SellerProducts({ sellerId, apiUrl, token }) {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 8; // Increased limit for better grid view
+  const [limit] = useState(12); // Increased limit for better grid view
 
   const fetchProducts = async (page = 1) => {
     try {

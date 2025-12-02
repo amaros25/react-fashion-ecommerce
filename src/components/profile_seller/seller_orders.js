@@ -56,11 +56,29 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger }) {
       if (!res.ok) throw new Error("Serverfehler");
 
       const data = await res.json();
-      setOrders(data.orders || []);
+      const ordersList = data.orders || [];
+      setOrders(ordersList);
       setTotalPages(Math.ceil(data.totalCount / ordersPerPage));
 
-      // Ideally we should fetch product details for these orders if they are not fully populated
-      // But assuming order.items contains product details as per previous code
+      // Fetch product details for these orders
+      const newProductMap = {};
+      for (const order of ordersList) {
+        for (const item of order.items) {
+          if (!newProductMap[item.productId] && !products[item.productId]) {
+            try {
+              const prodRes = await fetch(`${apiUrl}/products/${item.productId}`);
+              const prodData = await prodRes.json();
+              newProductMap[item.productId] = prodData;
+            } catch (err) {
+              console.error("Product can not loaded:", item.productId, err);
+            }
+          }
+        }
+      }
+
+      if (Object.keys(newProductMap).length > 0) {
+        setProducts(prev => ({ ...prev, ...newProductMap }));
+      }
 
     } catch (error) {
       console.error("Error loading orders:", error);
@@ -69,7 +87,7 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger }) {
     } finally {
       setLoading(false);
     }
-  }, [sellerId, currentPage, filterStatus, searchOrder, apiUrl]);
+  }, [sellerId, currentPage, filterStatus, searchOrder, apiUrl, products]);
 
   useEffect(() => {
     fetchOrders();
@@ -114,12 +132,28 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger }) {
             onChange={(e) => setFilterStatus(e.target.value)}
           >
             <option value="">{t("order_state.all")}</option>
-            <option value="pending">{t("order_state.pending")}</option>
-            <option value="confirmed">{t("order_state.confirmed")}</option>
-            <option value="shipped">{t("order_state.shipped")}</option>
-            <option value="delivered">{t("order_state.delivered")}</option>
-            <option value="user_cancelled">{t("order_state.user_cancelled")}</option>
-            <option value="seller_cancelled">{t("order_state.seller_cancelled")}</option>
+            <option value={ORDER_STATUS.PENDING}>{t("order_state.pending")}</option>
+            <option value={ORDER_STATUS.CONFIRMED}>{t("order_state.confirmed")}</option>
+            <option value={ORDER_STATUS.SHIPPED}>{t("order_state.shipped")}</option>
+            <option value={ORDER_STATUS.DELIVERED}>{t("order_state.delivered")}</option>
+
+            <option value={ORDER_STATUS.FIRST_TRY_DELIVERY_FAILED}>{t("order_state.first_try_delivery_failed")}</option>
+            <option value={ORDER_STATUS.SECOND_TRY_DELIVERY}>{t("order_state.second_try_delivery")}</option>
+            <option value={ORDER_STATUS.FAILED_DELIVERY}>{t("order_state.failed_delivery")}</option>
+
+            <option value={ORDER_STATUS.READY_TO_PICKUP}>{t("order_state.ready_pickup")}</option>
+            <option value={ORDER_STATUS.PICKED_UP}>{t("order_state.picked_up")}</option>
+            <option value={ORDER_STATUS.PICK_UP_FAILED}>{t("order_state.pick_up_failed")}</option>
+
+            <option value={ORDER_STATUS.RETURN_REQUESTED}>{t("order_state.return_requested")}</option>
+            <option value={ORDER_STATUS.RETURN_CONFIRMED}>{t("order_state.return_confirmed")}</option>
+            <option value={ORDER_STATUS.RETURN_REFUSED}>{t("order_state.return_refused")}</option>
+            <option value={ORDER_STATUS.RETURN_SHIPPED}>{t("order_state.return_shipped")}</option>
+            <option value={ORDER_STATUS.RETURN_RECEIVED}>{t("order_state.return_received")}</option>
+            <option value={ORDER_STATUS.RETURN_NOT_RECEIVED}>{t("order_state.return_not_received")}</option>
+
+            <option value={ORDER_STATUS.CANCELLED_USER}>{t("order_state.user_cancelled")}</option>
+            <option value={ORDER_STATUS.CANCELLED_SELLER}>{t("order_state.seller_cancelled")}</option>
           </select>
           <button onClick={handleFilter} className="apply-btn">{t("filter")}</button>
         </div>

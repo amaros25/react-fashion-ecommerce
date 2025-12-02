@@ -198,7 +198,7 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
             <div className="order-card-header">
                 <div className="order-header-left">
                     <span className="order-id-label">{t("order_id") || "Order ID"}</span>
-                    <span className="order-id-value">#{order.orderNumber}</span>
+                    <span className="order-id-value">{order.orderNumber}</span>
                     {formattedDate && <span className="order-date">• {formattedDate}</span>}
                     <span className={`order-type-badge ${isDelivery ? 'delivery' : 'pickup'}`}>
                         {isDelivery ? (t("delivery") || "Delivery") : (t("pickup") || "Pickup")}
@@ -237,7 +237,8 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
                             product={product}
                             order={order}
                             t={t}
-                            isLast={false} // We don't want the user-side buttons here
+                            isLast={index === order.items.length - 1}
+                            chatRole="buyer"
                         />
                     );
                 })}
