@@ -493,5 +493,12 @@
     "blocked": "Bloqué",
     "deleted": "Supprimé",
     "unknown": "Inconnu"
-  }
+  },
+  "create_new_listing": "Créer un nouveau listing",
+  "product_images": "Images du produit",
+  "basic_information": "Informations de base",
+  "category": "Catégorie",
+  "select_subcategory": "Sélectionner une sous-catégorie",
+  "product_shipement_price": "Prix de livraison du produit",
+  "variants": "Variants (Taille & Couleur)"
 }

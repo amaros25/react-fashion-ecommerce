@@ -14,8 +14,6 @@ function AddProduct() {
   const imageUrls = [];
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
-
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -25,11 +23,9 @@ function AddProduct() {
     price: "",
     category: "",
     type: "",
-    sizes: [{ size: "", stock: 0, color: "#000000" }], // Default color black
+    sizes: [{ size: "", stock: 0, color: "#000000" }],
   });
-
   const categoryKeys = ["womens", "mens", "kids"];
-
   const subCategories = {
     womens: ["clothes", "shoes", "bags", "accessories", "beauty", "other-women"],
     mens: ["clothes", "shoes", "accessories", "other-mens"],
@@ -139,17 +135,17 @@ function AddProduct() {
     >
       <div className="add-product-header">
         <h2>{t("post_product")}</h2>
-        <p>Create a new listing for your shop</p>
+        <p>{t("create_new_listing")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="add-product-form">
         <div className="form-section">
-          <h3>Product Images</h3>
+          <h3>{t("product_images")}</h3>
           <ImageSelectUpload onImageChange={handleImageChange} maximages={5} />
         </div>
 
         <div className="form-section">
-          <h3>Basic Information</h3>
+          <h3>{t("basic_information")}</h3>
           <div className="form-row">
             <div className="form-group">
               <label>{t("product_name")}</label>
@@ -203,10 +199,10 @@ function AddProduct() {
         </div>
 
         <div className="form-section">
-          <h3>Category</h3>
+          <h3>{t("category")}</h3>
           <div className="form-row">
             <div className="form-group">
-              <label>{t("select_category")}</label>
+
               <select
                 name="category"
                 value={formData.category}
@@ -220,7 +216,7 @@ function AddProduct() {
                 }}
                 required
               >
-                <option value="">Select Category</option>
+                <option value="">{t("select_category")}</option>
                 {categoryKeys.map((cat, index) => (
                   <option key={cat} value={index}>
                     {t(`categories.${cat}`)}
@@ -231,7 +227,6 @@ function AddProduct() {
 
             {formData.category !== "" && (
               <div className="form-group">
-                <label>{t("select_subcategory")}</label>
                 <select
                   name="subcategory"
                   value={formData.subcategory}
@@ -243,7 +238,7 @@ function AddProduct() {
                   }
                   required
                 >
-                  <option value="">Select Subcategory</option>
+                  <option value="">{t("select_subcategory")}</option>
                   {subCategories[categoryKeys[formData.category]].map((sub, index) => (
                     <option key={index} value={index}>
                       {t(`subcategories.${sub}`)}
@@ -257,7 +252,7 @@ function AddProduct() {
 
         <div className="form-section">
           <div className="section-header">
-            <h3>Variants (Size & Color)</h3>
+            <h3>{t("variants")}</h3>
           </div>
 
           <div className="variants-list">

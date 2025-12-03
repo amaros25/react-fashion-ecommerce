@@ -110,7 +110,7 @@ function SellerOrders({ sellerId, handleStatusChange, refreshTrigger }) {
 
   return (
     <div
-      className="seller-orders-container"
+      className="seller-orders-main-container"
       dir={i18n.language === "ar" ? "rtl" : "ltr"}
     >
       <div className="orders-toolbar">

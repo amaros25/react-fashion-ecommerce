@@ -65,13 +65,13 @@
 .seller-profile-nav {
   display: flex;
   gap: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   border-bottom: 1px solid #e5e7eb;
   justify-content: center;
 }
 
 .seller-nav-item {
-  padding: 12px 4px;
+  padding: 10px 2px;
   cursor: pointer;
   user-select: none;
   border-bottom: 2px solid transparent;
@@ -91,4 +91,54 @@
   border-bottom-color: #111827;
   color: #111827;
   font-weight: 600;
+}
+
+
+
+@media (max-width: 768px) {
+  .seller-nav-item {
+    padding: 10px 2px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    color: #6b7280;
+    font-size: 0.70rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+}
+
+@media (max-width: 600px) {
+  .seller-nav-item {
+    padding: 10px 2px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    color: #6b7280;
+    font-size: 0.60rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1px;
+  }
+
+}
+
+@media (min-width: 1024px) {
+  .seller-nav-item {
+    padding: 10px 2px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    color: #6b7280;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+  }
+
 }

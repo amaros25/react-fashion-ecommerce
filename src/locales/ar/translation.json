@@ -341,5 +341,12 @@
     "no_phone_set": "لم يتم تعيين هاتف",
     "address_required": "يرجى إضافة عنوان التوصيل الخاص بك أولاً",
     "pickup_info": "سيتم عرض عنوان متجر البائع بعد تأكيد البائع."
-  }
+  },
+  "create_new_listing": "إنشاء قائمة جديدة",
+  "product_images": "صور المنتج",
+  "basic_information": "معلومات الأساسية",
+  "category": "القسم",
+  "select_subcategory": "اختر الفئة",
+  "product_shipement_price": "سعر الشحن",
+  "variants": "الخيارات"
 }

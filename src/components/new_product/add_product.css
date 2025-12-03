@@ -1,7 +1,7 @@
 .add-product-container {
-  max-width: 900px;
+  max-width: 80%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 5px;
   font-family: 'Inter', sans-serif;
 }
 
@@ -226,7 +226,8 @@
 /* Responsive - Tablet */
 @media (max-width: 768px) {
   .add-product-container {
-    padding: 15px;
+    padding: 5px;
+    max-width: 100%;
   }
 
   .add-product-header {
@@ -304,7 +305,8 @@
 /* Responsive - Mobile */
 @media (max-width: 600px) {
   .add-product-container {
-    padding: 12px;
+    padding: 5px;
+    max-width: 100%;
   }
 
   .add-product-header {

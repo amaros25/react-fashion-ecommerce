@@ -1,5 +1,6 @@
-.seller-orders-container {
+.seller-orders-main-container {
   width: 100%;
+  max-width: 100%;
   padding: 0 10px;
 }
 
@@ -105,7 +106,7 @@
 }
 
 @media (max-width: 768px) {
-  .seller-orders-container {
+  .seller-orders-main-container {
     padding: 0 8px;
   }
 
@@ -161,7 +162,7 @@
 }
 
 @media (max-width: 600px) {
-  .seller-orders-container {
+  .seller-orders-main-container {
     padding: 0 6px;
   }
 
