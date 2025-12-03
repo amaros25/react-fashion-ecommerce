@@ -164,6 +164,8 @@
   },
   "phone": "Téléphone",
   "address": "Adresse",
+  "products": "Produits",
+  "edit_profile": "Modifier le profil",
   "total_orders": "Commandes totales",
   "open_orders": "Commandes ouvertes",
   "loading_profile": "Chargement du profil",
@@ -493,7 +495,7 @@
   "selectSubCity": "Choisissez une Délégation",
   "product_state": {
     "pending": "En attente d'approbation",
-    "active": "Actif",
+    "active": "Disponible",
     "blocked": "Bloqué",
     "deleted": "Supprimé",
     "unknown": "Inconnu"
@@ -505,5 +507,32 @@
   "select_subcategory": "Sélectionner une sous-catégorie",
   "product_shipement_price": "Prix de livraison du produit",
   "variants": "Variants (Taille & Couleur)",
-  "price_suf": "DT"
+  "price_suf": "DT",
+  "messages": "Messages",
+  "settings": "Paramètres",
+  "street_address": "Adresse de rue",
+  "enter_phone_number": "Entrez votre numéro de téléphone",
+  "enter_street_address": "Entrez votre adresse de rue",
+  "delete_account": "Supprimer le compte",
+  "cancel": "Annuler",
+  "save_changes": "Enregistrer les modifications",
+  "select_city": "Sélectionnez la ville",
+  "select_subcity": "Sélectionnez la délégation",
+  "example_product_name": "Ex : Robe fleurie d'été",
+  "describe_your_product": "Décrivez votre produit...",
+  "subcategories": {
+    "clothes": "Vêtements",
+    "shoes": "Chaussures",
+    "bags": "Sacs",
+    "accessories": "Accessoires",
+    "beauty": "Beauté",
+    "other-women": "Autres (Femmes)",
+    "other-mens": "Autres (Hommes)",
+    "girls-clothing": "Vêtements filles",
+    "boys-clothing": "Vêtements garçons",
+    "baby-clothing": "Vêtements bébés",
+    "other-kids": "Autres (Enfants)"
+  },
+  "orders": "Commande(s)",
+  "no_orders": "Aucune commande"
 }

@@ -205,7 +205,7 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
               {t("settings") || "SETTINGS"}
             </button>
             <button className="action-btn-minimal logout" onClick={handleLogout}>
-              {t("logout") || "LOGOUT"}
+              {t("logout")}
             </button>
           </div>
         </div>
@@ -213,17 +213,17 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
         <div className="seller-stats-minimal">
           <div className="stat-item-minimal">
             <span className="stat-value">{productCount}</span>
-            <span className="stat-label">{t("products") || "Products"}</span>
+            <span className="stat-label">{t("products")}</span>
           </div>
           <div className="stat-separator"></div>
           <div className="stat-item-minimal">
             <span className="stat-value">{stats.totalOrders}</span>
-            <span className="stat-label">{t("total_orders") || "Total Orders"}</span>
+            <span className="stat-label">{t("total_orders")}</span>
           </div>
           <div className="stat-separator"></div>
           <div className="stat-item-minimal">
             <span className="stat-value">{stats.openOrders}</span>
-            <span className="stat-label">{t("open_orders") || "Open Orders"}</span>
+            <span className="stat-label">{t("open_orders")}</span>
           </div>
         </div>
       </div>
@@ -233,29 +233,29 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
         <div className="seller-modal-overlay">
           <div className="seller-modal-content">
             <div className="seller-modal-header">
-              <h2>{t("edit_profile") || "Edit Profile"}</h2>
+              <h2>{t("edit_profile")}</h2>
               <button className="seller-close-modal-btn" onClick={() => setShowSettings(false)}>&times;</button>
             </div>
 
             <div className="seller-modal-body">
               <div className="seller-form-group">
-                <label>{t("phone_number") || "Phone Number"}</label>
+                <label>{t("phone_number")}</label>
                 <input
                   type="text"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  placeholder="Enter your phone number"
+                  placeholder={t("enter_phone_number")}
                 />
               </div>
               <div className="seller-form-group">
-                <label>{t("street_address") || "Street Address"}</label>
+                <label>{t("street_address")}</label>
                 <input
                   type="text"
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  placeholder="Enter your street address"
+                  placeholder={t("enter_street_address")}
                 />
               </div>
               <div className="seller-form-row">
@@ -267,9 +267,9 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
                   </select>
                 </div>
                 <div className="seller-form-group half">
-                  <label>{t("subcity") || "SubCity"}</label>
+                  <label>{t("register.subCity")}</label>
                   <select name="subCity" value={formData.subCity} onChange={handleInputChange}>
-                    <option value="">{t("select_subcity") || "Select SubCity"}</option>
+                    <option value="">{t("select_subcity")}</option>
                     {subCities.map(sc => <option key={sc} value={sc}>{sc}</option>)}
                   </select>
                 </div>

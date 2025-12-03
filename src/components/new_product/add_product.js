@@ -29,7 +29,7 @@ function AddProduct() {
   const subCategories = {
     womens: ["clothes", "shoes", "bags", "accessories", "beauty", "other-women"],
     mens: ["clothes", "shoes", "accessories", "other-mens"],
-    kids: ["girls-clothing", "boys-lothing", "baby-clothing", "other-kids"]
+    kids: ["girls-clothing", "boys-clothing", "baby-clothing", "other-kids"]
   };
   const [status, setStatus] = useState({
     visible: false,
@@ -152,7 +152,7 @@ function AddProduct() {
               <input
                 type="text"
                 name="name"
-                placeholder="e.g. Summer Floral Dress"
+                placeholder={t("example_product_name")}
                 required
                 onChange={handleChange}
               />
@@ -163,11 +163,11 @@ function AddProduct() {
                 <input
                   type="number"
                   name="price"
-                  placeholder="0.00"
+                  placeholder="0.000"
                   required
                   onChange={handleChange}
                 />
-                <span className="currency-symbol">TND</span>
+                <span className="currency-symbol">{t("price_suf")}</span>
               </div>
             </div>
           </div>
@@ -178,11 +178,11 @@ function AddProduct() {
               <input
                 type="number"
                 name="shipment_price"
-                placeholder="0.00"
+                placeholder="0.000"
                 required
                 onChange={handleChange}
               />
-              <span className="currency-symbol">TND</span>
+              <span className="currency-symbol">{t("price_suf")}</span>
             </div>
           </div>
 
@@ -190,7 +190,7 @@ function AddProduct() {
             <label>{t("product_description")}</label>
             <textarea
               name="description"
-              placeholder="Describe your product..."
+              placeholder={t("describe_your_product")}
               required
               onChange={handleChange}
               rows="4"
@@ -219,7 +219,7 @@ function AddProduct() {
                 <option value="">{t("select_category")}</option>
                 {categoryKeys.map((cat, index) => (
                   <option key={cat} value={index}>
-                    {t(`categories.${cat}`)}
+                    {t(`main-categories.${cat}`)}
                   </option>
                 ))}
               </select>

@@ -113,7 +113,7 @@ function SellerProducts({ sellerId, apiUrl, token }) {
                     {product.price ? `${product.price} ${t("price_suf")}` : t("price_not_available")}
                   </span>
                   <span className="card-orders">
-                    {product.orderCount > 0 ? `${product.orderCount} Orders` : "No orders"}
+                    {product.orderCount > 0 ? `${product.orderCount} ${t("orders")}` : t("no_orders")}
                   </span>
                 </div>
                 <div className="card-footer">
