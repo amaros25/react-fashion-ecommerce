@@ -124,7 +124,12 @@
     "explore_seller": "Explorer le vendeur",
     "remove_from_saved": "Supprimer de mes favoris",
     "add_to_saved": "Ajouter aux favoris",
-    "login_to_save": "Vous devez vous connecter pour ajouter des produits à vos favoris."
+    "login_to_save": "Vous devez vous connecter pour ajouter des produits à vos favoris.",
+    "reviews": "Avis",
+    "no_reviews": "Pas encore d’avis.",
+    "write_review": "Écrire un avis",
+    "write_comment": "Écrire un commentaire",
+    "submit_review": "Soumettre l’avis"
   },
   "cart_page": {
     "title": "Votre panier",
@@ -138,7 +143,6 @@
     "use_my_position": "Utiliser ma position",
     "confirm_position": "Confirmer",
     "cancel_position": "Annuler",
-    "price_suf": "DT",
     "Change": "Modifier l’adresse / le téléphone",
     "empty_desc": "Il semble que vous n'ayez encore rien ajouté à votre panier.",
     "continue_shopping": "Continuer vos achats",
@@ -500,5 +504,6 @@
   "category": "Catégorie",
   "select_subcategory": "Sélectionner une sous-catégorie",
   "product_shipement_price": "Prix de livraison du produit",
-  "variants": "Variants (Taille & Couleur)"
+  "variants": "Variants (Taille & Couleur)",
+  "price_suf": "DT"
 }

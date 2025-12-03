@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { FaChevronDown, FaChevronUp, FaStar, FaRegStar } from 'react-icons/fa';
 import './commentar_product.css';
 import { toast } from 'react-toastify';
+import { useTranslation } from "react-i18next";
 
 const CommentProduct = ({ product, onReviewAdded }) => {
+    const { t, i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
@@ -43,7 +45,7 @@ const CommentProduct = ({ product, onReviewAdded }) => {
     return (
         <div className="comment-product-container">
             <div className="comment-header" onClick={toggleOpen}>
-                <h3>Reviews ({product.reviews ? product.reviews.length : 0})</h3>
+                <h3>{t('product_page.reviews')} ({product.reviews ? product.reviews.length : 0})</h3>
                 {isOpen ? <FaChevronUp /> : <FaChevronDown />}
             </div>
 
@@ -73,14 +75,14 @@ const CommentProduct = ({ product, onReviewAdded }) => {
                                     </div>
                                 ))
                         ) : (
-                            <p>No reviews yet.</p>
+                            <p>{t('product_page.no_reviews')}</p>
                         )}
                     </div>
 
                     {/* Add Review Form */}
                     {userId && !product.reviews.some(r => (r.user._id || r.user) === userId) && (
                         <form onSubmit={handleSubmit} className="add-review-form">
-                            <h4>Write a Review</h4>
+                            <h4>{t('product_page.write_review')}</h4>
                             <div className="star-rating">
                                 {[...Array(5)].map((star, index) => {
                                     const ratingValue = index + 1;
@@ -107,10 +109,10 @@ const CommentProduct = ({ product, onReviewAdded }) => {
                             <textarea
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
-                                placeholder="Write your comment..."
+                                placeholder={t('product_page.write_comment')}
                                 required
                             />
-                            <button type="submit">Submit Review</button>
+                            <button type="submit">{t('product_page.submit_review')}</button>
                         </form>
                     )}
                 </div>

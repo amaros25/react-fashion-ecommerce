@@ -51,10 +51,10 @@ function SavedProducts() {
     };
 
     return (
-        <div className="main-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+        <div className="msaved-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
 
 
-            <h2 className="saved-title">{t("saved_products.title")}</h2>
+            <h1 className="saved-title">{t("saved_products.title")}</h1>
 
             <div className="product-card-list">
                 {savedProductsList.length > 0 ? (

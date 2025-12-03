@@ -230,13 +230,8 @@ function ProductPage() {
                     key={index}
                     className={`color-swatch-container ${selectedColor === color ? 'selected' : ''}`}
                     onClick={() => setSelectedColor(color)}
-                  >
-                    <div
-                      className="color-swatch"
-                      style={{ backgroundColor: color.toLowerCase() }}
-                      title={color}
-                    />
-                  </div>
+                    style={{ backgroundColor: color.toLowerCase() }}
+                  />
                 ))}
               </div>
             </div>
@@ -298,7 +293,7 @@ function ProductPage() {
         currentProductId={product._id}
       />
 
-    </div>
+    </div >
   );
 }
 

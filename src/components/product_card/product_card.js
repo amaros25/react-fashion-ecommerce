@@ -83,7 +83,7 @@ function ProductCard({ product, onProductRemoved }) {
 
   return (
     <>
-      <div className="product-card-container">
+      <div className="product-card-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
         <Link
           key={product._id}
           to={`/product/${product._id}`}
@@ -96,8 +96,6 @@ function ProductCard({ product, onProductRemoved }) {
               className="product-card-image"
               loading="lazy" />
             <div className="expand-icon" onClick={handleExpandClick}>⤢</div>
-
-
             <div
               onClick={toggleSavedProduct}
               className={`save-product-card-icon ${isProductSaved ? 'saved' : ''}`}
@@ -147,9 +145,9 @@ function ProductCard({ product, onProductRemoved }) {
                 />
               ))}
             </div>
-            <p className="product-color-desc">{t("sizes")}: {product.sizes.map(sizeObj => sizeObj.size).join(", ")}</p>
+            <p className="product-color-desc">{t("sizes")}: {product.sizes.map(sizeObj => sizeObj.size).join(", ")} </p>
             <div className="product-price-row">
-              <span className="product-price">{product.price} DT</span>
+              <span className="product-price"> {product.price} {t("price_suf")}</span>
             </div>
           </div>
         </Link>

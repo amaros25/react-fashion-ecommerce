@@ -4,9 +4,9 @@
     direction: rtl;
 }
 
-.saved-container {
+.msaved-container {
     width: 100%;
-    max-width: 80%;
+    max-width: 100%;
     min-height: auto;
     padding: 20px;
     box-sizing: border-box;
@@ -18,7 +18,7 @@
     font-weight: 500;
     margin-top: 10px;
     margin-bottom: 15px;
-    text-align: left;
+    text-align: start;
     color: #333;
 }
 

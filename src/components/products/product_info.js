@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import "./product_info.css";
 
 function ProductInfo({ product }) {
-  
+
   const { t } = useTranslation();
   const [toastShown, setToastShown] = useState(false); // New state to track if toast has been shown
 
@@ -21,13 +21,13 @@ function ProductInfo({ product }) {
       setToastShown(true); // Set the toast flag to true, so it's not shown again
       return "";
     }
-    if(color  && !toastShown){
+    if (color && !toastShown) {
       const colorKey = color.toLowerCase();
       const translated = t(`product_colors.${colorKey}`);
       return translated !== `product_colors.${colorKey}` ? translated : color;
     }
 
-    };
+  };
   console.log("ProductInfo product: ", product)
   return (
     <div className="product-info-box">
@@ -36,7 +36,7 @@ function ProductInfo({ product }) {
         <span className="product-info-date">{formattedDate}</span>
       </div>
       <hr className="product-divider" />
-      <span className="product-info-price">{product.price} DT</span>
+      <span className="product-info-price">{product.price} {t("price_suf")}</span>
       <p className="product-info-description">{product.description}</p>
       {product.sizes && product.sizes.length > 0 && <hr className="product-divider" />}
       {product.sizes && product.sizes.length > 0 && (

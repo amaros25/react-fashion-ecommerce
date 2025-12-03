@@ -110,7 +110,7 @@ function SellerProducts({ sellerId, apiUrl, token }) {
                 <h4 className="card-title">{product.name}</h4>
                 <div className="card-meta">
                   <span className="card-price">
-                    {product.price ? `${product.price} €` : t("price_not_available")}
+                    {product.price ? `${product.price} ${t("price_suf")}` : t("price_not_available")}
                   </span>
                   <span className="card-orders">
                     {product.orderCount > 0 ? `${product.orderCount} Orders` : "No orders"}

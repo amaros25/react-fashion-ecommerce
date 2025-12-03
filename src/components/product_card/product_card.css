@@ -170,7 +170,7 @@
 .color-swatch-small {
     width: 24px;
     height: 24px;
-    border: 1px solid #000;
+    border: 1px solid #868383;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -241,6 +241,43 @@
 .product-card-container .save-product-card-icon.saved {
     opacity: 1;
     visibility: visible;
+}
+
+
+
+/* RTL Support */
+body.rtl .product-card-container {
+    direction: rtl;
+}
+
+body.rtl .expand-icon {
+    left: 10px;
+    right: unset;
+}
+
+body.rtl .save-product-card-icon {
+    left: unset;
+    right: 10px;
+}
+
+body.rtl .product-info {
+    text-align: right;
+}
+
+body.rtl .product-name {
+    text-align: right;
+}
+
+body.rtl .product-color-desc {
+    text-align: right;
+}
+
+body.rtl .product-colors-display {
+    justify-content: flex-end;
+}
+
+body.rtl .product-price-row {
+    justify-content: flex-end;
 }
 
 /* Responsive Media Queries */

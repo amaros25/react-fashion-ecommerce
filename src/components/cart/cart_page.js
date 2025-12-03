@@ -133,7 +133,7 @@ const CartPage = () => {
 
   if (cart.length === 0) {
     return (
-      <div className="cart-page-empty">
+      <div className="cart-page-empty" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
         <div className="empty-state">
           <FaShoppingBag className="empty-icon" />
           <h2>{t("cart_page.empty_cart")}</h2>
@@ -147,7 +147,7 @@ const CartPage = () => {
   }
 
   return (
-    <div className="cart-page-container">
+    <div className="cart-page-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className="cart-header">
         <h1>{t("cart_page.title")}</h1>
         <span className="item-count">{cart.length} {t("cart_page.items") || "Items"}</span>
@@ -189,7 +189,7 @@ const CartPage = () => {
                         <div className="item-price-row">
                           <span className="quantity">Qty: {item.quantity}</span>
                           <span className="price">
-                            {(item.price * item.quantity).toFixed(3)} {t("cart_page.price_suf")}
+                            {(item.price * item.quantity).toFixed(3)} {t("price_suf")}
                           </span>
                         </div>
                       </div>
@@ -197,9 +197,9 @@ const CartPage = () => {
                   ))}
                 </div>
                 <div className="seller-subtotal">
-                  <span>{t("cart_page.shipping")}: {items.reduce((sum, item) => sum + (item.delprice || 0), 0).toFixed(3)} {t("cart_page.price_suf")}</span>
+                  <span>{t("cart_page.shipping")}: {items.reduce((sum, item) => sum + (item.delprice || 0), 0).toFixed(3)} {t("price_suf")}</span>
                   <span className="subtotal-val">
-                    {t("cart_page.subtotal")}: {calculateSellerTotal(items).toFixed(3)} {t("cart_page.price_suf")}
+                    {t("cart_page.subtotal")}: {calculateSellerTotal(items).toFixed(3)} {t("price_suf")}
                   </span>
                 </div>
               </div>
@@ -256,18 +256,18 @@ const CartPage = () => {
 
             <div className="summary-row">
               <span>{t("cart_page.subtotal")}</span>
-              <span>{cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(3)} {t("cart_page.price_suf")}</span>
+              <span>{cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(3)} {t("price_suf")}</span>
             </div>
             {isDelivery && (
               <div className="summary-row">
                 <span>{t("cart_page.shipping")}</span>
-                <span>{cart.reduce((sum, item) => sum + (item.delprice || 0), 0).toFixed(3)} {t("cart_page.price_suf")}</span>
+                <span>{cart.reduce((sum, item) => sum + (item.delprice || 0), 0).toFixed(3)} {t("price_suf")}</span>
               </div>
             )}
             <div className="divider"></div>
             <div className="summary-row total">
               <span>{t("cart_page.total")}</span>
-              <span>{calculateTotal().toFixed(3)} {t("cart_page.price_suf")}</span>
+              <span>{calculateTotal().toFixed(3)} {t("price_suf")}</span>
             </div>
 
             <button

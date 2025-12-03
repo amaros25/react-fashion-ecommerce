@@ -120,29 +120,16 @@
 }
 
 .color-swatch-container {
-  padding: 3px;
+  padding: 12px;
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .color-swatch-container.selected {
-  border: 1px solid #000;
-  /* Outer border for selection */
+  border: 3px solid #cfcece;
 }
 
-.color-swatch {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #ddd;
-  position: relative;
-}
-
-.selected-color-name {
-  margin-top: 5px;
-  font-size: 0.9rem;
-  color: #666;
-}
 
 /* Size Buttons */
 .size-options {
@@ -382,7 +369,7 @@
     font-size: 0.85rem;
   }
 
-  .color-swatch {
+  .color-swatch-color-swatch-product-page {
     width: 28px;
     height: 28px;
   }

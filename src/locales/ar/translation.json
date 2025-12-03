@@ -268,7 +268,12 @@
     "explore_seller": "استكشف البائع",
     "remove_from_saved": "إزالة من المحفوظات",
     "add_to_saved": "إضافة إلى المحفوظات",
-    "login_to_save": "يجب تسجيل الدخول لإضافة المنتجات إلى المحفوظات."
+    "login_to_save": "يجب تسجيل الدخول لإضافة المنتجات إلى المحفوظات.",
+    "reviews": "التعليقات",
+    "no_reviews": "لا توجد تقييمات بعد.",
+    "write_review": "اكتب تقييم",
+    "write_comment": "اكتب تعليق",
+    "submit_review": "إرسال تقييم"
   },
   "saved_products": {
     "title": "منتجات المحفوظات",
@@ -322,7 +327,6 @@
     "use_my_position": "استخدام موقعي",
     "confirm_position": "تأكيد",
     "cancel_position": "إلغاء",
-    "price_suf": "DT ",
     "Change": "تغيير العنوان / رقم الهاتف",
     "empty_desc": "يبدو أنك لم تضف أي شيء إلى سلة التسوق بعد.",
     "continue_shopping": "متابعة التسوق",
@@ -348,5 +352,10 @@
   "category": "القسم",
   "select_subcategory": "اختر الفئة",
   "product_shipement_price": "سعر الشحن",
-  "variants": "الخيارات"
+  "variants": "الخيارات",
+  "price_suf": "د",
+  "sizes": "المقاسات",
+  "related_products": {
+    "title": "قد يعجبك أيضًا"
+  }
 }
