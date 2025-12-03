@@ -1,4 +1,4 @@
-.seller-orders-main-container {
+﻿.seller-orders-main-container {
   width: 100%;
   max-width: 100%;
   padding: 0 10px;
@@ -208,5 +208,57 @@
     width: 28px;
     height: 28px;
     font-size: 0.8rem;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 480px) {
+  .seller-orders-main-container {
+    padding: 0 4px;
+  }
+
+  .orders-toolbar {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .search-box,
+  .filter-box {
+    padding: 5px 6px;
+  }
+
+  .search-box input,
+  .filter-box select {
+    font-size: 0.8rem;
+  }
+
+  .apply-btn {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+    min-height: 44px; /* Touch target minimum */
+  }
+
+  .orders-list {
+    gap: 10px;
+  }
+
+  .empty-state {
+    padding: 25px 8px;
+    font-size: 0.85rem;
+  }
+
+  .empty-icon {
+    font-size: 1.8rem;
+  }
+
+  .pagination-container {
+    margin-top: 12px;
+    gap: 3px;
+  }
+
+  .page-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
   }
 }

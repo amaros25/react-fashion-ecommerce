@@ -143,12 +143,13 @@
     min-width: 120px;
 }
 
-/* Tablet */
+/* Tablet Responsive */
 @media (max-width: 768px) {
     .order-stepper {
         flex-direction: column;
         align-items: stretch;
         gap: 15px;
+        padding: 8px 0;
     }
 
     .stepper-item {
@@ -161,16 +162,21 @@
     .step-counter {
         flex-shrink: 0;
         margin-bottom: 0;
+        width: 28px;
+        height: 28px;
+        font-size: 13px;
     }
 
     .step-name {
         text-align: left;
         flex: 1;
+        font-size: 11px;
     }
 
     .step-date {
         text-align: left;
         margin-top: 2px;
+        font-size: 9px;
     }
 
     .step-line {
@@ -185,31 +191,93 @@
     .order-stepper.stepper-collapsed .stepper-item {
         flex-direction: column;
         align-items: center;
+        min-width: 100px;
     }
 
     .order-stepper.stepper-collapsed .step-name {
         text-align: center;
     }
+
+    .stepper-toggle-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
 }
 
-/* Mobile */
+/* Mobile Responsive */
 @media (max-width: 600px) {
-    .step-name {
-        font-size: 11px;
+    .order-stepper {
+        gap: 12px;
+        padding: 6px 0;
+    }
+
+    .stepper-item {
+        gap: 10px;
     }
 
     .step-counter {
-        width: 28px;
-        height: 28px;
-        font-size: 13px;
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+    }
+
+    .step-name {
+        font-size: 10px;
     }
 
     .step-date {
-        font-size: 9px;
+        font-size: 8px;
     }
 
     .stepper-toggle-btn {
+        font-size: 0.8rem;
+        padding: 7px 10px;
+    }
+
+    .order-stepper-cancelled {
+        padding: 8px;
         font-size: 0.85rem;
-        padding: 8px 12px;
+    }
+}
+
+/* Small Mobile Responsive */
+@media (max-width: 480px) {
+    .order-stepper {
+        gap: 10px;
+        padding: 5px 0;
+    }
+
+    .stepper-item {
+        gap: 8px;
+    }
+
+    .step-counter {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+    }
+
+    .step-name {
+        font-size: 9px;
+    }
+
+    .step-date {
+        font-size: 7px;
+    }
+
+    .stepper-toggle-btn {
+        font-size: 0.75rem;
+        padding: 6px 8px;
+        min-height: 44px;
+        /* Touch target minimum */
+    }
+
+    .order-stepper-cancelled {
+        padding: 6px;
+        font-size: 0.8rem;
+    }
+
+    .order-stepper.stepper-collapsed .stepper-item {
+        min-width: 80px;
     }
 }

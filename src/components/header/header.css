@@ -810,6 +810,30 @@ html[dir="rtl"] .sort-container-header {
   }
 }
 
+/* Mobile - 600px */
+@media (max-width: 600px) {
+  .logo-header {
+    font-size: 32px;
+  }
+
+  .links-header img {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 12px;
+  }
+
+  .search-form-header input,
+  .search-form-header button {
+    min-height: 44px;
+  }
+
+  .nav-header-item-header {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+}
+
 @media (max-width: 360px) {
   .links-header {
     gap: 15px;

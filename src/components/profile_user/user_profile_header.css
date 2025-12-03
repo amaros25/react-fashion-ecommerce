@@ -1,4 +1,4 @@
-.user-profile-header-container {
+﻿.user-profile-header-container {
   width: 100%;
   margin-bottom: 10px;
   font-family: 'Inter', sans-serif;
@@ -574,5 +574,129 @@
   .user-delete-account-link {
     font-size: 0.8rem;
     justify-content: center;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 480px) {
+  .user-profile-header-container {
+    padding: 0 8px;
+  }
+
+  .user-profile-minimal-card {
+    padding: 10px 0 20px 0;
+    gap: 10px;
+  }
+
+  .user-profile-top-row {
+    gap: 12px;
+  }
+
+  .user-avatar-minimal {
+    width: 60px;
+    height: 60px;
+  }
+
+  .user-name-minimal {
+    font-size: 1rem;
+  }
+
+  .user-email-minimal {
+    font-size: 0.75rem;
+  }
+
+  .user-contact-minimal {
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .contact-pill {
+    font-size: 0.65rem;
+    padding: 2px 5px;
+  }
+
+  .action-btn-minimal {
+    padding: 6px 12px;
+    font-size: 0.7rem;
+    min-width: 80px;
+    min-height: 44px; /* Touch target minimum */
+  }
+
+  .badge-count {
+    font-size: 0.6rem;
+    min-width: 14px;
+    height: 14px;
+    top: -5px;
+    right: -5px;
+  }
+
+  .user-stats-minimal {
+    gap: 15px;
+    padding-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat-value {
+    font-size: 0.9rem;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+  }
+
+  .user-modal-content {
+    max-width: 95%;
+    margin: 0 10px;
+  }
+
+  .user-modal-header {
+    padding: 12px;
+  }
+
+  .user-modal-header h2 {
+    font-size: 0.9rem;
+  }
+
+  .user-close-modal-btn {
+    font-size: 18px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .user-modal-body {
+    padding: 12px;
+  }
+
+  .user-form-group {
+    margin-bottom: 10px;
+  }
+
+  .user-form-group label {
+    font-size: 0.7rem;
+    margin-bottom: 4px;
+  }
+
+  .user-form-group input,
+  .user-form-group select {
+    padding: 7px;
+    font-size: 0.8rem;
+    min-height: 44px; /* Touch target minimum */
+  }
+
+  .user-modal-footer {
+    padding: 10px 12px;
+  }
+
+  .user-save-btn,
+  .user-cancel-btn {
+    padding: 7px 14px;
+    font-size: 0.75rem;
+    min-height: 44px; /* Touch target minimum */
+  }
+
+  .user-delete-account-link {
+    font-size: 0.75rem;
+    min-height: 44px;
   }
 }

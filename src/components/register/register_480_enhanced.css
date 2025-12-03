@@ -1,0 +1,72 @@
+﻿/* Very small phones */
+@media (max-width: 480px) {
+    .register-page-content {
+        padding: 20px 10px;
+        min-height: calc(100vh - 120px);
+    }
+
+    .register-form {
+        padding: 25px 18px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .register-form h2 {
+        font-size: 1.3rem;
+        margin-bottom: 25px;
+    }
+
+    .register-form label {
+        font-size: 10px;
+        margin-top: 15px;
+    }
+
+    .register-form input,
+    .register-form select {
+        padding: 10px 0;
+        font-size: 13px;
+        min-height: 44px; /* Touch target minimum */
+    }
+
+    .register-form button {
+        padding: 12px 0;
+        font-size: 12px;
+        min-height: 44px; /* Touch target minimum */
+        margin-top: 25px;
+    }
+
+    .role-option {
+        padding: 12px 0;
+        font-size: 13px;
+        min-height: 44px; /* Touch target minimum */
+    }
+
+    .terms-checkbox label {
+        font-size: 11px;
+    }
+
+    .login-link {
+        font-size: 11px;
+        margin-top: 20px;
+    }
+
+    .error {
+        font-size: 11px;
+        padding: 10px;
+    }
+}
+
+/* Autofill styles */
+.register-form input:-webkit-autofill,
+.register-form input:-webkit-autofill:hover,
+.register-form input:-webkit-autofill:focus,
+.register-form input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #f2f2f2 inset !important;
+    box-shadow: 0 0 0 1000px #f2f2f2 inset !important;
+    -webkit-text-fill-color: #000 !important;
+    caret-color: #000 !important;
+}
+
+.register-form input:-moz-autofill {
+    box-shadow: 0 0 0 1000px #f2f2f2 inset !important;
+    -moz-text-fill-color: #000 !important;
+}

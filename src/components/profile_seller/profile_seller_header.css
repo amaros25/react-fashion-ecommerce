@@ -1,4 +1,4 @@
-.seller-profile-header-container {
+﻿.seller-profile-header-container {
   width: 100%;
   margin-bottom: 10px;
   font-family: 'Inter', sans-serif;
@@ -563,5 +563,130 @@
 
   .stat-item-minimal .stat-label {
     font-size: 0.65rem;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 480px) {
+  .seller-profile-header-container {
+    padding: 0 2px;
+  }
+
+  .seller-profile-minimal-card {
+    padding: 10px 0 6px 0;
+    gap: 10px;
+  }
+
+  .seller-profile-top-row {
+    gap: 12px;
+  }
+
+  .seller-avatar-minimal {
+    width: 60px;
+    height: 60px;
+  }
+
+  .seller-name-minimal {
+    font-size: 1rem;
+  }
+
+  .seller-rating-minimal {
+    font-size: 0.75rem;
+  }
+
+  .star-icon-minimal {
+    font-size: 0.7rem;
+  }
+
+  .rating-count {
+    font-size: 0.7rem;
+  }
+
+  .seller-email-minimal {
+    font-size: 0.75rem;
+  }
+
+  .action-btn-minimal {
+    padding: 6px 12px;
+    font-size: 0.65rem;
+    min-width: 90px;
+    min-height: 44px; /* Touch target minimum */
+  }
+
+  .badge-count {
+    font-size: 0.6rem;
+    min-width: 14px;
+    height: 14px;
+    top: -5px;
+    right: -5px;
+  }
+
+  .seller-stats-minimal {
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat-value {
+    font-size: 0.9rem;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+  }
+
+  .seller-modal-content {
+    max-width: 95%;
+    margin: 0 10px;
+  }
+
+  .seller-modal-header {
+    padding: 12px;
+  }
+
+  .seller-modal-header h2 {
+    font-size: 0.9rem;
+  }
+
+  .seller-close-modal-btn {
+    font-size: 18px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .seller-modal-body {
+    padding: 12px;
+  }
+
+  .seller-form-group {
+    margin-bottom: 10px;
+  }
+
+  .seller-form-group label {
+    font-size: 0.7rem;
+    margin-bottom: 4px;
+  }
+
+  .seller-form-group input,
+  .seller-form-group select {
+    padding: 7px;
+    font-size: 0.8rem;
+    min-height: 44px; /* Touch target minimum */
+  }
+
+  .seller-modal-footer {
+    padding: 10px 12px;
+  }
+
+  .seller-save-btn,
+  .seller-cancel-btn {
+    padding: 7px 14px;
+    font-size: 0.75rem;
+    min-height: 44px; /* Touch target minimum */
+  }
+
+  .seller-delete-account-link {
+    font-size: 0.75rem;
+    min-height: 44px;
   }
 }

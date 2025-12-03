@@ -382,22 +382,77 @@
   margin-bottom: 20px;
 }
 
-/* Responsive */
+/* Tablet Responsive */
 @media (max-width: 900px) {
+  .cart-page-container {
+    padding: 30px 15px;
+  }
+
   .cart-layout {
     grid-template-columns: 1fr;
+    gap: 30px;
   }
 
   .summary-card {
     position: static;
     margin-top: 20px;
+    padding: 25px;
+  }
+
+  .cart-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .item-count {
+    font-size: 1rem;
   }
 }
 
+/* Mobile Responsive */
 @media (max-width: 600px) {
+  .cart-page-container {
+    padding: 20px 10px;
+  }
+
+  .cart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .cart-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .item-count {
+    font-size: 0.9rem;
+  }
+
+  .cart-layout {
+    gap: 20px;
+  }
+
+  .seller-group {
+    margin-bottom: 20px;
+  }
+
+  .seller-header-modern {
+    padding: 12px 15px;
+  }
+
+  .cart-seller-name {
+    font-size: 1rem;
+  }
+
+  .items-list {
+    padding: 0 15px;
+  }
+
   .cart-item-modern {
     flex-direction: column;
     gap: 15px;
+    padding: 15px 0;
   }
 
   .item-image-wrapper {
@@ -405,7 +460,218 @@
     height: 200px;
   }
 
+  .item-info-top h3 {
+    font-size: 1rem;
+  }
+
+  .item-specs {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .spec-badge {
+    font-size: 0.8rem;
+    padding: 3px 6px;
+  }
+
+  .item-price-row {
+    margin-top: 10px;
+  }
+
+  .quantity {
+    font-size: 0.9rem;
+  }
+
+  .price {
+    font-size: 1rem;
+  }
+
+  .seller-subtotal {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
+
+  .summary-card {
+    padding: 20px;
+  }
+
+  .summary-card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+
+  .delivery-toggle {
+    gap: 8px;
+    padding: 4px;
+  }
+
+  .toggle-btn {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .delivery-address,
+  .address-warning,
+  .pickup-info {
+    padding: 12px;
+    font-size: 0.85rem;
+  }
+
+  .summary-row {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+
+  .summary-row.total {
+    font-size: 1.1rem;
+    margin-top: 15px;
+    margin-bottom: 20px;
+  }
+
+  .checkout-btn {
+    padding: 14px;
+    font-size: 1rem;
+  }
+
+  .empty-state {
+    padding: 30px 20px;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+  }
+
+  .empty-state h2 {
+    font-size: 1.5rem;
+  }
+
+  .empty-state p {
+    font-size: 0.9rem;
+  }
+
+  .continue-shopping-btn {
+    padding: 10px 25px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Mobile Responsive */
+@media (max-width: 480px) {
+  .cart-page-container {
+    padding: 15px 8px;
+  }
+
   .cart-header h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
+  }
+
+  .item-count {
+    font-size: 0.85rem;
+  }
+
+  .seller-header-modern {
+    padding: 10px 12px;
+  }
+
+  .cart-seller-name {
+    font-size: 0.95rem;
+  }
+
+  .items-list {
+    padding: 0 12px;
+  }
+
+  .cart-item-modern {
+    padding: 12px 0;
+    gap: 12px;
+  }
+
+  .item-image-wrapper {
+    height: 180px;
+  }
+
+  .item-info-top h3 {
+    font-size: 0.95rem;
+  }
+
+  .remove-btn-modern {
+    padding: 4px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .spec-badge {
+    font-size: 0.75rem;
+    padding: 2px 5px;
+  }
+
+  .quantity {
+    font-size: 0.85rem;
+  }
+
+  .price {
+    font-size: 0.95rem;
+  }
+
+  .seller-subtotal {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  .summary-card {
+    padding: 15px;
+  }
+
+  .summary-card h2 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+
+  .toggle-btn {
+    padding: 8px;
+    font-size: 0.85rem;
+    min-height: 44px;
+  }
+
+  .delivery-address,
+  .address-warning,
+  .pickup-info {
+    padding: 10px;
+    font-size: 0.8rem;
+  }
+
+  .summary-row {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+
+  .summary-row.total {
+    font-size: 1rem;
+    margin-top: 12px;
+    margin-bottom: 15px;
+  }
+
+  .checkout-btn {
+    padding: 12px;
+    font-size: 0.95rem;
+    min-height: 44px;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+  }
+
+  .empty-state h2 {
+    font-size: 1.3rem;
+  }
+
+  .empty-state p {
+    font-size: 0.85rem;
+  }
+
+  .continue-shopping-btn {
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    min-height: 44px;
   }
 }

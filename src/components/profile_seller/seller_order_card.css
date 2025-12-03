@@ -1,4 +1,4 @@
-.seller-order-card {
+﻿.seller-order-card {
     background: #fff;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
@@ -254,5 +254,66 @@
     .seller-btn {
         font-size: 0.85rem;
         padding: 7px 14px;
+    }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 480px) {
+    .seller-order-card {
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+
+    .order-card-header {
+        padding-bottom: 12px;
+        margin-bottom: 12px;
+    }
+
+    .order-id-label {
+        font-size: 0.75rem;
+    }
+
+    .order-id-value {
+        font-size: 0.85rem;
+    }
+
+    .order-date {
+        font-size: 0.8rem;
+    }
+
+    .order-type-badge {
+        font-size: 0.7rem;
+        padding: 2px 6px;
+        margin-left: 6px;
+    }
+
+    .order-total-label {
+        font-size: 0.8rem;
+    }
+
+    .order-total-value {
+        font-size: 0.95rem;
+    }
+
+    .order-customer-details {
+        font-size: 0.8rem;
+        padding: 6px;
+        gap: 6px;
+    }
+
+    .order-items-container {
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .order-card-footer {
+        padding-top: 12px;
+        gap: 15px;
+    }
+
+    .seller-btn {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+        min-height: 44px; /* Touch target minimum */
     }
 }

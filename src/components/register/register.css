@@ -271,10 +271,24 @@
     }
 
     .register-form input,
-    .register-form select,
-    .register-form button {
+    .register-form select {
         padding: 10px 0;
         font-size: 13px;
+        min-height: 44px;
+        /* Touch target minimum */
+    }
+
+    .register-form button {
+        padding: 12px 0;
+        font-size: 12px;
+        min-height: 44px;
+        /* Touch target minimum */
+        margin-top: 25px;
+    }
+
+    .role-option {
+        min-height: 44px;
+        /* Touch target minimum */
     }
 }
 
