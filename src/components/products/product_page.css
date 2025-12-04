@@ -121,13 +121,14 @@
 
 .color-swatch-container {
   padding: 12px;
-  border: 1px solid transparent;
+  border: 3px solid transparent;
   cursor: pointer;
   transition: all 0.2s;
+  box-sizing: border-box;
 }
 
 .color-swatch-container.selected {
-  border: 3px solid #cfcece;
+  border: 3px solid #1a1a1a;
 }
 
 
@@ -165,6 +166,58 @@
   color: #ccc;
   cursor: not-allowed;
   text-decoration: line-through;
+}
+
+/* Quantity Selector */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: fit-content;
+  border: 1px solid #d4d4d4;
+}
+
+.quantity-btn {
+  width: 44px;
+  height: 44px;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #1a1a1a;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.quantity-btn:hover:not(:disabled) {
+  background-color: #f5f5f5;
+}
+
+.quantity-btn:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.quantity-input {
+  width: 60px;
+  height: 44px;
+  text-align: center;
+  border: none;
+  border-left: 1px solid #d4d4d4;
+  border-right: 1px solid #d4d4d4;
+  font-size: 1rem;
+  font-weight: 500;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* Action Buttons */

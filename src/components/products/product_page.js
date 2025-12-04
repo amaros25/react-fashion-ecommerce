@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
-
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -24,6 +23,15 @@ function ProductPage() {
   const [mainImage, setMainImage] = useState("");
   const { id } = useParams();
   const { product: loadedProduct } = useProductData(product ? null : id);
+
+  // Reset product when navigating to a different product
+  useEffect(() => {
+    const newProduct = location.state?.product || null;
+    setProduct(newProduct);
+    setSelectedSize("");
+    setSelectedColor("");
+    setQuantity(1);
+  }, [id, location.state]);
 
   useEffect(() => {
     if (!product && loadedProduct) {
@@ -161,8 +169,6 @@ function ProductPage() {
     return product.sizes.some(s => s.size === size && s.color === selectedColor && s.stock > 0);
   };
 
-
-
   const canOrderProduct = () => {
     const lastState = product.states?.[product.states.length - 1]?.state;
     return role !== "seller" && lastState === 1;
@@ -221,6 +227,33 @@ function ProductPage() {
                     style={{ backgroundColor: color.toLowerCase() }}
                   />
                 ))}
+              </div>
+            </div>
+
+            {/* Quantity Selection */}
+            <div className="selection-group">
+              <label className="selection-label">{t("product_page.quantity")}</label>
+              <div className="quantity-selector">
+                <button
+                  className="quantity-btn"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  disabled={quantity <= 1}
+                >
+                  −
+                </button>
+                <input
+                  type="number"
+                  className="quantity-input"
+                  value={quantity}
+                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  min="1"
+                />
+                <button
+                  className="quantity-btn"
+                  onClick={() => setQuantity(quantity + 1)}
+                >
+                  +
+                </button>
               </div>
             </div>
 
