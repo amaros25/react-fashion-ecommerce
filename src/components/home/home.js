@@ -37,7 +37,6 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(24);
 
-
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
@@ -55,8 +54,6 @@ const Home = () => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-
 
   const { latestProducts, totalPages } = useHomeProducts(
     page,

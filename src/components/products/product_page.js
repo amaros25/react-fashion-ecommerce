@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from "react-router-dom";
+
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,15 +10,41 @@ import RelatedProducts from "../related_products/related_product.js"
 import ProductImage from './product_images.js'
 import SellerInfo from "./seller_info.js";
 import Breadcrumb from './breadcrumb.js';
-import "./product_page.css";
 import ProductInfoHeader from "./product_info_header.js";
 import CommentProduct from './commentar_product.js';
 import { useProductData } from './hooks/useProductData';
+import { useSellerData } from './hooks/useSellerData';
+import "./product_page.css";
 
 function ProductPage() {
-
   const { t, i18n } = useTranslation();
+  const location = useLocation();
+  const initialProduct = location.state?.product || null;
+  const [product, setProduct] = useState(initialProduct);
+  const [mainImage, setMainImage] = useState("");
   const { id } = useParams();
+  const { product: loadedProduct } = useProductData(product ? null : id);
+
+  useEffect(() => {
+    if (!product && loadedProduct) {
+      setProduct(loadedProduct);
+    }
+  }, [product, loadedProduct]);
+
+  useEffect(() => {
+    if (!product) return;
+
+    if (Array.isArray(product.image) && product.image.length > 0) {
+      setMainImage(product.image[0]);
+    } else if (product.image) {
+      setMainImage(product.image);
+    }
+    const direction = i18n.language === "ar" ? "rtl" : "ltr";
+    document.documentElement.setAttribute("dir", direction);
+  }, [product, i18n.language]);
+
+  const { seller, loading, error } = useSellerData(product?.sellerId);
+
   const [quantity, setQuantity] = useState(1);
   const [role, setRole] = useState(localStorage.getItem("role")?.toLowerCase());
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -29,10 +57,7 @@ function ProductPage() {
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState("");
 
-  useEffect(() => {
-    const direction = i18n.language === "ar" ? "rtl" : "ltr";
-    document.documentElement.setAttribute("dir", direction);
-  }, [i18n.language]);
+
 
   const navigate = useNavigate();
 
@@ -44,7 +69,7 @@ function ProductPage() {
 
   const [refresh, setRefresh] = useState(false);
 
-  const { product, seller, mainImage, setMainImage } = useProductData(id, refresh);
+  //const { product, seller, mainImage, setMainImage } = useProductData(id, refresh);
 
   const availableSizes = product?.sizes
     ? Array.from(new Set(product.sizes.map(s => s.size)))

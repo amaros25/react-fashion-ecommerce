@@ -87,6 +87,7 @@ function ProductCard({ product, onProductRemoved }) {
         <Link
           key={product._id}
           to={`/product/${product._id}`}
+          state={{ product }}
           className="product-card-item">
 
           <div className="product-image-wrapper">
