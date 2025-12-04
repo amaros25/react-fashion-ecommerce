@@ -2,7 +2,7 @@ import React from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import "./seller_info.css";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import { cities, citiesData } from '../const/cities';
+import { cities, citiesData } from '../utils/const/cities';
 
 function SellerInfo({ seller }) {
   if (!seller) return null;

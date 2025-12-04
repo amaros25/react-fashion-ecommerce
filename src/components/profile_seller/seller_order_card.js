@@ -2,7 +2,7 @@ import React from "react";
 import OrderItem from "../profile_user/order_item";
 import "./seller_order_card.css";
 import OrderStatusStepper from "../profile_user/order_status_stepper";
-import { ORDER_STATUS } from "../const/order_status";
+import { ORDER_STATUS } from "../utils/const/order_status";
 import { FaCheck, FaTimes, FaTruck, FaBoxOpen, FaClipboardCheck, FaUndo } from "react-icons/fa";
 
 export default function SellerOrderCard({ order, products, t, onStatusChange }) {

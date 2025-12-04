@@ -6,10 +6,9 @@ import { toast } from 'react-toastify';
 import ProductCard from '../product_card/product_card';
 import Pagination from '../home/pagination';
 import LoadingSpinner from '../utils/loading_spinner';
-import { cities, citiesData } from '../const/cities';
 import { useShopData } from './hooks/useShopData';
 import './shop_page.css';
-
+import { cities, citiesData } from '../utils/const/cities';
 const ShopPage = () => {
     const { sellerId } = useParams();
     const { t } = useTranslation();

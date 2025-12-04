@@ -1,9 +1,9 @@
 import "./user_profile_header.css";
 import React, { useState, useEffect } from "react";
-import { cities, citiesData } from '../const/cities';
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { cities, citiesData } from '../utils/const/cities';
 import { FaCog, FaSignOutAlt, FaTrash, FaShoppingBag, FaExclamationTriangle, FaCommentDots, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
 
 function ProfileHeader({ user, totalOrders, openOrders }) {

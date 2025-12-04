@@ -1,6 +1,6 @@
 import "./profile_seller_header.css";
 import React, { useState, useEffect } from "react";
-import { cities, citiesData } from '../const/cities';
+import { cities, citiesData } from '../utils/const/cities';
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";

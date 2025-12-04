@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../utils/loading_spinner";
 import { FaSearch, FaFilter, FaBoxOpen } from "react-icons/fa";
 import SellerOrderCard from "./seller_order_card";
-import { ORDER_STATUS } from "../const/order_status";
+
 import Pagination from "../home/pagination";
 import { useSellerOrders } from "./hooks/useSellerOrders";
-
+import { ORDER_STATUS } from "../utils/const/order_status";
 function SellerOrders({ sellerId, handleStatusChange, refreshTrigger }) {
   // ... existing code ...
 

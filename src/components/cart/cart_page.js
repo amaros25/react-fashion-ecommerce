@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaTrash, FaArrowRight, FaShoppingBag, FaStore } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { ORDER_STATUS } from "../const/order_status";
 import { fetchSellers, createMultipleOrders } from "./hooks/api";
 import "./cart_page.css";
-import { cities, citiesData } from '../const/cities';
+import { cities, citiesData } from '../utils/const/cities';
+import { ORDER_STATUS } from "../utils/const/order_status";
 
 const CartPage = () => {
   const { t, i18n } = useTranslation();
