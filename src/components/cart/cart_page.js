@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { ORDER_STATUS } from "../const/order_status";
 import { fetchSellers, createMultipleOrders } from "./api";
 import "./cart_page.css";
+import { cities, citiesData } from '../const/cities';
 
 const CartPage = () => {
   const { t, i18n } = useTranslation();
@@ -238,7 +239,7 @@ const CartPage = () => {
               <div className="delivery-address">
                 <p className="address-label">📍 {t("cart_page.delivery_address") || "Delivery Address"}:</p>
                 <p className="address-text">
-                  {user.address}, {user.subCity && `${user.subCity}, `}{user.city}
+                  {user.address}, {user.subCity && `${citiesData[cities[user.city]][user.subCity]}, `}{cities[user.city]}
                 </p>
                 {user.phone && (
                   <p className="address-text">

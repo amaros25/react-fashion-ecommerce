@@ -28,9 +28,13 @@ function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.userId);
-      if (data.address) localStorage.setItem("address", JSON.stringify(data.address));
-      if (data.phone) localStorage.setItem("phone", data.phone);
-
+      const userData = {
+        address: data.address,
+        phone: data.phone,
+        city: data.city,
+        subCity: data.subCity
+      };
+      localStorage.setItem("userData", JSON.stringify(userData));
       if (data.role === "seller") {
         navigate("/profile_seller");
       } else {
