@@ -1,7 +1,5 @@
 .product-page {
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
-
-
 }
 
 .breadcrumb-container {
@@ -125,10 +123,11 @@
   cursor: pointer;
   transition: all 0.2s;
   box-sizing: border-box;
+  border: 2px solid #e2e0e0;
 }
 
 .color-swatch-container.selected {
-  border: 3px solid #1a1a1a;
+  border: 2px solid #1a1a1a;
 }
 
 
