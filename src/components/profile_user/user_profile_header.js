@@ -96,6 +96,18 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
 
       if (res.ok) {
         toast.success("Profile updated successfully");
+        if (formData.phone) localStorage.setItem("phone", formData.phone);
+        // Similar logic for address, but since it's complex, I'll focus on phone which is requested explicitly 
+        // "address of the user and his phone".
+        // I will store the address components if possible.
+        if (formData.address) {
+          const addressObj = {
+            address: formData.address,
+            city: cityIndex,
+            subCity: subCityIndex
+          };
+          localStorage.setItem("currentAddress", JSON.stringify(addressObj));
+        }
         setShowSettings(false);
         window.location.reload();
       } else {

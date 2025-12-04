@@ -232,7 +232,7 @@ const OrderStatusStepper = ({ order, t }) => {
                     {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
                 </button>
             )}
-            <div className={`order-stepper ${isMobile && !isExpanded ? 'stepper-collapsed' : ''}${isRTL ? 'rtl' : ''}`}>
+            <div className={`order-stepper ${isMobile && !isExpanded ? 'stepper-collapsed' : ''} ${isRTL ? 'rtl' : ''}`}>
                 {
                     displaySteps.map((step, index) => {
                         const actualIndex = steps.findIndex(s => s.key === step.key);

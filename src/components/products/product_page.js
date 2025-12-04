@@ -89,6 +89,7 @@ function ProductPage() {
       .catch((err) => {
         console.error("Error loading product:", err);
       });
+    window.scrollTo(0, 0);
   }, [id, apiUrl, refresh]);
 
   if (!product || !seller) {

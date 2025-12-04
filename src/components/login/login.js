@@ -28,6 +28,8 @@ function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.userId);
+      if (data.address) localStorage.setItem("address", JSON.stringify(data.address));
+      if (data.phone) localStorage.setItem("phone", data.phone);
 
       if (data.role === "seller") {
         navigate("/profile_seller");

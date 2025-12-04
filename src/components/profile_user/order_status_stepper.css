@@ -122,6 +122,11 @@
     transform: translateY(-50%);
 }
 
+.rtl .step-line {
+    left: auto;
+    right: 50%;
+}
+
 .stepper-item.completed .step-line {
     background-color: #4caf50;
 }
