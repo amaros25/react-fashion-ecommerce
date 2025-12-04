@@ -5,6 +5,17 @@ import "./order_items.css";
 export default function OrderItem({ item, product, order, t, isLast, chatRole = 'seller' }) {
   const navigate = useNavigate();
 
+  const STATUS_CONFIRMED = 1;
+  const PICKED_UP = 41;
+  const RETURN_RECEIVED = 24;
+  const DELIVERED = 23;
+  const FAILED_DELIVERY = 25;
+  const NO_RESPONSE = 10;
+  const CANCELLED_USER = 30;
+  const CANCELLED_SELLER = 31;
+  const PICK_UP_FAILED = 42;
+
+  const states_no_chat = [STATUS_CONFIRMED, PICKED_UP, RETURN_RECEIVED, DELIVERED, FAILED_DELIVERY, NO_RESPONSE, CANCELLED_USER, CANCELLED_SELLER, PICK_UP_FAILED];
   const handleChat = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -29,6 +40,17 @@ export default function OrderItem({ item, product, order, t, isLast, chatRole = 
 
   // Helper to determine if color is hex
   const isHexColor = (color) => /^#[0-9A-F]{6}$/i.test(color);
+
+  const is_chat_with_seller_ok = () => {
+    if (states_no_chat.includes(order.status[order.status.length - 1].update)) {
+      return false;
+    }
+    if (order.status.some((s) => s.update === STATUS_CONFIRMED)) {
+      return true;
+    }
+
+    return false;
+  }
 
   return (
     <Link to={`/product/${item.productId}`} className="order-item-link">
@@ -75,9 +97,9 @@ export default function OrderItem({ item, product, order, t, isLast, chatRole = 
         </div>
 
         <div className="order-item-right">
-          {isLast && (
+          {isLast && is_chat_with_seller_ok() && (
             <button className="chat-with-seller-btn" onClick={handleChat}>
-              {chatRole === 'buyer' ? (t("chat_user") || "Chat with User") : (t("chat_seller") || "Chat with Seller")}
+              {chatRole === 'buyer' ? (t("chat_user")) : (t("chat_seller"))}
             </button>
           )}
         </div>

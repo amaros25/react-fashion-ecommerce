@@ -184,3 +184,19 @@
     padding-top: 6px;
   }
 }
+
+.order-header-left.rtl-fix {
+  direction: ltr !important;
+}
+
+.order-header-left.rtl-fix span {
+  direction: rtl !important;
+}
+
+.order-header-right.rtl-fix {
+  direction: ltr !important;
+}
+
+.order-header-right.rtl-fix span {
+  direction: rtl !important;
+}

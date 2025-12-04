@@ -165,20 +165,15 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
                     deliverySteps.push("cancelled_seller");
                 }
             }
-            console.log("deliverySteps: ", deliverySteps);
             deliverySteps.forEach((key) => {
-                console.log("** deliverySteps key: ", key);
-
                 const log = statusLog.find((s) => {
-                    console.log("s.update: ", s.update);
                     return mapStatusToStepperState(s.update, true) === key;
                 });
-                console.log("log: ", log);
 
                 steps.push({
                     key,
                     label: t(`order_state.${key}`),
-                    date: log?.date,  // undefined, wenn noch nicht erreicht
+                    date: log?.date,
                 });
             });
         }
@@ -206,15 +201,10 @@ const OrderStatusStepper = ({ order, t }) => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    console.log("OrderStatusStepper status: ", status);
-    console.log("OrderStatusStepper is_delivery: ", is_delivery);
     const steps = getStepsFromLog(t, status, is_delivery);
     const lastLog = status[status.length - 1];
-    console.log("OrderStatusStepper lastLog: ", lastLog);
     const currentKey = lastLog ? mapStatusToStepperState(lastLog.update, is_delivery) : "pending";
-    console.log("OrderStatusStepper currentKey: ", currentKey);
     const currentIndex = steps.findIndex((s) => s.key === currentKey);
-    console.log("OrderStatusStepper currentIndex: ", currentIndex);
 
     const displaySteps = (isMobile && !isExpanded)
         ? steps.filter((_, index) => index === currentIndex)
@@ -242,7 +232,7 @@ const OrderStatusStepper = ({ order, t }) => {
                         return (
                             <div key={step.key} className={`stepper-item ${isCompleted ? "completed" : ""} ${isCurrent ? "current" : ""}`}>
                                 <div className="step-counter">{isCompleted ? "✓" : actualIndex + 1}</div>
-                                <div className="step-name">{step.label}</div>
+                                <div className="step-name">{t(step.label)}</div>
                                 {step.date && <div className="step-date">{new Date(step.date).toLocaleString()}</div>}
                                 {index < displaySteps.length - 1 && <div className="step-line"></div>}
                             </div>

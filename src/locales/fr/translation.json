@@ -231,7 +231,16 @@
     "return_rejected": "Retour refusé",
     "return_shipped": "Retour expédié",
     "return_received": "Retour reçu",
-    "returned_to_sender": "Retour à l'expéditeur"
+    "returned_to_sender": "Retour à l'expéditeur",
+    "second_try_delivery": "Deuxième tentative de livraison",
+    "ready_pickup": "Prêt à être retiré",
+    "picked_up": "Retirée",
+    "pick_up_failed": "Échec du retrait",
+    "no_response": "L'utilisateur ne répond pas au téléphone",
+    "cancelled_user": "Annulé par l'utilisateur",
+    "cancelled_seller": "Annulé par le vendeur",
+    "first_try_delivery_failed": "Première tentative de livraison échouée",
+    "second_try_delivery_failed": "Deuxième tentative de livraison échouée"
   },
   "no_products_found": "Aucun produit trouvé",
   "number": "N°",
@@ -534,5 +543,7 @@
     "other-kids": "Autres (Enfants)"
   },
   "orders": "Commande(s)",
-  "no_orders": "Aucune commande"
+  "no_orders": "Aucune commande",
+  "chat_user": "Discuter avec l'utilisateur",
+  "chat_seller": "Discuter avec le vendeur"
 }
