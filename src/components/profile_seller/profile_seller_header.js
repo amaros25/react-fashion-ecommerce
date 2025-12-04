@@ -156,7 +156,7 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
         <div className="seller-inactive-banner">
           <FaExclamationTriangle />
           <span>
-            {t("account_inactive_msg") || "Your account is currently inactive. Please contact admin."}
+            {t("account_inactive_msg")}
           </span>
         </div>
       )}
@@ -198,11 +198,11 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
 
           <div className="seller-actions-minimal">
             <button className="action-btn-minimal" onClick={() => navigate('/chat')}>
-              {t("messages") || "MESSAGES"}
+              {t("messages")}
               {unreadMessages > 0 && <span className="badge-count">{unreadMessages}</span>}
             </button>
             <button className="action-btn-minimal" onClick={() => setShowSettings(true)}>
-              {t("settings") || "SETTINGS"}
+              {t("settings")}
             </button>
             <button className="action-btn-minimal logout" onClick={handleLogout}>
               {t("logout")}
@@ -260,9 +260,9 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
               </div>
               <div className="seller-form-row">
                 <div className="seller-form-group half">
-                  <label>{t("city") || "City"}</label>
+                  <label>{t("city")}</label>
                   <select name="city" value={formData.city} onChange={handleCityChange}>
-                    <option value="">{t("select_city") || "Select City"}</option>
+                    <option value="">{t("select_city")}</option>
                     {cities.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
@@ -278,11 +278,11 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
 
             <div className="seller-modal-footer">
               <button className="seller-delete-account-link" onClick={handleDeleteAccount}>
-                <FaTrash /> {t("delete_account") || "Delete Account"}
+                <FaTrash /> {t("delete_account")}
               </button>
               <div className="seller-modal-actions-right">
-                <button className="seller-cancel-btn" onClick={() => setShowSettings(false)}>{t("cancel") || "Cancel"}</button>
-                <button className="seller-save-btn" onClick={handleUpdate}>{t("save_changes") || "Save Changes"}</button>
+                <button className="seller-cancel-btn" onClick={() => setShowSettings(false)}>{t("cancel")}</button>
+                <button className="seller-save-btn" onClick={handleUpdate}>{t("save_changes")}</button>
               </div>
             </div>
           </div>

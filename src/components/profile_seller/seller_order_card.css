@@ -119,6 +119,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    overflow: hidden;
 }
 
 /* Seller Actions */
@@ -314,6 +315,60 @@
     .seller-btn {
         font-size: 0.8rem;
         padding: 6px 12px;
-        min-height: 44px; /* Touch target minimum */
+        min-height: 44px;
+        /* Touch target minimum */
+    }
+}
+
+/* RTL Support */
+[dir="rtl"] .order-card-header {
+    direction: rtl;
+}
+
+[dir="rtl"] .order-header-left {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .order-type-badge {
+    margin-left: 0;
+    margin-right: 8px;
+}
+
+[dir="rtl"] .order-header-right {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .seller-actions-row {
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .order-customer-details {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir="rtl"] .customer-info-block {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .seller-btn {
+    flex-direction: row-reverse;
+}
+
+@media (max-width: 768px) {
+    [dir="rtl"] .seller-actions-row {
+        flex-direction: column;
+    }
+
+    [dir="rtl"] .order-header-right {
+        flex-direction: row-reverse;
+    }
+}
+
+@media (max-width: 480px) {
+    [dir="rtl"] .order-type-badge {
+        margin-left: 0;
+        margin-right: 6px;
     }
 }

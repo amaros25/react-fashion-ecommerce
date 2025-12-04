@@ -99,7 +99,7 @@ function SellerProducts({ sellerId, apiUrl, token }) {
                   className="card-image"
                 />
                 <div className="card-overlay">
-                  <span className="view-details-btn">View Details</span>
+                  <span className="view-details-btn">{t("view_details")}</span>
                 </div>
                 {product.productNumber && (
                   <span className="product-badge">{product.productNumber}</span>
@@ -118,7 +118,7 @@ function SellerProducts({ sellerId, apiUrl, token }) {
                 </div>
                 <div className="card-footer">
                   <span className="date-added">
-                    Added: {new Date(product.createdAt).toLocaleDateString(i18n.language)}
+                    {t("added_date")}: {new Date(product.createdAt).toLocaleDateString(i18n.language)}
                   </span>
                   <span className={`current-state-badge ${getStateClass(product.states?.[product.states.length - 1]?.state)}`}>
                     {getStateLabel(product.states?.[product.states.length - 1]?.state)}

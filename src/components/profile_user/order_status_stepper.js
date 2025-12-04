@@ -188,6 +188,8 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
 };
 
 const OrderStatusStepper = ({ order, t }) => {
+    const isRTL = document.documentElement.dir === "rtl";
+
     const status = order.status;
     const is_delivery = order.is_delivery;
     const [isExpanded, setIsExpanded] = useState(false);
@@ -230,23 +232,25 @@ const OrderStatusStepper = ({ order, t }) => {
                     {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
                 </button>
             )}
-            <div className={`order-stepper ${isMobile && !isExpanded ? 'stepper-collapsed' : ''}`}>
-                {displaySteps.map((step, index) => {
-                    const actualIndex = steps.findIndex(s => s.key === step.key);
-                    const isCompleted = step.date !== undefined && actualIndex <= currentIndex;
-                    const isCurrent = actualIndex === currentIndex;
+            <div className={`order-stepper ${isMobile && !isExpanded ? 'stepper-collapsed' : ''}${isRTL ? 'rtl' : ''}`}>
+                {
+                    displaySteps.map((step, index) => {
+                        const actualIndex = steps.findIndex(s => s.key === step.key);
+                        const isCompleted = step.date !== undefined && actualIndex <= currentIndex;
+                        const isCurrent = actualIndex === currentIndex;
 
-                    return (
-                        <div key={step.key} className={`stepper-item ${isCompleted ? "completed" : ""} ${isCurrent ? "current" : ""}`}>
-                            <div className="step-counter">{isCompleted ? "✓" : actualIndex + 1}</div>
-                            <div className="step-name">{step.label}</div>
-                            {step.date && <div className="step-date">{new Date(step.date).toLocaleString()}</div>}
-                            {index < displaySteps.length - 1 && <div className="step-line"></div>}
-                        </div>
-                    );
-                })}
+                        return (
+                            <div key={step.key} className={`stepper-item ${isCompleted ? "completed" : ""} ${isCurrent ? "current" : ""}`}>
+                                <div className="step-counter">{isCompleted ? "✓" : actualIndex + 1}</div>
+                                <div className="step-name">{step.label}</div>
+                                {step.date && <div className="step-date">{new Date(step.date).toLocaleString()}</div>}
+                                {index < displaySteps.length - 1 && <div className="step-line"></div>}
+                            </div>
+                        );
+                    })
+                }
             </div>
-        </div>
+        </div >
     );
 };
 
