@@ -3,6 +3,7 @@ import "./profile_user.css";
 import { useTranslation } from "react-i18next";
 import UserProfileHeader from "./user_profile_header";
 import { useUserOrders } from "./hooks/useUserOrders";
+import { useUserData } from "./hooks/useUserData";
 import ProfileUserOrders from "./profile_user_oders";
 import LoadingSpinner from "../loading/loading_spinner"
 import { useNavigate } from "react-router-dom";
@@ -13,19 +14,11 @@ export default function ProfileUser() {
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
   const [currentPage, setCurrentPage] = useState(1);
-  const [user, setUser] = useState(null);
-  const ordersPerPage = 5; // Reduced for better visual flow
+  const ordersPerPage = 5;
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
 
-  const fetchUser = useCallback(async () => {
-    const res = await fetch(`${apiUrl}/users/${userId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await res.json();
-    setUser(data);
-    console.log("ProfileUser data", data);
-  }, [userId, token]);
+  const { user, fetchUser } = useUserData(apiUrl, userId, token);
 
   useEffect(() => {
     if (userId && token) {
@@ -33,16 +26,15 @@ export default function ProfileUser() {
     }
   }, [userId, token, fetchUser]);
 
-
-  const { orders, products, totalPages } = useUserOrders(
+  const { orders, products, totalPages, allOrders } = useUserOrders(
     apiUrl, userId, token, currentPage, ordersPerPage
   );
 
   if (!user) return <LoadingSpinner />;
 
-  const totalOrders = orders.length;
+  const totalOrders = allOrders.length;
 
-  const openOrders = orders.filter(
+  const openOrders = allOrders.filter(
     (o) => o.status?.length && o.status[o.status.length - 1].update !== "delivered"
   ).length;
 

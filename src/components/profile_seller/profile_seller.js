@@ -4,7 +4,7 @@ import AddProduct from "../new_product/add_product";
 import SellerProducts from "./seller_products";
 import ProfileSellerHeader from "./profile_seller_header";
 import SellerOrders from "./seller_orders.js";
-import LoadingSpinner from "../products/loading_spinner.js";
+import LoadingSpinner from "../utils/loading_spinner.js";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 

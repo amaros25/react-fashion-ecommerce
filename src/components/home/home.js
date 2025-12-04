@@ -6,10 +6,10 @@ import Pagination from './pagination.js';
 import { FilterContext } from '../filter_context/filter_context';
 import ProductCard from '../product_card/product_card';
 import { useParams } from 'react-router-dom';
+import { useHomeProducts } from './hooks/useHomeProducts';
 
 const Home = () => {
   const { t, i18n } = useTranslation();
-  const apiUrl = process.env.REACT_APP_API_URL;
   const { category, subcategory } = useParams();
 
   // Context für die Kategorie und den Suchbegriff
@@ -34,9 +34,7 @@ const Home = () => {
 
   console.log("=> urlCategory:", urlCategory, "=> urlSubcategory:", urlSubcategory);
 
-  const [latestProducts, setLatestProducts] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
   const [limit, setLimit] = useState(24);
 
 
@@ -60,48 +58,14 @@ const Home = () => {
 
 
 
-  // Produkte von der API laden
-  useEffect(() => {
-    setLatestProducts([]);
-    setTotalPages(0);
-
-    let url = `${apiUrl}/products/latest?page=${page}&limit=${limit}`;
-
-    // Send numeric category if available
-    if (urlCategory !== null && !isNaN(urlCategory)) {
-      url += `&category=${urlCategory}`;
-    }
-
-    // Send numeric subcategory if available
-    // urlSubcategory 0 = "all-*" (z.B. "all-women") -> send nothing (get all)
-    // urlSubcategory 1+ = specific subcategory -> send index-1 (because first real subcategory is index 0 in DB)
-    if (urlSubcategory !== null && !isNaN(urlSubcategory) && urlSubcategory > 0) {
-      url += `&subcategory=${urlSubcategory - 1}`;
-    }
-
-    if (searchTerm) {
-      url += `&search=${encodeURIComponent(searchTerm)}`;
-    }
-
-    if (sortBy) {
-      url += `&sort=${sortBy}`;
-    }
-
-    console.log("Fetching products with URL:", url);
-
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data.products)) {
-          setLatestProducts(data.products);
-          setTotalPages(data.totalPages);
-        } else {
-          setLatestProducts([]);
-          setTotalPages(0);
-        }
-      })
-      .catch(err => console.error('Error fetching latest products:', err));
-  }, [page, urlCategory, urlSubcategory, searchTerm, sortBy, apiUrl, limit]);
+  const { latestProducts, totalPages } = useHomeProducts(
+    page,
+    limit,
+    urlCategory,
+    urlSubcategory,
+    searchTerm,
+    sortBy
+  );
 
   useEffect(() => {
     if (i18n.language === 'ar') {

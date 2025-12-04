@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import LoadingSpinner from "./loading_spinner.js";
+import LoadingSpinner from "../utils/loading_spinner.js";
 import RelatedProducts from "../related_products/related_product.js"
 import ProductImage from './product_images.js'
 import SellerInfo from "./seller_info.js";
@@ -11,16 +11,13 @@ import Breadcrumb from './breadcrumb.js';
 import "./product_page.css";
 import ProductInfoHeader from "./product_info_header.js";
 import CommentProduct from './commentar_product.js';
+import { useProductData } from './hooks/useProductData';
 
 function ProductPage() {
 
-  const apiUrl = process.env.REACT_APP_API_URL;
   const { t, i18n } = useTranslation();
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
-  const [mainImage, setMainImage] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [seller, setSeller] = useState(null);
   const [role, setRole] = useState(localStorage.getItem("role")?.toLowerCase());
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const userId = localStorage.getItem("userId");
@@ -45,6 +42,10 @@ function ProductPage() {
     }
   }, [role, t]);
 
+  const [refresh, setRefresh] = useState(false);
+
+  const { product, seller, mainImage, setMainImage } = useProductData(id, refresh);
+
   const availableSizes = product?.sizes
     ? Array.from(new Set(product.sizes.map(s => s.size)))
     : [];
@@ -52,45 +53,6 @@ function ProductPage() {
   const availableColors = product?.sizes
     ? Array.from(new Set(product.sizes.map(s => s.color)))
     : [];
-
-  const [refresh, setRefresh] = useState(false);
-
-  useEffect(() => {
-    fetch(`${apiUrl}/products/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProduct(data);
-        console.log(data);
-        if (Array.isArray(data.image) && data.image.length > 0) {
-          setMainImage(data.image[0]);
-        } else if (data.image) {
-          setMainImage(data.image);
-        }
-
-        if (data.sellerId) {
-          fetch(`${apiUrl}/sellers/${data.sellerId}`)
-            .then((res) => {
-              if (!res.ok) {
-                throw new Error(`Error fetching seller: ${res.status}`);
-              }
-              return res.json();
-            })
-            .then((sellerData) => {
-              setSeller(sellerData);
-            })
-            .catch((err) => {
-              console.error("Error loading seller:", err);
-              setSeller(null);
-            });
-        } else {
-          setSeller(null);
-        }
-      })
-      .catch((err) => {
-        console.error("Error loading product:", err);
-      });
-    window.scrollTo(0, 0);
-  }, [id, apiUrl, refresh]);
 
   if (!product || !seller) {
     return <LoadingSpinner />;

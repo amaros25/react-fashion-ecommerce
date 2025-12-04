@@ -5,17 +5,15 @@ import ImageSelectUpload from "./image_select_upload.js";
 import { useTranslation } from "react-i18next";
 import UploadStatus from "./upload_status";
 import { FaPlus, FaTrash, FaPalette } from "react-icons/fa";
+import { useProductUpload } from './hooks/useProductUpload';
 
 function AddProduct() {
   const { t, i18n } = useTranslation();
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const cloudName = process.env.REACT_APP_CLOUD_NAME;
-  const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
-  const imageUrls = [];
-  const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+
+  const { status, createProduct } = useProductUpload(userId);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -31,12 +29,7 @@ function AddProduct() {
     mens: ["clothes", "shoes", "accessories", "other-mens"],
     kids: ["girls-clothing", "boys-clothing", "baby-clothing", "other-kids"]
   };
-  const [status, setStatus] = useState({
-    visible: false,
-    loading: false,
-    success: false,
-    error: false,
-  });
+
 
 
   const handleChange = (e) => {
@@ -82,50 +75,7 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus({ visible: true, loading: true, success: false, error: false });
-    try {
-      for (const file of imageFiles) {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("upload_preset", uploadPreset);
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        if (!res.ok) throw new Error("Image upload failed");
-        const data = await res.json();
-        imageUrls.push(data.secure_url);
-      }
-
-      const productData = {
-        ...formData,
-        category: Number(formData.category),
-        subcategory: Number(formData.subcategory),
-        sizes: formData.sizes, // Sizes now contain hex codes directly
-        sellerId: userId,
-        price: parseFloat(formData.price),
-        image: imageUrls,
-        delprice: parseFloat(formData.shipment_price),
-        state: 0
-      };
-      const res = await fetch(`${apiUrl}/products/create`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(productData),
-      });
-      if (!res.ok) throw new Error("Product add error");
-      setStatus({ visible: true, loading: false, success: true, error: false });
-      setTimeout(() => {
-        setStatus({ visible: false, loading: false, success: false, error: false });
-        navigate("/profile_seller");
-      }, 3000);
-    } catch (err) {
-      console.log("🟢 : Error", err.message);
-      setStatus({ visible: true, loading: false, success: false, error: true });
-    }
+    await createProduct(formData, imageFiles);
   };
 
   return (

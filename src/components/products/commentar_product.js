@@ -3,44 +3,24 @@ import { FaChevronDown, FaChevronUp, FaStar, FaRegStar } from 'react-icons/fa';
 import './commentar_product.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from "react-i18next";
+import { useProductReview } from './hooks/useProductReview';
 
 const CommentProduct = ({ product, onReviewAdded }) => {
     const { t, i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
-    const [rating, setRating] = useState(0);
-    const [comment, setComment] = useState('');
-    const [hover, setHover] = useState(0);
-    const apiUrl = process.env.REACT_APP_API_URL;
     const userId = localStorage.getItem("userId");
 
+    const {
+        rating,
+        setRating,
+        comment,
+        setComment,
+        hover,
+        setHover,
+        handleSubmit
+    } = useProductReview(product._id, userId, onReviewAdded);
+
     const toggleOpen = () => setIsOpen(!isOpen);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!rating) return toast.error("Please select a rating");
-
-        try {
-            const res = await fetch(`${apiUrl}/products/${product._id}/rate`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${localStorage.getItem('token')}` 
-                },
-                body: JSON.stringify({ userId, rating, comment })
-            });
-            const data = await res.json();
-            if (res.ok) {
-                toast.success("Review added successfully");
-                setComment('');
-                setRating(0);
-                if (onReviewAdded) onReviewAdded();
-            } else {
-                toast.error(data.message);
-            }
-        } catch (err) {
-            toast.error("Failed to add review");
-        }
-    };
 
     return (
         <div className="comment-product-container">

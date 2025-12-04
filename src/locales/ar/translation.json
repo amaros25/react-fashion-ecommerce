@@ -465,5 +465,24 @@
     "second_try_delivery_failed": "فشل المحاولة الثانية"
   },
   "chat_user": "الدردشة مع المستخدم",
-  "chat_seller": "الدردشة مع البائع"
+  "chat_seller": "الدردشة مع البائع",
+  "order_state_buttons": {
+    "confirm": "تأكيد",
+    "cancel": "إلغاء",
+    "mark_shipped": "وضع علامة تم الشحن",
+    "mark_delivered": "وضع علامة تم التسليم",
+    "first_try_delivery_failed": "فشل محاولة التسليم الأولى",
+    "second_try_delivery": "محاولة التسليم الثانية",
+    "cancelled": "تم الإلغاء",
+    "failed_delivery": "فشل التسليم",
+    "mark_picked_up": "وضع علامة تم الاستلام",
+    "pickup_failed": "فشل الاستلام",
+    "accept_return": "قبول الإرجاع",
+    "reject_return": "رفض الإرجاع",
+    "confirm_return_received": "تأكيد استلام الإرجاع",
+    "return_not_received": "الإرجاع غير مستلم",
+    "ready_pickup": "جاهز للاستلام",
+    "picked_up": "تم الاستلام",
+    "pick_up_failed": "فشل الاستلام"
+  }
 }

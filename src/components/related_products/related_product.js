@@ -3,12 +3,16 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import "./related_products.css";
 import ProductCard from '../product_card/product_card';
-
+import useRelatedProducts from "./hooks/useRelatedProducts";
+import LoadingSpinner from "../utils/loading_spinner";
 
 function RelatedProducts({ category, currentProductId }) {
-  const apiUrl = process.env.REACT_APP_API_URL;
+
   const { t, i18n } = useTranslation();
-  const [latestProducts, setLatestProducts] = useState([]);
+  const { latestProducts, loading } = useRelatedProducts(
+    category,
+    currentProductId
+  );
 
   useEffect(() => {
     if (i18n.language === "ar") {
@@ -17,31 +21,8 @@ function RelatedProducts({ category, currentProductId }) {
       document.body.classList.remove("rtl");
     }
   }, [i18n.language]);
+  if (loading) return <LoadingSpinner />;
 
-  useEffect(() => {
-    let url = `${apiUrl}/products/latest?page=1&limit=8`;
-    if (category) {
-      url += `&category=${category}`;
-    }
-    if (currentProductId) {
-      url += `&not=${currentProductId}`; // 🚫 Aktuelles Produkt ausschließen
-    }
-    console.log("url", url);
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data.products)) {
-          // Filtere die aktuelle Product ID heraus
-          const filteredProducts = data.products.filter(
-            (product) => product._id !== currentProductId
-          );
-          setLatestProducts(filteredProducts);
-        } else {
-          setLatestProducts([]);
-        }
-      })
-      .catch((err) => console.error("Error fetching latest products:", err));
-  }, [category, currentProductId]);
 
   return (
     <div className="related-container">

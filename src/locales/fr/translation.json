@@ -545,5 +545,24 @@
   "orders": "Commande(s)",
   "no_orders": "Aucune commande",
   "chat_user": "Discuter avec l'utilisateur",
-  "chat_seller": "Discuter avec le vendeur"
+  "chat_seller": "Discuter avec le vendeur",
+  "order_state_buttons": {
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "ready_pickup": "Prêt pour le retrait",
+    "picked_up": "Retiré",
+    "pick_up_failed": "Échec du retrait",
+    "mark_shipped": "Marquer comme expédié",
+    "mark_delivered": "Marquer comme livré",
+    "first_try_delivery_failed": "Échec de la première tentative de livraison",
+    "second_try_delivery": "Deuxième tentative de livraison",
+    "cancelled": "Annulé",
+    "failed_delivery": "Livraison échouée",
+    "mark_picked_up": "Marquer comme retiré",
+    "pickup_failed": "Échec du retrait",
+    "accept_return": "Accepter le retour",
+    "reject_return": "Refuser le retour",
+    "confirm_return_received": "Confirmer retour reçu",
+    "return_not_received": "Retour non reçu"
+  }
 }

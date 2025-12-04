@@ -23,12 +23,12 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
         if (currentStatus === ORDER_STATUS.PENDING) {
             buttons.push(
                 <button key="confirm" className="seller-btn btn-confirm" onClick={() => onStatusChange(order._id, ORDER_STATUS.CONFIRMED)}>
-                    <FaCheck /> {t("order_state.confirm")}
+                    <FaCheck /> {t("order_state_buttons.confirm")}
                 </button>
             );
             buttons.push(
                 <button key="cancel" className="seller-btn btn-cancel" onClick={() => onStatusChange(order._id, ORDER_STATUS.CANCELLED_SELLER)}>
-                    <FaTimes /> {t("order_state.cancel")}
+                    <FaTimes /> {t("order_state_buttons.cancel")}
                 </button>
             );
         }
@@ -37,24 +37,24 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
         else if (currentStatus === ORDER_STATUS.CONFIRMED) {
             buttons.push(
                 <button key="ship" className="seller-btn btn-primary" onClick={() => onStatusChange(order._id, ORDER_STATUS.READY_TO_PICKUP)}>
-                    <FaTruck /> {t("order_state.ready_pickup")}
+                    <FaTruck /> {t("order_state_buttons.ready_pickup")}
                 </button>
             );
             buttons.push(
                 <button key="cancel" className="seller-btn btn-cancel-outline" onClick={() => onStatusChange(order._id, ORDER_STATUS.CANCELLED_SELLER)}>
-                    {t("order_state.cancel")}
+                    {t("order_state_buttons.cancel")}
                 </button>
             );
         }
         else if (currentStatus === ORDER_STATUS.READY_TO_PICKUP) {
             buttons.push(
                 <button key="ship" className="seller-btn btn-primary" onClick={() => onStatusChange(order._id, ORDER_STATUS.PICKED_UP)}>
-                    <FaTruck /> {t("order_state.picked_up")}
+                    <FaTruck /> {t("order_state_buttons.picked_up")}
                 </button>
             );
             buttons.push(
                 <button key="cancel" className="seller-btn btn-cancel-outline" onClick={() => onStatusChange(order._id, ORDER_STATUS.PICK_UP_FAILED)}>
-                    {t("order_state.pick_up_failed")}
+                    {t("order_state_buttons.pick_up_failed")}
                 </button>
             );
         }
@@ -81,12 +81,12 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
         if (currentStatus === ORDER_STATUS.PENDING) {
             buttons.push(
                 <button key="confirm" className="seller-btn btn-confirm" onClick={() => onStatusChange(order._id, ORDER_STATUS.CONFIRMED)}>
-                    <FaCheck /> {t("order_state.confirm")}
+                    <FaCheck /> {t("order_state_buttons.confirm")}
                 </button>
             );
             buttons.push(
                 <button key="cancel" className="seller-btn btn-cancel" onClick={() => onStatusChange(order._id, ORDER_STATUS.CANCELLED_SELLER)}>
-                    <FaTimes /> {t("order_state.cancel")}
+                    <FaTimes /> {t("order_state_buttons.cancel")}
                 </button>
             );
         }
@@ -96,14 +96,14 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
             if (isDelivery) {
                 buttons.push(
                     <button key="ship" className="seller-btn btn-primary" onClick={() => onStatusChange(order._id, ORDER_STATUS.SHIPPED)}>
-                        <FaTruck /> {t("order_state.mark_shipped")}
+                        <FaTruck /> {t("order_state_buttons.mark_shipped")}
                     </button>
                 );
             }
             // Can still cancel if needed? Usually yes, but let's stick to the main flow for now or add cancel as secondary
             buttons.push(
                 <button key="cancel" className="seller-btn btn-cancel-outline" onClick={() => onStatusChange(order._id, ORDER_STATUS.CANCELLED_SELLER)}>
-                    {t("order_state.cancel")}
+                    {t("order_state_buttons.cancel")}
                 </button>
             );
         }
@@ -112,12 +112,12 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
         else if (currentStatus === ORDER_STATUS.SHIPPED) {
             buttons.push(
                 <button key="deliver" className="seller-btn btn-success" onClick={() => onStatusChange(order._id, ORDER_STATUS.DELIVERED)}>
-                    <FaClipboardCheck /> {t("order_state.mark_delivered")}
+                    <FaClipboardCheck /> {t("order_state_buttons.mark_delivered")}
                 </button>
             );
             buttons.push(
                 <button key="failed" className="seller-btn btn-warning" onClick={() => onStatusChange(order._id, ORDER_STATUS.FIRST_TRY_DELIVERY_FAILED)}>
-                    <FaTimes /> {t("order_state.first_try_delivery_failed")}
+                    <FaTimes /> {t("order_state_buttons.first_try_delivery_failed")}
                 </button>
             );
         }
@@ -125,12 +125,12 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
         else if (currentStatus === ORDER_STATUS.FIRST_TRY_DELIVERY_FAILED) {
             buttons.push(
                 <button key="deliver" className="seller-btn btn-success" onClick={() => onStatusChange(order._id, ORDER_STATUS.SECOND_TRY_DELIVERY)}>
-                    <FaClipboardCheck /> {t("order_state.second_try_delivery")}
+                    <FaClipboardCheck /> {t("order_state_buttons.second_try_delivery")}
                 </button>
             );
             buttons.push(
                 <button key="failed" className="seller-btn btn-warning" onClick={() => onStatusChange(order._id, ORDER_STATUS.CANCELLED_SELLER)}>
-                    <FaTimes /> {t("order_state.cancelled")}
+                    <FaTimes /> {t("order_state_buttons.cancelled")}
                 </button>
             );
         }
@@ -138,12 +138,12 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
         else if (currentStatus === ORDER_STATUS.SECOND_TRY_DELIVERY) {
             buttons.push(
                 <button key="deliver" className="seller-btn btn-success" onClick={() => onStatusChange(order._id, ORDER_STATUS.DELIVERED)}>
-                    <FaClipboardCheck /> {t("order_state.mark_delivered")}
+                    <FaClipboardCheck /> {t("order_state_buttons.mark_delivered")}
                 </button>
             );
             buttons.push(
                 <button key="failed" className="seller-btn btn-warning" onClick={() => onStatusChange(order._id, ORDER_STATUS.FAILED_DELIVERY)}>
-                    <FaTimes /> {t("order_state.failed_delivery")}
+                    <FaTimes /> {t("order_state_buttons.failed_delivery")}
                 </button>
             );
         }
@@ -152,12 +152,12 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
         else if (currentStatus === ORDER_STATUS.READY_TO_PICKUP) {
             buttons.push(
                 <button key="picked_up" className="seller-btn btn-success" onClick={() => onStatusChange(order._id, ORDER_STATUS.PICKED_UP)}>
-                    <FaClipboardCheck /> {t("order_state.mark_picked_up")}
+                    <FaClipboardCheck /> {t("order_state_buttons.mark_picked_up")}
                 </button>
             );
             buttons.push(
                 <button key="pickup_failed" className="seller-btn btn-warning" onClick={() => onStatusChange(order._id, ORDER_STATUS.PICK_UP_FAILED)}>
-                    <FaTimes /> {t("order_state.pickup_failed")}
+                    <FaTimes /> {t("order_state_buttons.pickup_failed")}
                 </button>
             );
         }
@@ -166,12 +166,12 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
         else if (currentStatus === ORDER_STATUS.RETURN_REQUESTED) {
             buttons.push(
                 <button key="accept_return" className="seller-btn btn-primary" onClick={() => onStatusChange(order._id, ORDER_STATUS.RETURN_CONFIRMED)}>
-                    <FaUndo /> {t("order_state.accept_return")}
+                    <FaUndo /> {t("order_state_buttons.accept_return")}
                 </button>
             );
             buttons.push(
                 <button key="reject_return" className="seller-btn btn-cancel" onClick={() => onStatusChange(order._id, ORDER_STATUS.RETURN_REFUSED)}>
-                    <FaTimes /> {t("order_state.reject_return")}
+                    <FaTimes /> {t("order_state_buttons.reject_return")}
                 </button>
             );
         }
@@ -180,12 +180,12 @@ export default function SellerOrderCard({ order, products, t, onStatusChange }) 
         else if (currentStatus === ORDER_STATUS.RETURN_SHIPPED) {
             buttons.push(
                 <button key="return_received" className="seller-btn btn-success" onClick={() => onStatusChange(order._id, ORDER_STATUS.RETURN_RECEIVED)}>
-                    <FaCheck /> {t("order_state.confirm_return_received")}
+                    <FaCheck /> {t("order_state_buttons.confirm_return_received")}
                 </button>
             );
             buttons.push(
                 <button key="return_not_received" className="seller-btn btn-warning" onClick={() => onStatusChange(order._id, ORDER_STATUS.RETURN_NOT_RECEIVED)}>
-                    <FaTimes /> {t("order_state.return_not_received")}
+                    <FaTimes /> {t("order_state_buttons.return_not_received")}
                 </button>
             );
         }

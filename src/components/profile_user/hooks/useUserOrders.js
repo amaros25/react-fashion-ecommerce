@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 export function useUserOrders(apiUrl, userId, token, currentPage, ordersPerPage) {
 
   const [orders, setOrders] = useState([]);
+  const [allOrders, setAllOrders] = useState([]);
   const [products, setProducts] = useState({});
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    
+
     if (!userId || !token) return;
 
     const fetchOrders = async () => {
@@ -41,8 +42,24 @@ export function useUserOrders(apiUrl, userId, token, currentPage, ordersPerPage)
         console.error("Fetch Orders Error:", err);
       }
     };
+
+    const fetchAllOrders = async () => {
+      try {
+        const res = await fetch(`${apiUrl}/orders/user/${userId}?limit=1000`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (res.ok && data.orders) {
+          setAllOrders(data.orders);
+        }
+      } catch (error) {
+        console.error("Error fetching all orders for stats:", error);
+      }
+    };
+
     fetchOrders();
+    fetchAllOrders();
   }, [apiUrl, userId, token, currentPage, ordersPerPage]);
 
-  return { orders, products, totalPages };
+  return { orders, allOrders, products, totalPages };
 }

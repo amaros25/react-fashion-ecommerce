@@ -30,9 +30,9 @@ function TopBannerSlider() {
     // useEffect to fetch sections data once on component mount
     useEffect(() => {
         fetch(`${apiUrl}/sections/`) // Fetch sections data from API
-        .then(res => res.json())    // Parse response as JSON
-        .then(data => setSections(data)) // Save data in sections state
-        .catch(err => console.error('Error fetching sections:', err)); // Log any errors
+            .then(res => res.json())    // Parse response as JSON
+            .then(data => setSections(data)) // Save data in sections state
+            .catch(err => console.error('Error fetching sections:', err)); // Log any errors
     }, []); // Empty dependency array ensures this runs only once on mount
 
     // Function to go to previous banner slide (with wrap-around)
@@ -45,7 +45,7 @@ function TopBannerSlider() {
         setCurrent((current + 1) % banners.length);
     };
 
-    
+
     // Update screen width when window is resized
     useEffect(() => {
         const handleResize = () => setScreenWidth(window.innerWidth);
@@ -71,21 +71,21 @@ function TopBannerSlider() {
     }, [screenWidth, offers, bestOrders]); // Re-run when screen width or offers change
 
     return (
-    <div className="banner-wrapper"> {/* Wrapper div for the whole banner and sections */}
-        <div className="banner-slider"> {/* Banner slider container */}
-            <button className="arrow left" onClick={prevSlide}>‹</button> {/* Left arrow button */}
-            <img src={banners[current]} alt="Banner" className="banner-image"  loading="lazy" /> {/* Current banner image */}
-            <button className="arrow right" onClick={nextSlide}>›</button> {/* Right arrow button */}
+        <div className="banner-wrapper"> {/* Wrapper div for the whole banner and sections */}
+            <div className="banner-slider"> {/* Banner slider container */}
+                <button className="arrow left" onClick={prevSlide}>‹</button> {/* Left arrow button */}
+                <img src={banners[current]} alt="Banner" className="banner-image" loading="lazy" /> {/* Current banner image */}
+                <button className="arrow right" onClick={nextSlide}>›</button> {/* Right arrow button */}
+            </div>
+
+            {/* Section grid containing best offers and best orders */}
+            <div className="section-grid">
+
+                <TopSection title={t("categoryBanner.bestOffers")} products={offersToShow} /> {/* Best Offers section */}
+                <TopSection title={t("categoryBanner.bestOrders")} products={bestOrdersToShow} className="best-orders" /> {/* Best Orders section */}
+
+            </div>
         </div>
-
-        {/* Section grid containing best offers and best orders */}
-        <div className="section-grid">
-         
-            <TopSection title={t("categoryBanner.bestOffers")} products={offersToShow} /> {/* Best Offers section */}
-            <TopSection title={t("categoryBanner.bestOrders")} products={bestOrdersToShow} className="best-orders" /> {/* Best Orders section */}
-
-         </div>
-    </div>
     );
 }
 

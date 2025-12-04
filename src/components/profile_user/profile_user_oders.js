@@ -1,5 +1,6 @@
 import React from "react";
 import OrderCard from "./order_card";
+import Pagination from "../home/pagination";
 
 export default function ProfileUserOrders({ orders, products, totalPages, currentPage, setCurrentPage, t }) {
   if (orders.length === 0) return (
@@ -17,17 +18,11 @@ export default function ProfileUserOrders({ orders, products, totalPages, curren
       </div>
 
       {totalPages > 1 && (
-        <div className="pagination">
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              className={currentPage === i + 1 ? "active" : ""}
-              onClick={() => setCurrentPage(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
+        <Pagination
+          page={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       )}
     </>
   );

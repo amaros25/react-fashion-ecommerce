@@ -4,7 +4,8 @@ import "./register.css";
 import { useTranslation } from "react-i18next";
 import ImageSelectUpload from '../new_product/image_select_upload.js';
 import { toast } from "react-toastify";
-import { cities, citiesData } from '../const/cities';
+import { cities, citiesData } from '../utils/const/cities.js';
+import useRegisterApi from "./hooks/useRegisterApi";
 
 function Register() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -24,6 +25,7 @@ function Register() {
   const [error, setError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
+  const { uploadImage, registerUser } = useRegisterApi(apiUrl, cloudName, uploadPreset);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -34,8 +36,6 @@ function Register() {
     shopName: "",
     address: "",
   });
-
-
 
   const handleCheckboxChange = () => {
     setAcceptedTerms(!acceptedTerms);
@@ -95,9 +95,6 @@ function Register() {
       setImagePreview(null);
     }
   };
-
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -192,24 +189,8 @@ function Register() {
       return;
     }
     try {
-      let imageUrl = "";
 
-      if (imageFile) {
-        const formData = new FormData();
-        formData.append("file", imageFile);
-        formData.append("upload_preset", uploadPreset);
-
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!res.ok) throw new Error("Image upload failed");
-
-        const data = await res.json();
-        imageUrl = data.secure_url;
-      }
-
+      const imageUrl = imageFile ? await uploadImage(imageFile) : "";
       let endpoint = "";
       let payload = {};
 
@@ -260,21 +241,7 @@ function Register() {
         };
       }
 
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const responseText = await res.text();
-      if (!res.ok) {
-        let errorData = {};
-        try {
-          errorData = JSON.parse(responseText);
-        } catch (jsonError) {
-          errorData = { message: "unknown error" };
-        }
-        throw new Error(errorData.message || "unknown error");
-      }
+      await registerUser(endpoint, payload);
       toast.success(t("register.success"));
       navigate("/login");
     } catch (err) {

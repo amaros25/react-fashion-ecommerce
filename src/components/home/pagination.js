@@ -45,6 +45,11 @@ export default function Pagination({ page, totalPages, onPageChange }) {
 
   const pageNumbers = getPageNumbers();
 
+  const handlePageChange = (num) => {
+    onPageChange(num);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="pagination-container">
       {pageNumbers.map((num, index) => {
@@ -60,7 +65,7 @@ export default function Pagination({ page, totalPages, onPageChange }) {
           <button
             key={index}
             className={`pagination-button ${page === num ? 'active' : ''}`}
-            onClick={() => onPageChange(num)}
+            onClick={() => handlePageChange(num)}
           >
             {num}
           </button>

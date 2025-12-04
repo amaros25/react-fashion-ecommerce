@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from "react-router-dom";
-import '../top_section/top_section.css';
+import './top_section.css';
 
 function TopSection({ title, products }) {
   const productGridRef = useRef(null);

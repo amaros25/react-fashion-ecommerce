@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import "./seller_products.css";
 import { useNavigate } from "react-router-dom";
-import LoadingSpinner from "../products/loading_spinner";
+import LoadingSpinner from "../utils/loading_spinner";
 import { FaSearch, FaBoxOpen } from "react-icons/fa";
 
 function SellerProducts({ sellerId, apiUrl, token }) {
