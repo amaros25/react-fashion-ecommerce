@@ -21,21 +21,12 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "user not found" });
     }
 
-    // Check if user is already logged in
-    if (user.isLoggedIn) {
-      return res.status(403).json({
-        message: "User already logged in on another device. Please logout from the other device first.",
-        error: "ALREADY_LOGGED_IN"
-      });
-    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "wrong password" });
     }
 
-    // Set isLoggedIn to true
-    user.isLoggedIn = true;
     await user.save();
 
     const token = jwt.sign({ id: user._id, role }, JWT_SECRET, { expiresIn: "1d" });
@@ -87,7 +78,6 @@ const logout = async (req, res) => {
 
 
     if (user) {
-      user.isLoggedIn = false;
       await user.save();
       res.json({ message: "Logged out successfully" });
     } else {
