@@ -566,5 +566,17 @@
     "reject_return": "Refuser le retour",
     "confirm_return_received": "Confirmer retour reçu",
     "return_not_received": "Retour non reçu"
+  },
+  "add_product_error": {
+    "productImagesRequired": "Veuillez ajouter des images du produit",
+    "productNameRequired": "Veuillez entrer le nom du produit",
+    "productPriceRequired": "Veuillez entrer le prix du produit",
+    "productShipmentPriceRequired": "Veuillez entrer le prix de livraison du produit",
+    "productDescriptionRequired": "Veuillez entrer une description du produit",
+    "productCategoryRequired": "Veuillez sélectionner une catégorie",
+    "productSubcategoryRequired": "Veuillez sélectionner une sous-catégorie",
+    "productSizesRequired": "Veuillez sélectionner des tailles",
+    "productSizeRequired": "Veuillez entrer une taille",
+    "productStockRequired": "Veuillez entrer le stock"
   }
 }

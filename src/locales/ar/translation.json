@@ -566,5 +566,17 @@
     "reject_return": "رفض الإرجاع",
     "confirm_return_received": "تأكيد استلام الإرجاع",
     "return_not_received": "الإرجاع غير مستلم"
+  },
+  "add_product_error": {
+    "productImagesRequired": "يرجى إضافة صور المنتج",
+    "productNameRequired": "اسم المنتج مطلوب",
+    "productPriceRequired": "يجب تحديد سعر المنتج",
+    "productShipmentPriceRequired": "يجب تحديد سعر شحن المنتج",
+    "productDescriptionRequired": "يرجى إضافة وصف للمنتج",
+    "productCategoryRequired": "فئة المنتج مطلوبة",
+    "productSubcategoryRequired": "الفئة الفرعية للمنتج مطلوبة",
+    "productSizesRequired": "يرجى تحديد مقاسات المنتج",
+    "productSizeRequired": "حجم المنتج مطلوب",
+    "productStockRequired": "مخزون المنتج مطلوب"
   }
 }
