@@ -1,0 +1,43 @@
+.chat-sidebar {
+  width: 300px;
+  background-color: #f7f7f7;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-card {
+  padding: 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.chat-card:hover {
+  background-color: #e9e9e9;
+}
+
+.chat-card.active {
+  background-color: #e0e0e0;
+}
+
+.chat-date {
+  font-size: 0.8em;
+  color: #888;
+  margin-top: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+.no-chats-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  color: #888;
+  font-size: 1.1em;
+  padding: 20px;
+}

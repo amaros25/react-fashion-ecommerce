@@ -1,0 +1,570 @@
+{
+    "myshop": "Cmandi",
+    "home": "Home",
+    "profile": "Profile",
+    "login": "Login",
+    "logout": "Logout",
+    "newProducts": "New Products",
+    "select_category": "Select a category",
+    "product_name": "Product Name",
+    "product_description": "Description",
+    "product_price": "Price",
+    "size_stock_color": "Sizes & Stock & Color",
+    "size_exp": "Size (e.g. M, 36)",
+    "select_color": "Select Color",
+    "categories": {
+        "womensClothing": "Women's Clothing",
+        "mensClothing": "Men's Clothing",
+        "shoes": "Shoes",
+        "womensUnderwear": "Women's Underwear",
+        "mensUnderwear": "Men's Underwear",
+        "bags": "Bags & Accessories",
+        "kidsClothing": "Kids' Clothing",
+        "babyClothing": "Baby Clothing"
+    },
+    "categoryBanner": {
+        "bestOffers": "Best Offers",
+        "bestOrders": "Best Orders",
+        "popularCategories": "Popular Categories"
+    },
+    "tabs_seller": {
+        "products": "Products",
+        "openOrders": "Open Orders",
+        "allOrders": "All Orders"
+    },
+    "add_new_product": "Add New Product",
+    "new_products": "",
+    "alter_max_images": "A maximum of 3 images can be selected!",
+    "max_images_selected": "A maximum of 3 images have been selected.",
+    "product_images_max": "Product Images (max. 3):",
+    "choose_files": "Choose a photo",
+    "search_product": "Search Model",
+    "search": "Search",
+    "email": "Email",
+    "password": "Password",
+    "login_start": "Log In",
+    "loading": "Loading...",
+    "register_quest": "No account yet?",
+    "login_failed": "Login Failed",
+    "already_logged_in": "User already logged in on another device. Please logout from the other device first.",
+    "register": {
+        "title": "Register",
+        "role": "Role",
+        "selectRole": "Select your role",
+        "shoper": "Shopper (Regular User)",
+        "seller": "Seller",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "password": "Password",
+        "phone": "Phone Number",
+        "shopName": "Shop Name",
+        "address": "Address",
+        "profileImageOptional": "Profile Image (Optional)",
+        "profileImageRequired": "Profile Image (Required)",
+        "removeImage": "Remove Image",
+        "submit": "Register",
+        "alreadyRegistered": "Already registered?",
+        "login": "Login",
+        "acceptTerms": "By registering, you confirm that you have read and accepted the <a href='{{cmandiLink}}'>General Terms and Conditions</a> and the <a href='{{privacyLink}}'>Privacy Policy</a>, and are 18 years of age or older.",
+        "city": "City",
+        "subCity": "Delegated City",
+        "success": "Registration successful!",
+        "error": {
+            "fillShopNameAddress": "Please fill in the shop name",
+            "uploadProfileImage": "Please upload a profile image.",
+            "enterPhone": "Please enter a phone number.",
+            "registrationFailed": "Registration failed",
+            "acceptTerms": "You must accept the terms and privacy policy to continue.",
+            "firstNameRequired": "Please enter your first name.",
+            "lastNameRequired": "Please enter your last name.",
+            "emailRequired": "Please enter your email.",
+            "passwordRequired": "Please enter your password.",
+            "phoneRequired": "Please enter your phone number.",
+            "addressRequired": "Please enter your address.",
+            "cityRequired": "Please enter your city.",
+            "subCityRequired": "Please enter your delegation.",
+            "passwordStrength": "Please enter a strong password (at least 8 characters, one uppercase, one lowercase, one number, and one special character).",
+            "invalidLastName": "Please enter a valid last name.",
+            "invalidFirstName": "Please enter a valid first name.",
+            "invalidPhone": "Please enter a valid phone number.",
+            "userAlreadyExists": "User already exists."
+        }
+    },
+    "sizes": "Sizes",
+    "product_page": {
+        "rating": "Rating",
+        "size": "Size",
+        "color": "Color",
+        "quantity": "Quantity",
+        "select_size": "Select a Size",
+        "select_color": "Select a Color",
+        "variant_out_of_stock": "This variant is out of stock.",
+        "order_now": "Order Now",
+        "enter_shipping_address": "Enter Shipping Address",
+        "street": "Street",
+        "city": "City",
+        "postal_code": "Postal Code",
+        "country": "Country",
+        "placing_order": "Placing Order...",
+        "submit_order": "Submit Order",
+        "cancel": "Cancel",
+        "order_success": "Order placed successfully!",
+        "order_error": "Error placing order.",
+        "select_size_first": "Please select a size first.",
+        "order_create_error": "The order could not be created.",
+        "select_size_alert": "Please select a size and color before adding to cart.",
+        "must_login": "You must be logged in to add products to the cart.",
+        "invalid_selection": "Invalid selection. Please choose a valid size and color.",
+        "exceeds_stock": "The quantity exceeds the available stock.",
+        "available": "available",
+        "cart_updated": "Cart updated successfully.",
+        "added_to_cart": "Product added to cart.",
+        "add_to_cart": "Add to Cart",
+        "buy_now": "Buy Now",
+        "description": "Description",
+        "explore_seller": "Explore Seller",
+        "remove_from_saved": "Remove from Saved",
+        "add_to_saved": "Add to Saved",
+        "login_to_save": "You must log in to add products to your favorites.",
+        "reviews": "Reviews",
+        "no_reviews": "No reviews yet.",
+        "write_review": "Write a Review",
+        "write_comment": "Write a Comment",
+        "submit_review": "Submit Review"
+    },
+    "cart_page": {
+        "title": "Your Cart",
+        "empty_cart": "Your cart is empty.",
+        "shipping_cost_once": "Shipping Cost (Once):",
+        "seller_subtotal": "Subtotal (Shipping included)",
+        "total_price": "Total Price:",
+        "gps_denied": "GPS Access Denied",
+        "geolocation_unsupported": "Geolocation is not supported by your browser",
+        "current_position": "Your Current Position",
+        "use_my_position": "Use My Position",
+        "confirm_position": "Confirm",
+        "cancel_position": "Cancel",
+        "Change": "Change Address / Phone",
+        "empty_desc": "It seems you haven't added anything to your cart yet.",
+        "continue_shopping": "Continue Shopping",
+        "items": "Items",
+        "subtotal": "Subtotal",
+        "shipping": "Shipping",
+        "order_summary": "Order Summary",
+        "total": "Total",
+        "secure_checkout": "Secure Checkout",
+        "delivery": "Delivery",
+        "pickup": "Pickup",
+        "delivery_address": "Delivery Address",
+        "add_address": "Please add your delivery address",
+        "missed_address_add_in_profile": "Please add your delivery address in your profile",
+        "no_address_set": "No address set",
+        "no_phone_set": "No phone set",
+        "address_required": "Please add your delivery address first",
+        "pickup_info": "The seller's shop address will be displayed after seller confirmation."
+    },
+    "phone": "Phone",
+    "address": "Address",
+    "products": "Products",
+    "edit_profile": "Edit Profile",
+    "total_orders": "Total Orders",
+    "open_orders": "Open Orders",
+    "loading_profile": "Loading Profile",
+    "your_orders": "Your Orders",
+    "no_orders_yet": "No orders yet.",
+    "order_id": "Order ID",
+    "loading_product": "Loading product...",
+    "size": "Size",
+    "color": "Color",
+    "colors": "Colors",
+    "quantity": "Quantity",
+    "price": "Price",
+    "status": "Status",
+    "pending": "Pending",
+    "orderNumber": "Order Number",
+    "orderDate": "Order Date",
+    "productName": "Product Name",
+    "totalPrice": "Total Price",
+    "currentStatus": "Current Status",
+    "lastUpdate": "Last Update",
+    "confirmed": "Confirmed",
+    "shipped": "Shipped",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled",
+    "noUser": "No User",
+    "noPhone": "No Phone",
+    "noAddress": "No Address",
+    "productColor": "Product Color",
+    "productSize": "Product Size",
+    "product_color": {
+        "Red": "Red",
+        "Blue": "Blue",
+        "Green": "Green",
+        "Yellow": "Yellow",
+        "Black": "Black",
+        "White": "White",
+        "Orange": "Orange",
+        "Purple": "Purple",
+        "Pink": "Pink",
+        "Brown": "Brown",
+        "Gray": "Gray",
+        "Beige": "Beige",
+        "Teal": "Teal",
+        "Violet": "Violet",
+        "Indigo": "Indigo",
+        "Turquoise": "Turquoise"
+    },
+    "order_state": {
+        "all": "All Statuses",
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "dont_respond": "User does not respond",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "received": "Received",
+        "user_cancelled": "Cancelled",
+        "seller_cancelled": "Cancelled by Seller",
+        "failed_delivery": "Delivery Failed",
+        "second_try": "Second Delivery Attempt",
+        "third_try": "Third Delivery Attempt",
+        "return_requested": "Return Requested",
+        "return_confirmed": "Return Confirmed",
+        "return_rejected": "Return Rejected",
+        "return_shipped": "Return Shipped",
+        "return_received": "Return Received",
+        "returned_to_sender": "Returned to Sender",
+        "second_try_delivery": "Second Delivery Attempt",
+        "ready_pickup": "Ready for Pickup",
+        "picked_up": "Picked Up",
+        "pick_up_failed": "Pickup Failed",
+        "no_response": "User does not respond",
+        "cancelled_user": "Cancelled by User",
+        "cancelled_seller": "Cancelled by Seller",
+        "first_try_delivery_failed": "First Delivery Attempt Failed",
+        "second_try_delivery_failed": "Second Delivery Attempt Failed"
+    },
+    "no_products_found": "No products found",
+    "number": "No.",
+    "times_ordered": "times ordered",
+    "error_loading_products": "Error loading products",
+    "search_product_by_id": "Search by product ID (e.g., PR-123456)",
+    "searchOrderNumber": "Search by order number (e.g., O123456)",
+    "filter": "Filter",
+    "noOrders": "No orders",
+    "product_colors": {
+        "red": "Red",
+        "blue": "Blue",
+        "green": "Green",
+        "yellow": "Yellow",
+        "black": "Black",
+        "white": "White",
+        "orange": "Orange",
+        "purple": "Purple",
+        "pink": "Pink",
+        "brown": "Brown",
+        "gray": "Gray",
+        "beige": "Beige",
+        "teal": "Teal",
+        "violet": "Violet",
+        "indigo": "Indigo",
+        "turquoise": "Turquoise"
+    },
+    "other": "Other",
+    "enter_custom_color": "Enter a color",
+    "add_another_size": "Add another size",
+    "post_product": "Post Product",
+    "upload_status": {
+        "loading": "Uploading... please wait",
+        "success": "Upload successful!",
+        "error": "Upload failed!"
+    },
+    "seller_cannot_buy_alter": "Sellers cannot place orders.",
+    "related_products": {
+        "title": "You might also like"
+    },
+    "edit_delivery_address": "📦 Edit Address / Phone",
+    "street": "Street",
+    "city": "City",
+    "postal_code": "Postal Code",
+    "phone_number": "Phone Number",
+    "save": "💾 Save",
+    "orders_created_success": "✅ All orders created successfully!",
+    "orders_created_error": "❌ Error creating orders.",
+    "enter_address_first": "Please enter a delivery address first",
+    "address_saved": "✅ Address and phone number saved!",
+    "address_save_error": "❌ Error saving data.",
+    "statusUpdated": "Status updated successfully: {{status}}",
+    "updateFailed": "Update failed: {{message}}",
+    "unknownError": "Unknown error",
+    "stock": "Stock",
+    "errors": {
+        "product_infos_loading_failed": "Failed to load product information. Please check your internet connection and try again. If the problem persists, contact support.",
+        "product_color_loading_failed": "Failed to load product colors. Please check your internet connection and try again. If the problem persists, contact support."
+    },
+    "footer_pages": {
+        "about_us": {
+            "title": "About Us",
+            "content": "Welcome to Cmandi, your premier destination for sustainable and stylish fashion. We believe that style should never come at the cost of our planet.",
+            "sections": [
+                {
+                    "title": "Our Mission",
+                    "content": "To revolutionize the fashion industry by connecting conscious consumers with ethical sellers, promoting a circular economy where every garment tells a story."
+                },
+                {
+                    "title": "Our Vision",
+                    "content": "A world where fashion is inclusive, sustainable, and accessible to all. We strive to empower individuals to express themselves through unique, high-quality pieces."
+                }
+            ]
+        },
+        "sustainability": {
+            "title": "Sustainability",
+            "content": "At Cmandi, sustainability is at the core of everything we do. We are committed to reducing our carbon footprint and promoting eco-friendly practices.",
+            "sections": [
+                {
+                    "title": "Our Commitment",
+                    "list": [
+                        "Zero-waste packaging initiatives.",
+                        "Supporting local artisans and small businesses.",
+                        "Promoting second-hand and vintage fashion to reduce textile waste.",
+                        "Carbon-neutral shipping options."
+                    ]
+                }
+            ]
+        },
+        "advertising": {
+            "title": "Advertising",
+            "content": "Partner with Cmandi to reach a diverse and engaged audience of fashion enthusiasts. Our advertising solutions are designed to help your brand grow.",
+            "sections": [
+                {
+                    "title": "Why Advertise With Us?",
+                    "list": [
+                        "Targeted reach to fashion-conscious consumers.",
+                        "High engagement rates across our platform.",
+                        "Customizable ad formats to suit your campaign goals.",
+                        "Detailed analytics and reporting."
+                    ]
+                }
+            ]
+        },
+        "accessibility": {
+            "title": "Accessibility",
+            "content": "We are committed to ensuring that our website is accessible to everyone, including individuals with disabilities. We continuously improve our user experience to meet WCAG standards."
+        },
+        "how_it_works": {
+            "title": "How it Works",
+            "content": "Buying and selling on Cmandi is simple, secure, and fun. Follow these easy steps to get started.",
+            "sections": [
+                {
+                    "title": "1. Create an Account",
+                    "content": "Start by creating your free account. Click 'Login' then 'Register'. Fill in your details to join our community.",
+                    "image": "/images/screenshot_register.png"
+                },
+                {
+                    "title": "2. Login and Explore",
+                    "content": "Log in to your account to access personalized features. Browse thousands of unique items from sellers worldwide.",
+                    "image": "/images/screenshot_login.png"
+                },
+                {
+                    "title": "3. Find and Order",
+                    "content": "Found something you love? Click 'Add to Cart' or 'Buy Now'. Our secure checkout process ensures your transaction is safe.",
+                    "image": "/images/screenshot_order.png"
+                },
+                {
+                    "title": "4. Track Your Order",
+                    "content": "Stay updated on your purchase. You can track your order status from your profile as it makes its way to you.",
+                    "image": "/images/step_delivery.png"
+                }
+            ]
+        },
+        "article_verification": {
+            "title": "Item Verification",
+            "content": "Shop with confidence knowing that luxury items on Cmandi are verified by our team of experts to ensure authenticity.",
+            "sections": [
+                {
+                    "title": "Our Process",
+                    "list": [
+                        "Physical inspection of high-value items.",
+                        "Digital authentication using AI technology.",
+                        "Seller history and reputation verification."
+                    ]
+                }
+            ]
+        },
+        "info_board": {
+            "title": "Info Board",
+            "content": "Stay updated with the latest news, announcements, and community guidelines from the Cmandi team."
+        },
+        "help_center": {
+            "title": "Help Center",
+            "content": "Need assistance? Our Help Center is here to support you 24/7 with answers to frequently asked questions and direct support channels."
+        },
+        "sell": {
+            "title": "Sell on Cmandi",
+            "content": "Turn your wardrobe into cash. Selling on Cmandi is easy and rewarding.",
+            "sections": [
+                {
+                    "title": "How to Sell",
+                    "list": [
+                        "Create a free seller account.",
+                        "Upload clear photos and a detailed description.",
+                        "Set your price and shipping options.",
+                        "Ship the item once sold and get paid!"
+                    ]
+                }
+            ]
+        },
+        "buy": {
+            "title": "Buy on Cmandi",
+            "content": "Discover unique fashion pieces at unbeatable prices. Enjoy a safe and seamless shopping experience."
+        },
+        "trust_safety": {
+            "title": "Trust & Safety",
+            "content": "Your safety is our top priority. We use state-of-the-art security measures to protect your data and transactions."
+        },
+        "privacy_center": {
+            "title": "Privacy Center",
+            "content": "Learn how we collect, use, and protect your personal information. We are committed to transparency and user privacy."
+        },
+        "cookie_notices": {
+            "title": "Cookie Notices",
+            "content": "We use cookies to enhance your browsing experience, analyze site traffic, and deliver personalized content."
+        },
+        "cookie_settings": {
+            "title": "Cookie Settings",
+            "content": "Manage your cookie preferences. You can choose to allow or block cookies at any time."
+        },
+        "terms_conditions": {
+            "title": "Terms & Conditions",
+            "content": "Please read our Terms and Conditions carefully before using our platform. These terms govern your access and use of Cmandi."
+        },
+        "our_platform": {
+            "title": "Our Platform",
+            "content": "Cmandi is built on cutting-edge technology to provide a fast, reliable, and enjoyable shopping experience for our global community."
+        },
+        "press": {
+            "title": "Press",
+            "content": "For media inquiries, press kits, and the latest news about Cmandi, please contact our press team."
+        },
+        "mobile_apps": {
+            "title": "Mobile Apps",
+            "content": "Download the Cmandi app for iOS and Android to shop and sell on the go. Experience the best of fashion at your fingertips."
+        }
+    },
+    "chat": {
+        "loadOlderMessages": "Load older messages",
+        "unread": "Unread",
+        "read": "Read",
+        "messagePlaceholder": "Write a message...",
+        "sendButton": "Send",
+        "noChat": "Choose a chat or start a new one",
+        "noMessages": "No messages",
+        "order": "Order",
+        "product": "Product",
+        "lastMessage": "Last message",
+        "newChatButton": "New Chat",
+        "newChatPlaceholderOrder": "Order Number",
+        "newChatPlaceholderProduct": "Product Number",
+        "newChatWithSeller": "New chat with seller",
+        "newChatWithAdmin": "New chat with admin",
+        "cancel_with_seller": "Cancel chat with seller"
+    },
+    "saved_products": {
+        "title": "Saved Products",
+        "no_saved_products": "No saved products"
+    },
+    "main-categories": {
+        "mens": "Men's",
+        "womens": "Women's",
+        "kids": "Kids'"
+    },
+    "sort_by": "Sort by",
+    "sort": {
+        "newest": "Newest",
+        "oldest": "Oldest",
+        "price_low": "Price: Low to High",
+        "price_high": "Price: High to Low",
+        "rating": "Rating"
+    },
+    "all-women": "All",
+    "all-men": "All",
+    "all-kids": "All",
+    "clothes": "Clothes",
+    "shoes": "Shoes",
+    "accessories": "Accessories",
+    "jewelry": "Jewelry",
+    "bags": "Bags",
+    "watches": "Watches",
+    "other-women": "Other",
+    "other-mens": "Other",
+    "other-kids": "Other",
+    "beauty": "Beauty",
+    "girls-clothing": "Girls",
+    "boys-clothing": "Boys",
+    "baby-clothing": "Baby",
+    "selectCity": "Select a City",
+    "selectSubCity": "Select a Delegation",
+    "product_state": {
+        "pending": "Pending Approval",
+        "active": "Active",
+        "blocked": "Blocked",
+        "deleted": "Deleted",
+        "unknown": "Unknown"
+    },
+    "create_new_listing": "Create New Listing",
+    "product_images": "Product Images",
+    "basic_information": "Basic Information",
+    "category": "Category",
+    "select_subcategory": "Select a Subcategory",
+    "product_shipement_price": "Product Shipping Price",
+    "variants": "Variants (Size & Color)",
+    "price_suf": "DT",
+    "messages": "Messages",
+    "settings": "Settings",
+    "street_address": "Street Address",
+    "enter_phone_number": "Enter your phone number",
+    "enter_street_address": "Enter your street address",
+    "delete_account": "Delete Account",
+    "cancel": "Cancel",
+    "save_changes": "Save Changes",
+    "select_city": "Select City",
+    "select_subcity": "Select Delegation",
+    "example_product_name": "Ex: Summer Floral Dress",
+    "describe_your_product": "Describe your product...",
+    "subcategories": {
+        "clothes": "Clothing",
+        "shoes": "Shoes",
+        "bags": "Bags",
+        "accessories": "Accessories",
+        "beauty": "Beauty",
+        "other-women": "Other (Women)",
+        "other-mens": "Other (Men)",
+        "girls-clothing": "Girls' Clothing",
+        "boys-clothing": "Boys' Clothing",
+        "baby-clothing": "Baby Clothing",
+        "other-kids": "Other (Kids)"
+    },
+    "orders": "Order(s)",
+    "no_orders": "No orders",
+    "chat_user": "Chat with User",
+    "chat_seller": "Chat with Seller",
+    "order_state_buttons": {
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "ready_pickup": "Ready for Pickup",
+        "picked_up": "Picked Up",
+        "pick_up_failed": "Pickup Failed",
+        "mark_shipped": "Mark as Shipped",
+        "mark_delivered": "Mark as Delivered",
+        "first_try_delivery_failed": "First Delivery Attempt Failed",
+        "second_try_delivery": "Second Delivery Attempt",
+        "cancelled": "Cancelled",
+        "failed_delivery": "Delivery Failed",
+        "mark_picked_up": "Mark as Picked Up",
+        "pickup_failed": "Pickup Failed",
+        "accept_return": "Accept Return",
+        "reject_return": "Reject Return",
+        "confirm_return_received": "Confirm Return Received",
+        "return_not_received": "Return Not Received"
+    }
+}

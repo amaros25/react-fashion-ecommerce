@@ -1,0 +1,121 @@
+/* Container style */
+.container {
+    padding: 20px;
+}
+
+/* Heading Style */
+h2 {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* Latest Product List - Grid Layout */
+.latest-product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 10px 0;
+    max-width: 100%;
+}
+
+/* Latest Product Item Styling */
+.latest-product-item {
+    background-color: #f0f9fa;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+    max-width: 100%;
+    text-decoration: none;
+}
+
+/* Hover effects for product item */
+.latest-product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Product image style */
+.latest-product-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* Product title style */
+.latest-product-item h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    min-width: 0;
+    color: #444;
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Product description or price style */
+.product-item p {
+    font-size: 16px;
+    color: #444;
+}
+
+/* Product size information style */
+.product-sizes {
+    font-size: 13px;
+    color: #666;
+    margin-top: 3px;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+    .latest-product-list {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+
+    .latest-product-item {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .latest-product-list {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+
+    .latest-product-item {
+        background-color: white;
+        border-radius: 10px;
+        padding: 10px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+    }
+
+    .latest-product-item:hover {
+        transform: translateY(-5px);
+    }
+
+    .latest-product-image {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .latest-product-list {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+}

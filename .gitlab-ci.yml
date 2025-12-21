@@ -1,0 +1,15 @@
+stages:
+  - test
+
+test_react_app:
+  stage: test
+  image: node:18
+  script:
+    - npm ci
+    - npm run test -- --watchAll=false
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  only:
+    - main

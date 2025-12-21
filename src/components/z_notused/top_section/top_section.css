@@ -1,0 +1,201 @@
+/* Styling for the section box that holds each product or section */
+.section-box {
+  background-color: #f5f5f5; /* Light gray background */
+  padding: 10px;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Light shadow for depth */
+  height: 100%; /* Full height */
+  display: flex;
+  flex-direction: column; /* Stack child elements vertically */
+  justify-content: space-between; /* Distribute space between elements */
+}
+
+/* Heading style inside each section */
+.section-box h3 {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 18px;
+}
+
+/* Grid layout for product items (2x2 grid) */
+.section-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns for products */
+  gap: 10px; /* Space between items */
+}
+
+/* Styling for each product card */
+.product-card {
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit color */
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center items horizontally */
+  text-align: center; /* Center text */
+}
+
+/* Styling for product image */
+.product-card img {
+  width: 100%; /* Full width */
+  height: 60px; /* Fixed height */
+  object-fit: cover; /* Maintain aspect ratio */
+  border-radius: 5px; /* Rounded corners */
+}
+
+/* Styling for product description */
+.product-card p {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 5px 0; /* Spacing around the text */
+  text-align: center; /* Center the text */
+  
+  /* Multiline ellipsis for truncating text */
+  display: -webkit-box; /* For Safari/Chrome */
+  display: box; /* Old syntax for older browsers */
+  display: -moz-box; /* Old Firefox syntax */
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  overflow: hidden; /* Hide overflow text */
+  text-overflow: ellipsis; /* Show ellipsis for overflowed text */
+  text-decoration: none; 
+  color: inherit; 
+  
+  /* Limit to 2 lines of text */
+  -webkit-line-clamp: 2; /* Webkit browsers */
+  line-clamp: 2; /* Standard for browsers supporting the feature */
+
+  height: 2.8em; /* Ensure the height stays consistent */
+  line-height: 1.4em; /* Line height for 2 lines */
+}
+
+/* Price section (old and new prices) layout */
+.price-row {
+  display: flex;
+  gap: 5px; /* Space between price elements */
+  align-items: baseline; /* Align prices to the baseline */
+  justify-content: center; /* Center prices */
+}
+
+/* Styling for new price */
+.new-price {
+  font-weight: bold; /* Bold new price */
+  color: black; /* Black color */
+}
+
+/* Styling for old price */
+.old-price {
+  text-decoration: line-through; /* Strike-through for old price */
+  color: gray; /* Gray color */
+  font-size: 0.9em; /* Slightly smaller size */
+}
+
+/* Discount label */
+.discount {
+  color: red; /* Red color for discount */
+  font-weight: bold; /* Bold text */
+  font-size: 0.85em; /* Smaller font size for discount */
+  margin-top: 2px; /* Small margin on top */
+}
+
+/* Hover effect for product cards */
+.product-card:hover {
+  transform: translateY(-3px); /* Lift the card slightly */
+  transition: 0.2s; /* Smooth transition */
+}
+
+/* Category text in product card */
+.product-card .product-category {
+  margin-top: 10px;
+  font-weight: bold; /* Bold category text */
+  text-align: center; /* Center text */
+  color: red; /* Red color for category */
+}
+
+/* Invisible price row but keeps height */
+.category-section .price-row,
+.category-section .new-price,
+.category-section .old-price,
+.category-section .discount {
+  visibility: hidden; /* Hide elements, but retain space */
+}
+
+ 
+@media (max-width: 768px) {
+  .section-product-grid {
+    display: flex;
+    flex-direction: row; /* Produkte horizontal anordnen */
+    gap: 10px;
+    overflow-x: auto; /* Ermöglicht horizontales Scrollen */
+    padding-bottom: 10px; /* Etwas Abstand unten für das Scrollen */
+    scroll-snap-type: x mandatory; /* Verhindert, dass das Scrollen zu weit geht */
+    width: 100%; /* Container nimmt die volle Breite der Seite ein */
+    box-sizing: border-box; /* Verhindert, dass das Scrollen über die Containergrenzen hinausgeht */
+    -webkit-overflow-scrolling: touch; /* Für sanftes Scrollen auf Touch-Geräten */
+    scroll-snap-type: x mandatory; /* Verhindert zu weites Scrollen */
+  }
+
+  .section-product-grid::-webkit-scrollbar {
+    display: none; /* Verstecke die Scrollbar */
+  }
+
+  /* Verhindert, dass der gesamte Inhalt nach unten oder oben scrollt */
+  body {
+    overflow-x: hidden; /* Verhindert horizontales Scrollen auf der gesamten Seite */
+  }
+
+  .product-card {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 150px; /* Maximal 150px für jedes Produkt */
+    flex-shrink: 0;
+    scroll-snap-align: start; /* Erzwingt das Stoppen beim ersten Produkt */
+  }
+
+  .product-card img {
+    width: 100%; 
+    height: 150px; /* Fixe Höhe für die Produktbilder */
+    object-fit: cover; 
+    border-radius: 5px; 
+  }
+
+  .product-card p {
+    font-size: 12px;
+    font-weight: 500;
+    margin: 5px 0;
+    text-align: center;
+    color: inherit;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    height: 2.8em;
+    line-height: 1.4em;
+  }
+
+  /* Unsichtbare Preisreihe, aber behält die Höhe bei */
+  .category-section .price-row,
+  .category-section .new-price,
+  .category-section .old-price,
+  .category-section .discount {
+    visibility: hidden;
+  }
+
+  .section-product-grid::after {
+  content: '';
+  min-width: 10px;
+  flex-shrink: 0;
+}
+
+
+  /* RTL Unterstützung */
+  [dir="rtl"] .section-product-grid {
+    flex-direction: row-reverse;
+  }
+}

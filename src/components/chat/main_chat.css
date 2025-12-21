@@ -1,0 +1,113 @@
+ .main-chat {
+   display: flex;
+   gap: 20px;
+   flex: 1;
+   box-sizing: border-box;
+   background-color: #eeeeee;
+   border-radius: 10px;
+   overflow: hidden;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+   padding: 20px;
+   margin: 1% 0;
+   flex-direction: row;
+   min-height: 70vh;
+
+ }
+
+ .chat-sidebar {
+   width: 300px;
+   flex-direction: column;
+
+   overflow: hidden;
+   background-color: #ffffff;
+   min-height: 80vh;
+   max-height: 80vh;
+ }
+
+ .chat-window {
+   flex: 1;
+   display: flex;
+   flex-direction: column;
+   min-height: 80vh;
+   max-height: 80vh;
+ }
+
+ .chat-window.active {
+   background-color: #fff;
+   padding: 10px;
+   border-radius: 10px;
+   box-sizing: border-box;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+   flex-direction: column;
+   flex: 1;
+   display: flex;
+   overflow: hidden;
+   min-height: 80vh;
+   max-height: 80vh;
+ }
+
+ .chat-window.hidden {
+   display: none;
+ }
+
+
+ @media (max-width: 350px) {
+
+   .main-chat {
+     display: flex;
+     flex: 1;
+     box-sizing: border-box;
+     box-shadow: 0;
+     padding: 0px;
+   }
+
+   .chat-sidebar {
+     width: 300px;
+     flex-direction: column;
+     display: flex;
+     overflow: hidden;
+     background-color: #ffffff;
+     min-height: 100vh;
+     max-height: 100vh;
+   }
+ }
+
+
+
+ @media (min-width: 351px) and (max-width: 768px) {
+
+   .main-chat {
+     display: flex;
+     flex: 1;
+     box-sizing: border-box;
+     box-shadow: 0;
+     padding: 0px;
+   }
+
+   .chat-sidebar {
+     display: flex;
+     flex: 1;
+     min-height: 50vh;
+     max-height: 100vh;
+   }
+
+   .chat-sidebar.hidden {
+     opacity: 0;
+     visibility: hidden;
+   }
+
+   .chat-window-active {
+     display: flex;
+   }
+
+   .chat-window {
+     min-height: 50vh;
+     max-height: 60vh;
+   }
+
+   .chat-window.active {
+     min-height: 50vh;
+     max-height: 90vh;
+   }
+
+ }

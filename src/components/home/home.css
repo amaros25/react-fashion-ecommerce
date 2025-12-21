@@ -1,0 +1,76 @@
+/* RTL (Right to Left) Support */
+.rtl .section-title {
+    text-align: right;
+    direction: rtl;
+}
+
+/* Main Container */
+
+
+/* Pagination */
+.pagination-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.pagination-button {
+    border: none;
+    background-color: #eee;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.pagination-button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination-ellipsis {
+    padding: 8px 12px;
+    color: #666;
+    user-select: none;
+}
+
+
+/* === Responsive Design === */
+
+/* Small phones (320px - 480px) */
+@media (max-width: 480px) {
+
+
+    .pagination-container {
+        gap: 4px;
+        margin: 15px 0;
+        flex-wrap: wrap;
+    }
+
+    .pagination-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+/* Medium phones and small tablets (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+
+    .pagination-container {
+        gap: 6px;
+        margin: 18px 0;
+    }
+
+    .pagination-button {
+        padding: 7px 11px;
+        font-size: 13px;
+    }
+}
+
+
+
+/* * {  */
+/*   outline: 1px solid rgba(255, 0, 0, 0.2); */
+
+/* } */

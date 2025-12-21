@@ -1,0 +1,245 @@
+/* Shop Page Container - Minimalist Base */
+.shop-page-container {
+    max-width: 100%;
+    min-height: 100vh;
+    background-color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    color: #000;
+    padding-bottom: 100px;
+}
+
+/* Hero Section - Clean & Typographic */
+.shop-hero {
+    padding: 20px 20px 10px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background-color: #fff;
+}
+
+.shop-hero-content {
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.shop-title {
+    font-size: 4rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin: 0;
+    color: #000;
+}
+
+.shop-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.shop-owner {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #666;
+}
+
+.shop-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.shop-location .icon {
+    font-size: 0.8rem;
+}
+
+/* Rating Display - Minimal */
+.shop-rating-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.stars-static {
+    display: flex;
+    gap: 4px;
+}
+
+.stars-static .star {
+    color: #e0e0e0;
+}
+
+.stars-static .star.filled {
+    color: #000;
+}
+
+.rating-text {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Rate Action - Elegant Interaction */
+.rate-action {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    width: 100%;
+    max-width: 300px;
+}
+
+.rate-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    color: #000;
+}
+
+.stars-interactive {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.star-wrapper {
+    transition: transform 0.2s ease;
+}
+
+.star-wrapper:hover {
+    transform: scale(1.1);
+}
+
+.stars-interactive .star {
+    color: #e0e0e0;
+    transition: color 0.2s;
+}
+
+.stars-interactive .star.filled {
+    color: #000;
+}
+
+.rated-badge {
+    margin-top: 30px;
+    font-size: 0.8rem;
+    color: #000;
+    border: 1px solid #000;
+    padding: 8px 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Collection Section */
+.shop-collection {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.collection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 15px;
+}
+
+.collection-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.collection-count {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Grid Layout */
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 40px 20px;
+    width: 100%;
+}
+
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 100px 0;
+    color: #999;
+    font-size: 1.1rem;
+}
+
+/* Pagination */
+.shop-pagination {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .shop-title {
+        font-size: 3rem;
+    }
+
+    .shop-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .shop-hero {
+        padding: 80px 20px 60px;
+    }
+
+    .shop-title {
+        font-size: 2.5rem;
+    }
+
+    .shop-collection {
+        padding: 0 20px;
+    }
+
+    .shop-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .shop-title {
+        font-size: 2rem;
+    }
+
+    .shop-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .collection-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}

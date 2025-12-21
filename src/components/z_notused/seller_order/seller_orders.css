@@ -1,0 +1,138 @@
+.seller-orders-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: 'Inter', sans-serif;
+}
+
+.seller-orders-container h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #1a1a1a;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.orders-table thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.orders-table th {
+    padding: 15px 20px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #495057;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.orders-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.orders-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.orders-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-badge.status-0 {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.status-1 {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-badge.status-2 {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.status-3 {
+    background-color: #c3e6cb;
+    color: #155724;
+}
+
+.status-badge.status-4 {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.status-5 {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.status-badge.status-6 {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Status Select */
+.status-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.status-select:hover {
+    border-color: #999;
+}
+
+.status-select:focus {
+    outline: none;
+    border-color: #000;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .orders-table {
+        font-size: 0.85rem;
+    }
+
+    .orders-table th,
+    .orders-table td {
+        padding: 10px 12px;
+    }
+}
+
+@media (max-width: 900px) {
+    .orders-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}

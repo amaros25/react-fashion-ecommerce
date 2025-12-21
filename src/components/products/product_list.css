@@ -1,0 +1,129 @@
+/* General container padding */
+.container {
+    padding: 20px;
+}
+
+/* Header style */
+h2 {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* Product list container with horizontal scrolling support */
+.product-list {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px 0;
+    gap: 20px;
+    scroll-snap-type: x mandatory;
+}
+
+/* Individual product item styling */
+.product-item {
+    background-color: #cde0c1;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-shrink: 0;
+    width: 250px;
+    scroll-snap-align: start;
+}
+
+/* Hover effects for product item */
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Product image styling */
+.product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* Product title styling */
+.product-item h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Product description or price styling */
+.product-item p {
+    font-size: 16px;
+    color: #444;
+}
+
+/* === Responsive Design === */
+
+/* Small phones (320px - 480px) */
+@media (max-width: 480px) {
+    .container {
+        padding: 8px;
+    }
+
+    .product-list {
+        gap: 10px;
+        padding: 5px 0;
+    }
+
+    .product-item {
+        width: 180px;
+        padding: 10px;
+    }
+
+    .product-image {
+        height: 150px;
+    }
+
+    .product-item h3 {
+        font-size: 14px;
+    }
+
+    .product-item p {
+        font-size: 13px;
+    }
+}
+
+/* Medium phones (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .container {
+        padding: 12px;
+    }
+
+    .product-list {
+        gap: 15px;
+    }
+
+    .product-item {
+        width: 200px;
+        padding: 12px;
+    }
+
+    .product-image {
+        height: 170px;
+    }
+
+    .product-item h3 {
+        font-size: 16px;
+    }
+}
+
+/* Tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 15px;
+    }
+
+    .product-item {
+        width: 220px;
+    }
+}

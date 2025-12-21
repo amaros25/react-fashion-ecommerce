@@ -1,0 +1,166 @@
+/* Header & Price */
+.product-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.product-title-header-info {
+    font-size: 1.9 rem;
+    font-weight: 900;
+    margin: 0;
+    color: #1a1a1a;
+    line-height: 1.6;
+    letter-spacing: -0.5px;
+}
+
+.product-price-rating-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.product-price-header-info {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+
+.product-rating-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.product-rating label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.product-rating input[type="radio"] {
+    display: none;
+}
+
+.star {
+    transition: color 0.2s;
+}
+
+.review-count {
+    font-size: 0.9rem;
+    color: #666;
+    margin-left: 5px;
+}
+
+.save-product-icon {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 15px;
+    /* Abstand vom Produktnamen */
+}
+
+.star-icon {
+    transition: color 0.2s ease;
+}
+
+.current-state-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    margin: 0;
+}
+
+/* Farben */
+.state-pending {
+    background: #ffe9a8;
+    color: #9a7a00;
+}
+
+.state-active {
+    background: #c8f7c5;
+    color: #1e6f1e;
+}
+
+.state-blocked {
+    background: #ffd0d0;
+    color: #9b1c1c;
+}
+
+.state-deleted {
+    background: #e0e0e0;
+    color: #555;
+}
+
+.state-unknown {
+    background: #ddd;
+    color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .product-main-content {
+        flex-direction: column;
+    }
+
+    .product-title {
+        font-size: 2rem;
+    }
+
+    .product-title-header-info {
+        font-size: 1.5rem;
+    }
+
+    .product-price-header-info {
+        font-size: 1.3rem;
+    }
+
+    .product-rating-container {
+        gap: 6px;
+    }
+
+    .star {
+        font-size: 18px;
+    }
+
+    .review-count {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-title-header-info {
+        font-size: 1.3rem;
+    }
+
+    .product-price-rating-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .product-price-header-info {
+        font-size: 1.2rem;
+    }
+
+    .star {
+        font-size: 16px;
+    }
+
+    .review-count {
+        font-size: 0.8rem;
+    }
+}

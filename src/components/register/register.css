@@ -1,0 +1,309 @@
+/* Full page layout */
+.register-page-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../../../public/images/register_background_fashion.png');
+    background-size: cover;
+    background-position: center 20%;
+    background-repeat: no-repeat;
+    position: relative;
+    min-height: calc(100vh - 160px);
+    padding: 40px 20px;
+}
+
+/* Overlay to darken background slightly */
+.register-page-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.25);
+    z-index: 1;
+}
+
+/* Centering the register container */
+.register-container {
+    position: relative;
+    z-index: 2;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 480px;
+}
+
+/* Register form styling - white card overlay */
+.register-form {
+    padding: 50px 45px;
+    border-radius: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+/* Heading (Title) */
+.register-form h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: #000000;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Labels */
+.register-form label {
+    display: block;
+    margin-top: 20px;
+    font-weight: 400;
+    font-size: 11px;
+    color: #000000;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+/* Input fields and Selects */
+.register-form input,
+.register-form select {
+    width: 100%;
+    padding: 12px 0;
+    margin-top: 5px;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #000000;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+    background-color: #f2f2f2;
+}
+
+.register-form input:focus,
+.register-form select:focus {
+    outline: none;
+    border-bottom: 2px solid #000000;
+    background-color: #f2f2f2;
+}
+
+.register-form input::placeholder {
+    color: #999999;
+}
+
+/* Role Selection Tabs */
+.role-selection {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.role-option {
+    flex: 1;
+    text-align: center;
+    padding: 15px 0;
+    cursor: pointer;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    transition: all 0.3s ease;
+}
+
+.role-option.active {
+    color: #000;
+    border-bottom: 2px solid #000;
+    font-weight: 600;
+}
+
+/* Terms Checkbox */
+.terms-checkbox {
+    margin-top: 25px;
+    margin-bottom: 20px;
+}
+
+.terms-checkbox label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #666;
+}
+
+.terms-checkbox input[type="checkbox"] {
+    width: auto;
+    margin-top: 3px;
+}
+
+.terms-checkbox a {
+    color: #000;
+    text-decoration: underline;
+}
+
+/* Submit button */
+.register-form button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 35px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 400;
+    transition: background-color 0.3s ease;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.register-form button:hover {
+    background-color: #333333;
+}
+
+.register-form button:active {
+    background-color: #000000;
+}
+
+/* Error message styling */
+.error {
+    color: #d32f2f;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 12px;
+    background-color: #ffebee;
+    padding: 12px;
+    border-radius: 0;
+    border: 1px solid #ef9a9a;
+}
+
+/* Link to login page */
+.login-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 12px;
+    color: #000000;
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.login-link span {
+    color: #000000;
+    text-decoration: underline;
+    font-weight: 400;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.login-link span:hover {
+    color: #333333;
+}
+
+/* ---------- Responsive Design ---------- */
+
+/* Tablets */
+@media (max-width: 1024px) {
+    .register-form {
+        padding: 45px 40px;
+        max-width: 450px;
+    }
+
+    .register-form h2 {
+        font-size: 1.6rem;
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+    .register-page-content {
+        padding: 30px 15px;
+    }
+
+    .register-container {
+        max-width: 100%;
+    }
+
+    .register-form {
+        padding: 40px 30px;
+    }
+
+    .register-form h2 {
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+    }
+
+    .register-form input,
+    .register-form select,
+    .register-form button {
+        padding: 12px 0;
+        font-size: 13px;
+    }
+
+    .login-link {
+        font-size: 11px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 480px) {
+    .register-page-content {
+        padding: 20px 10px;
+    }
+
+    .register-form {
+        padding: 30px 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .register-form h2 {
+        font-size: 1.3rem;
+    }
+
+    .register-form input,
+    .register-form select {
+        padding: 10px 0;
+        font-size: 13px;
+        min-height: 44px;
+        /* Touch target minimum */
+    }
+
+    .register-form button {
+        padding: 12px 0;
+        font-size: 12px;
+        min-height: 44px;
+        /* Touch target minimum */
+        margin-top: 25px;
+    }
+
+    .role-option {
+        min-height: 44px;
+        /* Touch target minimum */
+    }
+}
+
+/* Autofill styles */
+.register-form input:-webkit-autofill,
+.register-form input:-webkit-autofill:hover,
+.register-form input:-webkit-autofill:focus,
+.register-form input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #f2f2f2 inset !important;
+    box-shadow: 0 0 0 1000px #f2f2f2 inset !important;
+    -webkit-text-fill-color: #000 !important;
+    caret-color: #000 !important;
+}
+
+.register-form input:-moz-autofill {
+    box-shadow: 0 0 0 1000px #f2f2f2 inset !important;
+    -moz-text-fill-color: #000 !important;
+}

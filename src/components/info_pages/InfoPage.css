@@ -1,0 +1,101 @@
+.info-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.info-page-container {
+    flex: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.info-page-container h1 {
+    margin-bottom: 3rem;
+    font-size: 3rem;
+    color: #222;
+    text-align: center;
+    font-weight: 700;
+}
+
+.info-page-content {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+/* Sections Styling */
+.info-page-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.info-section h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.info-section p {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #555;
+}
+
+.section-image-wrapper {
+    width: 100%;
+    display: flex;
+    justify_content: center;
+    margin: 1rem 0;
+}
+
+.section-image {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.section-list {
+    list-style-type: disc;
+    padding-left: 2rem;
+}
+
+.section-list li {
+    font-size: 1.15rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .info-page-container {
+        padding: 1.5rem;
+    }
+
+    .info-page-container h1 {
+        font-size: 2.2rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-section h2 {
+        font-size: 1.6rem;
+    }
+
+    .section-image {
+        max-height: 250px;
+    }
+}

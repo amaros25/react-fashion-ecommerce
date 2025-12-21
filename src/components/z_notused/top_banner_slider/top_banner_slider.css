@@ -1,0 +1,100 @@
+/* Styling for banner image */
+.banner-image {
+  width: 100%;              /* Make image take full width of its container */
+  height: 100%;             /* Make image take full height of its container */
+  object-fit: cover;        /* Scale image to cover container without distortion */
+  border-radius: 30px;      /* Round the corners of the image */
+}
+
+/* Arrow buttons for navigation (left and right arrows) */
+.arrow {
+  position: absolute;        /* Position arrows absolutely inside a relative parent */
+  top: 50%;                  /* Vertically center arrows */
+  transform: translateY(-50%); /* Adjust position to be perfectly centered vertically */
+  font-size: 2rem;           /* Set font size for arrow icons */
+  background: rgba(255, 255, 255, 0.6); /* Semi-transparent white background */
+  border: none;              /* Remove default button border */
+  cursor: pointer;          /* Change cursor to pointer on hover */
+  padding: 10px;             /* Add padding inside arrow buttons */
+  z-index: 10;               /* Ensure arrows appear above other elements */
+  border-radius: 50%;        /* Make arrows circular */
+}
+
+/* Position of left arrow */
+.arrow.left {
+  left: 10px;                /* Position left arrow 10px from the left edge */
+}
+
+/* Position of right arrow */
+.arrow.right {
+  right: 10px;               /* Position right arrow 10px from the right edge */
+}
+
+/* Section title styling */
+.section-title {
+  margin-top: 30px;          /* Add space above section titles */
+  direction: ltr;            /* Set text direction to left-to-right */
+  font-size: 1.5rem;         /* Set font size for section title */
+  text-align: center;        /* Center-align section title */
+}
+
+/* Banner container with positioning for slider */
+.banner-wrapper {
+  position: relative;        /* Create positioning context for absolute children */
+  z-index: 0;                /* Base stacking order */
+  padding-bottom: 0px;       /* Add bottom padding to make room for overlapping content */
+}
+
+/* Banner slider container */
+.banner-slider {
+  position: relative;        /* Position relative for layering and positioning children */
+  width: 100%;               /* Make banner take full width */
+  height: 250px;             /* Fixed height for banner */
+  overflow: hidden;          /* Hide overflowing content */
+  background: #f5f5f5;       /* Light gray background color */
+  border-radius: 30px;       /* Rounded corners on banner */
+  z-index: 1;                /* Layer above base but below higher z-index elements */
+}
+
+/* Section grid container (product display grid) */
+.section-grid {
+  position: relative;        /* Normal flow but allows z-index to work */
+  margin-top: -40px;         /* Move grid up to overlap banner by 40px */
+  z-index: 2;                /* Place grid above banner */
+  display: grid;             /* Use CSS Grid layout */
+  grid-template-columns: repeat(2, 1fr); /* Create 2 equal columns */
+  gap: 20px;                 /* Space between grid items */
+  border-radius: 20px;       /* Rounded corners on grid container */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+  margin-bottom: 0px;
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+  .section-grid {
+    margin-top: -80px;         /* Move grid up to overlap banner by 40px */
+    grid-template-columns: 1fr; /* Single column for mobile */
+    gap: 10px;                 /* Space between grid items */
+    display: grid;             /* Use CSS Grid layout */
+  }
+  .best-orders {
+    display: none; /* Hide Best Orders section on mobile */
+  }
+}
+
+.section-product-grid {
+  width: 100%;
+  max-width: 95vw; /* ← neu: Begrenze auf Viewport-Breite */
+  box-sizing: border-box;
+}
+
+/* For larger screens (PC, tablets in landscape, etc.) */
+@media (min-width: 769px) {
+  .section-grid {
+    grid-template-columns: repeat(2, 1fr); /* Show 2 columns on large screens */
+  }
+
+  .best-orders {
+    display: block; /* Ensure Best Orders is visible on large screens */
+  }
+}

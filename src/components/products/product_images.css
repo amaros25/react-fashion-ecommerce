@@ -1,0 +1,73 @@
+.product-images {
+  flex: 1;
+  width: 100%;
+  padding: 0;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  /* Removing border radius for a cleaner look as per modern design */
+  margin-bottom: 15px;
+  margin-top: 5px;
+  max-height: 700px;
+  /* Increased max-height */
+  object-fit: cover;
+  /* Changed to cover for better aesthetic */
+}
+
+.thumbnail-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.thumbnail {
+  width: 80px;
+  /* Slightly larger thumbnails */
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  /* Square-ish with slight radius */
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+
+.thumbnail.active {
+  border: 1px solid #000;
+  /* Black border for active state */
+}
+
+@media (max-width: 768px) {
+  .product-images {
+    width: 100%;
+  }
+
+  .main-image {
+    max-height: 450px;
+  }
+
+  .thumbnail {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-image {
+    max-height: 350px;
+    margin-bottom: 12px;
+  }
+
+  .thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+
+  .thumbnail-row {
+    gap: 8px;
+  }
+}

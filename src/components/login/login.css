@@ -1,0 +1,254 @@
+/* Full page layout */
+
+/* Background with model image */
+.login-page-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../../../public/images/login_model_background_1764156723260.png');
+  background-size: cover;
+  background-position: center 20%;
+  background-repeat: no-repeat;
+  position: relative;
+  min-height: calc(100vh - 160px);
+  padding: 40px 20px;
+
+}
+
+/* Overlay to darken background slightly */
+.login-page-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.25);
+  z-index: 1;
+}
+
+/* Centering the login container */
+.login-container {
+  position: relative;
+  z-index: 2;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Login form styling - white card overlay */
+.login-form {
+
+
+  padding: 50px 45px;
+  border-radius: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Heading (Title) */
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: #000000;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Labels */
+.login-form label {
+  display: block;
+  margin-top: 20px;
+  font-weight: 400;
+  font-size: 11px;
+  color: #000000;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* Input fields */
+.login-form input {
+
+  width: 100%;
+  padding: 12px 0;
+  margin-top: 5px;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid #000000;
+  box-sizing: border-box;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+
+  background-color: #f2f2f2;
+
+}
+
+.login-form input:focus {
+  outline: none;
+  border-bottom: 2px solid #000000;
+  background-color: #f2f2f2;
+  ;
+}
+
+.login-form input::placeholder {
+  color: #999999;
+}
+
+/* Submit button */
+.login-form button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 35px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 400;
+  transition: background-color 0.3s ease;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.login-form button:hover {
+  background-color: #333333;
+}
+
+.login-form button:active {
+  background-color: #000000;
+}
+
+/* Error message styling */
+.error {
+  color: #d32f2f;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 12px;
+  background-color: #ffebee;
+  padding: 12px;
+  border-radius: 0;
+  border: 1px solid #ef9a9a;
+}
+
+/* Link to registration page */
+.register-link {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 12px;
+  color: #000000;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.register-link span {
+  color: #000000;
+  text-decoration: underline;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.register-link span:hover {
+  color: #333333;
+}
+
+
+/* ---------- Responsive Design ---------- */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .login-form {
+    padding: 45px 40px;
+    max-width: 450px;
+  }
+
+  .login-form h2 {
+    font-size: 1.6rem;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  .login-page-content {
+    padding: 30px 15px;
+  }
+
+  .login-container {
+    max-width: 100%;
+  }
+
+  .login-form {
+    padding: 40px 30px;
+  }
+
+  .login-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+  }
+
+  .login-form input,
+  .login-form button {
+    padding: 12px 0;
+    font-size: 13px;
+  }
+
+  .register-link {
+    font-size: 11px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 480px) {
+  .login-page-content {
+    padding: 20px 10px;
+  }
+
+  .login-form {
+    padding: 30px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .login-form h2 {
+    font-size: 1.3rem;
+  }
+
+  .login-form input,
+  .login-form button {
+    padding: 10px 0;
+    font-size: 13px;
+  }
+}
+
+
+.login-form input {
+  background-color: #ECE9E2;
+}
+
+.login-form input:focus {
+  background-color: #ECE9E2;
+}
+
+.login-form input:-webkit-autofill,
+.login-form input:-webkit-autofill:hover,
+.login-form input:-webkit-autofill:focus,
+.login-form input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #f2f2f2 inset !important;
+  box-shadow: 0 0 0 1000px #ECE9E2 inset !important;
+  -webkit-text-fill-color: #000 !important;
+  caret-color: #000 !important;
+}
+
+.login-form input:-moz-autofill {
+  box-shadow: 0 0 0 1000px #ECE9E2 inset !important;
+  -moz-text-fill-color: #000 !important;
+}
