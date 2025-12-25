@@ -1,0 +1,335 @@
+﻿
+> webshop_react@0.1.0 test
+> jest src/components/new_product/test/add_product.test.js
+
+node.exe : [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: 
+`npm i baseline-browser-mapping@latest -D`
+In Zeile:1 Zeichen:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Users\Astra\AppData\Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([baseline-brows...ping@latest -D`:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+FAIL src/components/new_product/test/add_product.test.js
+  AddProduct Component
+    ├ù renders all main form sections (65 ms)
+    ÔêÜ shows validation error when submitting empty form (58 ms)
+    ÔêÜ validates product name (34 ms)
+    ÔêÜ successfully submits valid form (325 ms)
+    ÔêÜ handles variant addition and removal (34 ms)
+
+  ÔùÅ AddProduct Component ÔÇ║ renders all main form sections
+
+    TestingLibraryElementError: Found multiple elements with the text: post_product
+
+    Here are the matching elements:
+
+    Ignored nodes: comments, script, style
+    [36m<h2>[39m
+      [0mpost_product[0m
+    [36m</h2>[39m
+
+    Ignored nodes: comments, script, style
+    [36m<button[39m
+      [33mclass[39m=[32m"submit-btn"[39m
+      [33mtype[39m=[32m"submit"[39m
+    [36m>[39m
+      [0mpost_product[0m
+    [36m</button>[39m
+
+    (If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"add-product-container"[39m
+          [33mdir[39m=[32m"ltr"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"add-product-header"[39m
+          [36m>[39m
+            [36m<h2>[39m
+              [0mpost_product[0m
+            [36m</h2>[39m
+            [36m<p>[39m
+              [0mcreate_new_listing[0m
+            [36m</p>[39m
+          [36m</div>[39m
+          [36m<form[39m
+            [33mclass[39m=[32m"add-product-form"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"form-section"[39m
+            [36m>[39m
+              [36m<h3>[39m
+                [0mproduct_images[0m
+              [36m</h3>[39m
+              [36m<div[39m
+                [33mdata-testid[39m=[32m"mock-image-upload"[39m
+              [36m>[39m
+                [36m<button[39m
+                  [33mtype[39m=[32m"button"[39m
+                [36m>[39m
+                  [0mSimulate Image Add[0m
+                [36m</button>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"form-section"[39m
+            [36m>[39m
+              [36m<h3>[39m
+                [0mbasic_information[0m
+              [36m</h3>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"form-row"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"form-group"[39m
+                [36m>[39m
+                  [36m<label>[39m
+                    [0mproduct_name[0m
+                  [36m</label>[39m
+                  [36m<input[39m
+                    [33mname[39m=[32m"name"[39m
+                    [33mplaceholder[39m=[32m"example_product_name"[39m
+                    [33mtype[39m=[32m"text"[39m
+                    [33mvalue[39m=[32m""[39m
+                  [36m/>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"form-group"[39m
+                [36m>[39m
+                  [36m<label>[39m
+                    [0mproduct_price[0m
+                  [36m</label>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"price-input-wrapper"[39m
+                  [36m>[39m
+                    [36m<input[39m
+                      [33mname[39m=[32m"price"[39m
+                      [33mplaceholder[39m=[32m"0.000"[39m
+                      [33mtype[39m=[32m"number"[39m
+                      [33mvalue[39m=[32m""[39m
+                    [36m/>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"currency-symbol"[39m
+                    [36m>[39m
+                      [0mprice_suf[0m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"form-group"[39m
+              [36m>[39m
+                [36m<label>[39m
+                  [0mproduct_shipement_price[0m
+                [36m</label>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"price-input-wrapper"[39m
+                [36m>[39m
+                  [36m<input[39m
+                    [33mname[39m=[32m"shipment_price"[39m
+                    [33mplaceholder[39m=[32m"0.000"[39m
+                    [33mtype[39m=[32m"number"[39m
+                    [33mvalue[39m=[32m""[39m
+                  [36m/>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"currency-symbol"[39m
+                  [36m>[39m
+                    [0mprice_suf[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"form-group"[39m
+              [36m>[39m
+                [36m<label>[39m
+                  [0mproduct_description[0m
+                [36m</label>[39m
+                [36m<textarea[39m
+                  [33mname[39m=[32m"description"[39m
+                  [33mplaceholder[39m=[32m"describe_your_product"[39m
+                  [33mrows[39m=[32m"4"[39m
+                [36m/>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"form-section"[39m
+            [36m>[39m
+              [36m<h3>[39m
+                [0mcategory[0m
+              [36m</h3>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"form-row"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"form-group"[39m
+                [36m>[39m
+                  [36m<select[39m
+                    [33mname[39m=[32m"category"[39m
+                  [36m>[39m
+                    [36m<option[39m
+                      [33mvalue[39m=[32m""[39m
+                    [36m>[39m
+                      [0mselect_category[0m
+                    [36m</option>[39m
+                    [36m<option[39m
+                      [33mvalue[39m=[32m"0"[39m
+                    [36m>[39m
+                      [0mmain-categories.womens[0m
+                    [36m</option>[39m
+                    [36m<option[39m
+                      [33mvalue[39m=[32m"1"[39m
+                    [36m>[39m
+                      [0mmain-categories.mens[0m
+                    [36m</option>[39m
+                    [36m<option[39m
+                      [33mvalue[39m=[32m"2"[39m
+                    [36m>[39m
+                      [0mmain-categories.kids[0m
+                    [36m</option>[39m
+                  [36m</select>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"form-section"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"section-header"[39m
+              [36m>[39m
+                [36m<h3>[39m
+                  [0mvariants[0m
+                [36m</h3>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"checkbox-group"[39m
+                [36m>[39m
+                  [36m<label>[39m
+                    [36m<input[39m
+                      [33mtype[39m=[32m"checkbox"[39m
+                    [36m/>[39m
+                    [0mStandard Size[0m
+                  [36m</label>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"variants-list"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"variant-row"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"form-group size-input"[39m
+                  [36m>[39m
+                    [36m<label>[39m
+                      [0msize_exp[0m
+                    [36m</label>[39m
+                    [36m<input[39m
+                      [33mplaceholder[39m=[32m"e.g. M, 38"[39m
+                      [33mtype[39m=[32m"text"[39m
+                      [33mvalue[39m=[32m""[39m
+                    [36m/>[39m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"form-group stock-input"[39m
+                  [36m>[39m
+                    [36m<label>[39m
+                      [0mStock[0m
+                    [36m</label>[39m
+                    [36m<input[39m
+                      [33mmin[39m=[32m"1"[39m
+                      [33mplaceholder[39m=[32m"1"[39m
+                      [33mtype[39m=[32m"number"[39m
+                      [33mvalue[39m=[32m"0"[39m
+                    [36m/>[39m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"form-group color-input"[39m
+                  [36m>[39m
+                    [36m<label>[39m
+                      [0mproductColor[0m
+                    [36m</label>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"color-picker-wrapper"[39m
+                    [36m>[39m
+                      [36m<input[39m
+                        [33mtype[39m=[32m"color"[39m
+                        [33mvalue[39m=[32m"#000000"[39m
+                      [36m/>[39m
+                      [36m<span[39m
+                        [33mclass[39m=[32m"color-code"[39m
+                      [36m>[39m
+                        [0m#000000[0m
+                      [36m</span>[39m
+                    [36m</div>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"add-variant-btn"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"currentColor"[39m
+                  [33mheight[39m=[32m"1em"[39m
+                  [33mstroke[39m=[32m"currentColor"[39m
+                  [33mstroke-width[39m=[32m"0"[39m
+                  [33mviewBox[39m=[32m"0 0 448 512"[39m
+                  [33mwidth[39m=[32m"1em"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 
+32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 
+32-32v-32c0-17.67-14.33-32-32-32z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+                [0m [0m
+                [0madd_another_size[0m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"submit-button-wrapper"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"submit-btn"[39m
+                [33mtype[39m=[32m"submit"[39m
+              [36m>[39m
+                [0mpost_product[0m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</form>[39m
+          [36m<div[39m
+            [33mdata-testid[39m=[32m"mock-upload-status"[39m
+          [36m/>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+    [0m [90m 51 |[39m     test([32m'renders all main form sections'[39m[33m,[39m () [33m=>[39m {
+     [90m 52 |[39m         render([33m<[39m[33mAddProduct[39m [33m/[39m[33m>[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 53 |[39m         
+expect(screen[33m.[39mgetByText([32m'post_product'[39m))[33m.[39mtoBeInTheDocument()[33m;[39m
+     [90m    |[39m                       [31m[1m^[22m[39m
+     [90m 54 |[39m         expect(screen[33m.[39mgetByText([32m'basic_information'[39m))[33m.[39mtoBeInTheDocument()[33m;[39m
+     [90m 55 |[39m         expect(screen[33m.[39mgetByText([32m'category'[39m))[33m.[39mtoBeInTheDocument()[33m;[39m
+     [90m 56 |[39m         expect(screen[33m.[39mgetByText([32m'variants'[39m))[33m.[39mtoBeInTheDocument()[33m;[39m[0m
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at getElementError (node_modules/@testing-library/dom/dist/query-helpers.js:20:35)
+      at getMultipleElementsFoundError (node_modules/@testing-library/dom/dist/query-helpers.js:23:10)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+      at getByText (node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at Object.<anonymous> (src/components/new_product/test/add_product.test.js:53:23)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 4 passed, 5 total
+Snapshots:   0 total
+Time:        2.074 s, estimated 3 s
+Ran all test suites matching /src\\components\\new_product\\test\\add_product.test.js/i.

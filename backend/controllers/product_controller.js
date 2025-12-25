@@ -276,25 +276,28 @@ exports.createProduct = async (req, res) => {
 
 // Add a new Review
 exports.addReview = async (req, res) => {
+  let DELIVERED = 3;
+  let RETURN_RECEIVED = 24;
+  let PICKED_UP = 41;
   try {
     const productId = req.params.id;
     const { userId, rating, comment } = req.body;
     const hasBought = await Order.findOne({
       userId,
       "items.productId": productId,
-      "status.update": "delivered"
+      "status.update": DELIVERED || RETURN_RECEIVED || PICKED_UP
     });
 
     if (!hasBought) {
       return res.status(403).json({
-        message: "you can only rate products you have received."
+        message: "rate_only_received_error"
       });
     }
     const product = await Product.findById(productId);
     const exists = product.reviews.find(r => r.user.toString() === userId);
 
     if (exists) {
-      return res.status(400).json({ message: "you have already rated this product" });
+      return res.status(400).json({ message: "review_already_exists_error" });
     }
     product.reviews.push({
       user: userId,
@@ -304,11 +307,11 @@ exports.addReview = async (req, res) => {
 
     await product.save();
 
-    res.json({ message: "success", reviews: product.reviews });
+    res.json({ message: "success_add_review", reviews: product.reviews });
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "failed to add review" });
+    res.status(500).json({ message: "failed_to_add_review_error" });
   }
 };
 

@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 export const useProductReview = (productId, userId, onReviewAdded) => {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
     const [hover, setHover] = useState(0);
+    const { t } = useTranslation();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,15 +23,15 @@ export const useProductReview = (productId, userId, onReviewAdded) => {
             });
             const data = await res.json();
             if (res.ok) {
-                toast.success("Review added successfully");
+                toast.success(t("success_add_review"));
                 setComment('');
                 setRating(0);
                 if (onReviewAdded) onReviewAdded();
             } else {
-                toast.error(data.message);
+                toast.error(t("add_review_erros." + data.message));
             }
         } catch (err) {
-            toast.error("Failed to add review");
+            toast.error(t("failed_to_add_review_error"));
         }
     };
 

@@ -67,7 +67,6 @@ const seedUsers = async () => {
                 phone: u.phone,
                 address: u.address,
                 active: true,
-                isLoggedIn: false
             });
 
             await newUser.save();

@@ -82,58 +82,58 @@ function AddProduct() {
     e.preventDefault();
     setError("");
     if (!imageFiles.length) {
-      setError(t("add_product.error.productImagesRequired"));
-      toast.error(t("add_product.error.productImagesRequired"));
+      setError(t("add_product_error.productImagesRequired"));
+      toast.error(t("add_product_error.productImagesRequired"));
       return;
     }
 
     if (!formData.name) {
-      setError(t("add_product.error.productNameRequired"));
-      toast.error(t("add_product.error.productNameRequired"));
+      setError(t("add_product_error.productNameRequired"));
+      toast.error(t("add_product_error.productNameRequired"));
       return;
     }
 
     if (!formData.price) {
-      setError(t("add_product.error.productPriceRequired"));
-      toast.error(t("add_product.error.productPriceRequired"));
+      setError(t("add_product_error.productPriceRequired"));
+      toast.error(t("add_product_error.productPriceRequired"));
       return;
     }
     if (!formData.shipment_price) {
-      setError(t("add_product.error.productShipmentPriceRequired"));
-      toast.error(t("add_product.error.productShipmentPriceRequired"));
+      setError(t("add_product_error.productShipmentPriceRequired"));
+      toast.error(t("add_product_error.productShipmentPriceRequired"));
       return;
     }
     if (!formData.description) {
-      setError(t("add_product.error.productDescriptionRequired"));
-      toast.error(t("add_product.error.productDescriptionRequired"));
+      setError(t("add_product_error.productDescriptionRequired"));
+      toast.error(t("add_product_error.productDescriptionRequired"));
       return;
     }
     if (formData.category === "") {
-      setError(t("add_product.error.productCategoryRequired"));
-      toast.error(t("add_product.error.productCategoryRequired"));
+      setError(t("add_product_error.productCategoryRequired"));
+      toast.error(t("add_product_error.productCategoryRequired"));
       return;
     }
     if (formData.subcategory === "") {
-      setError(t("add_product.error.productSubcategoryRequired"));
-      toast.error(t("add_product.error.productSubcategoryRequired"));
+      setError(t("add_product_error.productSubcategoryRequired"));
+      toast.error(t("add_product_error.productSubcategoryRequired"));
       return;
     }
 
     if (formData.sizes.length === 0) {
-      setError(t("add_product.error.productSizesRequired"));
-      toast.error(t("add_product.error.productSizesRequired"));
+      setError(t("add_product_error.productSizesRequired"));
+      toast.error(t("add_product_error.productSizesRequired"));
       return;
     }
 
     for (const s of formData.sizes) {
       if (!s.size || s.size.trim() === "") {
-        setError(t("add_product.error.productSizeRequired"));
-        toast.error(t("add_product.error.productSizeRequired"));
+        setError(t("add_product_error.productSizeRequired"));
+        toast.error(t("add_product_error.productSizeRequired"));
         return;
       }
       if (s.stock === 0) {
-        setError(t("add_product.error.productStockRequired"));
-        toast.error(t("add_product.error.productStockRequired"));
+        setError(t("add_product_error.productStockRequired"));
+        toast.error(t("add_product_error.productStockRequired"));
         return;
       }
     }

@@ -29,7 +29,6 @@ const sellerSchema = new mongoose.Schema({
   password: { type: String, required: true },
   reviews: [sellerReviewSchema],
   active: { type: Boolean, default: true },
-  isLoggedIn: { type: Boolean, default: false },
   lastOnline: { type: Date, default: Date.now },
 });
 

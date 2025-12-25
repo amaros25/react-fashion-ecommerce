@@ -12,7 +12,6 @@ export const useSellerData = (sellerId) => {
             setLoading(false);
             return;
         }
-
         setLoading(true);
         fetch(`${apiUrl}/sellers/${sellerId}`)
             .then((res) => {

@@ -93,6 +93,7 @@
     },
     "sizes": "Sizes",
     "product_page": {
+        "one_size": "One Size",
         "rating": "Rating",
         "size": "Size",
         "color": "Color",
@@ -568,15 +569,21 @@
         "return_not_received": "Return Not Received"
     },
     "add_product_error": {
-        "productImagesRequired": "يرجى إضافة صور المنتج",
-        "productNameRequired": "اسم المنتج مطلوب",
-        "productPriceRequired": "يجب تحديد سعر المنتج",
-        "productShipmentPriceRequired": "يجب تحديد سعر شحن المنتج",
-        "productDescriptionRequired": "يرجى إضافة وصف للمنتج",
-        "productCategoryRequired": "فئة المنتج مطلوبة",
-        "productSubcategoryRequired": "الفئة الفرعية للمنتج مطلوبة",
-        "productSizesRequired": "يرجى تحديد مقاسات المنتج",
-        "productSizeRequired": "حجم المنتج مطلوب",
-        "productStockRequired": "مخزون المنتج مطلوب"
-    }
+        "productImagesRequired": "Product images are required",
+        "productNameRequired": "Product name is required",
+        "productPriceRequired": "Product price is required",
+        "productShipmentPriceRequired": "Product shipment price is required",
+        "productDescriptionRequired": "Product description is required",
+        "productCategoryRequired": "Product category is required",
+        "productSubcategoryRequired": "Product subcategory is required",
+        "productSizesRequired": "Product sizes are required",
+        "productSizeRequired": "Product size is required",
+        "productStockRequired": "Product stock is required"
+    },
+    "add_review_erros": {
+        "rate_only_received_error": "you can only rate products you have received.",
+        "review_already_exists_error": "you have already rated this product",
+        "failed_to_add_review_error": "failed to add review"
+    },
+    "success_add_review": "Review added successfully"
 }

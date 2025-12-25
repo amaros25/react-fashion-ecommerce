@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema({
     }
   ],
   active: { type: Boolean, default: true },
-  isLoggedIn: { type: Boolean, default: false },
   lastOnline: { type: Date, default: Date.now },
 }, { timestamps: true });
 

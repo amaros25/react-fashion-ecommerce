@@ -21,20 +21,6 @@ function ProfileSeller() {
   const [refreshOrders, setRefreshOrders] = useState(0);
 
 
-  const handleLogout = () => {
-    // localStorage.clear();
-    // setIsLoggedIn(false);
-    // navigate("/");
-  };
-  {/* {isLoggedIn && (
-  <img
-    src="/icons/logout_icon.svg"
-    style={{ width: "24px", height: "24px" }}
-    className="nav-icon"
-    onClick={handleLogout}
-  />
-)} */}
-
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       // 1. Fetch current status first

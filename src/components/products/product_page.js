@@ -209,7 +209,7 @@ function ProductPage() {
                     onClick={() => setSelectedSize(sizeOption)}
                     disabled={!isSizeAvailable(sizeOption)}
                   >
-                    {sizeOption}
+                    {sizeOption == "OS" ? t("product_page.one_size") : sizeOption}
                   </button>
                 ))}
               </div>

@@ -60,7 +60,6 @@ const seedSellers = async () => {
                 address: s.address,
                 image: s.image,
                 active: true,
-                isLoggedIn: false,
                 reviews: []
             });
 

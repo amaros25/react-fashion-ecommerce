@@ -93,6 +93,7 @@
   },
   "sizes": "Tailles",
   "product_page": {
+    "one_size": "Taille Standard",
     "rating": "Note",
     "size": "Taille",
     "color": "Couleur",
@@ -578,5 +579,11 @@
     "productSizesRequired": "Veuillez sélectionner des tailles",
     "productSizeRequired": "Veuillez entrer une taille",
     "productStockRequired": "Veuillez entrer le stock"
-  }
+  },
+  "add_review_erros": {
+    "rate_only_received_error": "Vous pouvez seulement évaluer les produits que vous avez reçus.",
+    "review_already_exists_error": "Vous avez déjà évalué ce produit",
+    "failed_to_add_review_error": "Échec de l'ajout de la critique"
+  },
+  "success_add_review": "Critique ajoutée avec succès"
 }

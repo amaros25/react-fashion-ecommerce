@@ -7,4 +7,5 @@ module.exports = {
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest', // Transpiliert JS/JSX-Dateien mit Babel
   },
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
 };

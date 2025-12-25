@@ -21,7 +21,6 @@ import SavedProducts from './components/saved_products/saved_products.js';
 import Agb from './components/info_pages/agb.js';
 import DataProtection from './components/info_pages/data_protection.js';
 //import SeedProducts from './components/new_product/seed_products.js';
-import Learn from './components/learn/learn.js'
 function App() {
 
   return (

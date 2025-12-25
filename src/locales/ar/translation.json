@@ -93,6 +93,7 @@
   },
   "sizes": "المقاسات",
   "product_page": {
+    "one_size": "حجم واحد",
     "rating": "التقييم",
     "size": "المقاس",
     "color": "اللون",
@@ -578,5 +579,11 @@
     "productSizesRequired": "يرجى تحديد مقاسات المنتج",
     "productSizeRequired": "حجم المنتج مطلوب",
     "productStockRequired": "مخزون المنتج مطلوب"
-  }
+  },
+  "add_review_erros": {
+    "rate_only_received_error": "يمكنك تقييم المنتجات التي تم استلامها فقط.",
+    "review_already_exists_error": "يمكنك تقييم المنتج مرة واحدة فقط.",
+    "failed_to_add_review_error": "فشل إضافة التقييم"
+  },
+  "success_add_review": "تم إضافة التقييم بنجاح"
 }
