@@ -141,15 +141,33 @@ function Header() {
     i18n.changeLanguage(lang);
   };
 
+  // Local state for search input to decouple typing from fetching
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
+  const lastSubmitTimeRef = useRef(0); // To track last submission time for throttling
+
+  // Sync local state if global searchTerm changes externally (optional but good for consistency)
+  useEffect(() => {
+    setLocalSearchTerm(searchTerm);
+  }, [searchTerm]);
+
   const handleSearchSubmit = (e) => {
     e.preventDefault();
+
+    const now = Date.now();
+    // Spam protection: prevent requests if less than 1 second has passed
+    if (now - lastSubmitTimeRef.current < 1000) {
+      console.log("Search ignored to prevent spam (throttling).");
+      return;
+    }
+    lastSubmitTimeRef.current = now;
+
     if (!activePath.startsWith("/home")) {
       navigate("/home");
       setTimeout(() => {
-        handleSearch(searchTerm);
+        handleSearch(localSearchTerm);
       }, 100);
     } else {
-      handleSearch(searchTerm);
+      handleSearch(localSearchTerm);
     }
   };
 
@@ -206,16 +224,7 @@ function Header() {
               activePath === "/login"
                 ? <FaUser className='nav-icon-user-header' onClick={handleProfileClick} />
                 : <FaRegUser className='nav-icon-user-header' onClick={handleProfileClick} />
-
-
             )}
-
-            {/* <Link to="/learn" onClick={(e) => handleClickOnPage(e, "/learn")}>
-              {activePath === "/learn"
-                ? <BsFillCupHotFill className='nav-icon-header' />
-                : <BsFillCupHotFill className='nav-icon-header' />
-              }
-            </Link> */}
 
             <select
               onChange={(e) => changeLanguage(e.target.value)}
@@ -234,8 +243,8 @@ function Header() {
             <input
               type="text"
               placeholder={t("search_product")}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={localSearchTerm}
+              onChange={(e) => setLocalSearchTerm(e.target.value)}
             />
             <button type="submit">{t("search")}</button>
           </form>

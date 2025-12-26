@@ -148,7 +148,21 @@ function ProductCard({ product, onProductRemoved }) {
             </div>
             <p className="product-color-desc">{t("sizes")}: {product.sizes.map(sizeObj => sizeObj.size).join(", ")} </p>
             <div className="product-price-row">
-              <span className="product-price"> {product.price} {t("price_suf")}</span>
+              {product.discountedPercent > 0 ? (
+                <>
+                  <span className="product-price-original">
+                    {product.price} {t("price_suf")}
+                  </span>
+                  <span className="product-price discounted">
+                    {(product.price * (1 - product.discountedPercent / 100)).toFixed(0)} {t("price_suf")}
+                  </span>
+                  <span className="discount-badge">
+                    -{product.discountedPercent}%
+                  </span>
+                </>
+              ) : (
+                <span className="product-price"> {product.price} {t("price_suf")}</span>
+              )}
             </div>
           </div>
         </Link>

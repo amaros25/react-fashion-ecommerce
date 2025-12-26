@@ -188,15 +188,37 @@
 }
 
 .product-card-container .product-price {
-    font-size: 17px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111;
+    /* Default price black */
+}
+
+.product-card-container .product-price.discounted {
     color: #d0021b;
+    /* Sale price red */
+    font-weight: 700;
+    font-size: 16px;
 }
 
 .product-price-original {
-    font-size: 14px;
+    font-size: 13px;
     text-decoration: line-through;
-    color: #d0021b;
+    color: #999;
+    margin-right: 4px;
+}
+
+.discount-badge {
+    background-color: #d0021b;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 0;
+    /* Boxy look for Zara style */
+    margin-left: auto;
+    /* Push to right */
+    letter-spacing: 0.5px;
 }
 
 /* Icon Styles - Both at Bottom */
