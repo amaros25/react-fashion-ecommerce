@@ -585,5 +585,10 @@
     "review_already_exists_error": "يمكنك تقييم المنتج مرة واحدة فقط.",
     "failed_to_add_review_error": "فشل إضافة التقييم"
   },
-  "success_add_review": "تم إضافة التقييم بنجاح"
+  "success_add_review": "تم إضافة التقييم بنجاح",
+  "home_error": {
+    "fetchTimeout": "خطأ: لا يمكن تحميل البيانات.",
+    "noProducts": "لا يوجد منتجات",
+    "error_while_reading_data": "خطأ: لا يمكن تحميل البيانات."
+  }
 }

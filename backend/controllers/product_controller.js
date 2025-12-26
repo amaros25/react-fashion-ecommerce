@@ -25,14 +25,7 @@ exports.getNewProducts = async (req, res) => {
     const sortBy = req.query.sort || 'newest';
     const skip = (page - 1) * limit;
 
-    console.log("page", page);
-    console.log("limit", limit);
-    console.log("category", category);
-    console.log("subcategory", subcategory);
-    console.log("search", search);
-    console.log("not", not);
-    console.log("sortBy", sortBy);
-    console.log("skip", skip);
+
     // Filter erstellen
     const match = {};
 
@@ -122,7 +115,8 @@ exports.getNewProducts = async (req, res) => {
     // Total count für Pagination
     const total = await Product.countDocuments(match);
     const totalAllProducts = await Product.countDocuments();
-
+    console.log("total", total);
+    console.log("totalAllProducts", totalAllProducts);
     res.json({
       products: new_products,
       page,

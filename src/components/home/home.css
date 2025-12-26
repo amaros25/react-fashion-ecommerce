@@ -35,6 +35,12 @@
     user-select: none;
 }
 
+.error-message {
+    color: red;
+    font-size: 1.2em;
+    text-align: center;
+    margin-top: 20px;
+}
 
 /* === Responsive Design === */
 

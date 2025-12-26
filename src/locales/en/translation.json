@@ -585,5 +585,10 @@
         "review_already_exists_error": "you have already rated this product",
         "failed_to_add_review_error": "failed to add review"
     },
-    "success_add_review": "Review added successfully"
+    "success_add_review": "Review added successfully",
+    "home_error": {
+        "fetchTimeout": "Error: Data could not be loaded.",
+        "noProducts": "No products found",
+        "error_while_reading_data": "Error: Data could not be loaded."
+    }
 }

@@ -585,5 +585,10 @@
     "review_already_exists_error": "Vous avez déjà évalué ce produit",
     "failed_to_add_review_error": "Échec de l'ajout de la critique"
   },
-  "success_add_review": "Critique ajoutée avec succès"
+  "success_add_review": "Critique ajoutée avec succès",
+  "home_error": {
+    "fetchTimeout": "Erreur: Les données n'ont pas pu être chargées.",
+    "noProducts": "Aucun produit trouvé",
+    "error_while_reading_data": "Erreur: Les données n'ont pas pu être chargées."
+  }
 }
