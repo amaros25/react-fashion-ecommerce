@@ -33,6 +33,7 @@ export const useHomeProducts = (page, limit, urlCategory, urlSubcategory, search
             console.log("CACHE HIT: Using cached products, no fetch.");
             setLatestProducts(cachedHomeProducts);
             setTotalPages(cachedTotalPages);
+            setReadingDataDone(true);
             return;
         }
         console.log("CACHE MISS: Fetching new data...");
