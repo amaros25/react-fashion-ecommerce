@@ -14,6 +14,7 @@ import { FaRegUser } from "react-icons/fa6";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { BsFillCupHotFill } from "react-icons/bs";
+import { categoryKeys, subCategories } from '../utils/const/category';
 
 function Header() {
 
@@ -37,15 +38,7 @@ function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(null);
 
-  const categoryKeys = [
-    "womens", "mens", "kids"
-  ];
 
-  const subCategories = {
-    womens: ["all-women", "clothes", "shoes", "bags", "accessories", "beauty", "other-women"],
-    mens: ["all-men", "clothes", "shoes", "accessories", "other-mens"],
-    kids: ["all-kids", "girls-clothing", "boys-clothing", "baby-clothing", "other-kids"]
-  };
 
   const handleCategoryClick = (categoryKey) => {
     console.log("categoryKey: ", categoryKey);
@@ -62,8 +55,8 @@ function Header() {
       return;
     }
     setSelectedCategory(categoryKey);
-    const firstSub = subCategories[categoryKey][0];
-    navigate(`/home/${categoryKey}/${firstSub}`);
+    setSelectedSubCategory("all");
+    navigate(`/home/${categoryKey}/all`);
   };
 
   const handleHomeClick = () => {
@@ -109,10 +102,12 @@ function Header() {
         setSelectedSubCategory(subcategoryFromUrl);
       } else {
         // If no valid subcategory in URL, set to first one
-        setSelectedSubCategory(subCategories[selectedCategory][0]);
+        console.log("subcategoryFromUrl: ", subcategoryFromUrl);
+        console.log("subCategories[selectedCategory][0]: ", subCategories[selectedCategory][0]);
+        setSelectedSubCategory("all");
       }
     } else {
-      setSelectedSubCategory("");
+      setSelectedSubCategory("all");
     }
   }, [selectedCategory, activePath]);
 
@@ -299,23 +294,25 @@ function Header() {
 
           <div className="submenu-container-header">
             <ul className="submenu-list-header">
+              <li
+                className={`submenu-item-header ${selectedSubCategory === "all" ? "active" : ""}`}
+                onClick={() => setSelectedSubCategory("all")}
+              >
+                <Link to={`/home/${selectedCategory}/all`}>
+                  {t(`all-${selectedCategory}`)}
+                </Link>
+              </li>
               {subCategories[selectedCategory].map((sub, index) => {
-
                 return (
-
                   <li key={index}
                     className={`submenu-item-header ${selectedSubCategory === sub ? "active" : ""}`}
-                    onClick={() => setSelectedSubCategory(sub)}
-
-                  >
+                    onClick={() => setSelectedSubCategory(sub)}>
                     <Link to={`/home/${selectedCategory}/${sub}`}>
                       {t(sub)}
                     </Link>
                   </li>
                 );
-              }
-
-              )}
+              })}
             </ul>
           </div>
         )}

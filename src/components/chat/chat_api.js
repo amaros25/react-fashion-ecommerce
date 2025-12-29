@@ -121,3 +121,14 @@ export const markMessagesAsRead = async (chatId) => {
     throw err;
   }
 };
+
+export const fetchOrderByNumber = async (orderNumber) => {
+  try {
+    const res = await fetch(`${apiUrl}/orders/number/${orderNumber}`);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (err) {
+    console.error("Error fetching order:", err);
+    return null;
+  }
+};

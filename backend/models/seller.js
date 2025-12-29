@@ -30,6 +30,8 @@ const sellerSchema = new mongoose.Schema({
   reviews: [sellerReviewSchema],
   active: { type: Boolean, default: true },
   lastOnline: { type: Date, default: Date.now },
+  passwordResetToken: { type: String },
+  passwordResetExpires: { type: Date },
 });
 
 module.exports = mongoose.model('Seller', sellerSchema);

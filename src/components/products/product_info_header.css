@@ -84,6 +84,38 @@
     margin: 0;
 }
 
+.product-badges {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.product-number-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    background: #fff;
+    color: #1a1a1a;
+    border: 1px solid #d4d4d4;
+}
+
+.product-price-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.product-price-strikethrough {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #999;
+    text-decoration: line-through;
+}
+
+
 /* Farben */
 .state-pending {
     background: #ffe9a8;

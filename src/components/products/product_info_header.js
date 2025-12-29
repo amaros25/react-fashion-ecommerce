@@ -87,12 +87,28 @@ function ProductInfoHeader({ product, userId }) {
                     </div>
 
                 </div>
-                <span className={`current-state-badge ${getStateClass(product.states?.[product.states.length - 1]?.state)}`}>
-                    {getStateLabel(product.states?.[product.states.length - 1]?.state)}
-                </span>
+                <div className="product-badges">
+                    <span className={`current-state-badge ${getStateClass(product.states?.[product.states.length - 1]?.state)}`}>
+                        {getStateLabel(product.states?.[product.states.length - 1]?.state)}
+                    </span>
+                    <span className="product-number-badge">
+                        {product.productNumber}
+                    </span>
+                </div>
             </div>
             <div className="product-price-rating-row">
-                <span className="product-price-header-info">{product.price} {t("price_suf")}</span>
+                <div className="product-price-container">
+                    {product.discountedPercent > 0 ? (
+                        <>
+                            <span className="product-price-strikethrough">{product.price} {t("price_suf")}</span>
+                            <span className="product-price-header-info">
+                                {(product.price * (1 - product.discountedPercent / 100)).toFixed(0)} {t("price_suf")}
+                            </span>
+                        </>
+                    ) : (
+                        <span className="product-price-header-info">{product.price} {t("price_suf")}</span>
+                    )}
+                </div>
                 <div className="product-rating-container">
                     <div className="product-rating">
                         {[1, 2, 3, 4, 5].map((value) => {

@@ -9,24 +9,26 @@ import './home.css';
 import '../products/new_product_list.css';
 import { categoryKeys, subCategories } from '../utils/const/category';
 import LoadingSpinner from '../loading/loading_spinner';
+import { debounce } from 'lodash';
 
 const Home = () => {
   const { t, i18n } = useTranslation();
   const { category, subcategory } = useParams();
+  console.log("category: ", category);
+  console.log("subcategory: ", subcategory);
   const { searchTerm, sortBy } = useContext(FilterContext);
   const urlCategory = categoryKeys.includes(category) ? categoryKeys.indexOf(category) : null;
-  const urlSubcategory = category && subcategory && subCategories[category]
+  const urlSubcategory = category && subcategory && subcategory !== "all" && subCategories[category]
     ? subCategories[category].indexOf(subcategory)
     : null;
+
+  console.log("urlCategory: ", urlCategory);
+  console.log("urlSubcategory: ", urlSubcategory);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(24);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState(null);
 
-  console.log("*** Home ***");
-  console.log("=> category:", category, "=> subcategory:", subcategory);
-  console.log("=> searchTerm:", searchTerm, "=> sortBy:", sortBy);
-  console.log("=> urlCategory:", urlCategory, "=> urlSubcategory:", urlSubcategory);
 
   const { latestProducts, totalPages, readingDataDone, readingError } = useHomeProducts(
     page,
@@ -36,11 +38,11 @@ const Home = () => {
     searchTerm,
     sortBy
   );
-  console.log("=> latestProducts:", latestProducts);
-  console.log("=> totalPages:", totalPages);
-  console.log("=> readingDataDone:", readingDataDone);
+
+  console.log("totalPages: ", totalPages);
+
   useEffect(() => {
-    const handleResize = () => {
+    const handleResize = debounce(() => {
       const width = window.innerWidth;
       console.log("handleResize => width:", width);
       if (width <= 786) {
@@ -48,7 +50,7 @@ const Home = () => {
       } else {
         setLimit(24);
       }
-    };
+    }, 200);
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
@@ -100,8 +102,10 @@ const Home = () => {
   };
 
   const handlePageChange = (newPage) => {
-    setPage(newPage);
-    scrollup();
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage);
+      scrollup();
+    }
   };
 
   return (

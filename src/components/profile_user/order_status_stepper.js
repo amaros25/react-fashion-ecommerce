@@ -47,7 +47,12 @@ const mapStatusToStepperState = (status, is_delivery) => {
         if (status === STATUS.DELIVERED) return "delivered";
         if (status === STATUS.CANCELLED_USER) return "cancelled_user";
         if (status === STATUS.CANCELLED_SELLER) return "cancelled_seller";
-        if ([STATUS.RETURN_REQUESTED, STATUS.RETURN_CONFIRMED, STATUS.RETURN_SHIPPED, STATUS.RETURN_RECEIVED].includes(status)) return "return";
+        if (status === STATUS.RETURN_REQUESTED) return "return_requested";
+        if (status === STATUS.RETURN_CONFIRMED) return "return_confirmed";
+        if (status === STATUS.RETURN_REFUSED) return "return_refused";
+        if (status === STATUS.RETURN_SHIPPED) return "return_shipped";
+        if (status === STATUS.RETURN_RECEIVED) return "return_received";
+        if (status === STATUS.RETURN_NOT_RECEIVED) return "return_not_received";
         if ([STATUS.CANCELLED_USER, STATUS.CANCELLED_SELLER].includes(status)) return "cancelled";
     }
 
@@ -62,34 +67,36 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
         let pickupSteps = [];
 
         pickupSteps.push("pending");
-        if (statusLog.some((s) => s.update === STATUS.PENDING)) {
-            pickupSteps.push("confirmed");
-        }
-        if (statusLog.some((s) => s.update === STATUS.NO_RESPONSE)) {
-            pickupSteps.push("no_response");
-        }
-        if (statusLog.some((s) => s.update === STATUS.READY_TO_PICKUP)) {
-            pickupSteps.push("ready_pickup");
-        }
-        if (statusLog.some((s) => s.update === STATUS.PICKED_UP)) {
-            pickupSteps.push("picked_up");
-        }
-
-        if (lastLog.update === STATUS.CONFIRMED) {
-            pickupSteps.push("ready_pickup");
-        }
-        if (lastLog.update === STATUS.READY_TO_PICKUP) {
-            pickupSteps.push("picked_up");
-        }
-        if (statusLog.some((s) => s.update === STATUS.PICK_UP_FAILED)) {
-            pickupSteps.push("pick_up_failed");
-        }
-        if (statusLog.some((s) => s.update === STATUS.CANCELLED_SELLER)) {
-            pickupSteps.push("cancelled_seller");
-        }
         if (statusLog.some((s) => s.update === STATUS.CANCELLED_USER)) {
             pickupSteps.push("cancelled_user");
+        } else {
+            if (lastLog.update === STATUS.CONFIRMED) {
+                pickupSteps.push("ready_pickup");
+            }
+            if (lastLog.update === STATUS.READY_TO_PICKUP) {
+                pickupSteps.push("picked_up");
+            }
+            if (statusLog.some((s) => s.update === STATUS.PICK_UP_FAILED)) {
+                pickupSteps.push("pick_up_failed");
+            }
+            if (statusLog.some((s) => s.update === STATUS.CANCELLED_SELLER)) {
+                pickupSteps.push("cancelled_seller");
+            }
+            if (statusLog.some((s) => s.update === STATUS.PENDING)) {
+                pickupSteps.push("confirmed");
+            }
+            if (statusLog.some((s) => s.update === STATUS.NO_RESPONSE)) {
+                pickupSteps.push("no_response");
+            }
+            if (statusLog.some((s) => s.update === STATUS.READY_TO_PICKUP)) {
+                pickupSteps.push("ready_pickup");
+            }
+            if (statusLog.some((s) => s.update === STATUS.PICKED_UP)) {
+                pickupSteps.push("picked_up");
+            }
         }
+
+
         pickupSteps.forEach((key) => {
             const log = statusLog.find((s) => mapStatusToStepperState(s.update, false) === key);
             console.log("key: ", key, " log date: ", log?.date);
@@ -139,6 +146,16 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
                 }
 
                 deliverySteps.push("failed_delivery");
+            }
+
+            if ([STATUS.RETURN_REQUESTED, STATUS.RETURN_CONFIRMED, STATUS.RETURN_REFUSED, STATUS.RETURN_SHIPPED, STATUS.RETURN_RECEIVED, STATUS.RETURN_NOT_RECEIVED].includes(lastLog.update)) {
+                deliverySteps = ["pending", "confirmed", "shipped", "delivered"];
+                deliverySteps.push("return_requested");
+                if (statusLog.some(s => s.update === STATUS.RETURN_CONFIRMED)) deliverySteps.push("return_confirmed");
+                if (statusLog.some(s => s.update === STATUS.RETURN_REFUSED)) deliverySteps.push("return_refused");
+                if (statusLog.some(s => s.update === STATUS.RETURN_SHIPPED)) deliverySteps.push("return_shipped");
+                if (statusLog.some(s => s.update === STATUS.RETURN_RECEIVED)) deliverySteps.push("return_received");
+                if (statusLog.some(s => s.update === STATUS.RETURN_NOT_RECEIVED)) deliverySteps.push("return_not_received");
             }
             if (lastLog.update === STATUS.CANCELLED_USER || lastLog.update === STATUS.CANCELLED_SELLER) {
                 deliverySteps = ["pending"];

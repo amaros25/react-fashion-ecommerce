@@ -20,6 +20,7 @@ import { ToastContainer } from "react-toastify";
 import SavedProducts from './components/saved_products/saved_products.js';
 import Agb from './components/info_pages/agb.js';
 import DataProtection from './components/info_pages/data_protection.js';
+import ResetPassword from './components/reset_password/reset_password.js';
 //import SeedProducts from './components/new_product/seed_products.js';
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/profile_seller" element={<ProfileSeller />} />
           <Route path="/profile_user" element={<ProfileUser />} />
           <Route path="/add_product" element={<AddProduct />} />

@@ -44,8 +44,8 @@ export const useHomeProducts = (page, limit, urlCategory, urlSubcategory, search
         if (urlCategory !== null && !isNaN(urlCategory)) {
             url += `&category=${urlCategory}`;
         }
-        if (urlSubcategory !== null && !isNaN(urlSubcategory) && urlSubcategory > 0) {
-            url += `&subcategory=${urlSubcategory - 1}`;
+        if (urlSubcategory !== null && !isNaN(urlSubcategory)) {
+            url += `&subcategory=${urlSubcategory}`;
         }
         if (searchTerm) {
             url += `&search=${encodeURIComponent(searchTerm)}`;
@@ -53,6 +53,7 @@ export const useHomeProducts = (page, limit, urlCategory, urlSubcategory, search
         if (sortBy) {
             url += `&sort=${sortBy}`;
         }
+        console.log("+++++++ => url: ", url);
         setReadingDataDone(false);
         setReadingError(false);
         fetch(url)

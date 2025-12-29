@@ -15,6 +15,20 @@ exports.getOrderByID = async (req, res) => {
   }
 };
 
+exports.getOrderByNumber = async (req, res) => {
+  try {
+    const { orderNumber } = req.params;
+    const order = await Order.findOne({ orderNumber }).lean();
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+    res.json(order);
+  } catch (error) {
+    console.error('Error fetching order by number:', error);
+    res.status(500).json({ message: 'Error fetching order', error });
+  }
+};
+
 exports.getOrderBySellerID = async (req, res) => {
   try {
     const sellerId = req.params.sellerId;
@@ -87,12 +101,12 @@ exports.getOrderBySellerID = async (req, res) => {
 
 exports.getOrderByUserID = async (req, res) => {
   try {
-    const userID = req.params.id;
+    const userId = req.params.id;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-    const totalOrders = await Order.countDocuments({ userID });
-    const orders = await Order.find({ userID })
+    const totalOrders = await Order.countDocuments({ userId });
+    const orders = await Order.find({ userId })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);

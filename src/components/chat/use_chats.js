@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { fetchChats, openChat, sendMessage, loadMoreMessages, startNewChat, markMessagesAsRead } from "./chat_api";
+import { fetchChats, openChat, sendMessage, loadMoreMessages, startNewChat, markMessagesAsRead, fetchOrderByNumber } from "./chat_api";
+import { ORDER_STATUS } from "../utils/const/order_status";
 
 export const useChats = (userId, partnerId, initialType, initialNumber) => {
 
@@ -16,6 +17,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
   const [isChatWindowActive, setIsChatWindowActive] = useState(false);
   const [isChatWindowHidden, setIsChatWindowHidden] = useState(false);
   const [getCurrentChatID, setCurrentChatID] = useState("");
+  const [isChatDisabled, setIsChatDisabled] = useState(false);
 
   const [chats, setChats] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -111,6 +113,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
 
 
   const openSelectedChat = async (chatId) => {
+    setIsChatDisabled(false); // Reset on open
     if (chatId.toString().startsWith("temp_")) {
       const tempChat = chats.find(c => c._id === chatId);
       if (tempChat) {
@@ -236,6 +239,59 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
     }
   };
 
+  useEffect(() => {
+    const checkChatRestriction = async () => {
+      if (activeChat?.type === "order" && activeChat.number) {
+        try {
+          const order = await fetchOrderByNumber(activeChat.number);
+          if (order) {
+            const currentStatus = order.status[order.status.length - 1].update;
+            const now = new Date();
+
+            const deliveredStatus = order.status.find(s =>
+              s.update === ORDER_STATUS.DELIVERED || s.update === ORDER_STATUS.PICKED_UP
+            );
+
+            let isExpired = false;
+            if (deliveredStatus) {
+              const deliveryDate = new Date(deliveredStatus.date);
+              const diffHours = (now - deliveryDate) / (1000 * 60 * 60);
+
+              if (currentStatus === ORDER_STATUS.PICKED_UP) {
+                isExpired = true;
+              } else if (currentStatus === ORDER_STATUS.DELIVERED && diffHours > 24) {
+                isExpired = true;
+              }
+            }
+
+            const activeReturnStatuses = [
+              ORDER_STATUS.RETURN_REQUESTED,
+              ORDER_STATUS.RETURN_CONFIRMED,
+              ORDER_STATUS.RETURN_SHIPPED,
+              ORDER_STATUS.RETURN_RECEIVED,
+              ORDER_STATUS.RETURN_NOT_RECEIVED
+            ];
+
+            const isCancelled = currentStatus === ORDER_STATUS.CANCEL_USER || currentStatus === ORDER_STATUS.CANCEL_SELLER;
+            const isNegativeFinal = [ORDER_STATUS.FAILED_DELIVERY, ORDER_STATUS.PICK_UP_FAILED, ORDER_STATUS.NO_RESPONSE].includes(currentStatus);
+
+            if ((isExpired || isCancelled || isNegativeFinal) && !activeReturnStatuses.includes(currentStatus)) {
+              setIsChatDisabled(true);
+            } else {
+              setIsChatDisabled(false);
+            }
+          }
+        } catch (err) {
+          console.error("Error checking chat restriction:", err);
+        }
+      } else {
+        setIsChatDisabled(false);
+      }
+    };
+
+    checkChatRestriction();
+  }, [activeChat]);
+
   const handleBackToSidebar = () => {
     setIsSidebarHidden(false);
     setIsChatWindowHidden(true);
@@ -268,9 +324,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
     totalPages,
     sidebarCurrentPage,
     setSidebarCurrentPage,
-    handleBackToSidebar
-
-
-
+    handleBackToSidebar,
+    isChatDisabled
   };
 };

@@ -8,7 +8,7 @@ import ProfileUserOrders from "./profile_user_oders";
 import LoadingSpinner from "../loading/loading_spinner"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import OrderStatusStepper from "./order_status_stepper";
 export default function ProfileUser() {
 
   const { t } = useTranslation();
@@ -60,10 +60,11 @@ export default function ProfileUser() {
 
       // Check if status is still valid for this action
       const currentStatus = currentOrderData.status[currentOrderData.status.length - 1].update;
-
+      console.log("handleStatusChange: currentStatus: ", currentStatus);
+      console.log("handleStatusChange: newStatus: ", newStatus);
       // Define valid transitions (simplified check)
       // If user wants to cancel (newStatus = 30), current status must be 'pending' (0)
-      if (newStatus === 30 && currentStatus !== "pending") {
+      if (newStatus === 30 && currentStatus !== 0) {
         toast.error(t("order_status_changed_reload"), { position: "top-center", autoClose: 5000 });
         setRefreshOrders(prev => prev + 1);
         return;

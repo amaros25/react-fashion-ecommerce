@@ -46,6 +46,27 @@
     "loading": "Loading...",
     "register_quest": "No account yet?",
     "login_failed": "Login Failed",
+    "forgot_password": "Forgot Password?",
+    "forgot_password_contact": "Please contact our support to reset your password.",
+    "reset_password_title": "Reset Password",
+    "reset_password_desc": "Enter your email to receive a reset link",
+    "enter_email": "Enter your email",
+    "send_reset_link": "Send Reset Link",
+    "reset_email_sent": "Reset email sent! Check your inbox.",
+    "reset_email_error": "Error sending reset email",
+    "enter_new_password": "Enter your new password",
+    "confirm_password": "Confirm Password",
+    "passwords_not_match": "Passwords do not match",
+    "password_reset_success": "Password reset successfully!",
+    "reset_password_failed": "Failed to reset password",
+    "reset_password_button": "Reset Password",
+    "remember_password": "Remember your password?",
+    "password_requirements": "Password must contain",
+    "password_req_length": "At least 8 characters",
+    "password_req_uppercase": "One uppercase letter",
+    "password_req_lowercase": "One lowercase letter",
+    "password_req_number": "One number",
+    "password_req_special": "One special character (@$!%*?&)",
     "already_logged_in": "User already logged in on another device. Please logout from the other device first.",
     "register": {
         "title": "Register",
@@ -163,7 +184,9 @@
         "no_address_set": "No address set",
         "no_phone_set": "No phone set",
         "address_required": "Please add your delivery address first",
-        "pickup_info": "The seller's shop address will be displayed after seller confirmation."
+        "pickup_info": "The seller's shop address will be displayed after seller confirmation.",
+        "update_address": "Update Address",
+        "cart_page.no_items_in_cart": "No items in cart"
     },
     "phone": "Phone",
     "address": "Address",
@@ -301,7 +324,11 @@
     "stock": "Stock",
     "errors": {
         "product_infos_loading_failed": "Failed to load product information. Please check your internet connection and try again. If the problem persists, contact support.",
-        "product_color_loading_failed": "Failed to load product colors. Please check your internet connection and try again. If the problem persists, contact support."
+        "product_color_loading_failed": "Failed to load product colors. Please check your internet connection and try again. If the problem persists, contact support.",
+        "fetch_sellers": "Error loading sellers. Please try again later.",
+        "fetch_seller": "Error loading seller. Please try again later.",
+        "create_order": "Error creating the order. Please try again later.",
+        "parse_user_data": "Error parsing user data. Please try again later."
     },
     "footer_pages": {
         "about_us": {
@@ -468,7 +495,9 @@
         "newChatPlaceholderProduct": "Product Number",
         "newChatWithSeller": "New chat with seller",
         "newChatWithAdmin": "New chat with admin",
-        "cancel_with_seller": "Cancel chat with seller"
+        "cancel_with_seller": "Cancel chat with seller",
+        "chatDisabled": "Chat disabled",
+        "disabledNotice": "This chat is read-only because the order is completed or the return window has expired."
     },
     "saved_products": {
         "title": "Saved Products",

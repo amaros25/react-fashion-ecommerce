@@ -1,9 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
+import "./modal.css";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 
 function Login() {
@@ -14,6 +16,10 @@ function Login() {
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showForgotModal, setShowForgotModal] = React.useState(false);
+  const [resetEmail, setResetEmail] = React.useState("");
+  const [resetLoading, setResetLoading] = React.useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +31,7 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      console.log(data);
+      console.log("Login data: ", data);
 
       if (!res.ok) {
         if (res.status === 403 && data.error === "ALREADY_LOGGED_IN") {
@@ -49,7 +55,7 @@ function Login() {
         city: data.city,
         subCity: data.subCity
       };
-      console.log("userData", userData);
+      console.log("Login userData", userData);
       setLoading(false);
       localStorage.setItem("userData", JSON.stringify(userData));
       if (data.role === "seller") {
@@ -78,6 +84,35 @@ function Login() {
     }
   };
 
+  const handleForgotPassword = () => {
+    setShowForgotModal(true);
+  };
+
+  const handleResetRequest = async (e) => {
+    e.preventDefault();
+    setResetLoading(true);
+    try {
+      const res = await fetch(`${apiUrl}/auth/request-password-reset`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: resetEmail }),
+      });
+      const data = await res.json();
+
+      toast.success(t("reset_email_sent"), {
+        position: "top-center",
+        autoClose: 5000,
+      });
+
+      setShowForgotModal(false);
+      setResetEmail("");
+    } catch (err) {
+      toast.error(t("reset_email_error"));
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
   return (
     <div className="login-page">
       <div className="login-page-content">
@@ -93,15 +128,26 @@ function Login() {
               required
             />
             <label>{t("password")}</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="password-input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <span
+                className="password-toggle-icon"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
             <button type="submit" disabled={loading}>
               {loading ? t("loading") : t("login_start")}
             </button>
+            <p className="forgot-password-link" onClick={handleForgotPassword}>
+              {t("forgot_password")}
+            </p>
             <p className="register-link">
               {t("register_quest")}{" "}
               <span
@@ -114,6 +160,34 @@ function Login() {
           </form>
         </div>
       </div>
+
+      {/* Forgot Password Modal */}
+      {showForgotModal && (
+        <div className="modal-overlay" onClick={() => setShowForgotModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>{t("reset_password_title")}</h3>
+            <p>{t("reset_password_desc")}</p>
+            <form onSubmit={handleResetRequest}>
+              <label>{t("email")}</label>
+              <input
+                type="email"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                required
+                placeholder={t("enter_email")}
+              />
+              <div className="modal-buttons">
+                <button type="button" onClick={() => setShowForgotModal(false)} className="btn-cancel">
+                  {t("cancel")}
+                </button>
+                <button type="submit" disabled={resetLoading} className="btn-submit">
+                  {resetLoading ? t("loading") : t("send_reset_link")}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

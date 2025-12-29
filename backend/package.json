@@ -15,6 +15,7 @@
     "nodemon": "^3.1.10"
   },
   "dependencies": {
-    "mongodb": "^6.20.0"
+    "mongodb": "^6.20.0",
+    "nodemailer": "^7.0.12"
   }
 }

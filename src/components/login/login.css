@@ -162,6 +162,48 @@
   color: #333333;
 }
 
+/* Password input wrapper */
+.password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.password-toggle-icon:hover {
+  color: #000;
+}
+
+/* Forgot password link */
+.forgot-password-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 11px;
+  color: #666;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.forgot-password-link:hover {
+  color: #000;
+}
+
 
 /* ---------- Responsive Design ---------- */
 

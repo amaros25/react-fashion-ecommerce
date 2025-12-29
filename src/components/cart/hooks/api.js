@@ -1,18 +1,16 @@
+import { toast } from 'react-toastify';
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 /**
  * Fetch all sellers from the API
  * @returns {Promise<Object>} - Object with seller IDs as keys and seller data as values
  */
-export const fetchSellersByIds = async (sellerIds) => {
+export const fetchSellersByIds = async (sellerIds, t) => {
     try {
-        console.log("fetchSellersByIds sellerIds", sellerIds);
         let url = `${apiUrl}/sellers/getByIds?ids=${sellerIds.join(",")}`;
-        console.log("fetchSellersByIds url", url);
         const res = await fetch(url);
-
         const data = await res.json();
-        console.log("fetchSellersByIds data", data);
         const sellerMap = data.reduce((acc, seller) => {
             acc[seller._id] = seller;
             return acc;
@@ -20,6 +18,7 @@ export const fetchSellersByIds = async (sellerIds) => {
         return sellerMap;
     } catch (err) {
         console.error("Error fetching sellers:", err);
+        toast.error(t("errors.fetch_sellers") || "Error loading sellers. Please try again later.");
         throw err;
     }
 };
@@ -29,7 +28,7 @@ export const fetchSellersByIds = async (sellerIds) => {
  * @returns {Promise<Object>} - Object with seller IDs as keys and seller data as values
  */
 
-export const fetchSeller = async (sellerId, token) => {
+export const fetchSeller = async (sellerId, token, t) => {
     if (!sellerId || !token) return;
     try {
         const res = await fetch(`${apiUrl}/sellers/${sellerId}`, {
@@ -42,6 +41,8 @@ export const fetchSeller = async (sellerId, token) => {
         return await res.json();
     } catch (err) {
         console.error('Error fetching seller:', err);
+        toast.error(t("errors.fetch_seller") || "Error loading seller. Please try again later.");
+        throw err;
     }
 };
 
@@ -51,7 +52,7 @@ export const fetchSeller = async (sellerId, token) => {
  * @param {string} token - Authentication token
  * @returns {Promise<Object>} - Created order response
  */
-export const createOrder = async (orderData, token) => {
+export const createOrder = async (orderData, token, t) => {
     try {
         const res = await fetch(`${apiUrl}/orders/create`, {
             method: "POST",
@@ -82,7 +83,7 @@ export const createOrder = async (orderData, token) => {
  * @param {boolean} isDelivery - Whether the order is for delivery or pickup
  * @returns {Promise<void>}
  */
-export const createMultipleOrders = async (groupedCart, userId, token, orderStatus, isDelivery = true) => {
+export const createMultipleOrders = async (groupedCart, userId, token, orderStatus, isDelivery = true, t) => {
     try {
         for (const [sellerId, items] of Object.entries(groupedCart)) {
             const formattedItems = items.map((item) => ({
@@ -107,10 +108,11 @@ export const createMultipleOrders = async (groupedCart, userId, token, orderStat
                 is_delivery: isDelivery,
             };
 
-            await createOrder(orderData, token);
+            await createOrder(orderData, token, t);
         }
     } catch (err) {
         console.error("Error creating multiple orders:", err);
+        toast.error(t("errors.create_order") || "Error creating the order. Please try again later.");
         throw err;
     }
 };

@@ -1,21 +1,11 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./order_items.css";
+import { ORDER_STATUS } from "../utils/const/order_status";
 
 export default function OrderItem({ item, product, order, t, isLast, chatRole = 'seller' }) {
   const navigate = useNavigate();
 
-  const STATUS_CONFIRMED = 1;
-  const PICKED_UP = 41;
-  const RETURN_RECEIVED = 24;
-  const DELIVERED = 23;
-  const FAILED_DELIVERY = 25;
-  const NO_RESPONSE = 10;
-  const CANCELLED_USER = 30;
-  const CANCELLED_SELLER = 31;
-  const PICK_UP_FAILED = 42;
-
-  const states_no_chat = [STATUS_CONFIRMED, PICKED_UP, RETURN_RECEIVED, DELIVERED, FAILED_DELIVERY, NO_RESPONSE, CANCELLED_USER, CANCELLED_SELLER, PICK_UP_FAILED];
   const handleChat = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -42,14 +32,22 @@ export default function OrderItem({ item, product, order, t, isLast, chatRole = 
   const isHexColor = (color) => /^#[0-9A-F]{6}$/i.test(color);
 
   const is_chat_with_seller_ok = () => {
-    if (states_no_chat.includes(order.status[order.status.length - 1].update)) {
-      return false;
-    }
-    if (order.status.some((s) => s.update === STATUS_CONFIRMED)) {
-      return true;
-    }
+    if (!order.status || order.status.length === 0) return false;
 
-    return false;
+    const lastStatus = order.status[order.status.length - 1].update;
+    const allowedStatuses = [
+      ORDER_STATUS.CONFIRMED,
+      ORDER_STATUS.SHIPPED,
+      ORDER_STATUS.FIRST_TRY_DELIVERY_FAILED,
+      ORDER_STATUS.SECOND_TRY_DELIVERY,
+      ORDER_STATUS.FAILED_DELIVERY,
+      ORDER_STATUS.RETURN_REQUESTED,
+      ORDER_STATUS.RETURN_CONFIRMED,
+      ORDER_STATUS.RETURN_SHIPPED,
+      ORDER_STATUS.READY_TO_PICKUP
+    ];
+
+    return allowedStatuses.includes(lastStatus);
   }
 
   return (

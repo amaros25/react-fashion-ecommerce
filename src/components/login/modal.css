@@ -1,0 +1,106 @@
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #f2f2f2;
+    padding: 40px 35px;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #000;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.modal-content p {
+    margin: 0 0 25px 0;
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 400;
+    font-size: 11px;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 12px 0;
+    margin-bottom: 25px;
+    border: none;
+    border-bottom: 1px solid #000;
+    background-color: #ECE9E2;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-bottom: 2px solid #000;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+.modal-buttons button {
+    padding: 12px 25px;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cancel {
+    background-color: #e0e0e0;
+    color: #000;
+}
+
+.btn-cancel:hover {
+    background-color: #d0d0d0;
+}
+
+.btn-submit {
+    background-color: #000;
+    color: #fff;
+}
+
+.btn-submit:hover {
+    background-color: #333;
+}
+
+.btn-submit:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+}

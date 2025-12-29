@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigationType } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaStar, FaRegStar, FaMapMarkerAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
@@ -13,14 +13,21 @@ import { cities, citiesData } from '../utils/const/cities';
 
 const ShopPage = () => {
     const { sellerId } = useParams();
+    const navType = useNavigationType();
     const { t } = useTranslation();
     const userId = localStorage.getItem("userId");
     const [hoverRating, setHoverRating] = useState(0);
 
-    // Scroll to top immediately when component mounts
     useEffect(() => {
+        // Scroll always to the top when the ShopPage is loaded
         window.scrollTo(0, 0);
-    }, []);
+    }, [navType]); // Empty dependency array to run only once on mount
+
+
+    const handleProductClick = () => {
+        console.log("handleProductClick: ", window.scrollY);
+        window.localStorage.setItem('scrollPosition', window.scrollY);
+    };
 
     const {
         seller,
@@ -119,36 +126,39 @@ const ShopPage = () => {
                     <span className="collection-count">{products.length} {t('Items')}</span>
                 </div>
 
-                {loading ? (
-                    <LoadingSpinner />
-                ) : (
-                    <>
-                        <div className="shop-grid">
-                            {products.length > 0 ? (
-                                products.map(product => (
-                                    <ProductCard key={product._id} product={product} />
-                                ))
-                            ) : (
-                                <div className="no-products">
-                                    <p>{t('No products found for this seller.')}</p>
-                                </div>
-                            )}
+                <div className="shop-products-area" style={{ minHeight: '600px', position: 'relative' }}>
+                    {loading && (
+                        <div className="shop-loading-overlay">
+                            <LoadingSpinner />
                         </div>
+                    )}
 
-                        {products.length > 0 && (
-                            <div className="shop-pagination">
-                                <Pagination
-                                    page={page}
-                                    totalPages={totalPages}
-                                    onPageChange={(p) => {
-                                        setPage(p);
-                                        window.scrollTo(0, 0);
-                                    }}
-                                />
+                    <div className={`shop-grid ${loading ? 'loading' : ''}`}>
+                        {products.length > 0 ? (
+                            products.map(product => (
+                                <ProductCard key={product._id} product={product} onClick={() => handleProductClick(product)} />
+                            ))
+                        ) : !loading && (
+                            <div className="no-products">
+                                <p>{t('No products found for this seller.')}</p>
                             </div>
                         )}
-                    </>
-                )}
+                    </div>
+
+                    {products.length > 0 && !loading && (
+                        <div className="shop-pagination">
+                            <Pagination
+                                page={page}
+                                totalPages={totalPages}
+                                onPageChange={(p) => {
+                                    setPage(p);
+
+
+                                }}
+                            />
+                        </div>
+                    )}
+                </div>
             </section>
         </div>
     );

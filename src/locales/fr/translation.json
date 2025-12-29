@@ -46,6 +46,27 @@
   "loading": "Chargement...",
   "register_quest": "Pas encore de compte ?",
   "login_failed": "Échec de la connexion",
+  "forgot_password": "Mot de passe oublié ?",
+  "forgot_password_contact": "Veuillez contacter notre support pour réinitialiser votre mot de passe.",
+  "reset_password_title": "Réinitialiser le mot de passe",
+  "reset_password_desc": "Entrez votre email pour recevoir un lien de réinitialisation",
+  "enter_email": "Entrez votre email",
+  "send_reset_link": "Envoyer le lien",
+  "reset_email_sent": "Email de réinitialisation envoyé ! Vérifiez votre boîte de réception.",
+  "reset_email_error": "Erreur lors de l'envoi de l'email",
+  "enter_new_password": "Entrez votre nouveau mot de passe",
+  "confirm_password": "Confirmer le mot de passe",
+  "passwords_not_match": "Les mots de passe ne correspondent pas",
+  "password_reset_success": "Mot de passe réinitialisé avec succès !",
+  "reset_password_failed": "Échec de la réinitialisation du mot de passe",
+  "reset_password_button": "Réinitialiser le mot de passe",
+  "remember_password": "Vous vous souvenez de votre mot de passe ?",
+  "password_requirements": "Le mot de passe doit contenir",
+  "password_req_length": "Au moins 8 caractères",
+  "password_req_uppercase": "Une lettre majuscule",
+  "password_req_lowercase": "Une lettre minuscule",
+  "password_req_number": "Un chiffre",
+  "password_req_special": "Un caractère spécial (@$!%*?&)",
   "already_logged_in": "Utilisateur déjà connecté sur un autre appareil. Veuillez vous déconnecter d'abord.",
   "register": {
     "title": "S'inscrire",
@@ -163,7 +184,9 @@
     "no_address_set": "Aucune adresse définie",
     "no_phone_set": "Aucun téléphone défini",
     "address_required": "Veuillez d'abord ajouter votre adresse de livraison",
-    "pickup_info": "L'adresse de la boutique du vendeur sera affichée après la confirmation du vendeur."
+    "pickup_info": "L'adresse de la boutique du vendeur sera affichée après la confirmation du vendeur.",
+    "update_address": "Modifier l'adresse",
+    "cart_page.no_items_in_cart": "Aucun article dans le panier"
   },
   "phone": "Téléphone",
   "address": "Adresse",
@@ -301,7 +324,11 @@
   "stock": "Stock",
   "errors": {
     "product_infos_loading_failed": "Échec du chargement du produit. Veuillez vérifier votre connexion Internet et réessayer. Si le problème persiste, contactez notre support client.",
-    "product_color_loading_failed": "Échec du chargement des couleurs du produit. Veuillez vérifier votre connexion Internet et réessayer. Si le problème persiste, contactez notre support client."
+    "product_color_loading_failed": "Échec du chargement des couleurs du produit. Veuillez vérifier votre connexion Internet et réessayer. Si le problème persiste, contactez notre support client.",
+    "fetch_sellers": "Erreur de chargement des vendeurs. Veuillez réessayer plus tard.",
+    "fetch_seller": "Erreur de chargement du vendeur. Veuillez réessayer plus tard.",
+    "create_order": "Erreur lors de la création de la commande. Veuillez réessayer plus tard.",
+    "parse_user_data": "Erreur lors du chargement des données de l'utilisateur. Veuillez réessayer plus tard."
   },
   "footer_pages": {
     "about_us": {
@@ -468,7 +495,9 @@
     "newChatPlaceholderProduct": "Numéro de produit",
     "newChatWithSeller": "Nouveau chat avec le vendeur",
     "newChatWithAdmin": "Nouveau chat avec l'administrateur",
-    "cancel_with_seller": "Annuler la chat avec le vendeur"
+    "cancel_with_seller": "Annuler la chat avec le vendeur",
+    "chatDisabled": "Chat désactivé",
+    "disabledNotice": "Ce chat est en lecture seule car la commande est terminée ou le délai de retour est expiré."
   },
   "saved_products": {
     "title": "Produits sauvegardés",

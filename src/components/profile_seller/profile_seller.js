@@ -37,14 +37,14 @@ function ProfileSeller() {
 
       // Define valid transitions for Seller
       // If confirming (1), must be 'pending'
-      if (newStatus === 1 && currentStatus !== "pending") {
+      if (newStatus === 1 && currentStatus !== 0) {
         toast.error(t("order_status_changed_reload"), { position: "top-center", autoClose: 5000 });
         setRefreshOrders(prev => prev + 1);
         return;
       }
       // If shipping (2) or (45 - ready pickup depending on implementation), usually needs 'confirmed'
       // Adjust logic as needed. For now preventing conflicting updates if user cancelled
-      if ((newStatus === 1 || newStatus === 2 || newStatus === 3) && (currentStatus === "user_cancelled" || currentStatus === "seller_cancelled")) {
+      if ((newStatus === 1 || newStatus === 2 || newStatus === 3) && (currentStatus === 30 || currentStatus === 31)) {
         toast.error(t("order_cancelled_reload"), { position: "top-center", autoClose: 5000 });
         setRefreshOrders(prev => prev + 1);
         return;

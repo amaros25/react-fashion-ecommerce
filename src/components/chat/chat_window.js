@@ -12,7 +12,8 @@ const ChatWindow = ({
   setNewMessage,
   isLoadingOlder,
   isMobile,
-  handleBackToSidebar
+  handleBackToSidebar,
+  isChatDisabled
 }) => {
   const { t, i18n } = useTranslation();
   const messagesRef = useRef(null);
@@ -79,16 +80,27 @@ const ChatWindow = ({
               );
             })}
           </div>
-          <div className="message-input">
-            <input
-              type="text"
-              placeholder={t('chat.messagePlaceholder')}
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendNewMessage(newMessage)}
-            />
-            <button onClick={() => sendNewMessage(newMessage)}>{t('chat.sendButton')}</button>
-          </div>
+          {isChatDisabled ? (
+            <div className="chat-disabled-notice">
+              {t('chat.disabledNotice')}
+            </div>
+          ) : (
+            <div className="message-input">
+              <input
+                type="text"
+                placeholder={t('chat.messagePlaceholder')}
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendNewMessage(newMessage)}
+              />
+              <button
+                onClick={() => sendNewMessage(newMessage)}
+                disabled={!newMessage.trim()}
+              >
+                {t('chat.sendButton')}
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <>
