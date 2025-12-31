@@ -1,19 +1,13 @@
 import React from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import "./seller_info.css";
-import { FaStar, FaRegStar } from "react-icons/fa";
+import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import { cities, citiesData } from '../utils/const/cities';
 
 function SellerInfo({ seller }) {
   if (!seller) return null;
-  const reviews = seller.reviews || [];
-  const ratingsWithValue = reviews.filter(r => r.rating > 0);
-  const reviewCount = ratingsWithValue.length;
-
-  const averageRating =
-    ratingsWithValue.length > 0
-      ? ratingsWithValue.reduce((sum, r) => sum + r.rating, 0) / ratingsWithValue.length
-      : 0;
+  const reviewCount = seller.reviewCount || 0;
+  const averageRating = seller.averageRating || 0;
 
   return (
     <div className="seller-info-card">
@@ -30,14 +24,22 @@ function SellerInfo({ seller }) {
           <h3 className="seller-card-name">{seller.shopName}</h3>
           <div className="seller-rating-container">
             <div className="seller-rating">
-              {[1, 2, 3, 4, 5].map((value) => {
-                const StarIcon = value <= Math.round(averageRating) ? FaStar : FaRegStar;
+              {[1, 2, 3, 4, 5].map((star) => {
+                const diff = averageRating - (star - 1);
+                let StarIcon;
+                if (diff >= 1) {
+                  StarIcon = FaStar;
+                } else if (diff >= 0.5) {
+                  StarIcon = FaStarHalfAlt;
+                } else {
+                  StarIcon = FaRegStar;
+                }
                 return (
                   <StarIcon
-                    key={value}
+                    key={star}
                     className="star"
                     size={22}
-                    color={value <= Math.round(averageRating) ? "#ffc107" : "#e4e5e9"}
+                    color={diff >= 0.5 ? "#ffc107" : "#e4e5e9"}
                   />
                 );
               })}

@@ -153,7 +153,10 @@
     "no_reviews": "Pas encore d’avis.",
     "write_review": "Écrire un avis",
     "write_comment": "Écrire un commentaire",
-    "submit_review": "Soumettre l’avis"
+    "submit_review": "Soumettre l’avis",
+    "stock_limit_reached": "Vous avez déjà le stock maximum disponible dans votre panier.",
+    "in_cart": "dans le panier",
+    "currently": "Actuellement"
   },
   "cart_page": {
     "title": "Votre panier",

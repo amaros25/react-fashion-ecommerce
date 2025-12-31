@@ -69,6 +69,18 @@ exports.createChat = async (req, res) => {
   try {
     let { userId, sellerId, type, number } = req.body;
     if (!type) return res.status(400).json({ message: "type fehlt" });
+
+    // Help Center Logic: If number is not provided, generate a Support Number
+    // Requirements: if user contacts -> userId provided, sellerId = "admin"
+    // if seller contacts -> sellerId provided, userId = "admin"
+    if (type === "help") {
+      if (!number) {
+        const letters = "SUP";
+        const randomNum = Math.floor(100000 + Math.random() * 900000);
+        number = `${letters}-${randomNum}`;
+      }
+    }
+
     if (!userId && !sellerId) return res.status(400).json({ message: "userId or sellerId must be provided" });
     if (!sellerId && userId) {
       sellerId = "admin";
@@ -129,6 +141,26 @@ exports.getUnreadCount = async (req, res) => {
     res.json({ unreadCount });
   } catch (error) {
     console.error("Error counting unread messages:", error);
+    res.status(500).json({ message: "Error counting unread messages", error });
+  }
+};
+
+// GET: Count unread messages for a user
+exports.getUnreadUserCount = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const chats = await Chat.find({ userId: userId });
+    let unreadCount = 0;
+    chats.forEach(chat => {
+      chat.messages.forEach(message => {
+        if (!message.isRead && message.senderId.toString() !== userId) {
+          unreadCount++;
+        }
+      });
+    });
+    res.json({ unreadCount });
+  } catch (error) {
+    console.error("Error counting unread messages for user:", error);
     res.status(500).json({ message: "Error counting unread messages", error });
   }
 };

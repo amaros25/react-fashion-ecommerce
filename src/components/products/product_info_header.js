@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./product_info_header.css";
-import { FaStar, FaRegStar } from "react-icons/fa";
+import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import { BsBookmarkHeart } from "react-icons/bs";
 import { BsBookmarkHeartFill } from "react-icons/bs";
 import { toast } from "react-toastify";
@@ -111,14 +111,22 @@ function ProductInfoHeader({ product, userId }) {
                 </div>
                 <div className="product-rating-container">
                     <div className="product-rating">
-                        {[1, 2, 3, 4, 5].map((value) => {
-                            const StarIcon = value <= Math.round(averageRating) ? FaStar : FaRegStar;
+                        {[1, 2, 3, 4, 5].map((star) => {
+                            const diff = averageRating - (star - 1);
+                            let StarIcon;
+                            if (diff >= 1) {
+                                StarIcon = FaStar;
+                            } else if (diff >= 0.5) {
+                                StarIcon = FaStarHalfAlt;
+                            } else {
+                                StarIcon = FaRegStar;
+                            }
                             return (
                                 <StarIcon
-                                    key={value}
+                                    key={star}
                                     className="star"
                                     size={22}
-                                    color={value <= Math.round(averageRating) ? "#ffc107" : "#e4e5e9"}
+                                    color={diff >= 0.5 ? "#ffc107" : "#e4e5e9"}
                                 />
                             );
                         })}

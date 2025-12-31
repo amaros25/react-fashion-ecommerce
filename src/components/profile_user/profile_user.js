@@ -132,6 +132,7 @@ export default function ProfileUser() {
             setCurrentPage={setCurrentPage}
             t={t}
             handleStatusChange={handleStatusChange}
+            onRatingComplete={() => setRefreshOrders(prev => prev + 1)}
           />
         </div>
       </div>

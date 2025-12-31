@@ -143,10 +143,22 @@ exports.updateOrderStatus = async (req, res) => {
     if (!order.status) {
       order.status = [];
     }
+
+    // Wenn Status auf "Bestätigt" (1) gesetzt wird, Stock abziehen
+    if (status === 1) {
+      for (const item of order.items) {
+        await Product.updateOne(
+          { _id: item.productId, "sizes.size": item.size, "sizes.color": item.color },
+          { $inc: { "sizes.$.stock": -item.quantity } }
+        );
+      }
+    }
+
     order.status.push({ date: new Date(), update: status });
     await order.save();
     res.status(200).json(order);
   } catch (error) {
+    console.error("❌ Fehler beim Update des Bestellstatus:", error);
     res.status(500).json({ message: "Error updating order status", error });
   }
 };

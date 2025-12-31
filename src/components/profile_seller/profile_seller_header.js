@@ -1,10 +1,10 @@
 import "./profile_seller_header.css";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { cities, citiesData } from '../utils/const/cities';
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { FaCog, FaSignOutAlt, FaTrash, FaStar, FaBoxOpen, FaShoppingBag, FaExclamationTriangle, FaMapMarkerAlt, FaPhone, FaCommentDots } from 'react-icons/fa';
+import { FaTrash, FaStar, FaStarHalfAlt, FaExclamationTriangle, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
 
 function ProfileSellerHeader({ seller, apiUrl, token }) {
   const { t } = useTranslation();
@@ -21,17 +21,8 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
   const [subCities, setSubCities] = useState([]);
   const [unreadMessages, setUnreadMessages] = useState(0);
 
-  // Calculate average rating
-  const calculateRating = () => {
-    if (!seller.reviews || seller.reviews.length === 0) return { average: 0, count: 0 };
-    const total = seller.reviews.reduce((acc, review) => acc + review.rating, 0);
-    return {
-      average: (total / seller.reviews.length).toFixed(1),
-      count: seller.reviews.length
-    };
-  };
-
-  const { average: avgRating, count: reviewCount } = calculateRating();
+  const avgRating = seller?.averageRating || 0;
+  const reviewCount = seller?.reviewCount || 0;
 
   useEffect(() => {
     if (!seller?._id) return;
@@ -101,6 +92,7 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
 
   const handleUpdate = async () => {
     try {
+
       const cityIndex = cities.indexOf(formData.city);
       const subCityIndex = citiesData[formData.city]?.indexOf(formData.subCity);
 
@@ -209,8 +201,17 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
               <div className="seller-name-row">
                 <h1 className="seller-name-minimal">{seller.shopName}</h1>
                 <div className="seller-rating-minimal">
-                  <FaStar className="star-icon-minimal" />
-                  <span>{avgRating}</span>
+                  {[1, 2, 3, 4, 5].map((star) => {
+                    const diff = avgRating - (star - 1);
+                    if (diff >= 1) {
+                      return <FaStar key={star} className="star-icon-minimal" />;
+                    } else if (diff >= 0.5) {
+                      return <FaStarHalfAlt key={star} className="star-icon-minimal" />;
+                    } else {
+                      return <FaStar key={star} className="star-icon-minimal empty" style={{ opacity: 0.3 }} />;
+                    }
+                  })}
+                  <span>{avgRating.toFixed(1)}</span>
                   <span className="rating-count">({reviewCount})</span>
                 </div>
               </div>

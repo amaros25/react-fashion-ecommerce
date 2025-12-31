@@ -243,3 +243,35 @@
         gap: 5px;
     }
 }
+
+.shop-error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 20px;
+    text-align: center;
+    gap: 20px;
+}
+
+.shop-error-container p {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 0;
+}
+
+.shop-error-container button {
+    padding: 12px 30px;
+    background: #000;
+    color: #fff;
+    border: none;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.shop-error-container button:hover {
+    background: #333;
+}

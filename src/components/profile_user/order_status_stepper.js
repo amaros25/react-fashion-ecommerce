@@ -25,7 +25,7 @@ const STATUS = {
 };
 
 const mapStatusToStepperState = (status, is_delivery) => {
-    console.log("mapStatusToStepperState status: ", status);
+    //console.log("mapStatusToStepperState status: ", status);
     if (!is_delivery) {
         if (status === STATUS.PENDING) return "pending";
         if (status === STATUS.CONFIRMED) return "confirmed";
@@ -65,28 +65,28 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
     // Pickup Flow
     if (!is_delivery) {
         let pickupSteps = [];
-
-        pickupSteps.push("pending");
-        if (statusLog.some((s) => s.update === STATUS.CANCELLED_USER)) {
-            pickupSteps.push("cancelled_user");
-        } else {
-            if (lastLog.update === STATUS.CONFIRMED) {
-                pickupSteps.push("ready_pickup");
-            }
-            if (lastLog.update === STATUS.READY_TO_PICKUP) {
-                pickupSteps.push("picked_up");
-            }
-            if (statusLog.some((s) => s.update === STATUS.PICK_UP_FAILED)) {
-                pickupSteps.push("pick_up_failed");
-            }
-            if (statusLog.some((s) => s.update === STATUS.CANCELLED_SELLER)) {
-                pickupSteps.push("cancelled_seller");
-            }
-            if (statusLog.some((s) => s.update === STATUS.PENDING)) {
+        if (lastLog.update == STATUS.PENDING) {
+            pickupSteps.push("pending");
+            pickupSteps.push("confirmed");
+            pickupSteps.push("ready_pickup");
+        }
+        else if (lastLog.update == STATUS.CONFIRMED || lastLog.update == STATUS.READY_TO_PICKUP || lastLog.update == STATUS.PICKED_UP) {
+            console.log("*** Push Confirmed");
+            console.log("*** Push Ready Pickup");
+            console.log("*** Push Picked Up");
+            pickupSteps.push("pending");
+            pickupSteps.push("confirmed");
+            pickupSteps.push("ready_pickup");
+            pickupSteps.push("picked_up");
+        } else if (lastLog.update == STATUS.PICK_UP_FAILED) {
+            pickupSteps.push("pending");
+            pickupSteps.push("confirmed");
+            pickupSteps.push("ready_pickup");
+            pickupSteps.push("pick_up_failed");
+        } else if (lastLog.update == STATUS.CANCELLED_SELLER) {
+            pickupSteps.push("pending");
+            if (statusLog.some((s) => s.update === STATUS.CONFIRMED)) {
                 pickupSteps.push("confirmed");
-            }
-            if (statusLog.some((s) => s.update === STATUS.NO_RESPONSE)) {
-                pickupSteps.push("no_response");
             }
             if (statusLog.some((s) => s.update === STATUS.READY_TO_PICKUP)) {
                 pickupSteps.push("ready_pickup");
@@ -94,9 +94,20 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
             if (statusLog.some((s) => s.update === STATUS.PICKED_UP)) {
                 pickupSteps.push("picked_up");
             }
+            pickupSteps.push("cancelled_seller");
+        } else if (lastLog.update == STATUS.CANCELLED_USER) {
+            pickupSteps.push("pending");
+            if (statusLog.some((s) => s.update === STATUS.CONFIRMED)) {
+                pickupSteps.push("confirmed");
+            }
+            if (statusLog.some((s) => s.update === STATUS.READY_TO_PICKUP)) {
+                pickupSteps.push("ready_pickup");
+            }
+            if (statusLog.some((s) => s.update === STATUS.PICKED_UP)) {
+                pickupSteps.push("picked_up");
+            }
+            pickupSteps.push("cancelled_user");
         }
-
-
         pickupSteps.forEach((key) => {
             const log = statusLog.find((s) => mapStatusToStepperState(s.update, false) === key);
             console.log("key: ", key, " log date: ", log?.date);
@@ -131,18 +142,15 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
             if (lastLog.update === STATUS.SECOND_TRY_DELIVERY) {     // Delivery Flow Second Try Delivery
                 deliverySteps = ["pending", "confirmed", "shipped", "first_try_delivery_failed", "second_try_delivery", "delivered"];
             }
-            if (lastLog.update === STATUS.SECOND_TRY_DELIVERY_FAILED) {     // Delivery Flow Second Try Failed Delivery
-                deliverySteps = ["pending", "confirmed", "shipped", "first_try_delivery_failed", "second_try_delivery", "second_try_delivery_failed"];
-            }
 
             if (lastLog.update === STATUS.FAILED_DELIVERY) {
                 //check if statusLog contain FIRST_TRY_DELIVERY_FAILED then push "first_try_delivery_failed" to deliverySteps
                 deliverySteps = ["pending", "confirmed", "shipped"];
                 if (statusLog.some((s) => s.update === STATUS.FIRST_TRY_DELIVERY_FAILED)) {
-                    deliverySteps.push("first_try_delivery_failed");
+                    deliverySteps.push("second_try_delivery");
                 }
-                if (statusLog.some((s) => s.update === STATUS.SECOND_TRY_DELIVERY_FAILED)) {
-                    deliverySteps.push("second_try_delivery_failed");
+                if (statusLog.some((s) => s.update === STATUS.SECOND_TRY_DELIVERY)) {
+                    deliverySteps.push("second_try_delivery");
                 }
 
                 deliverySteps.push("failed_delivery");

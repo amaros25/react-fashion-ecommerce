@@ -153,7 +153,10 @@
     "no_reviews": "لا توجد تقييمات بعد.",
     "write_review": "اكتب تقييم",
     "write_comment": "اكتب تعليق",
-    "submit_review": "إرسال تقييم"
+    "submit_review": "إرسال تقييم",
+    "stock_limit_reached": "لديك بالفعل الحد الأقصى للمخزون المتاح في سلتك.",
+    "in_cart": "في السلة",
+    "currently": "حالياً"
   },
   "cart_page": {
     "title": "سلة التسوق",

@@ -87,6 +87,44 @@ function ProductPage() {
     ? Array.from(new Set(product.sizes.map(s => s.color)))
     : [];
 
+  // Check availability for color based on selected size
+  const isColorAvailable = (color) => {
+    if (!product || !product.sizes) return true;
+    if (!selectedSize) return true;
+    return product.sizes.some(s => s.size === selectedSize && s.color === color && s.stock > 0);
+  };
+
+  // Check availability for size based on selected color
+  const isSizeAvailable = (size) => {
+    if (!product || !product.sizes) return true;
+    if (!selectedColor) return true;
+    return product.sizes.some(s => s.size === size && s.color === selectedColor && s.stock > 0);
+  };
+
+  const canOrderProduct = () => {
+    if (!product || !product.sizes) return false;
+    const lastState = product.states?.[product.states.length - 1]?.state;
+    const hasStock = product.sizes.some(s => s.stock > 0);
+    return role !== "seller" && lastState === 1 && hasStock;
+  };
+
+  // Auto-select if only one option is available
+  useEffect(() => {
+    if (!product || !product.sizes) return;
+
+    // Default Size
+    const inStockSizes = availableSizes.filter(size => isSizeAvailable(size));
+    if (inStockSizes.length === 1 && !selectedSize) {
+      setSelectedSize(inStockSizes[0]);
+    }
+
+    // Default Color
+    const inStockColors = availableColors.filter(color => isColorAvailable(color));
+    if (inStockColors.length === 1 && !selectedColor) {
+      setSelectedColor(inStockColors[0]);
+    }
+  }, [product, selectedSize, selectedColor, availableSizes, availableColors]);
+
   if (!product || !seller) {
     return <LoadingSpinner />;
   }
@@ -115,12 +153,25 @@ function ProductPage() {
       return;
     }
 
-    if (quantity > stockInfo.stock) {
-      toast.error(`${t("product_page.exceeds_stock")} (${stockInfo.stock} ${t("product_page.available")})`);
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingInCart = cart.find(
+      (item) =>
+        item.productId === product._id &&
+        item.size === selectedSize &&
+        item.color === selectedColor
+    );
+
+    const cartQuantity = existingInCart ? existingInCart.quantity : 0;
+    const totalRequested = cartQuantity + quantity;
+
+    if (totalRequested > stockInfo.stock) {
+      if (cartQuantity > 0) {
+        toast.error(`${t("product_page.exceeds_stock")} (${stockInfo.stock} ${t("product_page.available")}). ${t("product_page.currently")} ${cartQuantity} ${t("product_page.in_cart")}.`);
+      } else {
+        toast.error(`${t("product_page.exceeds_stock")} (${stockInfo.stock} ${t("product_page.available")})`);
+      }
       return;
     }
-
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const newItem = {
       productId: product._id,
@@ -157,22 +208,6 @@ function ProductPage() {
     }
   };
 
-  // Check availability for color based on selected size
-  const isColorAvailable = (color) => {
-    if (!selectedSize) return true;
-    return product.sizes.some(s => s.size === selectedSize && s.color === color && s.stock > 0);
-  };
-
-  // Check availability for size based on selected color
-  const isSizeAvailable = (size) => {
-    if (!selectedColor) return true;
-    return product.sizes.some(s => s.size === size && s.color === selectedColor && s.stock > 0);
-  };
-
-  const canOrderProduct = () => {
-    const lastState = product.states?.[product.states.length - 1]?.state;
-    return role !== "seller" && lastState === 1;
-  };
 
   return (
     <div className="product-page">

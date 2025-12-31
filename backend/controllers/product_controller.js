@@ -270,23 +270,15 @@ exports.createProduct = async (req, res) => {
 
 // Add a new Review
 exports.addReview = async (req, res) => {
-  let DELIVERED = 3;
-  let RETURN_RECEIVED = 24;
-  let PICKED_UP = 41;
   try {
     const productId = req.params.id;
     const { userId, rating, comment } = req.body;
+
     const hasBought = await Order.findOne({
       userId,
       "items.productId": productId,
-      "status.update": DELIVERED || RETURN_RECEIVED || PICKED_UP
+      "status.update": { $in: [3, 6, 24, 41] }
     });
-
-    if (!hasBought) {
-      return res.status(403).json({
-        message: "rate_only_received_error"
-      });
-    }
     const product = await Product.findById(productId);
     const exists = product.reviews.find(r => r.user.toString() === userId);
 

@@ -15,5 +15,8 @@ router.post('/create', sellerController.createSeller);
 // PUT: Update seller (address/phone)
 router.put('/:id', sellerController.updateSeller);
 
+// POST: Rate seller
+router.post('/:id/rate', sellerController.rateSeller);
+
 // Export the router so it can be used in the main app
 module.exports = router;

@@ -71,46 +71,65 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
 
   const handleUpdate = async () => {
     try {
+
       const cityIndex = cities.indexOf(formData.city);
       const subCityIndex = citiesData[formData.city]?.indexOf(formData.subCity);
-
+      console.log("ProfileHeader handleUpdate cityIndex: ", cityIndex);
+      console.log("ProfileHeader handleUpdate subCityIndex: ", subCityIndex);
+      console.log("ProfileHeader handleUpdate address: ", formData.address);
       const payload = {};
-      if (formData.address && formData.city && formData.subCity) {
-        payload.address = {
-          address: formData.address,
-          city: cityIndex,
-          subCity: subCityIndex
-        };
+      if (subCityIndex < 0) {
+        toast.error("Invalid subcity"); //TODO Error message in JSON Languages
+        return;
       }
-      if (formData.phone) {
+      if (!formData.address) {
+        toast.error("Please fill address"); //TODO Error message in JSON Languages
+        return;
+      }
+      if (formData.address === user.address && formData.city === cities[user.city] && formData.subCity === citiesData[cities[user.city]]?.[user.subCity] && formData.phone === user.phone) {
+        toast.error("No changes detected"); //TODO Error message in JSON Languages
+        return;
+      }
+      if (formData.address !== user.address || formData.city !== cities[user.city] || formData.subCity !== citiesData[cities[user.city]]?.[user.subCity]) {
+        if (formData.address && formData.city && formData.subCity) {
+          payload.address = {
+            address: formData.address,
+            city: cityIndex,
+            subCity: subCityIndex
+          };
+        }
+      }
+
+      if (formData.phone !== user.phone) {
         payload.phone = formData.phone;
       }
 
-      const res = await fetch(`${apiUrl}/users/${user.userId || user._id}`, {
-        method: "PUT",
+      console.log("ProfileHeader handleUpdate payload: ", payload);
+      console.log("ProfileHeader handleUpdate user: ", user);
+      const res = await fetch(`${apiUrl}/users/${user.userId || user._id}/updateContact`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(payload)
       });
-
+      console.log("ProfileHeader handleUpdate res: ", res);
       if (res.ok) {
         toast.success("Profile updated successfully");
-        if (formData.phone) localStorage.setItem("phone", formData.phone);
-        // Similar logic for address, but since it's complex, I'll focus on phone which is requested explicitly 
-        // "address of the user and his phone".
-        // I will store the address components if possible.
-        if (formData.address) {
-          const addressObj = {
-            address: formData.address,
-            city: cityIndex,
-            subCity: subCityIndex
-          };
-          localStorage.setItem("currentAddress", JSON.stringify(addressObj));
-        }
+
+        const updatedUserData = {
+          ...JSON.parse(localStorage.getItem("userData")),
+          address: formData.address || user.address,
+          phone: formData.phone || user.phone,
+          city: cityIndex,
+          subCity: subCityIndex,
+        };
+        console.log("ProfileHeader handleUpdate updatedUserData: ", updatedUserData);
+        localStorage.setItem("userData", JSON.stringify(updatedUserData));
+
         setShowSettings(false);
-        window.location.reload();
+        //window.location.reload();
       } else {
         toast.error("Failed to update profile");
       }

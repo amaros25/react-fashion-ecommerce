@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigationType } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FaStar, FaRegStar, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaStar, FaRegStar, FaStarHalfAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import ProductCard from '../product_card/product_card';
 import Pagination from '../home/pagination';
@@ -16,7 +16,6 @@ const ShopPage = () => {
     const navType = useNavigationType();
     const { t } = useTranslation();
     const userId = localStorage.getItem("userId");
-    const [hoverRating, setHoverRating] = useState(0);
 
     useEffect(() => {
         // Scroll always to the top when the ShopPage is loaded
@@ -36,23 +35,25 @@ const ShopPage = () => {
         page,
         setPage,
         totalPages,
-        userRating,
-        hasRated,
-        handleRateSeller
+        totalItems,
+        error
     } = useShopData(sellerId, userId);
 
-    const calculateAverageRating = () => {
-        if (!seller || !seller.reviews || seller.reviews.length === 0) return 0;
-        const validReviews = seller.reviews.filter(r => r.rating > 0);
-        if (validReviews.length === 0) return 0;
-        const sum = validReviews.reduce((acc, curr) => acc + curr.rating, 0);
-        return sum / validReviews.length;
-    };
+    const averageRating = seller?.averageRating || 0;
+    const roundedRating = Math.round(averageRating);
+    const reviewCount = seller?.reviewCount || 0;
 
-    if (!seller) return <LoadingSpinner />;
+    if (error) {
+        return (
+            <div className="shop-error-container">
+                <p>{error}</p>
+                <button onClick={() => window.location.reload()}>{t('Retry')}</button>
+            </div>
+        );
+    }
 
-    const averageRating = calculateAverageRating();
-    const reviewCount = seller.reviews ? seller.reviews.filter(r => r.rating > 0).length : 0;
+    if (!seller && loading) return <LoadingSpinner />;
+    if (!seller && !loading) return <div className="shop-error-container"><p>{t('Shop not found')}</p></div>;
 
     return (
         <div className="shop-page-container">
@@ -75,47 +76,22 @@ const ShopPage = () => {
 
                     <div className="shop-rating-display">
                         <div className="stars-static">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <FaStar
-                                    key={star}
-                                    className={`star ${star <= Math.round(averageRating) ? 'filled' : ''}`}
-                                    size={14}
-                                />
-                            ))}
+                            {[1, 2, 3, 4, 5].map((star) => {
+                                const diff = averageRating - (star - 1);
+                                if (diff >= 1) {
+                                    return <FaStar key={star} className="star filled" size={14} />;
+                                } else if (diff >= 0.5) {
+                                    return <FaStarHalfAlt key={star} className="star filled" size={14} />;
+                                } else {
+                                    return <FaRegStar key={star} className="star empty" size={14} />;
+                                }
+                            })}
                         </div>
                         <span className="rating-text">
                             {averageRating.toFixed(1)} / 5 ({reviewCount} {t('reviews')})
                         </span>
                     </div>
 
-                    {/* Rate Seller Section - Only if not rated and logged in */}
-                    {!hasRated && userId && (
-                        <div className="rate-action">
-                            <span className="rate-label">{t('Rate Experience')}</span>
-                            <div className="stars-interactive">
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                    <div
-                                        key={star}
-                                        className="star-wrapper"
-                                        onMouseEnter={() => setHoverRating(star)}
-                                        onMouseLeave={() => setHoverRating(0)}
-                                        onClick={() => handleRateSeller(star)}
-                                    >
-                                        {star <= (hoverRating || userRating) ? (
-                                            <FaStar className="star filled" size={20} />
-                                        ) : (
-                                            <FaRegStar className="star" size={20} />
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                    {hasRated && (
-                        <div className="rated-badge">
-                            {t('You rated this seller')}
-                        </div>
-                    )}
                 </div>
             </header>
 
@@ -123,7 +99,7 @@ const ShopPage = () => {
             <section className="shop-collection">
                 <div className="collection-header">
                     <h2>{t('LATEST COLLECTION')}</h2>
-                    <span className="collection-count">{products.length} {t('Items')}</span>
+                    <span className="collection-count">{totalItems} {t('Items')}</span>
                 </div>
 
                 <div className="shop-products-area" style={{ minHeight: '600px', position: 'relative' }}>
@@ -152,8 +128,6 @@ const ShopPage = () => {
                                 totalPages={totalPages}
                                 onPageChange={(p) => {
                                     setPage(p);
-
-
                                 }}
                             />
                         </div>
@@ -163,5 +137,6 @@ const ShopPage = () => {
         </div>
     );
 };
+
 
 export default ShopPage;

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
@@ -11,8 +11,8 @@ export const useShopData = (sellerId, userId) => {
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const [userRating, setUserRating] = useState(0);
-    const [hasRated, setHasRated] = useState(false);
+    const [totalItems, setTotalItems] = useState(0);
+    const [error, setError] = useState(null);
 
     // Fetch Seller Info
     useEffect(() => {
@@ -22,44 +22,43 @@ export const useShopData = (sellerId, userId) => {
                 if (!res.ok) throw new Error('Failed to fetch seller');
                 const data = await res.json();
                 setSeller(data);
-
-                // Check if current user has already rated
-                if (userId && data.reviews && Array.isArray(data.reviews)) {
-                    const userReview = data.reviews.find(r => r.userId === userId);
-                    if (userReview) {
-                        setHasRated(true);
-                        setUserRating(userReview.rating);
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching seller:', error);
-                toast.error('Could not load shop information');
+                setError(null);
+            } catch (err) {
+                console.error('Error fetching seller:', err);
+                setError(t('Could not load shop information'));
+                toast.error(t('Could not load shop information'));
             }
         };
 
         if (sellerId) {
             fetchSeller();
         }
-    }, [sellerId, apiUrl, userId]);
+    }, [sellerId, apiUrl, t]);
 
     // Fetch Seller Products
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`${apiUrl}/products/latest?seller=${sellerId}&page=${page}&limit=12`);
+                // Use the correct seller-specific endpoint
+                const res = await fetch(`${apiUrl}/products/seller/${sellerId}?page=${page}&limit=12`);
+                if (!res.ok) throw new Error('Failed to fetch products');
+
                 const data = await res.json();
 
                 if (Array.isArray(data.products)) {
-                    // Filter client side just in case
-                    const sellerProducts = data.products.filter(p => p.sellerId === sellerId);
                     setProducts(data.products);
-                    setTotalPages(data.totalPages);
+                    setTotalPages(data.totalPages || 0);
+                    setTotalItems(data.totalCount || 0);
                 } else {
                     setProducts([]);
+                    setTotalItems(0);
                 }
-            } catch (error) {
-                console.error('Error fetching products:', error);
+                setError(null);
+            } catch (err) {
+                console.error('Error fetching products:', err);
+                setError(t('Error loading products'));
+                toast.error(t('Error loading products'));
             } finally {
                 setLoading(false);
             }
@@ -68,52 +67,7 @@ export const useShopData = (sellerId, userId) => {
         if (sellerId) {
             fetchProducts();
         }
-    }, [sellerId, page, apiUrl]);
-
-    const handleRateSeller = async (ratingValue) => {
-        if (hasRated) return;
-        if (!userId) {
-            toast.info(t('Please login to rate this seller'));
-            return;
-        }
-
-        // Optimistic update
-        setUserRating(ratingValue);
-        setHasRated(true);
-
-        try {
-            const res = await fetch(`${apiUrl}/sellers/${sellerId}/rate`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: userId,
-                    rating: ratingValue
-                })
-            });
-
-            if (!res.ok) {
-                throw new Error('Failed to submit rating');
-            }
-
-            // Update seller local state to reflect new average immediately
-            if (seller) {
-                const newReview = { userId: userId, rating: ratingValue };
-                const updatedReviews = [...(seller.reviews || []), newReview];
-                setSeller({ ...seller, reviews: updatedReviews });
-            }
-
-            toast.success(t('Thank you for your rating!'));
-
-        } catch (error) {
-            console.error("Error rating seller:", error);
-            toast.error(t('Failed to submit rating'));
-            // Revert optimistic update
-            setHasRated(false);
-            setUserRating(0);
-        }
-    };
+    }, [sellerId, page, apiUrl, t]);
 
     return {
         seller,
@@ -122,8 +76,8 @@ export const useShopData = (sellerId, userId) => {
         page,
         setPage,
         totalPages,
-        userRating,
-        hasRated,
-        handleRateSeller
+        totalItems,
+        error
     };
 };
+
