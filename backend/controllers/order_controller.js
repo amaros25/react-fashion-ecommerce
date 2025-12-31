@@ -124,6 +124,28 @@ exports.getOrderByUserID = async (req, res) => {
 
 exports.createOrder = async (req, res) => {
   try {
+    const { items } = req.body;
+
+    // Safety check for stock
+    for (const item of items) {
+      const product = await Product.findOne({
+        _id: item.productId,
+        "sizes.size": item.size,
+        "sizes.color": item.color
+      });
+
+      if (!product) {
+        return res.status(404).json({ message: `Product variant not found: ${item.productId} (${item.size}, ${item.color})` });
+      }
+
+      const variant = product.sizes.find(s => s.size === item.size && s.color === item.color);
+      if (variant.stock < item.quantity) {
+        return res.status(400).json({
+          message: `Insufficient stock for ${product.name} (${item.size}, ${item.color}). Available: ${variant.stock}, Requested: ${item.quantity}`
+        });
+      }
+    }
+
     const order = new Order(req.body);
     await order.save();
     res.status(201).json(order);
@@ -144,13 +166,32 @@ exports.updateOrderStatus = async (req, res) => {
       order.status = [];
     }
 
+    const currentStatus = order.status.length > 0 ? order.status[order.status.length - 1].update : 0;
+
     // Wenn Status auf "Bestätigt" (1) gesetzt wird, Stock abziehen
-    if (status === 1) {
+    // Aber nur, wenn der vorherige Status nicht schon bestätigt war (Vermeidung von doppeltem Abzug)
+    if (status === 1 && currentStatus === 0) {
       for (const item of order.items) {
         await Product.updateOne(
           { _id: item.productId, "sizes.size": item.size, "sizes.color": item.color },
           { $inc: { "sizes.$.stock": -item.quantity } }
         );
+      }
+    }
+
+    // Stock wiederherstellen bei Stornierung oder Rückgabe
+    // Statusse: 30 (User Cancel), 31 (Seller Cancel), 13 (Failed Delivery), 24 (Return Received), 42 (Pick Up Failed)
+    const replenishmentStatuses = [30, 31, 13, 24, 42];
+    if (replenishmentStatuses.includes(status)) {
+      // Aber nur wenn der Stock vorher abgezogen wurde (Status >= 1, also mindestens bestätigt)
+      const wasStockSubtracted = order.status.some(s => s.update === 1);
+      if (wasStockSubtracted) {
+        for (const item of order.items) {
+          await Product.updateOne(
+            { _id: item.productId, "sizes.size": item.size, "sizes.color": item.color },
+            { $inc: { "sizes.$.stock": item.quantity } }
+          );
+        }
       }
     }
 

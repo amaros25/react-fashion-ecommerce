@@ -13,6 +13,7 @@ import AddProduct from './components/new_product/add_product.js';
 import CartPage from './components/cart/cart_page.js';
 import MainChat from './components/chat/main_chat.js';
 import InfoPage from './components/info_pages/InfoPage.js';
+import HelpCenter from './components/info_pages/HelpCenter.js';
 import ShopPage from './components/shop/ShopPage.js';
 import ScrollToTop from './components/utils/ScrollToTop.js';
 import { FilterProvider } from './components/filter_context/filter_context.js';
@@ -55,7 +56,7 @@ function App() {
           <Route path="/how-it-works" element={<InfoPage pageKey="how_it_works" />} />
           <Route path="/article-verification" element={<InfoPage pageKey="article_verification" />} />
           <Route path="/info-board" element={<InfoPage pageKey="info_board" />} />
-          <Route path="/help-center" element={<InfoPage pageKey="help_center" />} />
+          <Route path="/help-center" element={<HelpCenter />} />
           <Route path="/sell" element={<InfoPage pageKey="sell" />} />
           <Route path="/buy" element={<InfoPage pageKey="buy" />} />
           <Route path="/trust-safety" element={<InfoPage pageKey="trust_safety" />} />

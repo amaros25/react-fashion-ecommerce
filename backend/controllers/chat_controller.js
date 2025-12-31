@@ -67,6 +67,7 @@ exports.addMessage = async (req, res) => {
 
 exports.createChat = async (req, res) => {
   try {
+    console.log("createChat req.body: ", req.body);
     let { userId, sellerId, type, number } = req.body;
     if (!type) return res.status(400).json({ message: "type fehlt" });
 

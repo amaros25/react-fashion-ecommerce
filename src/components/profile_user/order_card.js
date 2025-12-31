@@ -81,6 +81,33 @@ export default function OrderCard({ order, products, t, onStatusChange, onRating
         </button>
       );
     }
+
+    // Return Logic: Within 24 hours of DELIVERED
+    const isWithin24Hours = (dateString) => {
+      if (!dateString) return false;
+      const date = new Date(dateString);
+      const now = new Date();
+      return (now - date) < 24 * 60 * 60 * 1000;
+    };
+
+    const deliveryStatus = order.status?.find(s => s.update === ORDER_STATUS.DELIVERED);
+
+    if (currentStatus === ORDER_STATUS.DELIVERED && isWithin24Hours(deliveryStatus?.date)) {
+      buttons.push(
+        <button key="return_req" className="seller-btn btn-return" onClick={() => onStatusChange(order._id, ORDER_STATUS.RETURN_REQUESTED)}>
+          {t("order_state_buttons.request_return") || "Request Return"}
+        </button>
+      );
+    }
+
+    if (currentStatus === ORDER_STATUS.RETURN_CONFIRMED) {
+      buttons.push(
+        <button key="return_ship" className="seller-btn btn-return" onClick={() => onStatusChange(order._id, ORDER_STATUS.RETURN_SHIPPED)}>
+          {t("order_state_buttons.return_shipped") || "Return Shipped"}
+        </button>
+      );
+    }
+
     return <div className="seller-actions-row">{buttons}</div>;
   }
 

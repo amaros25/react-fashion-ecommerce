@@ -20,4 +20,7 @@ router.patch("/:chatId/messages/read", chatController.updateReadStatus);
 // GET unread message count for seller
 router.get("/unread/seller/:sellerId", chatController.getUnreadCount);
 
+// GET unread message count for user
+router.get("/unread/user/:userId", chatController.getUnreadUserCount);
+
 module.exports = router;

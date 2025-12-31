@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
- 
+
 
 // Nachrichtenschema
 const messageSchema = new mongoose.Schema({
@@ -12,25 +12,25 @@ const messageSchema = new mongoose.Schema({
 
 // Chatschema
 const chatSchema = new mongoose.Schema({
-  userId: { 
-    type: String,  // Ändere hier auf String
-    required: true,
-  },
-  
-  sellerId: { 
+  userId: {
     type: String,  // Ändere hier auf String
     required: true,
   },
 
-  type: { 
-    type: String, 
-    enum: ["product", "order"], 
-    required: true 
+  sellerId: {
+    type: String,  // Ändere hier auf String
+    required: true,
   },
 
-  number: { 
-    type: String, 
-    default: null 
+  type: {
+    type: String,
+    enum: ["product", "order", "help"],
+    required: true
+  },
+
+  number: {
+    type: String,
+    default: null
   },
 
   messages: [messageSchema],  // Verknüpft mit dem vorherigen Message-Schema
@@ -38,6 +38,6 @@ const chatSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
- 
+
 
 module.exports = mongoose.model("Chat", chatSchema);

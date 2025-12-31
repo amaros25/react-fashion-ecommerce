@@ -257,9 +257,10 @@
         "third_try": "Third Delivery Attempt",
         "return_requested": "Return Requested",
         "return_confirmed": "Return Confirmed",
-        "return_rejected": "Return Rejected",
+        "return_refused": "Return Refused",
         "return_shipped": "Return Shipped",
         "return_received": "Return Received",
+        "return_not_received": "Return Not Received",
         "returned_to_sender": "Returned to Sender",
         "second_try_delivery": "Second Delivery Attempt",
         "ready_pickup": "Ready for Pickup",
@@ -598,7 +599,23 @@
         "accept_return": "Accept Return",
         "reject_return": "Reject Return",
         "confirm_return_received": "Confirm Return Received",
-        "return_not_received": "Return Not Received"
+        "return_not_received": "Return Not Received",
+        "request_return": "Request Return",
+        "return_shipped": "Return Shipped"
+    },
+    "help_center": {
+        "title": "HELP CENTER",
+        "subtitle": "How can we help you today?",
+        "order_number": "Order Number",
+        "order_placeholder": "Enter Order Number",
+        "product_number": "Product Number",
+        "product_placeholder": "Enter Product Number",
+        "message": "Your Message",
+        "message_placeholder": "How can we help you?",
+        "send": "SEND REQUEST",
+        "success_msg": "Your message has been sent to our support team.",
+        "error_msg": "Failed to send message. Please try again later.",
+        "message_required": "Please enter your message."
     },
     "add_product_error": {
         "productImagesRequired": "Product images are required",

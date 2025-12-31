@@ -1,0 +1,114 @@
+.help-center-container {
+    padding: 80px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #000;
+}
+
+.help-center-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.help-center-header h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.help-center-header p {
+    font-size: 1rem;
+    color: #666;
+}
+
+.contact-form-card {
+    background: #fff;
+    padding: 40px;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.help-form-group {
+    margin-bottom: 25px;
+}
+
+.help-form-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.help-form-group input,
+.help-form-group textarea {
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 1rem;
+    background: transparent;
+    transition: border-color 0.3s;
+}
+
+.help-form-group input:focus,
+.help-form-group textarea:focus {
+    outline: none;
+    border-bottom-color: #000;
+}
+
+.help-form-group textarea {
+    min-height: 120px;
+    resize: none;
+}
+
+.form-submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: #000;
+    color: #fff;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-submit-btn:hover {
+    opacity: 0.8;
+}
+
+.form-submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Zara RTL Support */
+[dir="rtl"] .help-center-header h1 {
+    letter-spacing: 0;
+}
+
+[dir="rtl"] .help-form-group label {
+    letter-spacing: 0;
+}
+
+@media (max-width: 768px) {
+    .help-center-container {
+        padding: 40px 15px;
+    }
+
+    .contact-form-card {
+        padding: 25px;
+    }
+}

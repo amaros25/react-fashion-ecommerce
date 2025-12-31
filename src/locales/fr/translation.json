@@ -257,9 +257,10 @@
     "third_try": "Troisième tentative de livraison",
     "return_requested": "Retour demandé",
     "return_confirmed": "Retour confirmé",
-    "return_rejected": "Retour refusé",
+    "return_refused": "Retour refusé",
     "return_shipped": "Retour expédié",
     "return_received": "Retour reçu",
+    "return_not_received": "Retour non reçu",
     "returned_to_sender": "Retour à l'expéditeur",
     "second_try_delivery": "Deuxième tentative de livraison",
     "ready_pickup": "Prêt à être retiré",
@@ -598,7 +599,23 @@
     "accept_return": "Accepter le retour",
     "reject_return": "Refuser le retour",
     "confirm_return_received": "Confirmer retour reçu",
-    "return_not_received": "Retour non reçu"
+    "return_not_received": "Retour non reçu",
+    "request_return": "Demander un retour",
+    "return_shipped": "Retour expédié"
+  },
+  "help_center": {
+    "title": "CENTRE D'AIDE",
+    "subtitle": "Comment pouvons-nous vous aider aujourd'hui ?",
+    "order_number": "Numéro de commande",
+    "order_placeholder": "Entrez le numéro de commande",
+    "product_number": "Numéro de produit",
+    "product_placeholder": "Entrez le numéro de produit",
+    "message": "Votre message",
+    "message_placeholder": "Comment pouvons-nous vous aider ?",
+    "send": "ENVOYER LA DEMANDE",
+    "success_msg": "Votre message a été envoyé à notre équipe d'assistance.",
+    "error_msg": "Échec de l'envoi du message. Veuillez réessayer plus tard.",
+    "message_required": "Veuillez entrer votre message."
   },
   "add_product_error": {
     "productImagesRequired": "Veuillez ajouter des images du produit",
