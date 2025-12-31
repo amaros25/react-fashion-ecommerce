@@ -8,9 +8,9 @@ exports.getUserChats = async (req, res) => {
     let filter = {};
     if (role === 'admin') {
       filter = {
-        $or: [{ userId: userId }, { sellerId: userId }]
+        $or: [{ userId: "admin" }, { sellerId: "admin" }]
       };
-    } else if (role === 'user') {
+    } else if (role === 'user' || role === 'shoper') {
       filter = { userId: userId };
     } else if (role === 'seller') {
       filter = { sellerId: userId };

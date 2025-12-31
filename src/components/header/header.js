@@ -116,7 +116,11 @@ function Header() {
     const role = localStorage.getItem("role");
 
     if (token) {
-      navigate(role === "seller" ? "/profile_seller" : "/profile_user");
+      if (role === "admin") {
+        navigate("/profile_admin");
+      } else {
+        navigate(role === "seller" ? "/profile_seller" : "/profile_user");
+      }
     } else {
       navigate("/login");
     }

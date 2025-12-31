@@ -3,6 +3,8 @@
     "home": "Home",
     "profile": "Profile",
     "login": "Login",
+    "email_or_phone": "Email or Phone Number",
+    "email": "Email Address",
     "logout": "Logout",
     "newProducts": "New Products",
     "select_category": "Select a category",

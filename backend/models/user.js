@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
   lastOnline: { type: Date, default: Date.now },
   passwordResetToken: { type: String },
   passwordResetExpires: { type: Date },
+  role: { type: String, default: "shoper" }
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

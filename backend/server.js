@@ -10,6 +10,7 @@ const userRoutes = require("./routes/user_route");
 const uploadRoutes = require('./routes/upload_route');
 const orderRoutes = require('./routes/orders_route');
 const chatRoutes = require('./routes/chat_route');
+const adminRoutes = require('./routes/admin_route');
 
 const path = require('path');
 
@@ -31,6 +32,7 @@ app.use("/api/users", userRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/chats', chatRoutes);
+app.use('/api/admin', adminRoutes);
 console.log("CORS enabled");
 app.use(
   cors({

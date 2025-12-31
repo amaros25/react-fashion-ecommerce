@@ -87,6 +87,8 @@
     "submit": "S'inscrire",
     "alreadyRegistered": "Déjà inscrit ?",
     "login": "Connexion",
+    "email_or_phone": "Email ou Numéro de téléphone",
+    "email": "Adresse Email",
     "acceptTerms": "En vous inscrivant, vous confirmez avoir lu et accepté les <a href='{{cmandiLink}}'>Conditions Générales de Vente</a> et la <a href='{{privacyLink}}'>Politique de Confidentialité</a>, et être âgé(e) de 18 ans ou plus.",
     "city": "Ville",
     "subCity": "Délégation",

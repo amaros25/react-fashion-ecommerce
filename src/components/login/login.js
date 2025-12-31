@@ -60,6 +60,8 @@ function Login() {
       localStorage.setItem("userData", JSON.stringify(userData));
       if (data.role === "seller") {
         navigate("/profile_seller");
+      } else if (data.role === "admin") {
+        navigate("/profile_admin");
       } else {
         navigate("/profile_user");
       }
@@ -120,9 +122,9 @@ function Login() {
           <form className="login-form" onSubmit={handleSubmit}>
             <h2>{t("login")}</h2>
             {error && <p className="error">{error}</p>}
-            <label>{t("email")}</label>
+            <label>{t("email_or_phone")}</label>
             <input
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

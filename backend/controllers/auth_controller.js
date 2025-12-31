@@ -11,12 +11,43 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    let user = await User.findOne({ email });
+    const identifier = email; // Input can be email or phone
+    let user = await User.findOne({ email: identifier });
     let role = "shoper";
 
+    // If not found by email, try phone
     if (!user) {
-      user = await Seller.findOne({ email });
+      const phoneNum = Number(identifier);
+      if (!isNaN(phoneNum)) {
+        // Find users who have this phone number
+        const usersWithPhone = await User.find({ "phone.phone": phoneNum });
+        // Check if it is the LAST (current) phone number
+        user = usersWithPhone.find(u =>
+          u.phone && u.phone.length > 0 && u.phone[u.phone.length - 1].phone === phoneNum
+        );
+      }
+    }
+
+    if (user) {
+      role = user.role || "shoper";
+    }
+
+    // Check Seller if NOT found in User
+    if (!user) {
+      user = await Seller.findOne({ email: identifier });
       role = "seller";
+
+      // If not found by email, try phone for Seller
+      if (!user) {
+        const phoneNum = Number(identifier);
+        if (!isNaN(phoneNum)) {
+          const sellersWithPhone = await Seller.find({ "phone.phone": phoneNum });
+          user = sellersWithPhone.find(s =>
+            s.phone && s.phone.length > 0 && s.phone[s.phone.length - 1].phone === phoneNum
+          );
+          if (user) role = "seller";
+        }
+      }
     }
 
     if (!user) {
@@ -190,4 +221,32 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { login, logout, requestPasswordReset, resetPassword };
+const updateLastOnline = async (req, res) => {
+  const { userId, role } = req.body;
+  try {
+    let user;
+    // Role check: Admin (undefined or "admin") is technically a user in our DB logic mostly, 
+    // but let's assume standard "shoper" or "seller" roles strings or IDs.
+    // The helper passing role might pass the string "shoper", "seller", "admin".
+
+    if (role === 'seller') {
+      user = await Seller.findById(userId);
+    } else {
+      // "shoper", "admin" are in User collection
+      user = await User.findById(userId);
+    }
+
+    if (user) {
+      user.lastOnline = Date.now();
+      await user.save();
+      res.json({ message: "Last online updated" });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (err) {
+    console.error("Error updating last online:", err);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+module.exports = { login, logout, requestPasswordReset, resetPassword, updateLastOnline };
