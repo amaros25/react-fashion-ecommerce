@@ -10,7 +10,7 @@ export default function useRelatedProducts(category, currentProductId) {
 
         const fetchProducts = async () => {
             try {
-                let url = `${apiUrl}/products/latest?page=1&limit=12`;
+                let url = `${apiUrl}/products/latest?page=1&limit=8`;
 
                 if (category) url += `&category=${category}`;
                 if (currentProductId) url += `&not=${currentProductId}`;

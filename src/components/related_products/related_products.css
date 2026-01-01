@@ -65,14 +65,22 @@
   direction: rtl;
 }
 
-@media (max-width: 1200px) {
+
+
+@media (min-width: 768px) {
   .related-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 2fr));
+    grid-template-columns: repeat(4, 4fr);
   }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 601px) and (max-width: 767px) {
   .related-grid {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 2fr));
+    grid-template-columns: repeat(3, 3fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .related-grid {
+    grid-template-columns: repeat(2, 2fr);
   }
 }
