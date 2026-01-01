@@ -514,7 +514,8 @@
   "main-categories": {
     "mens": "Hommes",
     "womens": "Femmes",
-    "kids": "Enfants"
+    "kids": "Enfants",
+    "home": "Maison"
   },
   "sort_by": "Trier par",
   "sort": {
@@ -527,6 +528,7 @@
   "all-women": "Tout",
   "all-men": "Tout",
   "all-kids": "Tout",
+  "all-home": "Tout",
   "clothes": "Vêtements",
   "shoes": "Chaussures",
   "accessories": "Accessoires",
@@ -549,6 +551,11 @@
     "deleted": "Supprimé",
     "unknown": "Inconnu"
   },
+  "kitchen": "Cuisine",
+  "furniture": "Meubles",
+  "decor": "Décoration",
+  "bath": "Salle de bain",
+  "other-home": "Autres produits",
   "create_new_listing": "Créer un nouveau listing",
   "product_images": "Images du produit",
   "basic_information": "Informations de base",

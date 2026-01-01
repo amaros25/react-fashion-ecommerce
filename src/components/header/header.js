@@ -13,7 +13,6 @@ import { FaUser } from "react-icons/fa6";
 import { FaRegUser } from "react-icons/fa6";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { IoChatboxEllipses } from "react-icons/io5";
-import { BsFillCupHotFill } from "react-icons/bs";
 import { categoryKeys, subCategories } from '../utils/const/category';
 
 function Header() {

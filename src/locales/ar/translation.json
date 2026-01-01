@@ -512,7 +512,8 @@
   "main-categories": {
     "mens": "رجال",
     "womens": "نساء",
-    "kids": "أطفال"
+    "kids": "أطفال",
+    "home": "المنزل"
   },
   "sort_by": "ترتيب حسب",
   "sort": {
@@ -525,6 +526,7 @@
   "all-women": "كل",
   "all-men": "كل",
   "all-kids": "كل",
+  "all-home": "كل",
   "clothes": "الملابس",
   "shoes": "الأحذية",
   "accessories": "الإكسسوارات",
@@ -547,6 +549,11 @@
     "deleted": "محذوف",
     "unknown": "غير معروف"
   },
+  "kitchen": "المطبخ",
+  "furniture": "أثاث",
+  "decor": "ديكور",
+  "bath": "حمام",
+  "other-home": "منتجات منزلية أخرى",
   "create_new_listing": "إنشاء قائمة جديدة",
   "product_images": "صور المنتج",
   "basic_information": "معلومات الأساسية",
