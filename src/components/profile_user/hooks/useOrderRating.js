@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
@@ -8,23 +8,37 @@ export const useOrderRating = (order, onRatingComplete) => {
     const userId = localStorage.getItem("userId");
 
     const [sellerRating, setSellerRating] = useState(0);
+    const [seller, setSeller] = useState(null);
     const [productRatings, setProductRatings] = useState(
         order.items.reduce((acc, item) => ({
             ...acc,
-            [item.productId]: { rating: 0 }
+            [item.productId]: { rating: 0, comment: "" }
         }), {})
     );
-    const [orderComment, setOrderComment] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
+    // Fetch seller details
+    useEffect(() => {
+        const fetchSeller = async () => {
+            if (!order.sellerId) return;
+            try {
+                const res = await fetch(`${apiUrl}/sellers/${order.sellerId}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setSeller(data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch seller:", error);
+            }
+        };
+        fetchSeller();
+    }, [order.sellerId]);
+
     const handleProductRatingChange = (productId, field, value) => {
-        // field is always 'rating' now as comments are global
-        if (field === 'rating') {
-            setProductRatings(prev => ({
-                ...prev,
-                [productId]: { ...prev[productId], rating: value }
-            }));
-        }
+        setProductRatings(prev => ({
+            ...prev,
+            [productId]: { ...prev[productId], [field]: value }
+        }));
     };
 
     const submitRatings = async () => {
@@ -56,15 +70,12 @@ export const useOrderRating = (order, onRatingComplete) => {
             if (!sellerRes.ok) throw new Error("Failed to rate seller");
 
             // 2. Submit Product Ratings
-            // We use the same orderComment for all products, or just the first one?
-            // Usually duplicate content is fine, or we append it only to the first.
-            // Let's send it with all for now to ensure visibility.
             for (const item of order.items) {
-                const { rating } = productRatings[item.productId];
+                const { rating, comment } = productRatings[item.productId];
                 const prodRes = await fetch(`${apiUrl}/products/${item.productId}/rate`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId, rating, comment: orderComment })
+                    body: JSON.stringify({ userId, rating, comment })
                 });
                 if (!prodRes.ok) console.error(`Failed to rate product ${item.productId}`);
             }
@@ -80,13 +91,12 @@ export const useOrderRating = (order, onRatingComplete) => {
     };
 
     return {
+        seller,
         sellerRating,
         setSellerRating,
         productRatings,
         handleProductRatingChange,
         submitRatings,
-        submitting,
-        orderComment,
-        setOrderComment
+        submitting
     };
 };

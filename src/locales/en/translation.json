@@ -643,8 +643,11 @@
         "error_while_reading_data": "Error: Data could not be loaded."
     },
     "rate_your_experience": "Rate Your Experience",
+    "evaluate_experience": "Evaluate your experience",
     "rate_seller": "Rate Seller",
     "rate_products": "Rate Products",
+    "order_number": "Order Number",
+    "seller": "Seller",
     "add_comment_placeholder": "Add a comment (optional)...",
     "submit_rating": "Submit Rating",
     "submitting": "Submitting...",

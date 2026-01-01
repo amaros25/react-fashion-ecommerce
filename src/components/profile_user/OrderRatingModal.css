@@ -4,12 +4,18 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2000;
-    backdrop-filter: blur(4px);
+    /* Optimizations to prevent flickering */
+    transform: translate3d(0, 0, 0);
+    will-change: opacity;
+    contain: strict;
+    backdrop-filter: none;
+    /* Ensure it is really gone */
+    -webkit-backdrop-filter: none;
 }
 
 .order-rating-modal-content {
@@ -17,15 +23,18 @@
     width: 90%;
     max-width: 500px;
     max-height: 85vh;
-    border-radius: 16px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e5e7eb;
+    pointer-events: auto;
+    /* Ensure updated */
+    transform: translate3d(0, 0, 0);
+    /* New composite layer */
 }
 
 .modal-header {
     padding: 20px 24px;
-    border-bottom: 1px solid #f3f4f6;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,49 +42,157 @@
 
 .modal-header h2 {
     margin: 0;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #111827;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: #000;
 }
 
 .close-btn {
     background: none;
     border: none;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     cursor: pointer;
-    color: #6b7280;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: #000;
     padding: 4px;
-    border-radius: 50%;
-    transition: background 0.2s;
+    transition: opacity 0.2s;
 }
 
 .close-btn:hover {
-    background: #f3f4f6;
+    opacity: 0.7;
 }
 
 .modal-body {
-    padding: 24px;
+    padding: 0 24px 24px 24px;
     overflow-y: auto;
 }
 
-.order-number-info {
-    color: #6b7280;
-    font-size: 0.9rem;
+.order-number-section {
+    text-align: center;
     margin-bottom: 20px;
 }
 
-.rating-section h3 {
-    font-size: 1rem;
-    margin-bottom: 12px;
-    color: #374151;
+.order-number-text {
+    font-size: 0.9rem;
+    color: #000;
+    font-weight: 500;
+    letter-spacing: 0.02em;
 }
 
+.fine-line {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 20px 0;
+}
+
+.section-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    margin: 0 0 16px 0;
+    font-weight: 600;
+}
+
+/* Seller Section */
+.seller-info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.seller-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.seller-image {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #f3f4f6;
+}
+
+.shop-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #000;
+}
+
+.seller-stars {
+    display: flex;
+}
+
+/* Products Section */
+.product-rate-item {
+    margin-bottom: 32px;
+}
+
+.product-info-group {
+    margin-bottom: 12px;
+}
+
+.product-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.product-image {
+    width: 50px;
+    height: 65px;
+    /* Portrait aspect ratio */
+    object-fit: cover;
+    background-color: #f9fafb;
+}
+
+.product-name {
+    font-size: 0.9rem;
+    color: #000;
+    font-weight: 400;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-stars-comment {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.stars-wrapper {
+    margin-bottom: 4px;
+}
+
+.comment-box {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    min-height: 80px;
+    font-size: 0.85rem;
+    resize: none;
+    font-family: inherit;
+    color: #000;
+    background: #fafafa;
+    transition: border-color 0.2s;
+}
+
+.comment-box:focus {
+    outline: none;
+    border-color: #000;
+    background: #fff;
+}
+
+/* Stars */
 .star-rating-container {
     display: flex;
-    gap: 8px;
+    gap: 4px;
 }
 
 .star-btn {
@@ -83,97 +200,78 @@
     border: none;
     cursor: pointer;
     padding: 0;
-    font-size: 1.5rem;
-    transition: transform 0.1s;
+    font-size: 1.2rem;
+    transition: opacity 0.2s;
 }
 
 .star-btn:hover {
-    transform: scale(1.1);
+    opacity: 0.8;
 }
 
 .star-icon {
-    color: #d1d5db;
+    color: #e5e7eb;
 }
 
 .star-icon.active {
-    color: #fbbf24;
+    color: #000;
 }
 
-.product-rate-item {
-    margin-bottom: 24px;
-}
-
-.product-info-mini {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.product-info-mini img {
-    width: 48px;
-    height: 48px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.product-info-mini span {
-    font-weight: 500;
-    font-size: 0.95rem;
-}
-
-.product-rate-item textarea {
-    width: 100%;
-    margin-top: 12px;
-    padding: 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    min-height: 80px;
-    font-size: 0.9rem;
-    resize: none;
-}
-
-.product-rate-item textarea:focus {
-    outline: none;
-    border-color: #000;
-}
-
+/* Footer */
 .modal-footer {
     padding: 20px 24px;
-    border-top: 1px solid #f3f4f6;
+    border-top: 1px solid #e5e7eb;
     display: flex;
     gap: 12px;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 .modal-footer button {
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
+    padding: 12px 24px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     cursor: pointer;
     transition: all 0.2s;
+    flex: 1;
 }
 
 .modal-footer .btn-cancel {
     background: #fff;
-    border: 1px solid #e5e7eb;
-    color: #374151;
+    border: 1px solid #000;
+    color: #000;
+}
+
+.modal-footer .btn-cancel:hover {
+    background: #f9fafb;
 }
 
 .modal-footer .btn-submit {
     background: #000;
-    border: none;
+    border: 1px solid #000;
     color: #fff;
 }
 
+.modal-footer .btn-submit:hover {
+    opacity: 0.9;
+}
+
 .modal-footer .btn-submit:disabled {
-    opacity: 0.6;
+    background: #9ca3af;
+    border-color: #9ca3af;
     cursor: not-allowed;
+    opacity: 1;
 }
 
 @media (max-width: 640px) {
     .order-rating-modal-content {
-        max-width: 95%;
-        max-height: 90vh;
+        max-width: 100%;
+        max-height: 100vh;
+        height: 100vh;
+        border-radius: 0;
+        width: 100%;
+    }
+
+    .modal-body {
+        flex: 1;
     }
 }

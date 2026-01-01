@@ -643,6 +643,7 @@
     "error_while_reading_data": "Erreur: Les données n'ont pas pu être chargées."
   },
   "rate_your_experience": "Évaluez votre expérience",
+  "evaluate_experience": "Évaluez votre expérience",
   "rate_seller": "Évaluer le vendeur",
   "rate_products": "Évaluer les produits",
   "add_comment_placeholder": "Ajouter un commentaire (facultatif)...",
