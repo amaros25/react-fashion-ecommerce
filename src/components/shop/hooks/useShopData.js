@@ -2,10 +2,9 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
-export const useShopData = (sellerId, userId) => {
+export const useShopData = (sellerId) => {
     const { t } = useTranslation();
     const apiUrl = process.env.REACT_APP_API_URL;
-
     const [seller, setSeller] = useState(null);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -14,7 +13,6 @@ export const useShopData = (sellerId, userId) => {
     const [totalItems, setTotalItems] = useState(0);
     const [error, setError] = useState(null);
 
-    // Fetch Seller Info
     useEffect(() => {
         const fetchSeller = async () => {
             try {
@@ -35,17 +33,13 @@ export const useShopData = (sellerId, userId) => {
         }
     }, [sellerId, apiUrl, t]);
 
-    // Fetch Seller Products
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
             try {
-                // Use the correct seller-specific endpoint
                 const res = await fetch(`${apiUrl}/products/seller/${sellerId}?page=${page}&limit=12`);
                 if (!res.ok) throw new Error('Failed to fetch products');
-
                 const data = await res.json();
-
                 if (Array.isArray(data.products)) {
                     setProducts(data.products);
                     setTotalPages(data.totalPages || 0);

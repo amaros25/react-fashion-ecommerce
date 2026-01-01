@@ -132,7 +132,7 @@
     padding: 5px 5px 10px 5px;
 }
 
-.product-name {
+.product-info .product-name {
     font-family: 'Inter', 'Helvetica Neue', sans-serif;
     font-size: 15px;
     font-weight: 700;

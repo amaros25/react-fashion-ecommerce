@@ -60,13 +60,11 @@
   color: #c22929;
 }
 
-/* RTL Unterstützung */
 .rtl .related-title {
   text-align: right;
   direction: rtl;
 }
 
-/* Responsive Anpassungen */
 @media (max-width: 1200px) {
   .related-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 2fr));

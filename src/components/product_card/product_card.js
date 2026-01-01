@@ -137,7 +137,7 @@ function ProductCard({ product, onProductRemoved, onClick }) {
 
         <Link to={`/product/${product._id}`} className="product-info-link" onClick={onClick}>
           <div className="product-info">
-            <h2 className="product-name" title={product.name}>{product.name}</h2>
+            <div className="product-name" title={product.name}>{product.name}</div>
             <div className="product-colors-display">
               {[...new Set(product.sizes.map(s => s.color))].map((color, index) => (
                 <div
