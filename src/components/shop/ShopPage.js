@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import { useLayoutEffect, useCallback } from 'react';
 import { useParams, useNavigationType } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaStar, FaRegStar, FaStarHalfAlt, FaMapMarkerAlt } from 'react-icons/fa';
-import { toast } from 'react-toastify';
 import ProductCard from '../product_card/product_card';
 import Pagination from '../home/pagination';
 import LoadingSpinner from '../utils/loading_spinner';
@@ -15,7 +14,6 @@ const ShopPage = () => {
     const { sellerId } = useParams();
     const navType = useNavigationType();
     const { t } = useTranslation();
-    const userId = localStorage.getItem("userId");
 
     const {
         seller,
@@ -26,12 +24,11 @@ const ShopPage = () => {
         totalPages,
         totalItems,
         error
-    } = useShopData(sellerId, userId);
+    } = useShopData(sellerId);
 
-    const handleProductClick = () => {
-        console.log("handleProductClick: ", window.scrollY);
+    const handleProductClick = useCallback((product) => {
         window.localStorage.setItem('scrollPosition', window.scrollY);
-    };
+    }, []);
 
     useLayoutEffect(() => {
         if (!loading) {
@@ -47,7 +44,6 @@ const ShopPage = () => {
     }, [loading, navType]);
 
     const averageRating = seller?.averageRating || 0;
-    const roundedRating = Math.round(averageRating);
     const reviewCount = seller?.reviewCount || 0;
 
     if (error) {
@@ -58,29 +54,38 @@ const ShopPage = () => {
             </div>
         );
     }
+    let cityName = "";
+    let subCityName = "";
+    if (seller && Array.isArray(seller.address) && seller.address.length > 0) {
+        const lastAddress = seller.address[seller.address.length - 1];
 
-    if (!seller && loading) return <LoadingSpinner />;
-    if (!seller && !loading) return <div className="shop-error-container"><p>{t('Shop not found')}</p></div>;
+        cityName = cities[lastAddress.city];
+        subCityName = citiesData[cities[lastAddress.city]]?.[lastAddress.subCity] || "";
+    } else if (seller && seller.address && typeof seller.address === "object") {
+        const address = seller.address;
+        cityName = cities[address.city];
+        subCityName = citiesData[cities[address.city]]?.[address.subCity] || "";
+
+    } else {
+        console.log("No valid address found.");
+    }
 
     return (
         <div className="shop-page-container">
-            {/* Minimalist Header */}
+
             <header className="shop-hero">
                 <div className="shop-hero-content">
-                    <h1 className="shop-title">{seller.shopName || "SELLER SHOP"}</h1>
-
+                    <h1 className="shop-title">{seller?.shopName || "SELLER SHOP"}</h1>
                     <div className="shop-meta">
                         <span className="shop-owner">
-                            {t('cart_page.curated_by')} {seller.firstName} {seller.lastName}
+                            {t('cart_page.curated_by')} {seller?.firstName} {seller?.lastName}
                         </span>
-                        {seller.address && seller.address.length > 0 && (
-                            <span className="shop-location">
-                                <FaMapMarkerAlt className="icon" />
-                                {citiesData[cities[seller.address[seller.address.length - 1].city]][seller.address[seller.address.length - 1].subCity]}, {cities[seller.address[seller.address.length - 1].city]}
-                            </span>
-                        )}
-                    </div>
 
+                        <span className="shop-location">
+                            <FaMapMarkerAlt className="icon" />
+                            {subCityName}, {cityName}
+                        </span>
+                    </div>
                     <div className="shop-rating-display">
                         <div className="stars-static">
                             {[1, 2, 3, 4, 5].map((star) => {
@@ -98,24 +103,19 @@ const ShopPage = () => {
                             ({reviewCount} {t('product_page.reviews')})
                         </span>
                     </div>
-
                 </div>
             </header>
-
-            {/* Products Grid */}
             <section className="shop-collection">
                 <div className="collection-header">
                     <h2>{t('cart_page.latest_collection')}</h2>
                     <span className="collection-count">{totalItems} {t('cart_page.items')}</span>
                 </div>
-
                 <div className="shop-products-area" style={{ minHeight: '600px', position: 'relative' }}>
                     {loading && (
                         <div className="shop-loading-overlay">
                             <LoadingSpinner />
                         </div>
                     )}
-
                     <div className={`shop-grid ${loading ? 'loading' : ''}`}>
                         {products.length > 0 ? (
                             products.map(product => (
@@ -127,7 +127,6 @@ const ShopPage = () => {
                             </div>
                         )}
                     </div>
-
                     {products.length > 0 && !loading && (
                         <div className="shop-pagination">
                             <Pagination
