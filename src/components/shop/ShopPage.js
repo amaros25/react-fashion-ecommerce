@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useParams, useNavigationType } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaStar, FaRegStar, FaStarHalfAlt, FaMapMarkerAlt } from 'react-icons/fa';
@@ -17,17 +17,6 @@ const ShopPage = () => {
     const { t } = useTranslation();
     const userId = localStorage.getItem("userId");
 
-    useEffect(() => {
-        // Scroll always to the top when the ShopPage is loaded
-        window.scrollTo(0, 0);
-    }, [navType]); // Empty dependency array to run only once on mount
-
-
-    const handleProductClick = () => {
-        console.log("handleProductClick: ", window.scrollY);
-        window.localStorage.setItem('scrollPosition', window.scrollY);
-    };
-
     const {
         seller,
         products,
@@ -38,6 +27,24 @@ const ShopPage = () => {
         totalItems,
         error
     } = useShopData(sellerId, userId);
+
+    const handleProductClick = () => {
+        console.log("handleProductClick: ", window.scrollY);
+        window.localStorage.setItem('scrollPosition', window.scrollY);
+    };
+
+    useLayoutEffect(() => {
+        if (!loading) {
+            if (navType === 'POP') {
+                const savedPosition = window.localStorage.getItem('scrollPosition');
+                if (savedPosition) {
+                    window.scrollTo(0, parseInt(savedPosition, 10));
+                }
+            } else {
+                window.scrollTo(0, 0);
+            }
+        }
+    }, [loading, navType]);
 
     const averageRating = seller?.averageRating || 0;
     const roundedRating = Math.round(averageRating);
@@ -64,7 +71,7 @@ const ShopPage = () => {
 
                     <div className="shop-meta">
                         <span className="shop-owner">
-                            {t('Curated by')} {seller.firstName} {seller.lastName}
+                            {t('cart_page.curated_by')} {seller.firstName} {seller.lastName}
                         </span>
                         {seller.address && seller.address.length > 0 && (
                             <span className="shop-location">
@@ -79,16 +86,16 @@ const ShopPage = () => {
                             {[1, 2, 3, 4, 5].map((star) => {
                                 const diff = averageRating - (star - 1);
                                 if (diff >= 1) {
-                                    return <FaStar key={star} className="star filled" size={14} />;
+                                    return <FaStar key={star} className="star filled" size={16} />;
                                 } else if (diff >= 0.5) {
-                                    return <FaStarHalfAlt key={star} className="star filled" size={14} />;
+                                    return <FaStarHalfAlt key={star} className="star filled" size={16} />;
                                 } else {
-                                    return <FaRegStar key={star} className="star empty" size={14} />;
+                                    return <FaRegStar key={star} className="star empty" size={16} />;
                                 }
                             })}
                         </div>
                         <span className="rating-text">
-                            {averageRating.toFixed(1)} / 5 ({reviewCount} {t('reviews')})
+                            ({reviewCount} {t('product_page.reviews')})
                         </span>
                     </div>
 
@@ -98,8 +105,8 @@ const ShopPage = () => {
             {/* Products Grid */}
             <section className="shop-collection">
                 <div className="collection-header">
-                    <h2>{t('LATEST COLLECTION')}</h2>
-                    <span className="collection-count">{totalItems} {t('Items')}</span>
+                    <h2>{t('cart_page.latest_collection')}</h2>
+                    <span className="collection-count">{totalItems} {t('cart_page.items')}</span>
                 </div>
 
                 <div className="shop-products-area" style={{ minHeight: '600px', position: 'relative' }}>

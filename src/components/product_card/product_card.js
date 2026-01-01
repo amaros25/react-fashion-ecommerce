@@ -6,7 +6,7 @@ import { BsBookmarkHeart } from "react-icons/bs";
 import { BsBookmarkHeartFill } from "react-icons/bs";
 import { toast } from "react-toastify";
 
-function ProductCard({ product, onProductRemoved }) {
+function ProductCard({ product, onProductRemoved, onClick }) {
 
   const { t, i18n } = useTranslation();
   const [currentImage, setCurrentImage] = useState(product.image[0]);
@@ -88,7 +88,9 @@ function ProductCard({ product, onProductRemoved }) {
           key={product._id}
           to={`/product/${product._id}`}
           state={{ product }}
-          className="product-card-item">
+          className="product-card-item"
+          onClick={onClick}
+        >
 
           <div className="product-image-wrapper">
             <img
@@ -133,7 +135,7 @@ function ProductCard({ product, onProductRemoved }) {
           )}
         </div>
 
-        <Link to={`/product/${product._id}`} className="product-info-link">
+        <Link to={`/product/${product._id}`} className="product-info-link" onClick={onClick}>
           <div className="product-info">
             <h2 className="product-name" title={product.name}>{product.name}</h2>
             <div className="product-colors-display">

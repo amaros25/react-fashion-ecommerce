@@ -189,7 +189,9 @@
     "address_required": "يرجى إضافة عنوان التوصيل الخاص بك أولاً",
     "pickup_info": "سيتم عرض عنوان متجر البائع بعد تأكيد البائع.",
     "update_address": "تعديل العنوان",
-    "cart_page.no_items_in_cart": "لا توجد عناصر في السلة"
+    "cart_page.no_items_in_cart": "لا توجد عناصر في السلة",
+    "curated_by": "يُدَار من قِبَل",
+    "latest_collection": "أحدث مجموعة"
   },
   "phone": "الهاتف",
   "address": "العنوان",

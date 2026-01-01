@@ -191,7 +191,9 @@
     "address_required": "Veuillez d'abord ajouter votre adresse de livraison",
     "pickup_info": "L'adresse de la boutique du vendeur sera affichée après la confirmation du vendeur.",
     "update_address": "Modifier l'adresse",
-    "cart_page.no_items_in_cart": "Aucun article dans le panier"
+    "cart_page.no_items_in_cart": "Aucun article dans le panier",
+    "curated_by": "Géré par",
+    "latest_collection": "Dernière collection"
   },
   "phone": "Téléphone",
   "address": "Adresse",

@@ -191,7 +191,9 @@
         "address_required": "Please add your delivery address first",
         "pickup_info": "The seller's shop address will be displayed after seller confirmation.",
         "update_address": "Update Address",
-        "cart_page.no_items_in_cart": "No items in cart"
+        "cart_page.no_items_in_cart": "No items in cart",
+        "curated_by": "Curated by",
+        "latest_collection": "Latest Collection"
     },
     "phone": "Phone",
     "address": "Address",
