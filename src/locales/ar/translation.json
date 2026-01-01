@@ -491,7 +491,7 @@
     "sendButton": "إرسال",
     "noChat": "اختر محادثة أو ابدأ محادثة جديدة",
     "noMessages": "لا توجد رسائل",
-    "order": "طلب",
+    "order": "رقم الطلب",
     "product": "منتج",
     "lastMessage": "آخر رسالة",
     "newChatButton": "دردشة جديدة",
@@ -639,5 +639,16 @@
     "fetchTimeout": "خطأ: لا يمكن تحميل البيانات.",
     "noProducts": "لا يوجد منتجات",
     "error_while_reading_data": "خطأ: لا يمكن تحميل البيانات."
-  }
+  },
+  "rate_your_experience": "قيم تجربتك",
+  "rate_seller": "قيم البائع",
+  "rate_products": "قيم المنتجات",
+  "add_comment_placeholder": "أضف تعليقًا (اختياري)...",
+  "submit_rating": "إرسال التقييم",
+  "submitting": "جاري الإرسال...",
+  "please_rate_seller": "يرجى تقييم البائع",
+  "please_rate_all_products": "يرجى تقييم جميع المنتجات",
+  "thank_you_for_rating": "شكراً لتقييمك!",
+  "failed_to_submit_ratings": "فشل إرسال التقييم",
+  "close": "إغلاق"
 }

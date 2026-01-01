@@ -163,6 +163,7 @@ export default function OrderCard({ order, products, t, onStatusChange, onRating
           onClose={() => setShowRatingModal(false)}
           onRatingComplete={() => {
             setHasRated(true);
+            setShowRatingModal(false);
             if (onRatingComplete) onRatingComplete();
             toast.success(t("thank_you_for_rating") || "Thank you for your rating!");
           }}

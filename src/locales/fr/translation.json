@@ -88,7 +88,7 @@
     "alreadyRegistered": "Déjà inscrit ?",
     "login": "Connexion",
     "email_or_phone": "Email ou Numéro de téléphone",
-    "email": "Adresse Email",
+    "email_or_phone": "Email ou Numéro de téléphone",
     "acceptTerms": "En vous inscrivant, vous confirmez avoir lu et accepté les <a href='{{cmandiLink}}'>Conditions Générales de Vente</a> et la <a href='{{privacyLink}}'>Politique de Confidentialité</a>, et être âgé(e) de 18 ans ou plus.",
     "city": "Ville",
     "subCity": "Délégation",
@@ -493,7 +493,7 @@
     "sendButton": "Envoyer",
     "noChat": "Choisissez un chat ou commencez un nouveau",
     "noMessages": "Aucun message",
-    "order": "Commande",
+    "order": "Numéro de Commande",
     "product": "Produit",
     "lastMessage": "Dernier message",
     "newChatButton": "Nouveau chat",
@@ -641,5 +641,16 @@
     "fetchTimeout": "Erreur: Les données n'ont pas pu être chargées.",
     "noProducts": "Aucun produit trouvé",
     "error_while_reading_data": "Erreur: Les données n'ont pas pu être chargées."
-  }
+  },
+  "rate_your_experience": "Évaluez votre expérience",
+  "rate_seller": "Évaluer le vendeur",
+  "rate_products": "Évaluer les produits",
+  "add_comment_placeholder": "Ajouter un commentaire (facultatif)...",
+  "submit_rating": "Soumettre",
+  "submitting": "Envoi...",
+  "please_rate_seller": "Veuillez évaluer le vendeur",
+  "please_rate_all_products": "Veuillez évaluer tous les produits",
+  "thank_you_for_rating": "Merci pour votre avis !",
+  "failed_to_submit_ratings": "Échec de l'envoi des notes",
+  "close": "Fermer"
 }

@@ -42,7 +42,7 @@
     "choose_files": "Choose a photo",
     "search_product": "Search Model",
     "search": "Search",
-    "email": "Email",
+    "search": "Search",
     "password": "Password",
     "login_start": "Log In",
     "loading": "Loading...",
@@ -493,7 +493,7 @@
         "sendButton": "Send",
         "noChat": "Choose a chat or start a new one",
         "noMessages": "No messages",
-        "order": "Order",
+        "order": "Order Number",
         "product": "Product",
         "lastMessage": "Last message",
         "newChatButton": "New Chat",
@@ -641,5 +641,16 @@
         "fetchTimeout": "Error: Data could not be loaded.",
         "noProducts": "No products found",
         "error_while_reading_data": "Error: Data could not be loaded."
-    }
+    },
+    "rate_your_experience": "Rate Your Experience",
+    "rate_seller": "Rate Seller",
+    "rate_products": "Rate Products",
+    "add_comment_placeholder": "Add a comment (optional)...",
+    "submit_rating": "Submit Rating",
+    "submitting": "Submitting...",
+    "please_rate_seller": "Please rate the seller",
+    "please_rate_all_products": "Please rate all products",
+    "thank_you_for_rating": "Thank you for your rating!",
+    "failed_to_submit_ratings": "Failed to submit ratings",
+    "close": "Close"
 }

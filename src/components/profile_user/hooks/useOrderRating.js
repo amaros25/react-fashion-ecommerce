@@ -11,27 +11,31 @@ export const useOrderRating = (order, onRatingComplete) => {
     const [productRatings, setProductRatings] = useState(
         order.items.reduce((acc, item) => ({
             ...acc,
-            [item.productId]: { rating: 0, comment: '' }
+            [item.productId]: { rating: 0 }
         }), {})
     );
+    const [orderComment, setOrderComment] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
     const handleProductRatingChange = (productId, field, value) => {
-        setProductRatings(prev => ({
-            ...prev,
-            [productId]: { ...prev[productId], [field]: value }
-        }));
+        // field is always 'rating' now as comments are global
+        if (field === 'rating') {
+            setProductRatings(prev => ({
+                ...prev,
+                [productId]: { ...prev[productId], rating: value }
+            }));
+        }
     };
 
     const submitRatings = async () => {
         if (sellerRating === 0) {
-            toast.error(t("please_rate_seller") || "Please rate the seller");
+            toast.error(t("please_rate_seller"));
             return;
         }
 
         const missingProductRating = Object.values(productRatings).some(p => p.rating === 0);
         if (missingProductRating) {
-            toast.error(t("please_rate_all_products") || "Please rate all products");
+            toast.error(t("please_rate_all_products"));
             return;
         }
 
@@ -52,21 +56,24 @@ export const useOrderRating = (order, onRatingComplete) => {
             if (!sellerRes.ok) throw new Error("Failed to rate seller");
 
             // 2. Submit Product Ratings
+            // We use the same orderComment for all products, or just the first one?
+            // Usually duplicate content is fine, or we append it only to the first.
+            // Let's send it with all for now to ensure visibility.
             for (const item of order.items) {
-                const { rating, comment } = productRatings[item.productId];
+                const { rating } = productRatings[item.productId];
                 const prodRes = await fetch(`${apiUrl}/products/${item.productId}/rate`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId, rating, comment })
+                    body: JSON.stringify({ userId, rating, comment: orderComment })
                 });
                 if (!prodRes.ok) console.error(`Failed to rate product ${item.productId}`);
             }
 
-            toast.success(t("thank_you_for_rating") || "Thank you for your rating!");
+            toast.success(t("thank_you_for_rating"));
             if (onRatingComplete) onRatingComplete();
         } catch (err) {
             console.error(err);
-            toast.error(t("failed_to_submit_ratings") || "Failed to submit ratings");
+            toast.error(t("failed_to_submit_ratings"));
         } finally {
             setSubmitting(false);
         }
@@ -78,6 +85,8 @@ export const useOrderRating = (order, onRatingComplete) => {
         productRatings,
         handleProductRatingChange,
         submitRatings,
-        submitting
+        submitting,
+        orderComment,
+        setOrderComment
     };
 };
