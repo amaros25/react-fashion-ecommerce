@@ -23,13 +23,15 @@ export const useShopData = (sellerId) => {
                 setError(null);
             } catch (err) {
                 console.error('Error fetching seller:', err);
-                setError(t('Could not load shop information'));
-                toast.error(t('Could not load shop information'));
+                setError(t('Failed to load shop information, Could not load shop information'));
+                toast.error(t('Failed to load shop information, Could not load shop information'));
             }
         };
-
         if (sellerId) {
             fetchSeller();
+        } else {
+            setError(t('No seller ID provided'));
+            toast.error(t('Failed to load shop information, No seller ID provided'));
         }
     }, [sellerId, apiUrl, t]);
 
@@ -51,15 +53,17 @@ export const useShopData = (sellerId) => {
                 setError(null);
             } catch (err) {
                 console.error('Error fetching products:', err);
-                setError(t('Error loading products'));
-                toast.error(t('Error loading products'));
+                setError(t('Failed to load products, Error while loading products'));
+                toast.error(t('Failed to load products, Error while loading products'));
             } finally {
                 setLoading(false);
             }
         };
-
         if (sellerId) {
             fetchProducts();
+        } else {
+            setError(t('No seller ID provided'));
+            toast.error(t('Failed to load products, Seller ID not found'));
         }
     }, [sellerId, page, apiUrl, t]);
 

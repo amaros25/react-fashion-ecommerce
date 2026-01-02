@@ -1,14 +1,12 @@
-/* Shop Page Container - Minimalist Base */
 .shop-page-container {
     max-width: 100%;
     min-height: 100vh;
     background-color: #ffffff;
     font-family: 'Outfit', sans-serif;
     color: #000;
-    padding-bottom: 100px;
+    padding-bottom: 20px;
 }
 
-/* Hero Section - Clean & Typographic */
 .shop-hero {
     padding: 20px 20px 10px;
     display: flex;
@@ -63,13 +61,12 @@
     font-size: 0.8rem;
 }
 
-/* Rating Display - Minimal */
 .shop-rating-display {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 5px;
-    margin-top: 20px;
+    margin-top: 5px;
 }
 
 .stars-static {
@@ -91,7 +88,6 @@
     font-weight: 500;
 }
 
-/* Rate Action - Elegant Interaction */
 .rate-action {
     margin-top: 30px;
     display: flex;
@@ -145,7 +141,6 @@
     letter-spacing: 1px;
 }
 
-/* Collection Section */
 .shop-collection {
     max-width: 1600px;
     margin: 0 auto;
@@ -175,7 +170,6 @@
     font-weight: 500;
 }
 
-/* Grid Layout */
 .shop-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -191,14 +185,12 @@
     font-size: 1.1rem;
 }
 
-/* Pagination */
 .shop-pagination {
-    margin-top: 80px;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
 }
 
-/* Responsive Adjustments */
 
 @media (max-width: 480px) {
     .shop-title {

@@ -91,11 +91,11 @@ const ShopPage = () => {
                             {[1, 2, 3, 4, 5].map((star) => {
                                 const diff = averageRating - (star - 1);
                                 if (diff >= 1) {
-                                    return <FaStar key={star} className="star filled" size={16} />;
+                                    return <FaStar key={star} className="star filled" size={18} />;
                                 } else if (diff >= 0.5) {
-                                    return <FaStarHalfAlt key={star} className="star filled" size={16} />;
+                                    return <FaStarHalfAlt key={star} className="star filled" size={18} />;
                                 } else {
-                                    return <FaRegStar key={star} className="star empty" size={16} />;
+                                    return <FaRegStar key={star} className="star empty" size={18} />;
                                 }
                             })}
                         </div>
