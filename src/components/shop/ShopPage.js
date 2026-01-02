@@ -1,4 +1,4 @@
-import { useLayoutEffect, useCallback, useEffect } from 'react';
+import { useLayoutEffect, useCallback } from 'react';
 import { useParams, useNavigationType } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaStar, FaRegStar, FaStarHalfAlt, FaMapMarkerAlt } from 'react-icons/fa';

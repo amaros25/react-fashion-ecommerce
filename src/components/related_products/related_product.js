@@ -22,7 +22,6 @@ function RelatedProducts({ category, currentProductId }) {
   }, [i18n.language]);
   if (loading) return <LoadingSpinner />;
 
-
   return (
     <div className="related-container">
       <hr className="product-divider" />
