@@ -1,47 +1,34 @@
-/* RTL (Right to Left) Support */
-.rtl .section-title {
-    text-align: right;
-    direction: rtl;
-}
+ .rtl .section-title {
+     text-align: right;
+     direction: rtl;
+ }
 
-.msaved-container {
-    width: 100%;
-    max-width: 100%;
-    min-height: auto;
-    padding: 20px;
-    box-sizing: border-box;
-    margin: 0 auto;
-}
+ .msaved-container {
+     width: 100%;
+     max-width: 100%;
+     min-height: auto;
+     padding-top: 30px;
+     box-sizing: border-box;
+     margin: 0 auto;
+ }
 
-.saved-title {
-    font-size: 1.6rem;
-    font-weight: 500;
-    margin-top: 10px;
-    margin-bottom: 15px;
-    text-align: start;
-    color: #333;
-}
+ .no-products {
+     padding-bottom: 150px;
+ }
 
-.no-products {
-    padding-bottom: 150px;
-}
+ @media (max-width: 480px) {
+     .msaved-container {
+         width: 100%;
+         padding: 8px;
+         max-width: 100%;
+         margin: 0;
+     }
+ }
 
-@media (max-width: 480px) {
-    .msaved-container {
-        width: 100%;
-        padding: 8px;
-        max-width: 100%;
-        margin: 0;
-    }
+ @media (min-width: 481px) and (max-width: 768px) {
+     .msaved-container {
+         padding: 12px;
+         max-width: 100%;
+     }
 
-
-}
-
-/* Medium phones and small tablets (481px - 768px) */
-@media (min-width: 481px) and (max-width: 768px) {
-    .msaved-container {
-        padding: 12px;
-        max-width: 100%;
-    }
-
-}
+ }

@@ -22,8 +22,6 @@ const Home = () => {
     ? subCategories[category].indexOf(subcategory)
     : null;
 
-  console.log("urlCategory: ", urlCategory);
-  console.log("urlSubcategory: ", urlSubcategory);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(24);
   const [loading, setLoading] = useState(false);
@@ -39,12 +37,9 @@ const Home = () => {
     sortBy
   );
 
-  console.log("totalPages: ", totalPages);
-
   useEffect(() => {
     const handleResize = debounce(() => {
       const width = window.innerWidth;
-      console.log("handleResize => width:", width);
       if (width <= 786) {
         setLimit(16);
       } else {

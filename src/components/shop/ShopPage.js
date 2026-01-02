@@ -1,4 +1,4 @@
-import { useLayoutEffect, useCallback } from 'react';
+import { useLayoutEffect, useCallback, useEffect } from 'react';
 import { useParams, useNavigationType } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaStar, FaRegStar, FaStarHalfAlt, FaMapMarkerAlt } from 'react-icons/fa';
@@ -8,12 +8,14 @@ import LoadingSpinner from '../utils/loading_spinner';
 import { useShopData } from './hooks/useShopData';
 import './shop_page.css';
 import { cities, citiesData } from '../utils/const/cities';
-
+import { toast } from "react-toastify";
 
 const ShopPage = () => {
     const { sellerId } = useParams();
     const navType = useNavigationType();
     const { t } = useTranslation();
+    let cityName = "";
+    let subCityName = "";
 
     const {
         seller,
@@ -25,6 +27,8 @@ const ShopPage = () => {
         totalItems,
         error
     } = useShopData(sellerId);
+    const averageRating = seller?.averageRating || 0;
+    const reviewCount = seller?.reviewCount || 0;
 
     const handleProductClick = useCallback((product) => {
         window.localStorage.setItem('scrollPosition', window.scrollY);
@@ -43,9 +47,6 @@ const ShopPage = () => {
         }
     }, [loading, navType]);
 
-    const averageRating = seller?.averageRating || 0;
-    const reviewCount = seller?.reviewCount || 0;
-
     if (error) {
         return (
             <div className="shop-error-container">
@@ -54,21 +55,27 @@ const ShopPage = () => {
             </div>
         );
     }
-    let cityName = "";
-    let subCityName = "";
-    if (seller && Array.isArray(seller.address) && seller.address.length > 0) {
-        const lastAddress = seller.address[seller.address.length - 1];
 
-        cityName = cities[lastAddress.city];
-        subCityName = citiesData[cities[lastAddress.city]]?.[lastAddress.subCity] || "";
-    } else if (seller && seller.address && typeof seller.address === "object") {
-        const address = seller.address;
-        cityName = cities[address.city];
-        subCityName = citiesData[cities[address.city]]?.[address.subCity] || "";
+    const getCityName = () => {
+        try {
+            if (seller && Array.isArray(seller.address) && seller.address.length > 0) {
+                const lastAddress = seller.address[seller.address.length - 1];
+                cityName = cities[lastAddress.city];
+                subCityName = citiesData[cities[lastAddress.city]]?.[lastAddress.subCity] || "";
+            } else if (seller && seller.address && typeof seller.address === "object") {
+                const address = seller.address;
+                cityName = cities[address.city];
+                subCityName = citiesData[cities[address.city]]?.[address.subCity] || "";
+            } else {
+                console.log("No valid address found.");
+            }
+        } catch (error) {
+            console.error("Error getting city name:", error);
+            toast.error(t('Failed to get city name'));
+        }
+    };
 
-    } else {
-        console.log("No valid address found.");
-    }
+    getCityName();
 
     return (
         <div className="shop-page-container">

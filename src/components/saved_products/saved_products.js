@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "./saved_products.css";
 import ProductCard from '../product_card/product_card';
-
+import { toast } from "react-toastify";
 
 function SavedProducts() {
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -23,8 +23,14 @@ function SavedProducts() {
     }, [i18n.language]);
 
     const getSavedProducts = () => {
-        const saved = localStorage.getItem(savedProductsKey);
-        return saved ? JSON.parse(saved) : [];
+        try {
+            const saved = localStorage.getItem(savedProductsKey);
+            return saved ? JSON.parse(saved) : [];
+        } catch (error) {
+            console.error("Error getting saved products:", error);
+            toast.error(t('Failed to load saved products'));
+            return [];
+        }
     };
 
     const loadSavedProducts = () => {
@@ -38,26 +44,31 @@ function SavedProducts() {
                 })
                 .catch((err) => {
                     console.error("Error loading products:", err);
+                    toast.error(t('Failed to load saved products'));
                 });
         } else {
             setSavedProductsList([]);
         }
     };
-
     useEffect(() => {
         loadSavedProducts();
     }, [apiUrl]);
 
-    // Callback function when a product is removed
     const handleProductRemoved = (productId) => {
-        setSavedProductsList(prevList => prevList.filter(p => p._id !== productId));
+        try {
+            setSavedProductsList(prevList => prevList.filter(p => p._id !== productId));
+        } catch (error) {
+            console.error("Error removing product:", error);
+            toast.error(t('Failed to remove product'));
+        }
     };
 
     return (
         <div className="msaved-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-
-
-            <h1 className="saved-title">{t("saved_products.title")}</h1>
+            <div className="collection-header">
+                <h2>{t('saved_products.title')}</h2>
+                <span className="collection-count">{savedProductsList.length} {t('cart_page.items')}</span>
+            </div>
 
             <div className="product-card-list">
                 {savedProductsList.length > 0 ? (
@@ -72,11 +83,8 @@ function SavedProducts() {
                     <p className="no-products">{t("saved_products.no_saved_products")}</p>
                 )}
             </div>
-
-
         </div>
     );
-
 }
 
 export default SavedProducts;

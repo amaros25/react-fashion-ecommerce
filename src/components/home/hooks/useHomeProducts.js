@@ -30,13 +30,11 @@ export const useHomeProducts = (page, limit, urlCategory, urlSubcategory, search
             return JSON.stringify(p1) === JSON.stringify(p2);
         };
         if (isSameParams(currentParams, cacheParams) && cachedHomeProducts.length > 0) {
-            console.log("CACHE HIT: Using cached products, no fetch.");
             setLatestProducts(cachedHomeProducts);
             setTotalPages(cachedTotalPages);
             setReadingDataDone(true);
             return;
         }
-        console.log("CACHE MISS: Fetching new data...");
         setLatestProducts([]);
         setTotalPages(0);
 
@@ -53,7 +51,6 @@ export const useHomeProducts = (page, limit, urlCategory, urlSubcategory, search
         if (sortBy) {
             url += `&sort=${sortBy}`;
         }
-        console.log("+++++++ => url: ", url);
         setReadingDataDone(false);
         setReadingError(false);
         fetch(url)
