@@ -60,6 +60,12 @@ function SellerProducts({ sellerId, apiUrl, token }) {
       default: return "state-unknown";
     }
   };
+  const calculateTotalStock = (product) => {
+    if (!product || !Array.isArray(product.sizes)) {
+      return 0;
+    }
+    return product.sizes.reduce((total, size) => total + (size.stock || 0), 0);
+  };
 
   return (
     <div
@@ -112,10 +118,12 @@ function SellerProducts({ sellerId, apiUrl, token }) {
                   <span className="card-price">
                     {product.price ? `${product.price} ${t("price_suf")}` : t("price_not_available")}
                   </span>
+
                   <span className="card-orders">
                     {product.orderCount > 0 ? `${product.orderCount} ${t("orders")}` : t("no_orders")}
                   </span>
                 </div>
+                <span className="card-stock">{t("stock")}: {calculateTotalStock(product)}</span>
                 <div className="card-footer">
                   <span className="date-added">
                     {t("added_date")}: {new Date(product.createdAt).toLocaleDateString(i18n.language)}

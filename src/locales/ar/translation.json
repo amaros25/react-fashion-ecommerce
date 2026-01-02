@@ -585,7 +585,12 @@
     "girls-clothing": "ملابس الفتيات",
     "boys-clothing": "ملابس الأولاد",
     "baby-clothing": "ملابس الرضع",
-    "other-kids": "أخرى (أطفال)"
+    "other-kids": "أخرى (أطفال)",
+    "kitchen": "المطبخ",
+    "furniture": "أثاث",
+    "decor": "ديكور",
+    "bath": "حمام",
+    "other-home": "منتجات منزلية أخرى"
   },
   "orders": "طلبات",
   "no_orders": "لا توجد طلبات",
@@ -636,7 +641,8 @@
     "productSubcategoryRequired": "الفئة الفرعية للمنتج مطلوبة",
     "productSizesRequired": "يرجى تحديد مقاسات المنتج",
     "productSizeRequired": "حجم المنتج مطلوب",
-    "productStockRequired": "مخزون المنتج مطلوب"
+    "productStockRequired": "مخزون المنتج مطلوب",
+    "productCustomSizeRequired": "حجم مخصص مطلوب عند اختيار 'حجم مخصص'."
   },
   "add_review_erros": {
     "rate_only_received_error": "يمكنك تقييم المنتجات التي تم استلامها فقط.",
@@ -660,5 +666,13 @@
   "please_rate_all_products": "يرجى تقييم جميع المنتجات",
   "thank_you_for_rating": "شكراً لتقييمك!",
   "failed_to_submit_ratings": "فشل إرسال التقييم",
-  "close": "إغلاق"
+  "close": "إغلاق",
+  "select_size": "اختر الحجم",
+  "custom_size": "حجم مخصص",
+  "productSizeRequired": "الحجم مطلوب.",
+  "productCustomSizeRequired": "الحجم المخصص مطلوب عند اختيار 'حجم مخصص'.",
+  "productStockRequired": "الكمية المطلوبة من المخزون.",
+  "enter_custom_size": "أدخل الحجم المخصص",
+  "exp_100_watt_30_cm": "على سبيل المثال 100 واط، 30 سم",
+  "product_size": "حجم المنتج"
 }

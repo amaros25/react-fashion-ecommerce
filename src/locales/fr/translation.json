@@ -587,7 +587,12 @@
     "girls-clothing": "Vêtements filles",
     "boys-clothing": "Vêtements garçons",
     "baby-clothing": "Vêtements bébés",
-    "other-kids": "Autres (Enfants)"
+    "other-kids": "Autres (Enfants)",
+    "kitchen": "Cuisine",
+    "furniture": "Meubles",
+    "decor": "Décoration",
+    "bath": "Salle de bain",
+    "other-home": "Autres produits"
   },
   "orders": "Commande(s)",
   "no_orders": "Aucune commande",
@@ -638,7 +643,8 @@
     "productSubcategoryRequired": "Veuillez sélectionner une sous-catégorie",
     "productSizesRequired": "Veuillez sélectionner des tailles",
     "productSizeRequired": "Veuillez entrer une taille",
-    "productStockRequired": "Veuillez entrer le stock"
+    "productStockRequired": "Veuillez entrer le stock",
+    "productCustomSizeRequired": "La taille personnalisée est requise lorsque 'taille personnalisée' est sélectionnée."
   },
   "add_review_erros": {
     "rate_only_received_error": "Vous pouvez seulement évaluer les produits que vous avez reçus.",
@@ -662,5 +668,13 @@
   "please_rate_all_products": "Veuillez évaluer tous les produits",
   "thank_you_for_rating": "Merci pour votre avis !",
   "failed_to_submit_ratings": "Échec de l'envoi des notes",
-  "close": "Fermer"
+  "close": "Fermer",
+  "select_size": "Sélectionner la taille",
+  "custom_size": "Taille personnalisée",
+  "productSizeRequired": "La taille est requise.",
+  "productCustomSizeRequired": "La taille personnalisée est requise lorsque 'Taille personnalisée' est sélectionnée.",
+  "productStockRequired": "La quantité en stock est requise.",
+  "enter_custom_size": "Entrez la taille personnalisée",
+  "exp_100_watt_30_cm": "par exemple 100 Watt, 30 cm",
+  "product_size": "Taille du produit"
 }

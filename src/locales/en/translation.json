@@ -587,7 +587,12 @@
         "girls-clothing": "Girls' Clothing",
         "boys-clothing": "Boys' Clothing",
         "baby-clothing": "Baby Clothing",
-        "other-kids": "Other (Kids)"
+        "other-kids": "Other (Kids)",
+        "kitchen": "Kitchen",
+        "furniture": "Furniture",
+        "decor": "Decor",
+        "bath": "Bath",
+        "other-home": "Other Home"
     },
     "orders": "Order(s)",
     "no_orders": "No orders",
@@ -638,7 +643,8 @@
         "productSubcategoryRequired": "Product subcategory is required",
         "productSizesRequired": "Product sizes are required",
         "productSizeRequired": "Product size is required",
-        "productStockRequired": "Product stock is required"
+        "productStockRequired": "Product stock is required",
+        "productCustomSizeRequired": "Custom size is required when 'custom size' is selected."
     },
     "add_review_erros": {
         "rate_only_received_error": "you can only rate products you have received.",
@@ -664,5 +670,13 @@
     "please_rate_all_products": "Please rate all products",
     "thank_you_for_rating": "Thank you for your rating!",
     "failed_to_submit_ratings": "Failed to submit ratings",
-    "close": "Close"
+    "close": "Close",
+    "select_size": "Select Size",
+    "custom_size": "Custom Size",
+    "productSizeRequired": "Size is required.",
+    "productCustomSizeRequired": "Custom size is required when 'Custom Size' is selected.",
+    "productStockRequired": "Stock quantity is required.",
+    "enter_custom_size": "Enter custom size",
+    "exp_100_watt_30_cm": "e.g. 100 Watt, 30 cm",
+    "product_size": "Product Size"
 }

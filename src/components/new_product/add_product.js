@@ -26,16 +26,18 @@ function AddProduct() {
     subcategory: "",
     type: "",
     isStandard: false,
-    sizes: [{ size: "", stock: 0, color: "#000000" }],
+    sizes: [{ size: "", stock: 0, color: "#000000", customSize: "" }],
   });
-  const categoryKeys = ["womens", "mens", "kids"];
+  const categoryKeys = ["womens", "mens", "kids", "home"];
   const subCategories = {
     womens: ["clothes", "shoes", "bags", "accessories", "beauty", "other-women"],
     mens: ["clothes", "shoes", "accessories", "other-mens"],
-    kids: ["girls-clothing", "boys-clothing", "baby-clothing", "other-kids"]
+    kids: ["girls-clothing", "boys-clothing", "baby-clothing", "other-kids"],
+    home: ["kitchen", "furniture", "decor", "bath", "other-home"]
   };
 
 
+  const sizesList = ["S", "M", "L", "XL", "XXL", "XXXXL", "XXXXXL", "30", "32", "34", "36", "38", "40", "42", "44", "46", "48", "50", t("custom_size")];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +46,16 @@ function AddProduct() {
 
   const handleSizeChange = (index, field, value) => {
     const newSizes = [...formData.sizes];
-    newSizes[index][field] = field === "stock" ? parseInt(value) || 0 : value;
+
+    if (field === "size" && value === t("custom_size")) {
+      newSizes[index][field] = value;
+      newSizes[index].customSize = "";
+    } else if (field === "customSize") {
+      newSizes[index][field] = value;
+    } else {
+      newSizes[index][field] = field === "stock" ? parseInt(value) || 0 : value;
+    }
+
     setFormData({ ...formData, sizes: newSizes });
   };
 
@@ -131,6 +142,13 @@ function AddProduct() {
         toast.error(t("add_product_error.productSizeRequired"));
         return;
       }
+
+      if (s.size === t("custom_size") && !s.customSize) {
+        setError(t("add_product_error.productCustomSizeRequired"));
+        toast.error(t("add_product_error.productCustomSizeRequired"));
+        return;
+      }
+
       if (s.stock === 0) {
         setError(t("add_product_error.productStockRequired"));
         toast.error(t("add_product_error.productStockRequired"));
@@ -232,7 +250,6 @@ function AddProduct() {
           <h3>{t("category")}</h3>
           <div className="form-row">
             <div className="form-group">
-
               <select
                 name="category"
                 value={formData.category}
@@ -308,16 +325,44 @@ function AddProduct() {
           <div className="variants-list">
             {formData.sizes.map((size, index) => (
               <div key={index} className="variant-row">
-                <div className="form-group size-input">
-                  <label>{t("size_exp")}</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. M, 38"
-                    value={size.size}
-                    onChange={(e) => handleSizeChange(index, "size", e.target.value)}
-                    disabled={formData.isStandard}
-                  />
-                </div>
+                {formData.category === 3 ? (
+                  <div className="form-group size-input">
+                    <label>{t("product_size")}</label>
+                    <input
+                      type="text"
+                      placeholder={t("exp_100_watt_30_cm")}
+                      value={size.size}
+                      onChange={(e) => handleSizeChange(index, "size", e.target.value)}
+                    />
+                  </div>
+                ) : (
+                  <div className="form-group size-input">
+                    <label>{t("select_size")}</label>
+                    <select
+                      value={size.size}
+                      onChange={(e) => handleSizeChange(index, "size", e.target.value)}
+                      disabled={formData.isStandard}
+                    >
+                      <option value="">{t("select_size")}</option>
+                      {sizesList.map((sizeOption) => (
+                        <option key={sizeOption} value={sizeOption}>
+                          {sizeOption}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                {size.size === t("custom_size") && (
+                  <div className="form-group size-input">
+                    <label>{t("custom_size")}</label>
+                    <input
+                      type="text"
+                      placeholder={t("enter_custom_size")}
+                      value={size.customSize}
+                      onChange={(e) => handleSizeChange(index, "customSize", e.target.value)}
+                    />
+                  </div>
+                )}
                 <div className="form-group stock-input">
                   <label>Stock</label>
                   <input
