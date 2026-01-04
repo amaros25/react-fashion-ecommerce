@@ -12,7 +12,6 @@ const sellerSchema = new mongoose.Schema({
       dateModified: { type: Date, default: Date.now }
     }
   ],
-  image: { type: String, required: true },
   phone: [
     {
       phone: { type: Number, required: true },
@@ -25,6 +24,12 @@ const sellerSchema = new mongoose.Schema({
   lastOnline: { type: Date, default: Date.now },
   passwordResetToken: { type: String },
   passwordResetExpires: { type: Date },
+  image: [
+    {
+      imageUrl: { type: String, required: true },
+      dateModified: { type: Date, default: Date.now }
+    }
+  ],
 });
 
 module.exports = mongoose.model('Seller', sellerSchema);

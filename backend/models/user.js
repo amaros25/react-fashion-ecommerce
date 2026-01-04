@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema({
   lastOnline: { type: Date, default: Date.now },
   passwordResetToken: { type: String },
   passwordResetExpires: { type: Date },
+  image: [
+    {
+      imageUrl: { type: String },
+      dateModified: { type: Date, default: Date.now }
+    }
+  ],
   role: { type: String, default: "shoper" }
 }, { timestamps: true });
 

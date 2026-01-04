@@ -6,6 +6,9 @@ import ImageSelectUpload from '../new_product/image_select_upload.js';
 import { toast } from "react-toastify";
 import { cities, citiesData } from '../utils/const/cities.js';
 import useRegisterApi from "./hooks/useRegisterApi";
+import { Link } from "react-router-dom";
+import ValidateRegisterForm from "./validateregisterform";
+import { generateRegisterPayload } from "./generate_payload";
 
 function Register() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -25,7 +28,10 @@ function Register() {
   const [error, setError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-  const { uploadImage, registerUser } = useRegisterApi(apiUrl, cloudName, uploadPreset);
+  const { uploadImage, registerUser, updateImage } = useRegisterApi(cloudName, uploadPreset);
+
+  const cmandiLink = "/agb";
+  const privacyLink = "/data_protection";
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -44,12 +50,6 @@ function Register() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-
-  const isValidEmail = (email) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email);
-  const isStrongPassword = (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
-  const isValidPhone = (phone) => /^[0-9]{8,15}$/.test(phone);
-  const isValidName = (name) => /^[a-zA-Z\s]+$/.test(name);
 
   const handleCityChange = (e) => {
     const cityIndex = e.target.selectedIndex - 1;
@@ -96,162 +96,66 @@ function Register() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+  const handleValidationError = (message) => {
+    setError(message);
+    toast.error(message);
+  };
 
-    if (!formData.firstName) {
-      setError(t("register.error.firstNameRequired"));
-      toast.error(t("register.error.firstNameRequired"));
-      return;
-    }
-
-    if (formData.firstName.length < 4 || !isValidName(formData.firstName)) {
-      setError(t("register.error.invalidFirstName"));
-      toast.error(t("register.error.invalidFirstName"));
-      return;
-    }
-    if (!formData.lastName) {
-      setError(t("register.error.lastNameRequired"));
-      toast.error(t("register.error.lastNameRequired"));
-      return;
-    }
-    if (formData.lastName.length < 4 || !isValidName(formData.lastName)) {
-      setError(t("register.error.invalidLastName"));
-      toast.error(t("register.error.invalidLastName"));
-      return;
-    }
-
-    if (!formData.email || !isValidEmail(formData.email)) {
-      setError(t("register.error.emailRequired"));
-      toast.error(t("register.error.emailRequired"));
-      return;
-    }
-
-    if (!formData.password) {
-      setError(t("register.error.passwordRequired"));
-      toast.error(t("register.error.passwordRequired"));
-      return;
-    }
-
-    if (!isStrongPassword(formData.password)) {
-      setError(t("register.error.passwordStrength"));
-      toast.error(t("register.error.passwordStrength"));
-      return;
-    }
-    if (!formData.phone) {
-      setError(t("register.error.phoneRequired"));
-      toast.error(t("register.error.phoneRequired"));
-      return;
-    }
-
-    if (!isValidPhone(formData.phone)) {
-      setError(t("register.error.invalidPhone"));
-      toast.error(t("register.error.invalidPhone"));
-      return;
-    }
-
-    if (!formData.address) {
-      setError(t("register.error.addressRequired"));
-      toast.error(t("register.error.addressRequired"));
-      return;
-    }
-
-    if (!selectedCity) {
-      setError(t("register.error.cityRequired"));
-      toast.error(t("register.error.cityRequired"));
-      return;
-    }
-
-    if (!selectedSubCity) {
-      setError(t("register.error.subCityRequired"));
-      toast.error(t("register.error.subCityRequired"));
-      return;
-    }
-
-
-
-    if (role === "seller") {
-      if (!formData.shopName) {
-        setError(t("register.error.fillShopNameAddress"));
-        toast.error(t("register.error.fillShopNameAddress"));
-        return;
-      }
-      if (!imageFile) {
-        setError(t("register.error.uploadProfileImage"));
-        toast.error(t("register.error.uploadProfileImage"));
-        return;
-      }
-    }
-    if (!acceptedTerms) {
-      setError(t("register.error.acceptTerms"));
-      toast.error(t("register.error.acceptTerms"));
+  const upload_profile_image = async (userId) => {
+    if (!imageFile) {
+      console.log("No Image Selected");
       return;
     }
     try {
-
       const imageUrl = imageFile ? await uploadImage(imageFile) : "";
+      if (!imageUrl) {
+        console.error("Image upload failed");
+        toast.error(t("register.error.image_upload_failed"));
+        return;
+      }
       let endpoint = "";
-      let payload = {};
-
       if (role === "seller") {
-        endpoint = `${apiUrl}/sellers/create`;
-        payload = {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          password: formData.password,
-          shopName: formData.shopName,
-          address: formData.address ? [{
-            address: formData.address,
-            city: selectedCityIndex,
-            subCity: selectedSubCityIndex,
-            dateModified: new Date()
-          }
-          ] : [],
-          phone: formData.phone ? [{
-            phone: formData.phone,
-            dateModified: new Date()
-          }] : [],
-          image: imageUrl,
-          active: false,
-          lastOnline: new Date(),
-        };
+        endpoint = `${apiUrl}/sellers/${userId}/updateImage`;
       } else {
-        endpoint = `${apiUrl}/users/create`;
-        payload = {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          password: formData.password,
-          address: formData.address ? [{
-            address: formData.address,
-            city: selectedCityIndex,
-            subCity: selectedSubCityIndex,
-            dateModified: new Date()
-          }
-          ] : [],
-          phone: formData.phone ? [{
-            phone: formData.phone,
-            dateModified: new Date()
-          }] : [],
-          image: imageUrl || "",
-          active: true,
-          lastOnline: new Date(),
-        };
+        endpoint = `${apiUrl}/users/${userId}/updateImage`;
       }
+      const updateResponse = await updateImage(endpoint, { imageUrl });
+      if (!updateResponse.success) {
+        console.error("Error updating image URL in DB:", updateResponse.error);
+      } else {
+        console.log("Image updated successfully");
+        toast.success(t("register.image_updated_successfully"));
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error.message);
+      toast.error(t("register.error.image_upload_failed"));
+    }
+  };
 
-      await registerUser(endpoint, payload);
-      toast.success(t("register.success"));
-      navigate("/login");
-    } catch (err) {
-      if (err.message === "user already exists") {
-        setError(t("register.error.userAlreadyExists"));
-        toast.error(t("register.error.userAlreadyExists"));
+  const handleSubmit = async (e) => {
+    console.log("handleSubmit formData: ", formData);
+    e.preventDefault();
+    setError("");
+    const error = ValidateRegisterForm(formData, role, acceptedTerms, imageFile, selectedCity, selectedSubCity, t);
+    if (error) {
+      handleValidationError(error);
+      return;
+    }
+    try {
+      const { endpoint, payload } = generateRegisterPayload(apiUrl, formData, role, selectedCityIndex, selectedSubCityIndex);
+      const response = await registerUser(endpoint, payload);
+      console.log("response: ", response);
+      if (response.success) {
+        upload_profile_image(response.userId);
+        toast.success(t("register.user_created_successfully"));
+        navigate("/login");
       } else {
-        setError(err.message);
-        toast.error(err.message)
+        setError(t("register.error." + response.error));
+        toast.error(t("register.error." + response.error));
       }
+    } catch (err) {
+      setError(t("register.registrationFailed") + err.message);
+      toast.error(t("register.registrationFailed") + err.message);
     }
   };
 
@@ -361,8 +265,6 @@ function Register() {
                   value={formData.shopName}
                   onChange={handleChange}
                 />
-
-
                 <label>{t("register.profileImageRequired")}</label>
                 <ImageSelectUpload onImageChange={handleImageChange} maximages={1} />
               </>
@@ -375,14 +277,15 @@ function Register() {
                   checked={acceptedTerms}
                   onChange={handleCheckboxChange}
                 />
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: t("register.acceptTerms", {
-                      cmandiLink: "/agb",
-                      privacyLink: "/data_protection"
-                    })
-                  }}
-                />
+
+                <p>
+                  {t("register.acceptTermsPart1")}
+                  <Link to={cmandiLink}>{t("register.acceptTermsLink1")}</Link>
+                  {t("register.acceptTermsPart2")}
+                  <Link to={privacyLink}>{t("register.acceptTermsLink2")}</Link>
+                  {t("register.acceptTermsPart3")}
+                </p>
+
               </label>
             </div>
 

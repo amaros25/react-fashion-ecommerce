@@ -4,7 +4,8 @@ const userController = require("../controllers/user_controller");
 
 router.get("/", userController.getAllUsers);
 router.get("/:id", userController.getUserById);
-router.post("/create", userController.createUser); // Registrierung
+router.post("/create", userController.createUser);
 router.patch("/:id/updateContact", userController.updateUser);
+router.put("/:id/updateImage", userController.updateUserImage);
 
 module.exports = router;

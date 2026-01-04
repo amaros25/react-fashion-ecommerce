@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { cities, citiesData } from '../utils/const/cities';
-import { FaCog, FaSignOutAlt, FaTrash, FaShoppingBag, FaExclamationTriangle, FaCommentDots, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
+import { FaTrash, FaExclamationTriangle, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
 
 function ProfileHeader({ user, totalOrders, openOrders }) {
   const { t } = useTranslation();
@@ -129,7 +129,7 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
         localStorage.setItem("userData", JSON.stringify(updatedUserData));
 
         setShowSettings(false);
-        //window.location.reload();
+        window.location.reload();
       } else {
         toast.error("Failed to update profile");
       }
