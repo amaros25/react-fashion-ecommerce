@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 import "./modal.css";
@@ -12,14 +12,14 @@ function Login() {
   const apiUrl = process.env.REACT_APP_API_URL;
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showForgotModal, setShowForgotModal] = React.useState(false);
-  const [resetEmail, setResetEmail] = React.useState("");
-  const [resetLoading, setResetLoading] = React.useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
