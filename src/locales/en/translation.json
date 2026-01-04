@@ -32,7 +32,8 @@
     "tabs_seller": {
         "products": "Products",
         "openOrders": "Open Orders",
-        "allOrders": "All Orders"
+        "allOrders": "All Orders",
+        "bills": "Invoices"
     },
     "add_new_product": "Add New Product",
     "new_products": "",
@@ -692,5 +693,18 @@
     "productStockRequired": "Stock quantity is required.",
     "enter_custom_size": "Enter custom size",
     "exp_100_watt_30_cm": "e.g. 100 Watt, 30 cm",
-    "product_size": "Product Size"
+    "product_size": "Product Size",
+    "bill_order_number": "Order Number",
+    "bill_main_title": "INVOICE",
+    "bill_product_number": "Product Number",
+    "bill_date": "Confirmation Date",
+    "bill_costs": "Costs",
+    "previous": "Previous",
+    "next": "Next",
+    "bill_item_price": "Item Price",
+    "bill_order_total": "Order Total",
+    "bill_commission_rate": "Commission (3%)",
+    "bill_status_paid": "Paid",
+    "bill_status_open": "Open",
+    "bill_number_label": "Invoice Number"
 }

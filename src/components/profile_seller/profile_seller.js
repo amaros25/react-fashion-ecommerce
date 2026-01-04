@@ -4,6 +4,7 @@ import AddProduct from "../new_product/add_product";
 import SellerProducts from "./seller_products";
 import ProfileSellerHeader from "./profile_seller_header";
 import SellerOrders from "./seller_orders.js";
+import SellerBills from "./seller_bills.js";
 import LoadingSpinner from "../utils/loading_spinner.js";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -117,11 +118,12 @@ function ProfileSeller() {
         token={token}
       />
       <nav className="seller-profile-nav">
-        {["add_new_product", "products", "allOrders"].map((tab) => {
+        {["add_new_product", "products", "allOrders", "bills"].map((tab) => {
           let label = "";
-          if (tab === "add_new_product") label = t(t("add_new_product"));
+          if (tab === "add_new_product") label = t("add_new_product");
           if (tab === "products") label = t(`tabs_seller.${tabKeys[0]}`);
           if (tab === "allOrders") label = t(`tabs_seller.${tabKeys[2]}`);
+          if (tab === "bills") label = t("tabs_seller.bills");
 
           return (
             <div
@@ -144,6 +146,9 @@ function ProfileSeller() {
             handleStatusChange={handleStatusChange}
             refreshTrigger={refreshOrders}
           />
+        )}
+        {activeTab === "bills" && (
+          <SellerBills sellerId={userId} apiUrl={apiUrl} token={token} />
         )}
         {activeTab === "add_new_product" && <AddProduct />}
       </div>

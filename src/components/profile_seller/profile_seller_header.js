@@ -12,6 +12,7 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
   const [stats, setStats] = useState({ openOrders: 0, totalOrders: 0 });
   const [productCount, setProductCount] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
+  const [sellerImage, setSellerImage] = useState("");
   const [formData, setFormData] = useState({
     address: "",
     city: "",
@@ -71,13 +72,17 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
         setSubCities(citiesData[cities[lastAddress.city]] || []);
       }
     }
+
     if (seller.phone && seller.phone.length > 0) {
       setFormData(prev => ({
         ...prev,
         phone: seller.phone[seller.phone.length - 1].phone
       }));
     }
-
+    if (seller.image && seller.image.length > 0) {
+      const lastImage = seller.image[seller.image.length - 1].imageUrl;
+      setSellerImage(lastImage);
+    }
   }, [seller, apiUrl, token]);
 
   const handleCityChange = (e) => {
@@ -195,7 +200,7 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
         <div className="seller-profile-top-row">
           <div className="seller-profile-identity">
             <div className="seller-avatar-minimal">
-              <img src={seller.image || '/default-avatar.png'} alt={seller.shopName} />
+              <img src={sellerImage || '/default-avatar.png'} alt={seller.shopName} />
             </div>
             <div className="seller-info-minimal">
               <div className="seller-name-row">

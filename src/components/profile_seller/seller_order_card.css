@@ -1,14 +1,14 @@
 ﻿.seller-order-card {
     background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    border: 1px solid #000;
+    border-radius: 0;
     padding: 20px;
     margin-bottom: 20px;
-    transition: box-shadow 0.2s ease;
+    transition: transform 0.2s ease;
 }
 
 .seller-order-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
 }
 
 .order-card-header {

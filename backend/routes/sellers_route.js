@@ -19,5 +19,8 @@ router.post('/:id/rate', sellerController.rateSeller);
 
 router.put("/:id/updateImage", sellerController.updateSellerImage);
 
+router.get("/:sellerId/bills", sellerController.getSellerBills);
+
+
 // Export the router so it can be used in the main app
 module.exports = router;

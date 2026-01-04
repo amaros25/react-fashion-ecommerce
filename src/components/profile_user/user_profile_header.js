@@ -14,6 +14,7 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
 
   const [showSettings, setShowSettings] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [userImage, setUserImage] = useState('');
   const [formData, setFormData] = useState({
     address: "",
     city: "",
@@ -23,8 +24,7 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
   const [subCities, setSubCities] = useState([]);
 
   useEffect(() => {
-    console.log("ProfileHeader user phone", user.phone);
-    console.log("ProfileHeader user address", user.address);
+
     if (user.address) {
       setFormData(prev => ({
         ...prev,
@@ -57,6 +57,10 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
       }
     };
     fetchUnreadMessages();
+    if (user.image && user.image.length > 0) {
+      const lastImage = user.image[user.image.length - 1].imageUrl;
+      setUserImage(lastImage);
+    }
   }, [user, apiUrl, token]);
 
   const handleCityChange = (e) => {
@@ -181,7 +185,7 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
         <div className="user-profile-top-row">
           <div className="user-profile-identity">
             <div className="user-avatar-minimal">
-              <img src={user.image || '/default-avatar.png'} alt={user.firstName} />
+              <img src={userImage || '/default-avatar.png'} alt={user.firstName} />
             </div>
             <div className="user-info-minimal">
               <h1 className="user-name-minimal">{user.firstName} {user.lastName}</h1>

@@ -8,12 +8,15 @@ function SellerInfo({ seller }) {
   if (!seller) return null;
   const reviewCount = seller.reviewCount || 0;
   const averageRating = seller.averageRating || 0;
-
+  let sellerImage = "";
+  if (seller.image && seller.image.length > 0) {
+    sellerImage = seller.image[seller.image.length - 1].imageUrl;
+  }
   return (
     <div className="seller-info-card">
-      {seller.image && (
+      {sellerImage && (
         <img
-          src={seller.image}
+          src={sellerImage}
           alt={seller.shopName}
           className="seller-card-image"
           loading="lazy"

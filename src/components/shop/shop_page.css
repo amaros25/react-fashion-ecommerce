@@ -252,7 +252,7 @@
     }
 
     .shop-grid {
-        grid-template-columns: repeat(4, 2fr);
+        grid-template-columns: repeat(6, 2fr);
     }
 }
 

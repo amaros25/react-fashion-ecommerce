@@ -12,10 +12,8 @@ export default function useRelatedProducts(category, currentProductId) {
             let url = `${apiUrl}/products/latest?page=${page}&limit=${limit}`;
             if (category) url += `&category=${category}`;
             if (currentProductId) url += `&not=${currentProductId}`;
-
             const res = await fetch(url);
             const data = await res.json();
-
             if (Array.isArray(data.products)) {
                 return data.products;
             }

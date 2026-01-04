@@ -1,8 +1,17 @@
 const Seller = require("../models/seller.js");
 const User = require("../models/user");
 const SellerReview = require("../models/seller_review.js");
+const SellerBill = require("../models/seller_bill.js");
+const Product = require("../models/product.js");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
+
+function generateBillNumber() {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
+  const randomNum = Math.floor(10000 + Math.random() * 90000);
+  return `FACT-${randomLetter}${randomNum}`;
+}
 
 exports.getSellerByIds = async (req, res) => {
   try {
@@ -237,5 +246,61 @@ exports.updateSellerImage = async (req, res) => {
       message: "seller_image_update_failed",
       error: err.message,
     });
+  }
+};
+
+exports.createSellerBill = async (order, item) => {
+  try {
+    const product = await Product.findById(item.productId);
+    if (!product) return;
+
+    const commission = (product.price * item.quantity) * 0.03;
+
+    let billNumber;
+    let exists = true;
+    while (exists) {
+      billNumber = generateBillNumber();
+      const existing = await SellerBill.findOne({ billNumber });
+      if (!existing) exists = false;
+    }
+
+    const newBill = new SellerBill({
+      orderId: order._id,
+      productId: product._id,
+      sellerId: order.sellerId,
+      billNumber: billNumber,
+      amount: commission,
+      date: new Date()
+    });
+    await newBill.save();
+  } catch (error) {
+    console.error("Error creating seller bill:", error);
+  }
+};
+
+exports.getSellerBills = async (req, res) => {
+  try {
+    const { sellerId } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const totalCount = await SellerBill.countDocuments({ sellerId });
+    const bills = await SellerBill.find({ sellerId })
+      .populate("orderId", "orderNumber totalPrice")
+      .populate("productId", "name image price")
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      bills,
+      totalCount,
+      page,
+      totalPages: Math.ceil(totalCount / limit),
+    });
+  } catch (error) {
+    console.error("❌ Fehler beim Laden der Rechnungen:", error);
+    res.status(500).json({ message: "Error fetching bills", error });
   }
 };

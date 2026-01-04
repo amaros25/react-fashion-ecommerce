@@ -31,7 +31,8 @@
   "tabs_seller": {
     "products": "منتجات",
     "openOrders": "الطلبات المفتوحة",
-    "allOrders": "الطلبات"
+    "allOrders": "الطلبات",
+    "bills": "الفواتير"
   },
   "add_new_product": "إضافة منتج جديد",
   "new_products": "",
@@ -690,5 +691,18 @@
   "productStockRequired": "الكمية المطلوبة من المخزون.",
   "enter_custom_size": "أدخل الحجم المخصص",
   "exp_100_watt_30_cm": "على سبيل المثال 100 واط، 30 سم",
-  "product_size": "حجم المنتج"
+  "product_size": "حجم المنتج",
+  "bill_order_number": "رقم الطلب",
+  "bill_main_title": "فاتورة",
+  "bill_product_number": "رقم المنتج",
+  "bill_date": "تاريخ التأكيد",
+  "bill_costs": "التكاليف",
+  "previous": "السابق",
+  "next": "التالي",
+  "bill_item_price": "سعر المنتج",
+  "bill_order_total": "إجمالي الطلب",
+  "bill_commission_rate": "العمولة (3%)",
+  "bill_status_paid": "مدفوع",
+  "bill_status_open": "مفتوح",
+  "bill_number_label": "رقم الفاتورة"
 }

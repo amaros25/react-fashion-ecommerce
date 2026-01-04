@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const Order = require('../models/order')
 const User = require('../models/user');
 const Product = require('../models/product');
+const sellerController = require('./seller_controller');
+
 
 exports.getOrderByID = async (req, res) => {
   try {
@@ -176,6 +178,8 @@ exports.updateOrderStatus = async (req, res) => {
           { _id: item.productId, "sizes.size": item.size, "sizes.color": item.color },
           { $inc: { "sizes.$.stock": -item.quantity } }
         );
+        // Rechnung für den Seller erstellen (3% Provision)
+        await sellerController.createSellerBill(order, item);
       }
     }
 
