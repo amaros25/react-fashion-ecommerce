@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 import "./modal.css";
@@ -20,6 +20,10 @@ function Login() {
   const [showForgotModal, setShowForgotModal] = React.useState(false);
   const [resetEmail, setResetEmail] = React.useState("");
   const [resetLoading, setResetLoading] = React.useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
