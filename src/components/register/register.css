@@ -253,6 +253,19 @@
     .login-link {
         font-size: 11px;
     }
+
+    .terms-checkbox input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-top: 3px;
+        transform: scale(1.3);
+    }
+
+    .terms-checkbox label {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #666;
+    }
 }
 
 /* Very small phones */
@@ -289,6 +302,19 @@
     .role-option {
         min-height: 44px;
         /* Touch target minimum */
+    }
+
+    .terms-checkbox input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-top: 3px;
+        transform: scale(1.3);
+    }
+
+    .terms-checkbox label {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #666;
     }
 }
 
