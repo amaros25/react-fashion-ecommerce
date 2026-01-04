@@ -46,8 +46,7 @@ exports.getSellerByIds = async (req, res) => {
 
     res.json(sellers);
   } catch (error) {
-    console.error("❌ Fehler beim Laden der Verkäufer (IDs):", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -55,7 +54,7 @@ exports.getSellerByIds = async (req, res) => {
 exports.getSellerById = async (req, res) => {
   try {
     const seller = await Seller.findById(req.params.id).lean();
-    if (!seller) return res.status(404).json({ message: "Seller not found" });
+    if (!seller) return res.status(404).json({ message: "seller_not_found" });
     const stats = await SellerReview.aggregate([
       { $match: { seller: new mongoose.Types.ObjectId(req.params.id) } },
       {
@@ -76,8 +75,7 @@ exports.getSellerById = async (req, res) => {
     }
     res.json(seller);
   } catch (err) {
-    console.error("❌ Fehler beim Laden des Verkäufers:", err);
-    res.status(500).json({ message: "Error fetching seller", error: err });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -169,7 +167,7 @@ exports.updateSeller = async (req, res) => {
     const { address, phone } = req.body;
     const seller = await Seller.findById(req.params.id);
     if (!seller) {
-      return res.status(404).json({ message: "Seller not found" });
+      return res.status(404).json({ message: "seller_not_found" });
     }
     if (address) {
       seller.address.push({
@@ -188,8 +186,7 @@ exports.updateSeller = async (req, res) => {
     await seller.save();
     res.json(seller);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error updating seller", error: err });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -200,10 +197,10 @@ exports.rateSeller = async (req, res) => {
     const { userId, orderId, productId, rating } = req.body;
 
     if (!userId || !orderId || !rating) {
-      return res.status(400).json({ message: "Data missing: userId, orderId, and rating are required." });
+      return res.status(400).json({ message: "missing_data" });
     }
     const seller = await Seller.findById(id);
-    if (!seller) return res.status(404).json({ message: "Seller not found" });
+    if (!seller) return res.status(404).json({ message: "seller_not_found" });
     const exists = await SellerReview.findOne({ seller: id, user: userId, order: orderId });
     if (exists) {
       return res.status(400).json({ message: "review_already_exists_for_this_order" });
@@ -241,10 +238,8 @@ exports.updateSellerImage = async (req, res) => {
       seller,
     });
   } catch (err) {
-    console.error(err);
     res.status(500).json({
-      message: "seller_image_update_failed",
-      error: err.message,
+      message: "seller_image_update_failed"
     });
   }
 };
@@ -300,7 +295,6 @@ exports.getSellerBills = async (req, res) => {
       totalPages: Math.ceil(totalCount / limit),
     });
   } catch (error) {
-    console.error("❌ Fehler beim Laden der Rechnungen:", error);
-    res.status(500).json({ message: "Error fetching bills", error });
+    res.status(500).json({ message: "server_error" });
   }
 };

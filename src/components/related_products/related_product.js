@@ -8,7 +8,7 @@ import LoadingSpinner from "../utils/loading_spinner";
 function RelatedProducts({ category, currentProductId }) {
 
   const { t, i18n } = useTranslation();
-  const { latestProducts, loading } = useRelatedProducts(
+  const { latestProducts, loading, error } = useRelatedProducts(
     category,
     currentProductId
   );
@@ -21,6 +21,14 @@ function RelatedProducts({ category, currentProductId }) {
     }
   }, [i18n.language]);
   if (loading) return <LoadingSpinner />;
+
+  if (error) {
+    return (
+      <div className="related-error">
+        <p>{t(error)}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="related-container">

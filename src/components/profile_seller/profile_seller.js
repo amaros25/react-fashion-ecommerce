@@ -4,6 +4,7 @@ import AddProduct from "../new_product/add_product";
 import SellerProducts from "./seller_products";
 import ProfileSellerHeader from "./profile_seller_header";
 import SellerOrders from "./seller_orders.js";
+import { useSellerData } from "./hooks/useSellerData";
 import SellerBills from "./seller_bills.js";
 import LoadingSpinner from "../utils/loading_spinner.js";
 import { toast } from "react-toastify";
@@ -12,14 +13,13 @@ import { useTranslation } from "react-i18next";
 function ProfileSeller() {
   const apiUrl = process.env.REACT_APP_API_URL;
   const { t, i18n } = useTranslation();
-  const [seller, setSeller] = useState(null);
-  const [filteredOpenOrders, setFilteredOpenOrders] = useState([]);
   const [activeTab, setActiveTab] = useState("add_new_product");
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
   const tabKeys = ["products", "openOrders", "allOrders"];
-  const [loading, setLoading] = useState(false);
   const [refreshOrders, setRefreshOrders] = useState(0);
+
+  const { seller, loading, error, fetchSeller } = useSellerData(apiUrl, userId, token);
 
 
   const handleStatusChange = async (orderId, newStatus) => {
@@ -31,7 +31,7 @@ function ProfileSeller() {
       const currentOrderData = await currentOrderRes.json();
 
       if (!currentOrderRes.ok) {
-        throw new Error("Could not fetch current order status");
+        throw new Error(currentOrderRes.status === 404 ? "order_not_found" : "fetch_order_failed");
       }
 
       const currentStatus = currentOrderData.status[currentOrderData.status.length - 1].update;
@@ -90,24 +90,18 @@ function ProfileSeller() {
     }
   };
 
-  // Fetch Funktionen
-  const fetchSeller = useCallback(async () => {
-    const res = await fetch(`${apiUrl}/sellers/${userId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await res.json();
-    console.log("data", data);
-    setSeller(data);
-  }, [userId, token]);
-
   useEffect(() => {
     if (userId && token) {
       fetchSeller();
     }
   }, [userId, token, fetchSeller]);
 
-  if (!seller) {
+  if (loading || !seller) {
     return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <div className="error-message">{t(error)}</div>;
   }
 
   return (

@@ -50,7 +50,7 @@ const ShopPage = () => {
     if (error) {
         return (
             <div className="shop-error-container">
-                <p>{error}</p>
+                <p>{t(error)}</p>
                 <button onClick={() => window.location.reload()}>{t('Retry')}</button>
             </div>
         );
@@ -130,7 +130,7 @@ const ShopPage = () => {
                             ))
                         ) : !loading && (
                             <div className="no-products">
-                                <p>{t('No products found for this seller.')}</p>
+                                <p>{t('no_products_found')}</p>
                             </div>
                         )}
                     </div>

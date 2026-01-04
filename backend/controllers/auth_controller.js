@@ -51,13 +51,13 @@ const login = async (req, res) => {
     }
 
     if (!user) {
-      return res.status(400).json({ message: "user not found" });
+      return res.status(400).json({ message: "user_not_found" });
     }
 
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "wrong password" });
+      return res.status(400).json({ message: "wrong_password" });
     }
 
     await user.save();
@@ -91,7 +91,7 @@ const login = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "server error" });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -109,7 +109,7 @@ const logout = async (req, res) => {
       user = await Seller.findById(userId);
     }
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "user_not_found" });
     }
 
 
@@ -117,11 +117,11 @@ const logout = async (req, res) => {
       await user.save();
       res.json({ message: "Logged out successfully" });
     } else {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "user_not_found" });
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "server error" });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -141,7 +141,7 @@ const requestPasswordReset = async (req, res) => {
 
     if (!user) {
       // For security, don't reveal if email exists
-      return res.json({ message: "If email exists, reset link sent" });
+      return res.json({ message: "reset_email_sent_if_exists" });
     }
     console.log("User found for email:", email);
     // Generate secure reset token
@@ -160,11 +160,11 @@ const requestPasswordReset = async (req, res) => {
     // Send email
     await sendPasswordResetEmail(email, resetToken);
     console.log("Password reset email sent to:", email);
-    res.json({ message: "Password reset email sent" });
+    res.json({ message: "reset_email_sent" });
     console.log("Password reset email sent to:", email);
   } catch (err) {
     console.error("Password reset request error:", err);
-    res.status(500).json({ message: "Error sending reset email" });
+    res.status(500).json({ message: "error_sending_reset_email" });
   }
 };
 
@@ -178,7 +178,7 @@ const resetPassword = async (req, res) => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
       return res.status(400).json({
-        message: "Password must be at least 8 characters with uppercase, lowercase, number, and special character"
+        message: "invalid_password_strength"
       });
     }
 
@@ -201,7 +201,7 @@ const resetPassword = async (req, res) => {
     }
 
     if (!user) {
-      return res.status(400).json({ message: "Invalid or expired token" });
+      return res.status(400).json({ message: "invalid_or_expired_token" });
     }
 
     // Hash new password
@@ -214,10 +214,10 @@ const resetPassword = async (req, res) => {
 
     await user.save();
 
-    res.json({ message: "Password reset successful" });
+    res.json({ message: "password_reset_success" });
   } catch (err) {
     console.error("Password reset error:", err);
-    res.status(500).json({ message: "Error resetting password" });
+    res.status(500).json({ message: "error_resetting_password" });
   }
 };
 
@@ -241,11 +241,11 @@ const updateLastOnline = async (req, res) => {
       await user.save();
       res.json({ message: "Last online updated" });
     } else {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "user_not_found" });
     }
   } catch (err) {
     console.error("Error updating last online:", err);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "server_error" });
   }
 };
 

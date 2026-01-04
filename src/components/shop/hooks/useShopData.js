@@ -17,21 +17,21 @@ export const useShopData = (sellerId) => {
         const fetchSeller = async () => {
             try {
                 const res = await fetch(`${apiUrl}/sellers/${sellerId}`);
-                if (!res.ok) throw new Error('Failed to fetch seller');
+                if (!res.ok) throw new Error("fetch_seller_failed");
                 const data = await res.json();
                 setSeller(data);
                 setError(null);
             } catch (err) {
                 console.error('Error fetching seller:', err);
-                setError(t('Failed to load shop information, Could not load shop information'));
-                toast.error(t('Failed to load shop information, Could not load shop information'));
+                setError(err.message || 'fetch_seller_failed');
+                toast.error(t(err.message || 'fetch_seller_failed'));
             }
         };
         if (sellerId) {
             fetchSeller();
         } else {
-            setError(t('No seller ID provided'));
-            toast.error(t('Failed to load shop information, No seller ID provided'));
+            setError('no_seller_id');
+            toast.error(t('no_seller_id'));
         }
     }, [sellerId, apiUrl, t]);
 
@@ -40,7 +40,7 @@ export const useShopData = (sellerId) => {
             setLoading(true);
             try {
                 const res = await fetch(`${apiUrl}/products/seller/${sellerId}?page=${page}&limit=12`);
-                if (!res.ok) throw new Error('Failed to fetch products');
+                if (!res.ok) throw new Error("fetch_products_failed");
                 const data = await res.json();
                 if (Array.isArray(data.products)) {
                     setProducts(data.products);
@@ -53,8 +53,8 @@ export const useShopData = (sellerId) => {
                 setError(null);
             } catch (err) {
                 console.error('Error fetching products:', err);
-                setError(t('Failed to load products, Error while loading products'));
-                toast.error(t('Failed to load products, Error while loading products'));
+                setError(err.message || 'fetch_products_failed');
+                toast.error(t(err.message || 'fetch_products_failed'));
             } finally {
                 setLoading(false);
             }
@@ -62,8 +62,8 @@ export const useShopData = (sellerId) => {
         if (sellerId) {
             fetchProducts();
         } else {
-            setError(t('No seller ID provided'));
-            toast.error(t('Failed to load products, Seller ID not found'));
+            setError('no_seller_id');
+            toast.error(t('no_seller_id'));
         }
     }, [sellerId, page, apiUrl, t]);
 

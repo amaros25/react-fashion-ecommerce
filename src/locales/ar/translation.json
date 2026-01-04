@@ -50,25 +50,6 @@
   "login_failed": "فشل تسجيل الدخول. يرجى التحقق من بيانات الاعتماد الخاصة بك.",
   "forgot_password": "نسيت كلمة المرور؟",
   "forgot_password_contact": "يرجى الاتصال بالدعم لإعادة تعيين كلمة المرور.",
-  "reset_password_title": "إعادة تعيين كلمة المرور",
-  "reset_password_desc": "أدخل بريدك الإلكتروني لتلقي رابط إعادة التعيين",
-  "enter_email": "أدخل بريدك الإلكتروني",
-  "send_reset_link": "إرسال رابط إعادة التعيين",
-  "reset_email_sent": "تم إرسال بريد إعادة التعيين! تحقق من صندوق الوارد.",
-  "reset_email_error": "خطأ في إرسال البريد الإلكتروني",
-  "enter_new_password": "أدخل كلمة المرور الجديدة",
-  "confirm_password": "تأكيد كلمة المرور",
-  "passwords_not_match": "كلمات المرور غير متطابقة",
-  "password_reset_success": "تم إعادة تعيين كلمة المرور بنجاح!",
-  "reset_password_failed": "فشل إعادة تعيين كلمة المرور",
-  "reset_password_button": "إعادة تعيين كلمة المرور",
-  "remember_password": "تذكرت كلمة المرور؟",
-  "password_requirements": "يجب أن تحتوي كلمة المرور على",
-  "password_req_length": "8 أحرف على الأقل",
-  "password_req_uppercase": "حرف كبير واحد",
-  "password_req_lowercase": "حرف صغير واحد",
-  "password_req_number": "رقم واحد",
-  "password_req_special": "حرف خاص واحد (@$!%*?&)",
   "already_logged_in": "المستخدم قام بتسجيل الدخول بالفعل على جهاز آخر. يرجى تسجيل الخروج من الجهاز الآخر أولاً.",
   "register": {
     "title": "تسجيل",
@@ -321,11 +302,6 @@
   "enter_custom_color": "أدخل لوناً",
   "add_another_size": "أضف حجمًا آخر",
   "post_product": "نشر المنتج",
-  "upload_status": {
-    "loading": "جارٍ التحميل... يرجى الانتظار",
-    "success": "تم التحميل بنجاح!",
-    "error": "فشل التحميل!"
-  },
   "seller_cannot_buy_alter": "لا يمكن للبائعين تقديم طلبات.",
   "related_products": {
     "title": "قد يعجبك أيضًا"
@@ -661,7 +637,7 @@
     "productStockRequired": "مخزون المنتج مطلوب",
     "productCustomSizeRequired": "حجم مخصص مطلوب عند اختيار 'حجم مخصص'."
   },
-  "add_review_erros": {
+  "add_review_errors": {
     "rate_only_received_error": "يمكنك تقييم المنتجات التي تم استلامها فقط.",
     "review_already_exists_error": "يمكنك تقييم المنتج مرة واحدة فقط.",
     "failed_to_add_review_error": "فشل إضافة التقييم"
@@ -704,5 +680,45 @@
   "bill_commission_rate": "العمولة (3%)",
   "bill_status_paid": "مدفوع",
   "bill_status_open": "مفتوح",
-  "bill_number_label": "رقم الفاتورة"
+  "bill_number_label": "رقم الفاتورة",
+  "server_error": "خطأ في الخادم. يرجى المحاولة لاحقاً.",
+  "user_not_found": "المستخدم غير موجود.",
+  "seller_not_found": "البائع غير موجود.",
+  "success_update_status": "تم تحديث الحالة بنجاح.",
+  "missing_data": "البيانات المطلوبة مفقودة.",
+  "order_not_found": "الطلب غير موجود.",
+  "product_variant_not_found": "هذا النوع من المنتج غير موجود.",
+  "insufficient_stock": "المخزون غير كافٍ لواحد أو أكثر من العناصر.",
+  "chat_not_found": "المحادثة غير موجودة.",
+  "invalid_role": "دور المستخدم غير صالح.",
+  "wrong_password": "كلمة المرور خاطئة.",
+  "reset_email_sent_if_exists": "إذا كان البريد الإلكتروني موجودًا، فقد تم إرسال رابط إعادة التعيين.",
+  "reset_email_sent": "تم إرسال بريد إعادة تعيين كلمة المرور.",
+  "error_sending_reset_email": "خطأ في إرسال بريد إعادة التعيين.",
+  "invalid_password_strength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل مع أحرف كبيرة وصغيرة ورقم ورمز خاص.",
+  "invalid_or_expired_token": "الرمز غير صالح أو منتهي الصلاحية.",
+  "password_reset_success": "تمت إعادة تعيين كلمة المرور بنجاح.",
+  "error_resetting_password": "خطأ في إعادة تعيين كلمة المرور.",
+  "upload_status": {
+    "loading": "جاري رفع المنتج...",
+    "success": "تم رفع المنتج بنجاح!",
+    "error": "خطأ في رفع المنتج. يرجى المحاولة مرة أخرى."
+  },
+  "error_fetching_products": "خطأ في جلب المنتجات.",
+  "error_adding_product": "خطأ في إضافة المنتج.",
+  "product_not_found": "المنتج غير موجود.",
+  "missing_product_ids": "لم يتم توفير معرفات المنتج.",
+  "user_no_address": "المستخدم ليس له عنوان.",
+  "user_no_phone": "المستخدم ليس له رقم هاتف.",
+  "user_updated_successfully": "تم تحديث المستخدم بنجاح.",
+  "user_image_updated_successfully": "تم تحديث صورة المستخدم بنجاح.",
+  "user_image_update_failed": "فشل تحديث صورة المستخدم.",
+  "fetch_user_failed": "فشل جلب بيانات المستخدم.",
+  "update_user_failed": "فشل تحديث بيانات المستخدم.",
+  "fetch_seller_failed": "فشل جلب بيانات البائع.",
+  "update_seller_failed": "فشل تحديث بيانات البائع.",
+  "fetch_order_failed": "فشل جلب بيانات الطلب.",
+  "fetch_products_failed": "فشل في جلب المنتجات.",
+  "no_seller_id": "لا يوجد معرف بائع مقدم.",
+  "fetch_related_products_failed": "فشل في جلب المنتجات ذات الصلة."
 }

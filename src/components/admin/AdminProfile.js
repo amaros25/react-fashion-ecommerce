@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useAdminApi } from './hooks/useAdminApi';
+import { toast } from 'react-toastify';
 import './AdminProfile.css';
 
 const AdminProfile = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const apiUrl = process.env.REACT_APP_API_URL;
+    const { loading, fetchStats, fetchTabData, toggleActivation: toggleActivationApi } = useAdminApi(apiUrl);
+
     const [stats, setStats] = useState({
         totalUsers: 0,
         totalSellers: 0,
@@ -13,9 +19,32 @@ const AdminProfile = () => {
     });
     const [activeTab, setActiveTab] = useState('products');
     const [dataList, setDataList] = useState([]);
-    const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 10;
+
+    const loadStats = useCallback(async () => {
+        const result = await fetchStats();
+        if (result.success) {
+            setStats(result.data);
+        } else {
+            toast.error(t(result.errorKey));
+        }
+    }, [fetchStats, t]);
+
+    const loadTabData = useCallback(async (tab) => {
+        const result = await fetchTabData(tab);
+        if (result.success) {
+            if (Array.isArray(result.data)) {
+                setDataList(result.data);
+            } else {
+                console.error("API did not return an array:", result.data);
+                setDataList([]);
+            }
+        } else {
+            toast.error(t(result.errorKey));
+            setDataList([]);
+        }
+    }, [fetchTabData, t]);
 
     useEffect(() => {
         const role = localStorage.getItem('role');
@@ -23,47 +52,18 @@ const AdminProfile = () => {
             navigate('/login');
             return;
         }
-        fetchStats();
-        fetchTabData('products'); // Initial load
-    }, []);
+        loadStats();
+        loadTabData('products'); // Initial load
+    }, [navigate, loadStats, loadTabData]);
 
     useEffect(() => {
         setCurrentPage(1); // Reset page on tab change
-        fetchTabData(activeTab);
-    }, [activeTab]);
+        loadTabData(activeTab);
+    }, [activeTab, loadTabData]);
 
     const handleLogout = () => {
         localStorage.clear();
         navigate('/login');
-    };
-
-    const fetchStats = async () => {
-        try {
-            const res = await fetch(`${apiUrl}/admin/stats`);
-            const data = await res.json();
-            setStats(data);
-        } catch (err) {
-            console.error("Error fetching stats:", err);
-        }
-    };
-
-    const fetchTabData = async (tab) => {
-        setLoading(true);
-        try {
-            const res = await fetch(`${apiUrl}/admin/${tab}`);
-            const data = await res.json();
-            if (Array.isArray(data)) {
-                setDataList(data);
-            } else {
-                console.error("API did not return an array:", data);
-                setDataList([]);
-            }
-        } catch (err) {
-            console.error(`Error fetching ${tab}:`, err);
-            setDataList([]);
-        } finally {
-            setLoading(false);
-        }
     };
 
     // Pagination Logic
@@ -184,24 +184,15 @@ const AdminProfile = () => {
     };
 
     const toggleActivation = async (type, id, currentStatus) => {
-        try {
-            const endpoint = type === 'user' ? 'toggle-user' : 'toggle-seller';
-            const res = await fetch(`${apiUrl}/admin/${endpoint}/${id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ active: !currentStatus })
-            });
-
-            if (res.ok) {
-                // Optimistic update
-                setDataList(prev => prev.map(item =>
-                    item._id === id ? { ...item, active: !currentStatus } : item
-                ));
-            }
-        } catch (err) {
-            console.error("Error toggling activation:", err);
+        const result = await toggleActivationApi(type, id, currentStatus);
+        if (result.success) {
+            // Optimistic update
+            setDataList(prev => prev.map(item =>
+                item._id === id ? { ...item, active: result.active } : item
+            ));
+            toast.success(t("success_update_status"));
+        } else {
+            toast.error(t(result.errorKey));
         }
     };
 

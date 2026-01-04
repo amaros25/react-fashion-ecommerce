@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export const useProductUpload = (userId) => {
     const apiUrl = process.env.REACT_APP_API_URL;
     const cloudName = process.env.REACT_APP_CLOUD_NAME;
     const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [status, setStatus] = useState({
         visible: false,
@@ -35,7 +37,7 @@ export const useProductUpload = (userId) => {
     };
 
     const createProduct = async (formData, imageFiles) => {
-        setStatus({ visible: true, loading: true, success: false, error: false });
+        setStatus({ visible: true, loading: true, success: false, error: false, errorKey: null });
         try {
             const imageUrls = await uploadImages(imageFiles);
 
@@ -43,7 +45,10 @@ export const useProductUpload = (userId) => {
                 ...formData,
                 category: Number(formData.category),
                 subcategory: Number(formData.subcategory),
-                sizes: formData.sizes,
+                sizes: formData.sizes.map(s => ({
+                    ...s,
+                    size: s.size === t("custom_size") ? s.customSize : s.size
+                })),
                 sellerId: userId,
                 price: parseFloat(formData.price),
                 image: imageUrls,
@@ -57,17 +62,27 @@ export const useProductUpload = (userId) => {
                 body: JSON.stringify(productData),
             });
 
-            if (!res.ok) throw new Error("Product add error");
+            const data = await res.json();
 
-            setStatus({ visible: true, loading: false, success: true, error: false });
+            if (!res.ok) {
+                throw new Error(data.message || "error_adding_product");
+            }
+
+            setStatus({ visible: true, loading: false, success: true, error: false, errorKey: null });
             setTimeout(() => {
-                setStatus({ visible: false, loading: false, success: false, error: false });
+                setStatus({ visible: false, loading: false, success: false, error: false, errorKey: null });
                 navigate("/profile_seller");
             }, 3000);
             return true;
         } catch (err) {
-            console.log("🟢 : Error", err.message);
-            setStatus({ visible: true, loading: false, success: false, error: true });
+            console.error("🟢 : Error", err.message);
+            setStatus({
+                visible: true,
+                loading: false,
+                success: false,
+                error: true,
+                errorKey: err.message === "Image upload failed" ? "image_upload_failed" : (err.message || "server_error")
+            });
             return false;
         }
     };

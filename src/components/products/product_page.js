@@ -22,7 +22,7 @@ function ProductPage() {
   const [product, setProduct] = useState(initialProduct);
   const [mainImage, setMainImage] = useState("");
   const { id } = useParams();
-  const { product: loadedProduct } = useProductData(product ? null : id);
+  const { product: loadedProduct, loading: productLoading, error: productError } = useProductData(product ? null : id);
 
   // Reset product when navigating to a different product
   useEffect(() => {
@@ -51,7 +51,7 @@ function ProductPage() {
     document.documentElement.setAttribute("dir", direction);
   }, [product, i18n.language]);
 
-  const { seller, loading, error } = useSellerData(product?.sellerId);
+  const { seller, loading: sellerLoading, error: sellerError } = useSellerData(product?.sellerId);
 
   const [quantity, setQuantity] = useState(1);
   const [role, setRole] = useState(localStorage.getItem("role")?.toLowerCase());
@@ -65,8 +65,6 @@ function ProductPage() {
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState("");
 
-
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -76,8 +74,6 @@ function ProductPage() {
   }, [role, t]);
 
   const [refresh, setRefresh] = useState(false);
-
-  //const { product, seller, mainImage, setMainImage } = useProductData(id, refresh);
 
   const availableSizes = product?.sizes
     ? Array.from(new Set(product.sizes.map(s => s.size)))
@@ -125,8 +121,20 @@ function ProductPage() {
     }
   }, [product, selectedSize, selectedColor, availableSizes, availableColors]);
 
-  if (!product || !seller) {
+  if (productLoading || (product && sellerLoading)) {
     return <LoadingSpinner />;
+  }
+
+  if (productError || sellerError) {
+    return (
+      <div className="error-container">
+        <p>{t(productError || sellerError)}</p>
+      </div>
+    );
+  }
+
+  if (!product || !seller) {
+    return null; // Or some fallback
   }
 
   const handleBuyClick = (buyNow = false) => {

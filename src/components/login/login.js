@@ -35,33 +35,36 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      console.log("Login data: ", data);
 
       if (!res.ok) {
-        if (res.status === 403 && data.error === "ALREADY_LOGGED_IN") {
-          // Yellow toast for already logged in
-          const errorMsg = t("already_logged_in");
-          throw { message: errorMsg, isWarning: true };
+        const errorKey = data.message || "login_failed";
+        if (res.status === 403 && data.message === "already_logged_in") {
+          toast.warn(t("already_logged_in"), {
+            position: "top-center",
+            theme: "colored",
+          });
+          setError("");
+          return;
         }
-        throw new Error(t("login_failed"));
+        throw new Error(errorKey);
       }
+
+      if (!data.token) {
+        throw new Error("login_failed");
+      }
+
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("userId", data.userId);
-      //TODO when token none show error toast, login failed
-      if (!data.token) {
-        toast.error(t("login_failed"));
-        return;
-      }
+
       const userData = {
         address: data.address,
         phone: data.phone,
         city: data.city,
         subCity: data.subCity
       };
-      console.log("Login userData", userData);
-      setLoading(false);
       localStorage.setItem("userData", JSON.stringify(userData));
+
       if (data.role === "seller") {
         navigate("/profile_seller");
       } else if (data.role === "admin") {
@@ -70,21 +73,7 @@ function Login() {
         navigate("/profile_user");
       }
     } catch (err) {
-      if (err.isWarning) {
-        toast.warn(err.message, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-        setError(""); // Clear generic error if specific warning shown
-      } else {
-        setError(err.message);
-      }
+      setError(t(err.message));
     } finally {
       setLoading(false);
     }
@@ -105,13 +94,16 @@ function Login() {
       });
       const data = await res.json();
 
-      toast.success(t("reset_email_sent"), {
-        position: "top-center",
-        autoClose: 5000,
-      });
-
-      setShowForgotModal(false);
-      setResetEmail("");
+      if (res.ok) {
+        toast.success(t(data.message || "reset_email_sent"), {
+          position: "top-center",
+          autoClose: 5000,
+        });
+        setShowForgotModal(false);
+        setResetEmail("");
+      } else {
+        toast.error(t(data.message || "reset_email_error"));
+      }
     } catch (err) {
       toast.error(t("reset_email_error"));
     } finally {

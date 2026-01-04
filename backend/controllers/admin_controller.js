@@ -29,7 +29,7 @@ exports.getDashboardStats = async (req, res) => {
         });
     } catch (err) {
         console.error("Error fetching stats:", err);
-        res.status(500).json({ message: "Server Error" });
+        res.status(500).json({ message: "server_error" });
     }
 };
 
@@ -38,7 +38,7 @@ exports.getAllUsers = async (req, res) => {
         const users = await User.find().select("-password").sort({ createdAt: -1 });
         res.json(users);
     } catch (err) {
-        res.status(500).json({ message: "Server Error" });
+        res.status(500).json({ message: "server_error" });
     }
 };
 
@@ -47,7 +47,7 @@ exports.getAllSellers = async (req, res) => {
         const sellers = await Seller.find().select("-password").sort({ createdAt: -1 });
         res.json(sellers);
     } catch (err) {
-        res.status(500).json({ message: "Server Error" });
+        res.status(500).json({ message: "server_error" });
     }
 };
 
@@ -60,7 +60,7 @@ exports.getAllProducts = async (req, res) => {
         res.json(products);
     } catch (err) {
         console.error("Admin Product Error:", err);
-        res.status(500).json({ message: "Server Error", error: err.message });
+        res.status(500).json({ message: "server_error", error: err.message });
     }
 };
 
@@ -72,32 +72,32 @@ exports.getAllOrders = async (req, res) => {
         res.json(orders);
     } catch (err) {
         console.error("Admin Order Error:", err);
-        res.status(500).json({ message: "Server Error", error: err.message });
+        res.status(500).json({ message: "server_error", error: err.message });
     }
 };
 
 exports.toggleUser = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        if (!user) return res.status(404).json({ message: "User not found" });
+        if (!user) return res.status(404).json({ message: "user_not_found" });
 
         user.active = req.body.active;
         await user.save();
-        res.json({ message: "User active status updated", active: user.active });
+        res.json({ message: "success_update_status", active: user.active });
     } catch (err) {
-        res.status(500).json({ message: "Server Error" });
+        res.status(500).json({ message: "server_error" });
     }
 };
 
 exports.toggleSeller = async (req, res) => {
     try {
         const seller = await Seller.findById(req.params.id);
-        if (!seller) return res.status(404).json({ message: "Seller not found" });
+        if (!seller) return res.status(404).json({ message: "seller_not_found" });
 
         seller.active = req.body.active;
         await seller.save();
-        res.json({ message: "Seller active status updated", active: seller.active });
+        res.json({ message: "success_update_status", active: seller.active });
     } catch (err) {
-        res.status(500).json({ message: "Server Error" });
+        res.status(500).json({ message: "server_error" });
     }
 };

@@ -28,42 +28,43 @@ function ResetPassword() {
         e.preventDefault();
         setError("");
 
-        // Validate passwords match
+        setError(""); // Clear previous errors
+
         if (password !== confirmPassword) {
             setError(t("passwords_not_match"));
+            toast.error(t("passwords_not_match"));
             return;
         }
 
         // Validate password strength
         if (!isPasswordStrong(password)) {
             setError(t("register.error.passwordStrength"));
+            toast.error(t("register.error.passwordStrength"));
             return;
         }
 
         setLoading(true);
-
         try {
             const res = await fetch(`${apiUrl}/auth/reset-password/${token}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ password }),
             });
-
             const data = await res.json();
 
-            if (!res.ok) {
-                throw new Error(data.message || t("reset_password_failed"));
+            if (res.ok) {
+                toast.success(t(data.message || "password_reset_success"), {
+                    position: "top-center",
+                    autoClose: 3000,
+                });
+                setTimeout(() => navigate("/login"), 3000);
+            } else {
+                setError(data.message || t("reset_password_failed")); // Keep local error state for display
+                toast.error(t(data.message || "reset_password_failed"), {
+                    position: "top-center",
+                    autoClose: 3000,
+                });
             }
-
-            toast.success(t("password_reset_success"), {
-                position: "top-center",
-                autoClose: 3000,
-            });
-
-            // Redirect to login after 2 seconds
-            setTimeout(() => {
-                navigate("/login");
-            }, 2000);
         } catch (err) {
             setError(err.message || t("reset_password_failed"));
             toast.error(err.message || t("reset_password_failed"));

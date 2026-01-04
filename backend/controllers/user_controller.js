@@ -9,7 +9,7 @@ exports.getAllUsers = async (req, res) => {
     const users = await User.find();
     res.json(users);
   } catch (err) {
-    res.status(500).json({ message: "server error" });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -17,19 +17,19 @@ exports.getAllUsers = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: "user not found" });
+    if (!user) return res.status(404).json({ message: "user_not_found" });
 
     let lastAddress = "";
     let lastPhone = "";
     if (Array.isArray(user.address) && user.address.length > 0) {
       lastAddress = user.address[user.address.length - 1];
     } else {
-      return res.status(400).json({ message: "user has no address" });
+      return res.status(400).json({ message: "user_no_address" });
     }
     if (Array.isArray(user.phone) && user.phone.length > 0) {
       lastPhone = user.phone[user.phone.length - 1];
     } else {
-      return res.status(400).json({ message: "user has no phone" });
+      return res.status(400).json({ message: "user_no_phone" });
     }
 
     res.json({
@@ -45,7 +45,7 @@ exports.getUserById = async (req, res) => {
 
     });
   } catch (err) {
-    res.status(500).json({ message: "server error" });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -129,7 +129,7 @@ exports.updateUser = async (req, res) => {
 
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "user not found" });
+      return res.status(404).json({ message: "user_not_found" });
     }
 
     // Push new address to array
@@ -153,13 +153,13 @@ exports.updateUser = async (req, res) => {
     await user.save();
 
     res.status(200).json({
-      message: "user updated successfully",
+      message: "user_updated_successfully",
       user,
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      message: "server error",
+      message: "server_error",
       error: err.message,
     });
   }

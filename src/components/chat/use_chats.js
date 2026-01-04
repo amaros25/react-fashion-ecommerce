@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 import { fetchChats, openChat, sendMessage, loadMoreMessages, startNewChat, markMessagesAsRead, fetchOrderByNumber } from "./chat_api";
 import { ORDER_STATUS } from "../utils/const/order_status";
 
 export const useChats = (userId, partnerId, initialType, initialNumber) => {
+  const { t } = useTranslation();
 
   const [activeChat, setActiveChat] = useState(null);
   const [newChatType, setNewChatType] = useState(initialType);
@@ -64,43 +67,45 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
       const sellerIdFromStorage = role === "seller" ? userId : partnerId;
 
       if (userId) {
-        const data = await fetchChats(role, userId, sellerIdFromStorage, newChatType, sidebarCurrentPage);
-        let currentChats = data.chats;
+        const result = await fetchChats(role, userId, sellerIdFromStorage, newChatType, sidebarCurrentPage);
+        if (result.success) {
+          const data = result.data;
+          let currentChats = data.chats;
 
-        // Check for initial chat from navigation (only on first load or when initialNumber changes)
-        if (initialNumber && initialType) {
-          const existingChat = currentChats.find(c => c.number === initialNumber && c.type === initialType);
+          // Check for initial chat from navigation
+          if (initialNumber && initialType) {
+            const existingChat = currentChats.find(c => c.number === initialNumber && c.type === initialType);
 
-          if (existingChat) {
-            // If it exists, we just set it as active if it's not already
-            if (activeChat?._id !== existingChat._id) {
-              setActiveChat(existingChat);
-              handleOpenChat(existingChat._id);
-            }
-          } else {
-            // Create temp chat if it doesn't exist
-            const tempId = "temp_" + Date.now();
-            // Check if we already have this temp chat in state to avoid duplicates on re-renders
-            const alreadyExists = chats.find(c => c.number === initialNumber && c.type === initialType && c._id.startsWith("temp_"));
+            if (existingChat) {
+              if (activeChat?._id !== existingChat._id) {
+                setActiveChat(existingChat);
+                handleOpenChat(existingChat._id);
+              }
+            } else {
+              const tempId = "temp_" + Date.now();
+              const alreadyExists = chats.find(c => c.number === initialNumber && c.type === initialType && c._id.startsWith("temp_"));
 
-            if (!alreadyExists) {
-              const tempChat = {
-                _id: tempId,
-                type: initialType,
-                number: initialNumber,
-                updatedAt: new Date().toISOString(),
-                messages: [],
-                participants: [userId]
-              };
-              currentChats = [tempChat, ...currentChats];
-              setActiveChat(tempChat);
-              handleOpenChat(tempId);
+              if (!alreadyExists) {
+                const tempChat = {
+                  _id: tempId,
+                  type: initialType,
+                  number: initialNumber,
+                  updatedAt: new Date().toISOString(),
+                  messages: [],
+                  participants: [userId]
+                };
+                currentChats = [tempChat, ...currentChats];
+                setActiveChat(tempChat);
+                handleOpenChat(tempId);
+              }
             }
           }
-        }
 
-        setChats(currentChats);
-        setTotalPages(data.totalPages);
+          setChats(currentChats);
+          setTotalPages(data.totalPages);
+        } else {
+          toast.error(t(result.errorKey));
+        }
       }
     };
 
@@ -123,14 +128,15 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
     }
 
     setChatWindowCurrentPage(1);
-    try {
-      const data = await openChat(chatId, userId, PAGE_LIMIT);
+    const result = await openChat(chatId, userId, PAGE_LIMIT);
+    if (result.success) {
+      const data = result.data;
       setActiveChat(data);
       const unreadMessages = data.messages.filter(m => m.senderId !== userId && !m.isRead);
       if (unreadMessages.length > 0) await markMessagesAsRead(chatId);
       setHasMore(data.messages.length === PAGE_LIMIT);
-    } catch (err) {
-      console.error(err);
+    } else {
+      toast.error(t(result.errorKey));
     }
   };
 
@@ -142,40 +148,42 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
     }
     else if (activeChat?._id && activeChat._id.toString().startsWith("temp_")) {
       const role = localStorage.getItem("role");
-      try {
-        let payloadUserId = userId;
-        let payloadSellerId = partnerId;
+      let payloadUserId = userId;
+      let payloadSellerId = partnerId;
 
-        if (role === "seller") {
-          payloadUserId = partnerId;
-          payloadSellerId = userId;
+      if (role === "seller") {
+        payloadUserId = partnerId;
+        payloadSellerId = userId;
+      }
+
+      const chatResult = await startNewChat(role, payloadUserId, payloadSellerId, activeChat.type, activeChat.number);
+      if (chatResult.success) {
+        const msgResult = await sendMessage(chatResult.data._id, userId, message);
+        if (msgResult.success) {
+          setActiveChat(msgResult.data);
+          setChats(prev => prev.map(c => c._id === activeChat._id ? msgResult.data : c));
+        } else {
+          toast.error(t(msgResult.errorKey));
         }
-
-        const newChatData = await startNewChat(role, payloadUserId, payloadSellerId, activeChat.type, activeChat.number);
-
-        const sentMessageData = await sendMessage(newChatData._id, userId, message);
-
-        setActiveChat(sentMessageData);
-        setChats(prev => prev.map(c => c._id === activeChat._id ? sentMessageData : c));
-      } catch (err) {
-        console.error("Error persisting temp chat:", err);
+      } else {
+        toast.error(t(chatResult.errorKey));
       }
     }
     else if (activeChat?._id) {
-      try {
-        const data = await sendMessage(activeChat._id, userId, message);
-        setActiveChat(data);
-        setChats(prev => prev.map(c => c._id === data._id ? data : c));
-      } catch (err) {
-        console.error(err);
+      const result = await sendMessage(activeChat._id, userId, message);
+      if (result.success) {
+        setActiveChat(result.data);
+        setChats(prev => prev.map(c => c._id === result.data._id ? result.data : c));
+        setNewMessage("");
+      } else {
+        toast.error(t(result.errorKey));
       }
-      setNewMessage("");
     }
   };
 
   const startNewChatAndSendMessage = async (message) => {
     const role = localStorage.getItem("role");
-    if (!userId) return alert("Kein User-Login gefunden!");
+    if (!userId) return toast.error(t("must_login"));
 
     if (!message || message.trim() === "") {
       const tempId = "temp_" + Date.now();
@@ -197,92 +205,93 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
       return;
     }
 
-    try {
-      let payloadUserId = userId;
-      let payloadSellerId = partnerId;
+    let payloadUserId = userId;
+    let payloadSellerId = partnerId;
 
-      if (role === "seller") {
-        payloadUserId = partnerId;
-        payloadSellerId = userId;
-      }
+    if (role === "seller") {
+      payloadUserId = partnerId;
+      payloadSellerId = userId;
+    }
 
-      const newChatData = await startNewChat(role, payloadUserId, payloadSellerId, newChatType, newChatNumber);
-      setChats(prev => [newChatData, ...prev]);
-      setActiveChat(newChatData);
+    const chatResult = await startNewChat(role, payloadUserId, payloadSellerId, newChatType, newChatNumber);
+    if (chatResult.success) {
+      setChats(prev => [chatResult.data, ...prev]);
+      setActiveChat(chatResult.data);
 
       if (message.trim()) {
-        const sentMessageData = await sendMessage(newChatData._id, userId, message);
-        setActiveChat(sentMessageData);
-        setChats(prev => prev.map(c => c._id === newChatData._id ? sentMessageData : c));
+        const msgResult = await sendMessage(chatResult.data._id, userId, message);
+        if (msgResult.success) {
+          setActiveChat(msgResult.data);
+          setChats(prev => prev.map(c => c._id === chatResult.data._id ? msgResult.data : c));
+        } else {
+          toast.error(t(msgResult.errorKey));
+        }
       }
       setIsNewChat(false);
-    } catch (err) {
-      console.error(err);
+    } else {
+      toast.error(t(chatResult.errorKey));
     }
   };
 
   const loadOlderMessages = async () => {
     if (!activeChat?._id || !hasMore) return;
     setIsLoadingOlder(true);
-    try {
-      const data = await loadMoreMessages(activeChat._id, chatWindowCurrentPage, PAGE_LIMIT);
+    const result = await loadMoreMessages(activeChat._id, chatWindowCurrentPage, PAGE_LIMIT);
+    if (result.success) {
+      const data = result.data;
       const newMessages = data.messages.filter(msg =>
         !activeChat.messages.some(existingMsg => existingMsg._id === msg._id)
       );
       setActiveChat(prev => ({ ...prev, messages: [...newMessages, ...prev.messages] }));
       setChatWindowCurrentPage(prev => prev + 1);
       if (data.messages.length < PAGE_LIMIT) setHasMore(false);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoadingOlder(false);
+    } else {
+      toast.error(t(result.errorKey));
     }
+    setIsLoadingOlder(false);
   };
 
   useEffect(() => {
     const checkChatRestriction = async () => {
       if (activeChat?.type === "order" && activeChat.number) {
-        try {
-          const order = await fetchOrderByNumber(activeChat.number);
-          if (order) {
-            const currentStatus = order.status[order.status.length - 1].update;
-            const now = new Date();
+        const result = await fetchOrderByNumber(activeChat.number);
+        if (result.success) {
+          const order = result.data;
+          const currentStatus = order.status[order.status.length - 1].update;
+          const now = new Date();
 
-            const deliveredStatus = order.status.find(s =>
-              s.update === ORDER_STATUS.DELIVERED || s.update === ORDER_STATUS.PICKED_UP
-            );
+          const deliveredStatus = order.status.find(s =>
+            s.update === ORDER_STATUS.DELIVERED || s.update === ORDER_STATUS.PICKED_UP
+          );
 
-            let isExpired = false;
-            if (deliveredStatus) {
-              const deliveryDate = new Date(deliveredStatus.date);
-              const diffHours = (now - deliveryDate) / (1000 * 60 * 60);
+          let isExpired = false;
+          if (deliveredStatus) {
+            const deliveryDate = new Date(deliveredStatus.date);
+            const diffHours = (now - deliveryDate) / (1000 * 60 * 60);
 
-              if (currentStatus === ORDER_STATUS.PICKED_UP) {
-                isExpired = true;
-              } else if (currentStatus === ORDER_STATUS.DELIVERED && diffHours > 24) {
-                isExpired = true;
-              }
-            }
-
-            const activeReturnStatuses = [
-              ORDER_STATUS.RETURN_REQUESTED,
-              ORDER_STATUS.RETURN_CONFIRMED,
-              ORDER_STATUS.RETURN_SHIPPED,
-              ORDER_STATUS.RETURN_RECEIVED,
-              ORDER_STATUS.RETURN_NOT_RECEIVED
-            ];
-
-            const isCancelled = currentStatus === ORDER_STATUS.CANCEL_USER || currentStatus === ORDER_STATUS.CANCEL_SELLER;
-            const isNegativeFinal = [ORDER_STATUS.FAILED_DELIVERY, ORDER_STATUS.PICK_UP_FAILED, ORDER_STATUS.NO_RESPONSE].includes(currentStatus);
-
-            if ((isExpired || isCancelled || isNegativeFinal) && !activeReturnStatuses.includes(currentStatus)) {
-              setIsChatDisabled(true);
-            } else {
-              setIsChatDisabled(false);
+            if (currentStatus === ORDER_STATUS.PICKED_UP) {
+              isExpired = true;
+            } else if (currentStatus === ORDER_STATUS.DELIVERED && diffHours > 24) {
+              isExpired = true;
             }
           }
-        } catch (err) {
-          console.error("Error checking chat restriction:", err);
+
+          const activeReturnStatuses = [
+            ORDER_STATUS.RETURN_REQUESTED,
+            ORDER_STATUS.RETURN_CONFIRMED,
+            ORDER_STATUS.RETURN_SHIPPED,
+            ORDER_STATUS.RETURN_RECEIVED,
+            ORDER_STATUS.RETURN_NOT_RECEIVED
+          ];
+
+          const isCancelled = currentStatus === ORDER_STATUS.CANCEL_USER || currentStatus === ORDER_STATUS.CANCEL_SELLER;
+          const isNegativeFinal = [ORDER_STATUS.FAILED_DELIVERY, ORDER_STATUS.PICK_UP_FAILED, ORDER_STATUS.NO_RESPONSE].includes(currentStatus);
+
+          if ((isExpired || isCancelled || isNegativeFinal) && !activeReturnStatuses.includes(currentStatus)) {
+            setIsChatDisabled(true);
+          } else {
+            setIsChatDisabled(false);
+          }
         }
       } else {
         setIsChatDisabled(false);

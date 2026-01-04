@@ -67,7 +67,10 @@ export const useOrderRating = (order, onRatingComplete) => {
                 })
             });
 
-            if (!sellerRes.ok) throw new Error("Failed to rate seller");
+            if (!sellerRes.ok) {
+                const errorData = await sellerRes.json();
+                throw new Error(errorData.message || "failed_to_rate_seller");
+            }
 
             // 2. Submit Product Ratings
             for (const item of order.items) {

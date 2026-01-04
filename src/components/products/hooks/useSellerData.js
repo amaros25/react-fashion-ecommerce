@@ -16,7 +16,7 @@ export const useSellerData = (sellerId) => {
         fetch(`${apiUrl}/sellers/${sellerId}`)
             .then((res) => {
                 if (!res.ok) {
-                    throw new Error(`Error fetching seller: ${res.status}`);
+                    throw new Error(res.status === 404 ? "seller_not_found" : "server_error");
                 }
                 return res.json();
             })
@@ -26,7 +26,7 @@ export const useSellerData = (sellerId) => {
             })
             .catch((err) => {
                 console.error("Error loading seller:", err);
-                setError(err);
+                setError(err.message || "server_error");
                 setSeller(null);
                 setLoading(false);
             });

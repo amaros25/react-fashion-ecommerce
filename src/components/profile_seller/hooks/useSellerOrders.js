@@ -10,6 +10,7 @@ export const useSellerOrders = (sellerId, refreshTrigger) => {
     const [searchOrder, setSearchOrder] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
     const [products, setProducts] = useState({});
+    const [error, setError] = useState(null);
 
     const fetchOrders = useCallback(async () => {
         if (!sellerId) return;
@@ -26,7 +27,7 @@ export const useSellerOrders = (sellerId, refreshTrigger) => {
                 `${apiUrl}/orders/seller/${sellerId}?${queryParams.toString()}`
             );
 
-            if (!res.ok) throw new Error("Serverfehler");
+            if (!res.ok) throw new Error(res.status === 404 ? "order_not_found" : "server_error");
 
             const data = await res.json();
             const ordersList = data.orders || [];
@@ -55,6 +56,7 @@ export const useSellerOrders = (sellerId, refreshTrigger) => {
 
         } catch (error) {
             console.error("Error loading orders:", error);
+            setError(error.message || "server_error");
             setOrders([]);
             setTotalPages(1);
         } finally {
@@ -84,6 +86,7 @@ export const useSellerOrders = (sellerId, refreshTrigger) => {
         setFilterStatus,
         products,
         handleFilter,
-        paginate
+        paginate,
+        error
     };
 };

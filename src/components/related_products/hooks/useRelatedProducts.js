@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export default function useRelatedProducts(category, currentProductId) {
-
+    const { t } = useTranslation();
     const apiUrl = process.env.REACT_APP_API_URL;
     const [latestProducts, setLatestProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const fetchProducts = async (page = 1, limit = 12) => {
         try {
@@ -13,6 +15,7 @@ export default function useRelatedProducts(category, currentProductId) {
             if (category) url += `&category=${category}`;
             if (currentProductId) url += `&not=${currentProductId}`;
             const res = await fetch(url);
+            if (!res.ok) throw new Error("fetch_related_products_failed");
             const data = await res.json();
             if (Array.isArray(data.products)) {
                 return data.products;
@@ -20,7 +23,8 @@ export default function useRelatedProducts(category, currentProductId) {
             return [];
         } catch (error) {
             console.error("Error fetching related products:", error);
-            toast.error("Error fetching related products");
+            setError(error.message || "fetch_related_products_failed");
+            toast.error(t(error.message || "fetch_related_products_failed"));
             return [];
         }
     };
@@ -42,10 +46,12 @@ export default function useRelatedProducts(category, currentProductId) {
                 else {
                     setLatestProducts(filtered);
                 }
+                setError(null);
             } catch (error) {
                 if (error.name !== "AbortError") {
                     console.error("Failed to load related products:", error);
-                    toast.error("Failed to load related products");
+                    setError(error.message || "fetch_related_products_failed");
+                    toast.error(t(error.message || "fetch_related_products_failed"));
                 }
             } finally {
                 setLoading(false);
@@ -57,5 +63,5 @@ export default function useRelatedProducts(category, currentProductId) {
         return () => controller.abort();
     }, [apiUrl, category, currentProductId]);
 
-    return { latestProducts, loading };
+    return { latestProducts, loading, error };
 }

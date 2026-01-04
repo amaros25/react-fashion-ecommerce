@@ -28,10 +28,10 @@ export const useProductReview = (productId, userId, onReviewAdded) => {
                 setRating(0);
                 if (onReviewAdded) onReviewAdded();
             } else {
-                toast.error(t("add_review_erros." + data.message));
+                toast.error(t("add_review_errors." + data.message));
             }
         } catch (err) {
-            toast.error(t("failed_to_add_review_error"));
+            toast.error(t("add_review_errors.failed_to_add_review_error"));
         }
     };
 

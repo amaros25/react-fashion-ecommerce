@@ -28,7 +28,7 @@ function UploadStatus({ status }) {
         {status.error && (
           <>
             <div className="error-icon">❌</div>
-            <p>{t("upload_status.error")}</p>
+            <p>{t(status.errorKey || "upload_status.error")}</p>
           </>
         )}
       </div>

@@ -8,7 +8,7 @@ exports.getTopProducts = async (req, res) => {
     const top_products = await Product.find({ type: 'top' });
     res.json(top_products);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching products', error });
+    res.status(500).json({ message: 'error_fetching_products' });
   }
 };
 
@@ -115,8 +115,6 @@ exports.getNewProducts = async (req, res) => {
     // Total count für Pagination
     const total = await Product.countDocuments(match);
     const totalAllProducts = await Product.countDocuments();
-    console.log("total", total);
-    console.log("totalAllProducts", totalAllProducts);
     res.json({
       products: new_products,
       page,
@@ -125,7 +123,7 @@ exports.getNewProducts = async (req, res) => {
       totalAllProducts
     });
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching products', error });
+    res.status(500).json({ message: 'error_fetching_products' });
   }
 };
 
@@ -154,7 +152,7 @@ exports.getProductBySellerID = async (req, res) => {
 
     // Produkte des Verkäufers laden
     const totalCount = await Product.countDocuments(filter);
-    console.log("totalCount", totalCount);
+
     // Use aggregation to sort by computed createdAt from states
     const products = await Product.aggregate([
       { $match: filter },
@@ -193,18 +191,6 @@ exports.getProductBySellerID = async (req, res) => {
     // IDs der Produkte des Verkäufers
     const productIds = products.map(p => p._id);
 
-    const rawOrders = await Order.find({
-      "items.productId": { $in: productIds }
-    })
-      .select("orderNumber items status")
-      .lean();
-
-
-    rawOrders.forEach(o => {
-      console.log("Order:", o.orderNumber);
-      console.log("  ➤ Status:", o.status.map(s => s.update));
-      console.log("  ➤ Produkte:", o.items.map(i => i.productId.toString()));
-    });
     // Order-Aggregation: nur Bestellungen mit diesen Produkten und gültigem Status
     const orderCounts = await Order.aggregate([
       // 1️⃣ Nur Orders mit Items, die zu den Produkten des Verkäufers gehören
@@ -247,12 +233,11 @@ exports.getProductBySellerID = async (req, res) => {
 
   } catch (error) {
     console.error("❌ Fehler beim Laden der Produkte:", error);
-    res.status(500).json({ message: "Fehler beim Laden der Produkte", error });
+    res.status(500).json({ message: "error_fetching_products" });
   }
 };
 
 
-// Add a new Product
 // Add a new Product
 exports.createProduct = async (req, res) => {
   try {
@@ -262,9 +247,9 @@ exports.createProduct = async (req, res) => {
 
     const product = new Product(productData);
     await product.save();
-    res.status(201).json(product);
+    res.status(201).json({ success: true, data: product });
   } catch (error) {
-    res.status(500).json({ message: 'Error adding product', error });
+    res.status(500).json({ message: 'error_adding_product' });
   }
 };
 
@@ -307,11 +292,11 @@ exports.getProductByID = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: 'product_not_found' });
     }
     res.json(product);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching product', error });
+    res.status(500).json({ message: 'error_fetching_products' });
   }
 };
 
@@ -320,7 +305,7 @@ exports.getProductByID = async (req, res) => {
 exports.getProductsByIDs = async (req, res) => {
   const { ids } = req.query;
   if (!ids) {
-    return res.status(400).json({ message: "No product IDs provided" });
+    return res.status(400).json({ message: "missing_product_ids" });
   }
 
   const productIds = ids.split(',');
@@ -328,10 +313,10 @@ exports.getProductsByIDs = async (req, res) => {
   try {
     const products = await Product.find({ _id: { $in: productIds } });
     if (products.length === 0) {
-      return res.status(404).json({ message: "Products not found" });
+      return res.status(404).json({ message: "product_not_found" });
     }
     res.json(products);
   } catch (err) {
-    res.status(500).json({ message: "Server error", error: err });
+    res.status(500).json({ message: "server_error" });
   }
 };

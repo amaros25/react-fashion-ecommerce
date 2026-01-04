@@ -9,11 +9,11 @@ exports.getOrderByID = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: "order_not_found" });
     }
     res.json(order);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching order', error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -22,12 +22,12 @@ exports.getOrderByNumber = async (req, res) => {
     const { orderNumber } = req.params;
     const order = await Order.findOne({ orderNumber }).lean();
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: "order_not_found" });
     }
     res.json(order);
   } catch (error) {
     console.error('Error fetching order by number:', error);
-    res.status(500).json({ message: 'Error fetching order', error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -40,7 +40,7 @@ exports.getOrderBySellerID = async (req, res) => {
 
 
     if (!sellerId) {
-      return res.status(400).json({ message: 'sellerId wird benötigt' });
+      return res.status(400).json({ message: "missing_data" });
     }
 
     const query = { sellerId };
@@ -53,7 +53,7 @@ exports.getOrderBySellerID = async (req, res) => {
     const totalCount = await Order.countDocuments(query);
 
     if (totalCount === 0) {
-      return res.status(404).json({ message: 'Keine Bestellungen für diesen Verkäufer gefunden' });
+      return res.status(404).json({ message: "order_not_found" });
     }
 
     const orders = await Order.find(query)
@@ -97,7 +97,7 @@ exports.getOrderBySellerID = async (req, res) => {
     });
   } catch (error) {
     console.error('Fehler beim Laden der Bestellungen:', error);
-    res.status(500).json({ message: 'Serverfehler beim Laden der Bestellungen', error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -120,7 +120,7 @@ exports.getOrderByUserID = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error fetching orders", error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -137,13 +137,13 @@ exports.createOrder = async (req, res) => {
       });
 
       if (!product) {
-        return res.status(404).json({ message: `Product variant not found: ${item.productId} (${item.size}, ${item.color})` });
+        return res.status(404).json({ message: "product_variant_not_found" });
       }
 
       const variant = product.sizes.find(s => s.size === item.size && s.color === item.color);
       if (variant.stock < item.quantity) {
         return res.status(400).json({
-          message: `Insufficient stock for ${product.name} (${item.size}, ${item.color}). Available: ${variant.stock}, Requested: ${item.quantity}`
+          message: "insufficient_stock"
         });
       }
     }
@@ -152,7 +152,7 @@ exports.createOrder = async (req, res) => {
     await order.save();
     res.status(201).json(order);
   } catch (error) {
-    res.status(500).json({ message: 'Error adding order', error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -162,7 +162,7 @@ exports.updateOrderStatus = async (req, res) => {
     const { status } = req.body;
     const order = await Order.findById(orderId);
     if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(404).json({ message: "order_not_found" });
     }
     if (!order.status) {
       order.status = [];
@@ -204,7 +204,7 @@ exports.updateOrderStatus = async (req, res) => {
     res.status(200).json(order);
   } catch (error) {
     console.error("❌ Fehler beim Update des Bestellstatus:", error);
-    res.status(500).json({ message: "Error updating order status", error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -213,7 +213,7 @@ exports.getOrderCountByProduct = async (req, res) => {
     const { productId } = req.params;
 
     if (!productId) {
-      return res.status(400).json({ message: "productId wird benötigt" });
+      return res.status(400).json({ message: "missing_data" });
     }
     const count = await Order.countDocuments({ "items.productId": productId });
     res.status(200).json({
@@ -222,10 +222,7 @@ exports.getOrderCountByProduct = async (req, res) => {
     });
   } catch (error) {
     console.error("Fehler beim Zählen der Bestellungen:", error);
-    res.status(500).json({
-      message: "Serverfehler beim Zählen der Bestellungen",
-      error,
-    });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -233,7 +230,7 @@ exports.getSellerOrderStats = async (req, res) => {
   try {
     const { sellerId } = req.params;
     if (!sellerId) {
-      return res.status(400).json({ message: "sellerId wird benötigt" });
+      return res.status(400).json({ message: "missing_data" });
     }
     const orders = await Order.find({ sellerId }).select("status").lean();
     const totalOrders = orders.length;
@@ -250,6 +247,6 @@ exports.getSellerOrderStats = async (req, res) => {
 
   } catch (error) {
     console.error("Fehler beim Laden der Order Stats:", error);
-    res.status(500).json({ message: "Fehler beim Laden der Order Stats", error });
+    res.status(500).json({ message: "server_error" });
   }
 };

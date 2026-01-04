@@ -27,7 +27,7 @@ export const useSellerProducts = (apiUrl, sellerId, token) => {
             );
 
             if (!res.ok) {
-                throw new Error(`Failed to fetch products: ${res.status}`);
+                throw new Error(res.status === 404 ? "no_products_found" : "error_loading_products");
             }
 
             const data = await res.json();

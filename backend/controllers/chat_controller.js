@@ -15,7 +15,7 @@ exports.getUserChats = async (req, res) => {
     } else if (role === 'seller') {
       filter = { sellerId: userId };
     } else {
-      return res.status(400).json({ message: "error" });
+      return res.status(400).json({ message: "invalid_role" });
     }
     const totalChats = await Chat.countDocuments(filter);
     //console.log("totalchat: ", totalChats);
@@ -28,7 +28,7 @@ exports.getUserChats = async (req, res) => {
     const totalPages = Math.ceil(totalChats / limit);
     res.json({ chats, totalPages, totalChats });
   } catch (error) {
-    res.status(500).json({ message: "Error fetching chats", error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -37,7 +37,7 @@ exports.getChatById = async (req, res) => {
     const { chatId } = req.params;
     const { page = 1, limit = 10 } = req.query;
     const chat = await Chat.findById(chatId);
-    if (!chat) return res.status(404).json({ message: "Chat not found" });
+    if (!chat) return res.status(404).json({ message: "chat_not_found" });
     const total = chat.messages.length;
     const start = total - page * limit;
     const end = total - (page - 1) * limit;
@@ -45,7 +45,7 @@ exports.getChatById = async (req, res) => {
     const sortedMessages = messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     res.json({ ...chat.toObject(), messages: sortedMessages });
   } catch (error) {
-    res.status(500).json({ message: "Error fetching chat", error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -54,13 +54,13 @@ exports.addMessage = async (req, res) => {
     const { chatId } = req.params;
     const { senderId, text } = req.body;
     const chat = await Chat.findById(chatId);
-    if (!chat) return res.status(404).json({ message: "Chat not found" });
+    if (!chat) return res.status(404).json({ message: "chat_not_found" });
     chat.messages.push({ senderId, text });
     chat.updatedAt = new Date();
     await chat.save();
     res.json(chat);
   } catch (error) {
-    res.status(500).json({ message: "Error adding message", error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -69,7 +69,7 @@ exports.createChat = async (req, res) => {
   try {
     console.log("createChat req.body: ", req.body);
     let { userId, sellerId, type, number } = req.body;
-    if (!type) return res.status(400).json({ message: "type fehlt" });
+    if (!type) return res.status(400).json({ message: "missing_data" });
 
     // Help Center Logic: If number is not provided, generate a Support Number
     // Requirements: if user contacts -> userId provided, sellerId = "admin"
@@ -82,7 +82,7 @@ exports.createChat = async (req, res) => {
       }
     }
 
-    if (!userId && !sellerId) return res.status(400).json({ message: "userId or sellerId must be provided" });
+    if (!userId && !sellerId) return res.status(400).json({ message: "missing_data" });
     if (!sellerId && userId) {
       sellerId = "admin";
     } else if (!userId && sellerId) {
@@ -102,7 +102,7 @@ exports.createChat = async (req, res) => {
     res.status(201).json(newChat);
   } catch (error) {
     console.error("Error creating chat:", error);
-    res.status(500).json({ message: "Error creating chat", error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -111,7 +111,7 @@ exports.updateReadStatus = async (req, res) => {
     const { chatId } = req.params;
     const chat = await Chat.findById(chatId);
     if (!chat) {
-      return res.status(404).json({ message: "Chat not found" });
+      return res.status(404).json({ message: "chat_not_found" });
     }
     chat.messages.forEach((message) => {
       if (!message.isRead) {
@@ -122,7 +122,7 @@ exports.updateReadStatus = async (req, res) => {
     res.json(chat);
   } catch (error) {
     console.error("Error updating read status:", error);
-    res.status(500).json({ message: "Error updating read status", error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -142,7 +142,7 @@ exports.getUnreadCount = async (req, res) => {
     res.json({ unreadCount });
   } catch (error) {
     console.error("Error counting unread messages:", error);
-    res.status(500).json({ message: "Error counting unread messages", error });
+    res.status(500).json({ message: "server_error" });
   }
 };
 
@@ -162,6 +162,6 @@ exports.getUnreadUserCount = async (req, res) => {
     res.json({ unreadCount });
   } catch (error) {
     console.error("Error counting unread messages for user:", error);
-    res.status(500).json({ message: "Error counting unread messages", error });
+    res.status(500).json({ message: "server_error" });
   }
 };

@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Custom hook for managing seller data
@@ -8,6 +9,7 @@ import { useState, useCallback } from 'react';
  * @returns {Object} - Seller data, loading state, error, and update function
  */
 export const useSellerData = (apiUrl, userId, token) => {
+    const { t } = useTranslation();
     const [seller, setSeller] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -24,7 +26,7 @@ export const useSellerData = (apiUrl, userId, token) => {
             });
 
             if (!res.ok) {
-                throw new Error(`Failed to fetch seller: ${res.status}`);
+                throw new Error(res.status === 404 ? "seller_not_found" : "fetch_seller_failed");
             }
 
             const data = await res.json();
@@ -54,7 +56,7 @@ export const useSellerData = (apiUrl, userId, token) => {
             });
 
             if (!res.ok) {
-                throw new Error(`Failed to update seller: ${res.status}`);
+                throw new Error(res.status === 404 ? "seller_not_found" : "update_seller_failed");
             }
 
             const data = await res.json();

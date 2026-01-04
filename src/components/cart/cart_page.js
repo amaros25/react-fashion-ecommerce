@@ -26,11 +26,11 @@ const CartPage = () => {
 
   // Fetch Sellers
   const getSellersByIds = async (sellerIds) => {
-    try {
-      const sellerMap = await fetchSellersByIds(sellerIds, t);
-      setSellers(sellerMap);
-    } catch (err) {
-      toast.error(t("errors.fetch_sellers") || "Error loading sellers. Please try again later.");
+    const result = await fetchSellersByIds(sellerIds);
+    if (result.success) {
+      setSellers(result.data);
+    } else {
+      toast.error(t(result.errorKey));
     }
   };
 
@@ -106,14 +106,18 @@ const CartPage = () => {
     setIsSubmitting(true);
 
     try {
-      await createMultipleOrders(groupedCart, userId, token, ORDER_STATUS.PENDING, isDelivery, t);
-      toast.success(t("orders_created_success"));
-      localStorage.removeItem("cart");
-      setCart([]);
-      setGroupedCart({});
-      navigate("/profile_user");
+      const result = await createMultipleOrders(groupedCart, userId, token, ORDER_STATUS.PENDING, isDelivery);
+      if (result.success) {
+        toast.success(t("orders_created_success"));
+        localStorage.removeItem("cart");
+        setCart([]);
+        setGroupedCart({});
+        navigate("/profile_user");
+      } else {
+        toast.error(t(result.errorKey));
+      }
     } catch (err) {
-      toast.error(t("orders_created_error") || "An error occurred while creating your order. Please try again.");
+      toast.error(t("orders_created_error"));
     } finally {
       setIsSubmitting(false);
     }

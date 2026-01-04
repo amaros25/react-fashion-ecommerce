@@ -5,15 +5,27 @@ import { useState, useEffect } from 'react';
 export const useProductData = (productId, refresh) => {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [product, setProduct] = useState(null);
-    console.log("ProductPage useProductData productId:", productId);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     useEffect(() => {
         if (!productId) return;
 
+        setLoading(true);
         fetch(`${apiUrl}/products/${productId}`)
-            .then(res => res.json())
-            .then(data => setProduct(data))
-            .catch(err => console.error("Error loading product:", err));
+            .then(res => {
+                if (!res.ok) throw new Error("product_not_found");
+                return res.json();
+            })
+            .then(data => {
+                setProduct(data);
+                setError(null);
+            })
+            .catch(err => {
+                setError(err.message === "product_not_found" ? "product_not_found" : "server_error");
+            })
+            .finally(() => setLoading(false));
     }, [productId, apiUrl, refresh]);
 
-    return { product };
+    return { product, loading, error };
 };

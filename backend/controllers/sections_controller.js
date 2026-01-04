@@ -8,16 +8,16 @@ exports.getSections = async (req, res) => {
       .populate('popularCategories');
     res.json(sections);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ message: 'server_error' });
   }
 };
 
 exports.createSection = async (req, res) => {
   try {
-    const newSection = new Section(req.body);  
+    const newSection = new Section(req.body);
     await newSection.save();
     res.status(201).json(newSection);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ message: 'server_error' });
   }
 };

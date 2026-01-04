@@ -54,14 +54,10 @@
     "reset_password_desc": "Enter your email to receive a reset link",
     "enter_email": "Enter your email",
     "send_reset_link": "Send Reset Link",
-    "reset_email_sent": "Reset email sent! Check your inbox.",
     "reset_email_error": "Error sending reset email",
     "enter_new_password": "Enter your new password",
     "confirm_password": "Confirm Password",
     "passwords_not_match": "Passwords do not match",
-    "password_reset_success": "Password reset successfully!",
-    "reset_password_failed": "Failed to reset password",
-    "reset_password_button": "Reset Password",
     "remember_password": "Remember your password?",
     "password_requirements": "Password must contain",
     "password_req_length": "At least 8 characters",
@@ -321,11 +317,6 @@
     "enter_custom_color": "Enter a color",
     "add_another_size": "Add another size",
     "post_product": "Post Product",
-    "upload_status": {
-        "loading": "Uploading... please wait",
-        "success": "Upload successful!",
-        "error": "Upload failed!"
-    },
     "seller_cannot_buy_alter": "Sellers cannot place orders.",
     "related_products": {
         "title": "You might also like"
@@ -661,7 +652,7 @@
         "productStockRequired": "Product stock is required",
         "productCustomSizeRequired": "Custom size is required when 'custom size' is selected."
     },
-    "add_review_erros": {
+    "add_review_errors": {
         "rate_only_received_error": "you can only rate products you have received.",
         "review_already_exists_error": "you have already rated this product",
         "failed_to_add_review_error": "failed to add review"
@@ -706,5 +697,45 @@
     "bill_commission_rate": "Commission (3%)",
     "bill_status_paid": "Paid",
     "bill_status_open": "Open",
-    "bill_number_label": "Invoice Number"
+    "bill_number_label": "Invoice Number",
+    "server_error": "Internal server error. Please try again later.",
+    "user_not_found": "User not found.",
+    "seller_not_found": "Seller not found.",
+    "success_update_status": "Status updated successfully.",
+    "missing_data": "Required data is missing.",
+    "order_not_found": "Order not found.",
+    "product_variant_not_found": "Product variant not found.",
+    "insufficient_stock": "Insufficient stock for one or more items.",
+    "chat_not_found": "Chat not found.",
+    "invalid_role": "Invalid user role.",
+    "wrong_password": "Wrong password.",
+    "reset_email_sent_if_exists": "If the email exists, a reset link has been sent.",
+    "reset_email_sent": "Password reset email sent.",
+    "error_sending_reset_email": "Error sending reset email.",
+    "invalid_password_strength": "Password must be at least 8 characters with uppercase, lowercase, number, and special character.",
+    "invalid_or_expired_token": "Invalid or expired token.",
+    "password_reset_success": "Password reset successful.",
+    "error_resetting_password": "Error resetting password.",
+    "upload_status": {
+        "loading": "Uploading product...",
+        "success": "Product uploaded successfully!",
+        "error": "Error uploading product. Please try again."
+    },
+    "error_fetching_products": "Error fetching products.",
+    "error_adding_product": "Error adding product.",
+    "product_not_found": "Product not found.",
+    "missing_product_ids": "No product IDs provided.",
+    "user_no_address": "User has no address.",
+    "user_no_phone": "User has no phone number.",
+    "user_updated_successfully": "User updated successfully.",
+    "user_image_updated_successfully": "User image updated successfully.",
+    "user_image_update_failed": "Failed to update user image.",
+    "fetch_user_failed": "Failed to fetch user data.",
+    "update_user_failed": "Failed to update user data.",
+    "fetch_seller_failed": "Failed to fetch seller data.",
+    "update_seller_failed": "Failed to update seller data.",
+    "fetch_order_failed": "Failed to fetch order data.",
+    "fetch_products_failed": "Failed to fetch products.",
+    "no_seller_id": "No seller ID provided.",
+    "fetch_related_products_failed": "Failed to fetch related products."
 }

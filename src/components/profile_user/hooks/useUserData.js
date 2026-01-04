@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Custom hook for managing user data
@@ -8,9 +9,7 @@ import { useState, useCallback } from 'react';
  * @returns {Object} - User data, loading state, error, and update function
  */
 export const useUserData = (apiUrl, userId, token) => {
-    console.log("useUserData apiUrl: ", apiUrl);
-    console.log("useUserData userId: ", userId);
-    console.log("useUserData token: ", token);
+    const { t } = useTranslation();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -27,7 +26,7 @@ export const useUserData = (apiUrl, userId, token) => {
             });
 
             if (!res.ok) {
-                throw new Error(`Failed to fetch user: ${res.status}`);
+                throw new Error(res.status === 404 ? "user_not_found" : "fetch_user_failed");
             }
 
             const data = await res.json();
@@ -57,7 +56,7 @@ export const useUserData = (apiUrl, userId, token) => {
             });
 
             if (!res.ok) {
-                throw new Error(`Failed to update user: ${res.status}`);
+                throw new Error(res.status === 404 ? "user_not_found" : "update_user_failed");
             }
 
             const data = await res.json();

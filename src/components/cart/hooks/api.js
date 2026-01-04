@@ -1,58 +1,60 @@
-import { toast } from 'react-toastify';
-
 const apiUrl = process.env.REACT_APP_API_URL;
 
 /**
  * Fetch all sellers from the API
- * @returns {Promise<Object>} - Object with seller IDs as keys and seller data as values
+ * @returns {Promise<Object>} - Object with success status, data (sellerMap), and errorKey
  */
-export const fetchSellersByIds = async (sellerIds, t) => {
+export const fetchSellersByIds = async (sellerIds) => {
     try {
         let url = `${apiUrl}/sellers/getByIds?ids=${sellerIds.join(",")}`;
         const res = await fetch(url);
         const data = await res.json();
-        const sellerMap = data.reduce((acc, seller) => {
-            acc[seller._id] = seller;
-            return acc;
-        }, {});
-        return sellerMap;
+
+        if (res.ok) {
+            const sellerMap = data.reduce((acc, seller) => {
+                acc[seller._id] = seller;
+                return acc;
+            }, {});
+            return { success: true, data: sellerMap };
+        } else {
+            return { success: false, errorKey: data.message || "server_error" };
+        }
     } catch (err) {
         console.error("Error fetching sellers:", err);
-        toast.error(t("errors.fetch_sellers") || "Error loading sellers. Please try again later.");
-        throw err;
+        return { success: false, errorKey: "server_error" };
     }
 };
 
 /**
- * Fetch all sellers from the API
- * @returns {Promise<Object>} - Object with seller IDs as keys and seller data as values
+ * Fetch a single seller
+ * @returns {Promise<Object>} - Object with success status, data (seller), and errorKey
  */
-
-export const fetchSeller = async (sellerId, token, t) => {
-    if (!sellerId || !token) return;
+export const fetchSeller = async (sellerId, token) => {
+    if (!sellerId || !token) return { success: false, errorKey: "missing_data" };
     try {
         const res = await fetch(`${apiUrl}/sellers/${sellerId}`, {
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (!res.ok) {
-            throw new Error(`Failed to fetch seller: ${res.status}`);
+        const data = await res.json();
+        if (res.ok) {
+            return { success: true, data };
+        } else {
+            return { success: false, errorKey: data.message || "server_error" };
         }
-        return await res.json();
     } catch (err) {
         console.error('Error fetching seller:', err);
-        toast.error(t("errors.fetch_seller") || "Error loading seller. Please try again later.");
-        throw err;
+        return { success: false, errorKey: "server_error" };
     }
 };
 
 /**
  * Create a new order
- * @param {Object} orderData - Order data including userId, sellerId, items, totalPrice, etc.
+ * @param {Object} orderData - Order data
  * @param {string} token - Authentication token
- * @returns {Promise<Object>} - Created order response
+ * @returns {Promise<Object>} - Object with success status, data (order), and errorKey
  */
-export const createOrder = async (orderData, token, t) => {
+export const createOrder = async (orderData, token) => {
     try {
         const res = await fetch(`${apiUrl}/orders/create`, {
             method: "POST",
@@ -63,14 +65,15 @@ export const createOrder = async (orderData, token, t) => {
             body: JSON.stringify(orderData),
         });
 
-        if (!res.ok) {
-            throw new Error(`Error creating order: ${res.status}`);
+        const data = await res.json();
+        if (res.ok) {
+            return { success: true, data };
+        } else {
+            return { success: false, errorKey: data.message || "server_error" };
         }
-
-        return await res.json();
     } catch (err) {
         console.error("Error creating order:", err);
-        throw err;
+        return { success: false, errorKey: "server_error" };
     }
 };
 
@@ -79,11 +82,11 @@ export const createOrder = async (orderData, token, t) => {
  * @param {Object} groupedCart - Cart items grouped by seller ID
  * @param {string} userId - User ID
  * @param {string} token - Authentication token
- * @param {number} orderStatus - Initial order status (integer)
- * @param {boolean} isDelivery - Whether the order is for delivery or pickup
- * @returns {Promise<void>}
+ * @param {number} orderStatus - Initial order status
+ * @param {boolean} isDelivery - Delivery or pickup
+ * @returns {Promise<Object>} - Object with success status and errorKey
  */
-export const createMultipleOrders = async (groupedCart, userId, token, orderStatus, isDelivery = true, t) => {
+export const createMultipleOrders = async (groupedCart, userId, token, orderStatus, isDelivery = true) => {
     try {
         for (const [sellerId, items] of Object.entries(groupedCart)) {
             const formattedItems = items.map((item) => ({
@@ -108,11 +111,14 @@ export const createMultipleOrders = async (groupedCart, userId, token, orderStat
                 is_delivery: isDelivery,
             };
 
-            await createOrder(orderData, token, t);
+            const result = await createOrder(orderData, token);
+            if (!result.success) {
+                return result; // Return first failure
+            }
         }
+        return { success: true };
     } catch (err) {
         console.error("Error creating multiple orders:", err);
-        toast.error(t("errors.create_order") || "Error creating the order. Please try again later.");
-        throw err;
+        return { success: false, errorKey: "server_error" };
     }
 };

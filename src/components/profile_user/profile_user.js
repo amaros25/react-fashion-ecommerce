@@ -33,12 +33,12 @@ export default function ProfileUser() {
     }
   }, [userId, token, fetchUser, navigate]);
 
-  const { orders, products, totalPages, allOrders } = useUserOrders(
+  const { orders, products, totalPages, allOrders, loading: ordersLoading, error: ordersError } = useUserOrders(
     apiUrl, userId, token, currentPage, ordersPerPage, refreshOrders
   );
 
   if (loading || !user) return <LoadingSpinner />;
-  if (error) return <div className="error-message">{t("error_loading_profile")}</div>;
+  if (error || ordersError) return <div className="error-message">{t(error || ordersError)}</div>;
 
   const totalOrders = allOrders.length;
 
@@ -55,7 +55,7 @@ export default function ProfileUser() {
       const currentOrderData = await currentOrderRes.json();
 
       if (!currentOrderRes.ok) {
-        throw new Error("Could not fetch current order status");
+        throw new Error(currentOrderRes.status === 404 ? "order_not_found" : "fetch_order_failed");
       }
 
       // Check if status is still valid for this action
