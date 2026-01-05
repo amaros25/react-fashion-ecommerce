@@ -22,7 +22,9 @@ function ProductPage() {
   const [product, setProduct] = useState(initialProduct);
   const [mainImage, setMainImage] = useState("");
   const { id } = useParams();
-  const { product: loadedProduct, loading: productLoading, error: productError } = useProductData(product ? null : id);
+
+  const { product: loadedProduct, loading: productLoading, error: productError } = useProductData(initialProduct ? null : id);
+
 
   // Reset product when navigating to a different product
   useEffect(() => {

@@ -3,13 +3,17 @@ import { useState, useEffect } from 'react';
 
 
 export const useProductData = (productId, refresh) => {
+    console.log("# useProductData productId: ", productId);
     const apiUrl = process.env.REACT_APP_API_URL;
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (!productId) return;
+        if (!productId) {
+            setLoading(false);
+            return;
+        }
 
         setLoading(true);
         fetch(`${apiUrl}/products/${productId}`)

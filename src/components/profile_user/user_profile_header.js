@@ -1,5 +1,5 @@
 import "./user_profile_header.css";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -78,9 +78,6 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
 
       const cityIndex = cities.indexOf(formData.city);
       const subCityIndex = citiesData[formData.city]?.indexOf(formData.subCity);
-      console.log("ProfileHeader handleUpdate cityIndex: ", cityIndex);
-      console.log("ProfileHeader handleUpdate subCityIndex: ", subCityIndex);
-      console.log("ProfileHeader handleUpdate address: ", formData.address);
       const payload = {};
       if (subCityIndex < 0) {
         toast.error("Invalid subcity"); //TODO Error message in JSON Languages
@@ -107,9 +104,6 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
       if (formData.phone !== user.phone) {
         payload.phone = formData.phone;
       }
-
-      console.log("ProfileHeader handleUpdate payload: ", payload);
-      console.log("ProfileHeader handleUpdate user: ", user);
       const res = await fetch(`${apiUrl}/users/${user.userId || user._id}/updateContact`, {
         method: "PATCH",
         headers: {
@@ -262,14 +256,14 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
               </div>
               <div className="user-form-row">
                 <div className="user-form-group half">
-                  <label>{t("city") || "City"}</label>
+                  <label>{t("register.city") || "City"}</label>
                   <select name="city" value={formData.city} onChange={handleCityChange}>
                     <option value="">{t("select_city") || "Select City"}</option>
                     {cities.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div className="user-form-group half">
-                  <label>{t("subcity") || "SubCity"}</label>
+                  <label>{t("register.subCity") || "SubCity"}</label>
                   <select name="subCity" value={formData.subCity} onChange={handleInputChange}>
                     <option value="">{t("select_subcity") || "Select SubCity"}</option>
                     {subCities.map(sc => <option key={sc} value={sc}>{sc}</option>)}
