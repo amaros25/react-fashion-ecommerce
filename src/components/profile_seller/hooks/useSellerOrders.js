@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '../../../context/AuthContext';
 
 export const useSellerOrders = (sellerId, refreshTrigger) => {
     const apiUrl = process.env.REACT_APP_API_URL;
+    const { token } = useAuth();
     const [loading, setLoading] = useState(false);
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +26,12 @@ export const useSellerOrders = (sellerId, refreshTrigger) => {
             if (searchOrder) queryParams.append("orderNumber", searchOrder);
 
             const res = await fetch(
-                `${apiUrl}/orders/seller/${sellerId}?${queryParams.toString()}`
+                `${apiUrl}/orders/seller/${sellerId}?${queryParams.toString()}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
             );
 
             if (!res.ok) throw new Error(res.status === 404 ? "order_not_found" : "server_error");
@@ -62,7 +69,7 @@ export const useSellerOrders = (sellerId, refreshTrigger) => {
         } finally {
             setLoading(false);
         }
-    }, [sellerId, currentPage, filterStatus, searchOrder, apiUrl, products]);
+    }, [sellerId, currentPage, filterStatus, searchOrder, apiUrl, products, token]);
 
     useEffect(() => {
         fetchOrders();

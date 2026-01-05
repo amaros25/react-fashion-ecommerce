@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './AdminOrderDetail.css';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminOrderDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     useTranslation();
     const apiUrl = process.env.REACT_APP_API_URL;
+    const { token } = useAuth();
 
     const [order, setOrder] = useState(null);
     const [user, setUser] = useState(null);
@@ -19,14 +21,18 @@ const AdminOrderDetail = () => {
         const fetchAllData = async () => {
             try {
                 // 1. Fetch Order
-                const orderRes = await fetch(`${apiUrl}/orders/${id}`);
+                const orderRes = await fetch(`${apiUrl}/orders/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 const orderData = await orderRes.json();
                 if (!orderRes.ok) throw new Error(orderData.message);
                 setOrder(orderData);
 
                 // 2. Fetch User & Seller in parallel
                 const [userRes, sellerRes] = await Promise.all([
-                    fetch(`${apiUrl}/users/${orderData.userId}`),
+                    fetch(`${apiUrl}/users/${orderData.userId}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    }),
                     fetch(`${apiUrl}/sellers/${orderData.sellerId}`)
                 ]);
 
@@ -53,7 +59,7 @@ const AdminOrderDetail = () => {
         };
 
         fetchAllData();
-    }, [id, apiUrl]);
+    }, [id, apiUrl, token]);
 
     if (loading) return <div className="admin-order-loading">LOADING...</div>;
     if (!order) return <div className="admin-order-error">ORDER NOT FOUND</div>;

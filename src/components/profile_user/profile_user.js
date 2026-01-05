@@ -9,16 +9,17 @@ import LoadingSpinner from "../loading/loading_spinner"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import OrderStatusStepper from "./order_status_stepper";
+import { useAuth } from "../../context/AuthContext";
+
 export default function ProfileUser() {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
+  const { userId, token } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const [refreshOrders, setRefreshOrders] = useState(0);
   const ordersPerPage = 5;
-  const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
 
   const { user, fetchUser, loading, error } = useUserData(apiUrl, userId, token);
   console.log("ProfileUser token: ", token);

@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const chatController = require("../controllers/chat_controller");
 
+const { verifyToken } = require("../middleware/auth");
+
+router.use(verifyToken);
+
 // GET alle Chats eines Users
 router.get("/user/:userId", chatController.getUserChats);
 router.get("/seller/:userId", chatController.getUserChats);

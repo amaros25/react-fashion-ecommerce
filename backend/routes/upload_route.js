@@ -20,8 +20,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+const { verifyToken } = require("../middleware/auth");
+
 // Route: POST /api/upload
-router.post('/', upload.array('images', 3), (req, res) => {
+router.post('/', verifyToken, upload.array('images', 3), (req, res) => {
   const urls = req.files.map(file => `/images/${file.filename}`);
   res.json({ urls });
 });

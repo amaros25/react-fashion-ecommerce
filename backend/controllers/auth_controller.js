@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const { sendPasswordResetEmail } = require("../utils/emailService");
 
-const JWT_SECRET = "DEIN_SECRET_KEY";
+const JWT_SECRET = process.env.JWT_SECRET || "DEIN_SECRET_KEY";
 
 const login = async (req, res) => {
   const { email, password } = req.body;

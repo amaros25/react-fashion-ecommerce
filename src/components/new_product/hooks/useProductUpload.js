@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../context/AuthContext';
 
 export const useProductUpload = (userId) => {
     const apiUrl = process.env.REACT_APP_API_URL;
     const cloudName = process.env.REACT_APP_CLOUD_NAME;
     const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
     const navigate = useNavigate();
+    const { token } = useAuth();
     const { t } = useTranslation();
 
     const [status, setStatus] = useState({
@@ -58,7 +60,10 @@ export const useProductUpload = (userId) => {
 
             const res = await fetch(`${apiUrl}/products/create`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify(productData),
             });
 

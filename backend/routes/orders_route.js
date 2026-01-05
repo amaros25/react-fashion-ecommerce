@@ -3,18 +3,23 @@ const router = express.Router(); // Create a new router object to define route h
 const orderController = require('../controllers/order_controller');
 
 
-// GET: Get the order by ID when '/api/orders/:id' called with orderController.getProductByID
+const { verifyToken } = require('../middleware/auth');
+
+// Apply verifyToken to all routes in this file
+router.use(verifyToken);
+
+// GET: Get the order by ID
 router.get('/:id', orderController.getOrderByID);
 
-// GET: Get the product by SellerID when '/seller/:sellerId' called with orderController.getOrderBySellerID
+// GET: Get the product by SellerID
 router.get('/seller/:sellerId', orderController.getOrderBySellerID);
 
 router.get('/number/:orderNumber', orderController.getOrderByNumber);
 
-// GET: Get the order by UserID when '/api/orders/:id' called with orderController.getProductByID
+// GET: Get the order by UserID
 router.get('/user/:id', orderController.getOrderByUserID);
 
-// GET: add new Order when '/api/orders/create' called with orderController.createOrder
+// POST: add new Order
 router.post('/create', orderController.createOrder);
 
 // Update order Status

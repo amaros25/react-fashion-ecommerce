@@ -8,14 +8,14 @@ import { useSellerData } from "./hooks/useSellerData";
 import SellerBills from "./seller_bills.js";
 import LoadingSpinner from "../utils/loading_spinner.js";
 import { toast } from "react-toastify";
+import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 
 function ProfileSeller() {
   const apiUrl = process.env.REACT_APP_API_URL;
+  const { userId, token } = useAuth();
   const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState("add_new_product");
-  const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
   const tabKeys = ["products", "openOrders", "allOrders"];
   const [refreshOrders, setRefreshOrders] = useState(0);
 

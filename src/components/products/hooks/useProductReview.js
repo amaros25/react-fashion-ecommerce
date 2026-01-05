@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../context/AuthContext';
 
 export const useProductReview = (productId, userId, onReviewAdded) => {
     const apiUrl = process.env.REACT_APP_API_URL;
+    const { token } = useAuth();
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
     const [hover, setHover] = useState(0);
@@ -18,6 +20,7 @@ export const useProductReview = (productId, userId, onReviewAdded) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ userId, rating, comment })
             });
