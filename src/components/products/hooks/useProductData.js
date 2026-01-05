@@ -10,10 +10,7 @@ export const useProductData = (productId, refresh) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (!productId) {
-            setLoading(false);
-            return;
-        }
+        if (!productId) return;
 
         setLoading(true);
         fetch(`${apiUrl}/products/${productId}`)

@@ -35,7 +35,7 @@ exports.getDashboardStats = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find().select("-password").sort({ createdAt: -1 });
+        const users = await User.find().select("-password").sort({ _id: -1 });
         res.json(users);
     } catch (err) {
         res.status(500).json({ message: "server_error" });
@@ -44,7 +44,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.getAllSellers = async (req, res) => {
     try {
-        const sellers = await Seller.find().select("-password").sort({ createdAt: -1 });
+        const sellers = await Seller.find().select("-password").sort({ _id: -1 });
         res.json(sellers);
     } catch (err) {
         res.status(500).json({ message: "server_error" });
@@ -54,7 +54,7 @@ exports.getAllSellers = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
     try {
         console.log("Admin: Getting all products...");
-        const products = await Product.find().sort({ createdAt: -1 });
+        const products = await Product.find().sort({ _id: -1 });
         // Removed populate for now to test if that's causing issues
         console.log(`Admin: Found ${products.length} products`);
         res.json(products);
@@ -67,7 +67,7 @@ exports.getAllProducts = async (req, res) => {
 exports.getAllOrders = async (req, res) => {
     try {
         console.log("Admin: Getting all orders...");
-        const orders = await Order.find().sort({ createdAt: -1 });
+        const orders = await Order.find().sort({ _id: -1 });
         console.log(`Admin: Found ${orders.length} orders`);
         res.json(orders);
     } catch (err) {

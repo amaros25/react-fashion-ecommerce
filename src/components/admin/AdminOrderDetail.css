@@ -1,0 +1,240 @@
+.admin-order-container {
+    padding: 3rem 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: #fff;
+    color: #000;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+}
+
+.admin-order-header {
+    border-bottom: 1px solid #000;
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.admin-order-back {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-size: 0.8rem;
+    padding: 0;
+    cursor: pointer;
+    align-self: flex-start;
+    letter-spacing: 1px;
+}
+
+.admin-order-header h1 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -1px;
+}
+
+.admin-order-status-bar {
+    font-size: 0.9rem;
+}
+
+.admin-order-status-bar .label {
+    margin-right: 0.5rem;
+    color: #666;
+}
+
+.admin-order-status-bar .value {
+    font-weight: bold;
+}
+
+.admin-order-main-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 5rem;
+}
+
+.admin-order-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.admin-order-subtitle {
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    color: #000;
+    text-transform: uppercase;
+}
+
+.info-block p {
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.info-block .email {
+    text-decoration: underline;
+}
+
+.info-block .shop-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.admin-order-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+/* Items List */
+.admin-order-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 2rem;
+}
+
+.admin-order-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem 0;
+}
+
+.item-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.item-name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.item-details {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.item-sku {
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 0.5rem;
+}
+
+.item-quantity,
+.item-price {
+    font-size: 1rem;
+}
+
+/* Total Bar */
+.admin-order-total-bar {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: flex-end;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    width: 250px;
+    font-size: 0.9rem;
+}
+
+.total-row.grand-total {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #000;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Meta Grid */
+.admin-order-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.meta-item .label {
+    font-size: 0.7rem;
+    color: #666;
+    letter-spacing: 1px;
+}
+
+.meta-item .value {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.admin-order-notes {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* History */
+.admin-order-history {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.history-step {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px dotted #eee;
+}
+
+.history-step .date {
+    color: #666;
+}
+
+.history-step .update {
+    font-weight: 500;
+}
+
+/* Loading/Error */
+.admin-order-loading,
+.admin-order-error {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 1024px) {
+    .admin-order-main-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .admin-order-sidebar {
+        order: 2;
+    }
+
+    .admin-order-content {
+        order: 1;
+    }
+}

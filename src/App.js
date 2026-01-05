@@ -16,6 +16,7 @@ import MainChat from './components/chat/main_chat.js';
 import InfoPage from './components/info_pages/InfoPage.js';
 import HelpCenter from './components/info_pages/HelpCenter.js';
 import AdminProfile from "./components/admin/AdminProfile";
+import AdminOrderDetail from "./components/admin/AdminOrderDetail";
 import ShopPage from './components/shop/ShopPage.js';
 import ScrollToTop from './components/utils/ScrollToTop.js';
 import { FilterProvider } from './components/filter_context/filter_context.js';
@@ -77,6 +78,7 @@ function App() {
           <Route path="/info-board" element={<InfoPage pageKey="info_board" />} />
           <Route path="/help-center" element={<HelpCenter />} />
           <Route path="/profile_admin" element={<AdminProfile />} />
+          <Route path="/admin/order/:id" element={<AdminOrderDetail />} />
           <Route path="/sell" element={<InfoPage pageKey="sell" />} />
           <Route path="/buy" element={<InfoPage pageKey="buy" />} />
           <Route path="/trust-safety" element={<InfoPage pageKey="trust_safety" />} />

@@ -19,8 +19,29 @@ const AdminProfile = () => {
     });
     const [activeTab, setActiveTab] = useState('products');
     const [dataList, setDataList] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 10;
+
+    const filteredData = dataList.filter(item => {
+        if (!searchQuery) return true;
+        const query = searchQuery.toLowerCase();
+        if (activeTab === 'products') {
+            return item.productNumber?.toLowerCase().includes(query) || item.name?.toLowerCase().includes(query);
+        }
+        if (activeTab === 'orders') {
+            return item.orderNumber?.toLowerCase().includes(query);
+        }
+        if (activeTab === 'users' || activeTab === 'sellers') {
+            const fullName = `${item.firstName} ${item.lastName}`.toLowerCase();
+            return fullName.includes(query) || item.email?.toLowerCase().includes(query);
+        }
+        return true;
+    });
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery, activeTab]);
 
     const loadStats = useCallback(async () => {
         const result = await fetchStats();
@@ -69,111 +90,133 @@ const AdminProfile = () => {
     // Pagination Logic
     const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
     const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-    const currentItems = dataList.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(dataList.length / ITEMS_PER_PAGE);
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+
+    const handleRowClick = (item) => {
+        if (activeTab === 'products') {
+            navigate(`/product/${item._id}`);
+        } else if (activeTab === 'orders') {
+            navigate(`/admin/order/${item._id}`);
+        }
+    };
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 
     const renderContent = () => {
-        if (loading) return <div className="loading-spinner">Loading...</div>; // You might want a better spinner
+        if (loading) return <div className="loading-spinner">Loading...</div>;
 
-        // Helper to get base URL for images
         const baseUrl = apiUrl.replace('/api', '');
 
-        if (activeTab === 'products') {
-            return (
-                <div className="product-list">
-                    <div className="list-header product-item-grid">
-                        <span>Img</span>
-                        <span>Title</span>
-                        <span>Product No.</span>
-                        <span>Stock</span>
-                    </div>
-                    {currentItems.map(item => (
-                        <div key={item._id} className="list-item product-item-grid">
-                            <img
-                                src={item.images && item.images.length > 0
-                                    ? (item.images[0].startsWith('http') ? item.images[0] : `${baseUrl}/images/${item.images[0]}`)
-                                    : '/placeholder.png'
-                                }
-                                alt={item.name}
-                                className="product-img-small"
-                                onError={(e) => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
-                            />
-                            <span>{item.name}</span>
-                            <span>{item.productNumber}</span>
-                            {/* Summing stock from all sizes */}
-                            <span>
-                                {(item.sizes || []).reduce((acc, curr) => acc + Number(curr.stock || 0), 0)}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            );
-        }
+        const searchPlaceholder = activeTab === 'products' ? 'Search by Product No. or Name...' :
+            activeTab === 'orders' ? 'Search by Order Number...' : 'Search by Name or Email...';
 
-        if (activeTab === 'orders') {
-            return (
-                <div className="order-list">
-                    <div className="list-header" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr' }}>
-                        <span>Order #</span>
-                        <span>User</span>
-                        <span>Total</span>
-                        <span>Status</span>
+        return (
+            <div className="tab-container">
+                <div className="search-bar-container">
+                    <input
+                        type="text"
+                        className="admin-search-input"
+                        placeholder={searchPlaceholder}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
+
+                {activeTab === 'products' && (
+                    <div className="product-list">
+                        <div className="list-header product-item-grid">
+                            <span>Img</span>
+                            <span>Title</span>
+                            <span>Product No.</span>
+                            <span>Stock</span>
+                        </div>
+                        {currentItems.map(item => {
+                            const productImg = (item.images && item.images.length > 0) ? item.images[0] :
+                                (item.image && item.image.length > 0) ? item.image[0] : null;
+
+                            return (
+                                <div key={item._id} className="list-item product-item-grid clickable-row" onClick={() => handleRowClick(item)}>
+                                    <img
+                                        src={productImg
+                                            ? (productImg.startsWith('http') ? productImg : `${baseUrl}/images/${productImg}`)
+                                            : '/placeholder.png'
+                                        }
+                                        alt={item.name}
+                                        className="product-img-small"
+                                        onError={(e) => { e.target.onerror = null; e.target.src = '/placeholder.png'; }}
+                                    />
+                                    <span>{item.name}</span>
+                                    <span>{item.productNumber}</span>
+                                    <span>
+                                        {(item.sizes || []).reduce((acc, curr) => acc + Number(curr.stock || 0), 0)}
+                                    </span>
+                                </div>
+                            );
+                        })}
                     </div>
-                    {currentItems.map(item => {
-                        const currentStatus = item.status && item.status.length > 0
-                            ? item.status[item.status.length - 1].update
-                            : 'Unknown';
-                        return (
-                            <div key={item._id} className="list-item" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr' }}>
-                                <span>{item.orderNumber}</span>
-                                <span>{item.user ? item.user.email : 'Guest'}</span>
-                                <span>${item.totalPrice}</span>
-                                <span className={`status-badge status-${getStatusColor(currentStatus)}`}>
-                                    {getReadableStatus(currentStatus)}
+                )}
+
+                {activeTab === 'orders' && (
+                    <div className="order-list">
+                        <div className="list-header" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr' }}>
+                            <span>Order #</span>
+                            <span>User</span>
+                            <span>Total</span>
+                            <span>Status</span>
+                        </div>
+                        {currentItems.map(item => {
+                            const currentStatus = item.status && item.status.length > 0
+                                ? item.status[item.status.length - 1].update
+                                : 'Unknown';
+                            return (
+                                <div key={item._id} className="list-item clickable-row" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr' }} onClick={() => handleRowClick(item)}>
+                                    <span>{item.orderNumber}</span>
+                                    <span>{item.user ? item.user.email : 'Guest'}</span>
+                                    <span>€{item.totalPrice?.toFixed(3)}</span>
+                                    <span className={`status-badge status-${getStatusColor(currentStatus)}`}>
+                                        {getReadableStatus(currentStatus)}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+
+                {(activeTab === 'users' || activeTab === 'sellers') && (
+                    <div className="user-list">
+                        <div className="list-header" style={{ gridTemplateColumns: '1fr 2fr 1fr 1fr 1fr' }}>
+                            <span>Name</span>
+                            <span>Email</span>
+                            <span>Joined</span>
+                            <span>Last Online</span>
+                            <span>Active</span>
+                        </div>
+                        {currentItems.map(item => (
+                            <div key={item._id} className="list-item" style={{ gridTemplateColumns: '1fr 2fr 1fr 1fr 1fr' }}>
+                                <span>{item.firstName} {item.lastName}</span>
+                                <span>{item.email}</span>
+                                <span>{new Date(item.createdAt).toLocaleDateString()}</span>
+                                <span>
+                                    {item.lastOnline
+                                        ? new Date(item.lastOnline).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' })
+                                        : 'Never'}
+                                </span>
+                                <span>
+                                    <button
+                                        className={`toggle-btn ${item.active ? 'active' : 'inactive'}`}
+                                        onClick={() => toggleActivation(activeTab === 'users' ? 'user' : 'seller', item._id, item.active)}
+                                    >
+                                        {item.active ? 'Active' : 'Inactive'}
+                                    </button>
                                 </span>
                             </div>
-                        );
-                    })}
-                </div>
-            );
-        }
-
-        if (activeTab === 'users' || activeTab === 'sellers') {
-            return (
-                <div className="user-list">
-                    <div className="list-header" style={{ gridTemplateColumns: '1fr 2fr 1fr 1fr 1fr' }}>
-                        <span>Name</span>
-                        <span>Email</span>
-                        <span>Joined</span>
-                        <span>Last Online</span>
-                        <span>Active</span>
+                        ))}
                     </div>
-                    {currentItems.map(item => (
-                        <div key={item._id} className="list-item" style={{ gridTemplateColumns: '1fr 2fr 1fr 1fr 1fr' }}>
-                            <span>{item.firstName} {item.lastName}</span>
-                            <span>{item.email}</span>
-                            <span>{new Date(item.createdAt).toLocaleDateString()}</span>
-                            <span>
-                                {item.lastOnline
-                                    ? new Date(item.lastOnline).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' })
-                                    : 'Never'}
-                            </span>
-                            <span>
-                                <button
-                                    className={`toggle-btn ${item.active ? 'active' : 'inactive'}`}
-                                    onClick={() => toggleActivation(activeTab === 'users' ? 'user' : 'seller', item._id, item.active)}
-                                >
-                                    {item.active ? 'Active' : 'Inactive'}
-                                </button>
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            );
-        }
+                )}
+            </div>
+        );
     };
 
     const getStatusColor = (status) => {
