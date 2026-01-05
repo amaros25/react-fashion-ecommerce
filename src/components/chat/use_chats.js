@@ -3,9 +3,11 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { fetchChats, openChat, sendMessage, loadMoreMessages, startNewChat, markMessagesAsRead, fetchOrderByNumber } from "./chat_api";
 import { ORDER_STATUS } from "../utils/const/order_status";
+import { useAuth } from "../../context/AuthContext";
 
 export const useChats = (userId, partnerId, initialType, initialNumber) => {
   const { t } = useTranslation();
+  const { token } = useAuth();
 
   const [activeChat, setActiveChat] = useState(null);
   const [newChatType, setNewChatType] = useState(initialType);
@@ -67,7 +69,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
       const sellerIdFromStorage = role === "seller" ? userId : partnerId;
 
       if (userId) {
-        const result = await fetchChats(role, userId, sellerIdFromStorage, newChatType, sidebarCurrentPage);
+        const result = await fetchChats(role, userId, sellerIdFromStorage, newChatType, sidebarCurrentPage, token);
         if (result.success) {
           const data = result.data;
           let currentChats = data.chats;
@@ -128,12 +130,12 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
     }
 
     setChatWindowCurrentPage(1);
-    const result = await openChat(chatId, userId, PAGE_LIMIT);
+    const result = await openChat(chatId, userId, PAGE_LIMIT, token);
     if (result.success) {
       const data = result.data;
       setActiveChat(data);
       const unreadMessages = data.messages.filter(m => m.senderId !== userId && !m.isRead);
-      if (unreadMessages.length > 0) await markMessagesAsRead(chatId);
+      if (unreadMessages.length > 0) await markMessagesAsRead(chatId, token);
       setHasMore(data.messages.length === PAGE_LIMIT);
     } else {
       toast.error(t(result.errorKey));
@@ -156,9 +158,9 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
         payloadSellerId = userId;
       }
 
-      const chatResult = await startNewChat(role, payloadUserId, payloadSellerId, activeChat.type, activeChat.number);
+      const chatResult = await startNewChat(role, payloadUserId, payloadSellerId, activeChat.type, activeChat.number, token);
       if (chatResult.success) {
-        const msgResult = await sendMessage(chatResult.data._id, userId, message);
+        const msgResult = await sendMessage(chatResult.data._id, userId, message, token);
         if (msgResult.success) {
           setActiveChat(msgResult.data);
           setChats(prev => prev.map(c => c._id === activeChat._id ? msgResult.data : c));
@@ -170,7 +172,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
       }
     }
     else if (activeChat?._id) {
-      const result = await sendMessage(activeChat._id, userId, message);
+      const result = await sendMessage(activeChat._id, userId, message, token);
       if (result.success) {
         setActiveChat(result.data);
         setChats(prev => prev.map(c => c._id === result.data._id ? result.data : c));
@@ -213,7 +215,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
       payloadSellerId = userId;
     }
 
-    const chatResult = await startNewChat(role, payloadUserId, payloadSellerId, newChatType, newChatNumber);
+    const chatResult = await startNewChat(role, payloadUserId, payloadSellerId, newChatType, newChatNumber, token);
     if (chatResult.success) {
       setChats(prev => [chatResult.data, ...prev]);
       setActiveChat(chatResult.data);
@@ -236,7 +238,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
   const loadOlderMessages = async () => {
     if (!activeChat?._id || !hasMore) return;
     setIsLoadingOlder(true);
-    const result = await loadMoreMessages(activeChat._id, chatWindowCurrentPage, PAGE_LIMIT);
+    const result = await loadMoreMessages(activeChat._id, chatWindowCurrentPage, PAGE_LIMIT, token);
     if (result.success) {
       const data = result.data;
       const newMessages = data.messages.filter(msg =>
@@ -254,7 +256,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
   useEffect(() => {
     const checkChatRestriction = async () => {
       if (activeChat?.type === "order" && activeChat.number) {
-        const result = await fetchOrderByNumber(activeChat.number);
+        const result = await fetchOrderByNumber(activeChat.number, token);
         if (result.success) {
           const order = result.data;
           const currentStatus = order.status[order.status.length - 1].update;

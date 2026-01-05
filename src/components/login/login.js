@@ -6,12 +6,14 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useAuth } from "../../context/AuthContext";
 
 
 function Login() {
   const apiUrl = process.env.REACT_APP_API_URL;
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -53,17 +55,19 @@ function Login() {
         throw new Error("login_failed");
       }
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("userId", data.userId);
-
       const userData = {
         address: data.address,
         phone: data.phone,
         city: data.city,
         subCity: data.subCity
       };
-      localStorage.setItem("userData", JSON.stringify(userData));
+
+      login({
+        token: data.token,
+        role: data.role,
+        userId: data.userId,
+        userData
+      });
 
       if (data.role === "seller") {
         navigate("/profile_seller");

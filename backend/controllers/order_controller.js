@@ -34,7 +34,7 @@ exports.getOrderByNumber = async (req, res) => {
 exports.getOrderBySellerID = async (req, res) => {
   try {
     const sellerId = req.params.sellerId;
-    const page = parseInt(req.query.page) || 1; 1
+    const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
     const { status, orderNumber } = req.query;
 
@@ -126,9 +126,10 @@ exports.getOrderByUserID = async (req, res) => {
 
 exports.createOrder = async (req, res) => {
   try {
-    const { items } = req.body;
+    const { items, is_delivery } = req.body;
+    let calculatedTotal = 0;
 
-    // Safety check for stock
+    // Safety check for stock and recalculate price
     for (const item of items) {
       const product = await Product.findOne({
         _id: item.productId,
@@ -146,12 +147,20 @@ exports.createOrder = async (req, res) => {
           message: "insufficient_stock"
         });
       }
+
+      calculatedTotal += product.price * item.quantity;
+      if (is_delivery) {
+        calculatedTotal += (product.delprice || 0) * item.quantity;
+      }
     }
 
-    const order = new Order(req.body);
+    // Override the totalPrice sent from client for security
+    const orderData = { ...req.body, totalPrice: calculatedTotal };
+    const order = new Order(orderData);
     await order.save();
     res.status(201).json(order);
   } catch (error) {
+    console.error("Error creating order:", error);
     res.status(500).json({ message: "server_error" });
   }
 };

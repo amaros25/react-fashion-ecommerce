@@ -29,6 +29,7 @@ function ProductPage() {
   // Reset product when navigating to a different product
   useEffect(() => {
     const newProduct = location.state?.product || null;
+    console.log("newProduct", newProduct);
     setProduct(newProduct);
     setSelectedSize("");
     setSelectedColor("");
@@ -123,7 +124,10 @@ function ProductPage() {
     }
   }, [product, selectedSize, selectedColor, availableSizes, availableColors]);
 
+  console.log("DEBUG ProductPage:", { productLoading, sellerLoading, productExists: !!product, sellerExists: !!seller, id });
+
   if (productLoading || (product && sellerLoading)) {
+    console.log("DEBUG Showing LoadingSpinner");
     return <LoadingSpinner />;
   }
 

@@ -25,31 +25,32 @@ import SavedProducts from './components/saved_products/saved_products.js';
 import Agb from './components/info_pages/agb.js';
 import DataProtection from './components/info_pages/data_protection.js';
 import ResetPassword from './components/reset_password/reset_password.js';
-//import SeedProducts from './components/new_product/seed_products.js';
+import { useAuth } from "./context/AuthContext";
 function App() {
+  const { userId, role, token } = useAuth();
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    const role = localStorage.getItem("role");
     const hasUpdated = sessionStorage.getItem("lastOnlineUpdated");
 
     if (userId && !hasUpdated) {
       fetch(`${process.env.REACT_APP_API_URL}/auth/last-online`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : ''
+        },
         body: JSON.stringify({ userId, role })
       }).then(() => {
         sessionStorage.setItem("lastOnlineUpdated", "true");
         console.log("Last online status updated.");
       }).catch(err => console.error("Failed to update last online:", err));
     }
-  }, []);
+  }, [userId, role, token]);
 
   return (
     <FilterProvider>
-
       <Router>
-
+        <ScrollToTop />
         <Header />
         <Routes>
 

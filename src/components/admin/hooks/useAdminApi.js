@@ -1,11 +1,15 @@
 import { useState, useCallback } from 'react';
+import { useAuth } from '../../../context/AuthContext';
 
 export const useAdminApi = (apiUrl) => {
     const [loading, setLoading] = useState(false);
+    const { token } = useAuth();
 
     const fetchStats = useCallback(async () => {
         try {
-            const res = await fetch(`${apiUrl}/admin/stats`);
+            const res = await fetch(`${apiUrl}/admin/stats`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             const data = await res.json();
             if (res.ok) {
                 return { success: true, data };
@@ -16,12 +20,14 @@ export const useAdminApi = (apiUrl) => {
             console.error("Error fetching stats:", err);
             return { success: false, errorKey: 'server_error' };
         }
-    }, [apiUrl]);
+    }, [apiUrl, token]);
 
     const fetchTabData = useCallback(async (tab) => {
         setLoading(true);
         try {
-            const res = await fetch(`${apiUrl}/admin/${tab}`);
+            const res = await fetch(`${apiUrl}/admin/${tab}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             const data = await res.json();
             if (res.ok) {
                 return { success: true, data };
@@ -34,7 +40,7 @@ export const useAdminApi = (apiUrl) => {
         } finally {
             setLoading(false);
         }
-    }, [apiUrl]);
+    }, [apiUrl, token]);
 
     const toggleActivation = useCallback(async (type, id, currentStatus) => {
         try {
@@ -42,7 +48,8 @@ export const useAdminApi = (apiUrl) => {
             const res = await fetch(`${apiUrl}/admin/${endpoint}/${id}`, {
                 method: 'PATCH',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ active: !currentStatus })
             });
@@ -57,7 +64,7 @@ export const useAdminApi = (apiUrl) => {
             console.error("Error toggling activation:", err);
             return { success: false, errorKey: 'server_error' };
         }
-    }, [apiUrl]);
+    }, [apiUrl, token]);
 
     return {
         loading,

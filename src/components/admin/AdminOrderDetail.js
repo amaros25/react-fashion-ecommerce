@@ -6,7 +6,7 @@ import './AdminOrderDetail.css';
 const AdminOrderDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    useTranslation();
     const apiUrl = process.env.REACT_APP_API_URL;
 
     const [order, setOrder] = useState(null);

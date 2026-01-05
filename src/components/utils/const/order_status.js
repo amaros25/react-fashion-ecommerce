@@ -38,11 +38,23 @@ export const ORDER_STATUS = {
 export const ORDER_STATUS_LABELS = {
     0: "Pending",
     1: "Confirmed",
-    2: "Ready to Pickup",
-    3: "Picked Up",
-    4: "Cancelled",
-    5: "Shipped",
-    6: "Delivered"
+    2: "Shipped",
+    3: "Delivered",
+    10: "No Response",
+    11: "First Try Failed",
+    12: "Second Try Delivery",
+    13: "Failed Delivery",
+    20: "Return Requested",
+    21: "Return Confirmed",
+    22: "Return Refused",
+    23: "Return Shipped",
+    24: "Return Received",
+    25: "Return Not Received",
+    30: "Cancelled",
+    31: "Cancelled (Seller)",
+    40: "Ready for Pickup",
+    41: "Picked Up",
+    42: "Pickup Failed"
 };
 
 export const getStatusLabel = (statusInt) => {

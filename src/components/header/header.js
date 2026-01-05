@@ -14,6 +14,7 @@ import { FaRegUser } from "react-icons/fa6";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { categoryKeys, subCategories } from '../utils/const/category';
+import { useAuth } from '../../context/AuthContext';
 
 function Header() {
 
@@ -34,8 +35,7 @@ function Header() {
     setSortBy
   } = useContext(FilterContext);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [role, setRole] = useState(null);
+  const { isLoggedIn, role, handleLogout } = useAuth();
 
 
 
@@ -82,14 +82,6 @@ function Header() {
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedRole = localStorage.getItem("role");
-    console.log("token: ", token);
-    console.log("storedRole: ", storedRole);
-    setRole(storedRole);
-    setIsLoggedIn(!!token);
-  }, []);
 
   // Sync selectedSubCategory with URL and selectedCategory
   useEffect(() => {
@@ -111,10 +103,7 @@ function Header() {
   }, [selectedCategory, activePath]);
 
   const handleProfileClick = () => {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
-
-    if (token) {
+    if (isLoggedIn) {
       if (role === "admin") {
         navigate("/profile_admin");
       } else {
