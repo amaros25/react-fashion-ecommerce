@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useTranslation } from "react-i18next";
 import Pagination from './pagination.js';
 import { FilterContext } from '../filter_context/filter_context';
