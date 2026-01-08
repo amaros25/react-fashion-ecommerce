@@ -206,6 +206,8 @@
 /* Sort Dropdown Container */
 .sort-container-header {
   display: flex;
+  flex-direction: row;
+  /* Ensure consistent direction */
   align-items: center;
   gap: 10px;
   padding: 5px 0px 10px 0;
@@ -219,6 +221,7 @@ html[dir="ltr"] .sort-container-header {
 
 html[dir="rtl"] .sort-container-header {
   justify-content: flex-end;
+  /* Physical left for RTL */
 }
 
 .sort-label-header {

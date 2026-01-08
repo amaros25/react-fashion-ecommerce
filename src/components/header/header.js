@@ -116,7 +116,8 @@ function Header() {
 
   useEffect(() => {
     const isRtl = i18n.language === 'ar';
-    document.body.dir = isRtl ? 'rtl' : 'ltr';
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+    document.documentElement.lang = i18n.language;
     if (isRtl) {
       document.body.classList.add('rtl');
     } else {
