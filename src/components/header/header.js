@@ -225,7 +225,7 @@ function Header() {
           </div>
         </nav>
 
-        {activePath.startsWith("/home") && (
+        {(activePath.startsWith("/home") || activePath === "/") && (
           <form onSubmit={handleSearchSubmit} className="search-form-header">
             <input
               type="text"
@@ -264,7 +264,7 @@ function Header() {
           <button className="scroll-arrow-header right" onClick={() => scroll('right')}>›</button>
         </nav>
 
-        {activePath.startsWith("/home") && (
+        {(activePath.startsWith("/home") || activePath === "/") && (
           <div className="sort-container-header">
             <label htmlFor="sort-select" className="sort-label-header">{t("sort_by")}:</label>
             <select
