@@ -14,57 +14,48 @@ export const useShopData = (sellerId) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchSeller = async () => {
-            try {
-                const res = await fetch(`${apiUrl}/sellers/${sellerId}`);
-                if (!res.ok) throw new Error("fetch_seller_failed");
-                const data = await res.json();
-                setSeller(data);
-                setError(null);
-            } catch (err) {
-                console.error('Error fetching seller:', err);
-                setError(err.message || 'fetch_seller_failed');
-                toast.error(t(err.message || 'fetch_seller_failed'));
+        const fetchData = async () => {
+            if (!sellerId) {
+                setError('no_seller_id');
+                toast.error(t('no_seller_id'));
+                return;
             }
-        };
-        if (sellerId) {
-            fetchSeller();
-        } else {
-            setError('no_seller_id');
-            toast.error(t('no_seller_id'));
-        }
-    }, [sellerId, apiUrl, t]);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`${apiUrl}/products/seller/${sellerId}?page=${page}&limit=12`);
-                if (!res.ok) throw new Error("fetch_products_failed");
-                const data = await res.json();
-                if (Array.isArray(data.products)) {
-                    setProducts(data.products);
-                    setTotalPages(data.totalPages || 0);
-                    setTotalItems(data.totalCount || 0);
+                // 1. Fetch Seller (by ID or Slug)
+                const sellerRes = await fetch(`${apiUrl}/sellers/${sellerId}`);
+                if (!sellerRes.ok) throw new Error("fetch_seller_failed");
+                const sellerData = await sellerRes.json();
+                setSeller(sellerData);
+
+                // 2. Fetch Products using the resolved Seller ID
+                // Verify we have an ID
+                if (!sellerData._id) throw new Error("fetch_products_failed"); // Should not happen if sellerRes ok
+
+                const productsRes = await fetch(`${apiUrl}/products/seller/${sellerData._id}?page=${page}&limit=12`);
+                if (!productsRes.ok) throw new Error("fetch_products_failed");
+                const productsData = await productsRes.json();
+
+                if (Array.isArray(productsData.products)) {
+                    setProducts(productsData.products);
+                    setTotalPages(productsData.totalPages || 0);
+                    setTotalItems(productsData.totalCount || 0);
                 } else {
                     setProducts([]);
                     setTotalItems(0);
                 }
                 setError(null);
             } catch (err) {
-                console.error('Error fetching products:', err);
-                setError(err.message || 'fetch_products_failed');
-                toast.error(t(err.message || 'fetch_products_failed'));
+                console.error('Error fetching shop data:', err);
+                setError(err.message || 'fetch_shop_data_failed');
+                toast.error(t(err.message || 'fetch_shop_data_failed'));
             } finally {
                 setLoading(false);
             }
         };
-        if (sellerId) {
-            fetchProducts();
-        } else {
-            setError('no_seller_id');
-            toast.error(t('no_seller_id'));
-        }
+
+        fetchData();
     }, [sellerId, page, apiUrl, t]);
 
     return {

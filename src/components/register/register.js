@@ -150,8 +150,13 @@ function Register() {
         toast.success(t("register.user_created_successfully"));
         navigate("/login");
       } else {
-        setError(t("register.error." + response.error));
-        toast.error(t("register.error." + response.error));
+        if (response.error === "shop_name_taken") {
+          setError(t("register.error.shop_name_taken"));
+          toast.error(t("register.error.shop_name_taken"));
+        } else {
+          setError(t("register.error." + response.error));
+          toast.error(t("register.error." + response.error));
+        }
       }
     } catch (err) {
       setError(t("register.registrationFailed") + err.message);

@@ -50,13 +50,22 @@ exports.getSellerByIds = async (req, res) => {
   }
 };
 
-// Get seller by ID
+// Get seller by ID or Slug
 exports.getSellerById = async (req, res) => {
   try {
-    const seller = await Seller.findById(req.params.id).lean();
+    const { id } = req.params;
+    let seller;
+
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      seller = await Seller.findById(id).lean();
+    } else {
+      seller = await Seller.findOne({ slug: id }).lean();
+    }
+
     if (!seller) return res.status(404).json({ message: "seller_not_found" });
+
     const stats = await SellerReview.aggregate([
-      { $match: { seller: new mongoose.Types.ObjectId(req.params.id) } },
+      { $match: { seller: seller._id } },
       {
         $group: {
           _id: null,
@@ -141,6 +150,15 @@ exports.createSeller = async (req, res) => {
       return res.status(400).json({ message: "seller_exists_shop_name" });
     }
 
+    // Generate Slug
+    const slug = shopName.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+
+    // Check if slug exists (covers case where different names result in same slug, or user tries to take existing slug)
+    const existingSlug = await Seller.findOne({ slug });
+    if (existingSlug) {
+      return res.status(400).json({ message: "shop_name_taken" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const newSeller = new Seller({
       firstName,
@@ -149,7 +167,10 @@ exports.createSeller = async (req, res) => {
       password: hashedPassword,
       phone: phone,
       address: address,
+      phone: phone,
+      address: address,
       shopName,
+      slug,
     });
 
     await newSeller.save();

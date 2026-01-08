@@ -4,6 +4,7 @@ const sellerSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   shopName: { type: String, required: true },
+  slug: { type: String, required: true, unique: true },
   address: [
     {
       address: { type: String, required: true },

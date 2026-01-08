@@ -347,7 +347,7 @@ function ProductPage() {
             {/* Seller Info Section */}
             <div
               className="seller-section-container"
-              onClick={() => seller && seller._id && navigate(`/shop/${seller._id}`)}
+              onClick={() => seller && navigate(`/shop/${seller.slug || seller._id}`)}
               style={{ cursor: 'pointer' }}
             >
               <h3 className="seller-section-title">{t("product_page.explore_seller")}</h3>
