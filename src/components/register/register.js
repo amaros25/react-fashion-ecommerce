@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./register.css";
 import { useTranslation } from "react-i18next";
 import ImageSelectUpload from '../new_product/image_select_upload.js';
@@ -41,7 +42,11 @@ function Register() {
     phone: "",
     shopName: "",
     address: "",
+    confirmPassword: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleCheckboxChange = () => {
     setAcceptedTerms(!acceptedTerms);
@@ -209,13 +214,49 @@ function Register() {
               value={formData.email}
               onChange={handleChange}
             />
-            <label>{t("register.password")}</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
+            <div style={{ position: "relative" }}>
+              <label>{t("register.password")}</label>
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  top: "38px",
+                  [i18n.dir() === "rtl" ? "left" : "right"]: "10px",
+                  cursor: "pointer",
+                  color: "#666"
+                }}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
+
+            <div style={{ position: "relative" }}>
+              <label>{t("register.confirmPassword") || "Confirm Password"}</label>
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
+              <span
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                style={{
+                  position: "absolute",
+                  top: "38px",
+                  [i18n.dir() === "rtl" ? "left" : "right"]: "10px",
+                  cursor: "pointer",
+                  color: "#666"
+                }}
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
             <label>{t("register.phone")}</label>
             <input
               type="tel"

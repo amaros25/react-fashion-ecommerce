@@ -37,6 +37,9 @@ const ValidateRegisterForm = (formData, role, acceptedTerms, imageFile, selected
     if (!isStrongPassword(formData.password)) {
         return t("register.error.passwordStrength");
     }
+    if (formData.password !== formData.confirmPassword) {
+        return t("register.error.passwordMismatch");
+    }
 
     // Check phone
     if (!formData.phone) {
