@@ -88,6 +88,7 @@
     "subCity": "Délégation",
     "success": "Inscription reussie!",
     "image_updated_successfully": "Image mise à jour avec succès!",
+    "confirmPassword": "Confirmer le mot de passe",
     "error": {
       "fillShopNameAddress": "Veuillez renseigner le nom de la boutique",
       "uploadProfileImage": "Veuillez télécharger une image de profil.",
@@ -386,27 +387,22 @@
     },
     "how_it_works": {
       "title": "Comment ça marche",
-      "content": "Acheter et vendre sur Cmandi est simple, sécurisé et amusant. Suivez ces étapes faciles pour commencer.",
+      "content": "Cmandi est une plateforme innovante qui simplifie l’interaction entre les vendeurs et les acheteurs. En créant un profil, qu’il soit vendeur ou utilisateur, l’accès à une expérience facile et intuitive est garanti. La commande des produits est un jeu d’enfant, avec la possibilité de choisir entre une livraison ou un retrait en magasin. Grâce à notre plateforme, les utilisateurs peuvent suivre l'état de leur commande en temps réel, ce qui permet de garantir une transparence totale. Pour les vendeurs, la gestion des commandes est simplifiée grâce à un tri efficace par statut ou par date. En outre, notre fonctionnalité de chat permet une communication directe entre le vendeur et l’acheteur, facilitant ainsi une meilleure relation et une expérience utilisateur optimale.\n Dans les sections suivantes, vous apprendrez comment tout fonctionne réellement et à quel point il est facile d'utiliser Cmandi.",
       "sections": [
         {
           "title": "1. Créer un compte",
-          "content": "Commencez par créer votre compte gratuit. Cliquez sur 'Connexion' puis sur 'S'inscrire'. Remplissez vos coordonnées pour rejoindre notre communauté.",
+          "content": "La création d'un compte sur Cmandi est rapide et simple. Lors de votre inscription, vous avez la possibilité de choisir si vous souhaitez créer un profil **utilisateur** ou **vendeur**. Voici comment cela fonctionne :\n\n1. **Créer un compte utilisateur :**\n   Si vous souhaitez simplement acheter des produits sur notre plateforme, sélectionnez l'option **\"utilisateur\"**. Vous aurez à remplir vos informations personnelles comme votre nom, votre adresse e-mail, votre numéro de téléphone, et votre adresse de livraison. Une fois votre compte créé, vous pourrez explorer les produits proposés par les vendeurs et passer des commandes facilement.\n\n2. **Créer un compte vendeur :**\n   Si vous souhaitez vendre vos produits sur Cmandi, choisissez l'option **\"vendeur\"** lors de l'inscription. En plus des informations personnelles, vous devrez fournir le nom de votre boutique et une image de profil pour votre entreprise. Vous pourrez gérer vos produits, suivre les commandes et communiquer directement avec vos clients via la plateforme. Le processus est également simple, mais il nécessite de télécharger une image de profil pour représenter votre entreprise.\n\n**Différences principales :**\n- **Utilisateurs** : Peuvent acheter des produits, mais n'ont pas accès aux fonctionnalités de gestion des commandes.\n- **Vendeurs** : Peuvent vendre des produits, gérer les commandes et interagir avec les acheteurs.\n\nChoisissez le profil qui correspond le mieux à vos besoins, et commencez à explorer les nombreuses fonctionnalités offertes par Cmandi !",
           "image": "/images/screenshot_register.png"
         },
         {
           "title": "2. Connexion et exploration",
-          "content": "Connectez-vous à votre compte pour accéder aux fonctionnalités personnalisées. Parcourez des milliers d'articles uniques de vendeurs du monde entier.",
+          "content": "Une fois votre compte créé, vous pouvez vous connecter en utilisant votre e-mail ou votre numéro de téléphone, ainsi que votre mot de passe. Si vous avez oublié votre mot de passe, cliquez sur le lien **'Mot de passe oublié'**, entrez votre e-mail, et vous recevrez un lien pour réinitialiser votre mot de passe.",
           "image": "/images/screenshot_login.png"
         },
         {
-          "title": "3. Trouver et commander",
-          "content": "Vous avez trouvé quelque chose que vous aimez ? Cliquez sur 'Ajouter au panier' ou 'Acheter maintenant'. Notre processus de paiement sécurisé garantit la sécurité de votre transaction.",
+          "title": "3. Page d'accueil",
+          "content": "Sur la page d'accueil, vous pouvez choisir entre trois langues proposées par Cmandi: Arabe, Anglais et Français. Le menu en haut permet d'accéder aux catégories des produits : Femmes, Hommes, Enfants et Maison. En sélectionnant une catégorie, un sous-menu apparaît avec les sous-catégories correspondantes. Il y a également un champ de recherche pour trouver des produits par leur nom. Les produits peuvent être triés par date, prix croissant, prix décroissant ou par avis. En haut, il y a quatre icônes : le premier est pour l'accueil, le deuxième pour le profil, le troisième pour les produits enregistrés et le quatrième pour le panier. Les produits sont affichés avec pagination, et en cliquant sur une image, vous pouvez l'agrandir ou la sauvegarder. Pour chaque produit, les tailles disponibles, les couleurs et le prix sont indiqués.",
           "image": "/images/screenshot_order.png"
-        },
-        {
-          "title": "4. Suivre votre commande",
-          "content": "Restez informé de votre achat. Vous pouvez suivre le statut de votre commande depuis votre profil au fur et à mesure qu'elle vous parvient.",
-          "image": "/images/step_delivery.png"
         }
       ]
     },

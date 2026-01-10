@@ -1,0 +1,552 @@
+/* How It Works Page - Zara-Inspired Minimalist Design */
+
+.how-it-works-wrapper {
+    min-height: 100vh;
+    background-color: #ffffff;
+    padding: 60px 20px;
+}
+
+.how-it-works-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Page Title */
+.how-it-works-title {
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-align: center;
+    margin-bottom: 60px;
+    color: #000000;
+    text-transform: uppercase;
+}
+
+/* Introduction Section - Always Visible */
+.how-it-works-intro {
+    max-width: 900px;
+    margin: 0 auto 80px;
+    padding: 40px;
+    background-color: #fafafa;
+    border-left: 4px solid #000000;
+}
+
+.how-it-works-intro p {
+    font-size: 1.15rem;
+    line-height: 2;
+    color: #2c2c2c;
+    text-align: left;
+    margin: 0;
+}
+
+/* Sections Container */
+.how-it-works-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Individual Section */
+.section-item {
+    border-bottom: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+/* Section Header - Clickable */
+.section-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.section-header:hover {
+    background-color: #f9f9f9;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #000000;
+    margin: 0;
+    text-align: start;
+    flex: 1;
+}
+
+.section-icon {
+    font-size: 2rem;
+    font-weight: 300;
+    color: #000000;
+    transition: transform 0.3s ease;
+    min-width: 30px;
+    text-align: center;
+}
+
+.section-icon.expanded {
+    transform: rotate(0deg);
+}
+
+/* Section Content - Collapsible */
+.section-content {
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+}
+
+.section-content.hide {
+    max-height: 0;
+    opacity: 0;
+    padding: 0 20px;
+}
+
+.section-content.show {
+    max-height: 5000px;
+    opacity: 1;
+    padding: 0 20px 40px;
+}
+
+/* Section Description */
+.section-description {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #555555;
+    margin-bottom: 30px;
+}
+
+/* Steps with Images Side by Side */
+.section-steps-with-images {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    margin-top: 30px;
+}
+
+.step-image-container {
+    width: 280px;
+    /* fixierte Breite für das Bild */
+    flex-shrink: 0;
+    /* Bild schrumpft nicht */
+}
+
+.step-image {
+    width: 100%;
+    height: auto;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 2px;
+}
+
+.step-image.clickable {
+    cursor: pointer;
+}
+
+.step-image.clickable:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Image (for single images) */
+.section-image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.section-image {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.section-image.clickable {
+    cursor: pointer;
+}
+
+.section-image.clickable:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Lightbox Modal */
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    cursor: pointer;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.lightbox-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    cursor: default;
+}
+
+.lightbox-image {
+    max-width: 100%;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    border: 2px solid #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 3rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.lightbox-close:hover {
+    transform: scale(1.2);
+}
+
+/* Steps Container */
+.section-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 30px;
+}
+
+/* Individual Step */
+.step-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.step-number {
+    min-width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 1.2rem;
+    font-weight: 400;
+    border: 2px solid #000000;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+    padding-top: 5px;
+}
+
+.step-title {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: #000000;
+    margin: 0 0 8px 0;
+}
+
+.step-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #666666;
+    margin: 0;
+}
+
+/* Section Note */
+.section-note {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-left: 3px solid #000000;
+}
+
+.section-note p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #444444;
+    margin: 0;
+}
+
+.how-it-works-wrapper.rtl .section-body.with-image {
+    grid-template-columns: 320px minmax(0, 1fr);
+}
+
+/* RTL Support */
+.how-it-works-wrapper.rtl .section-title {
+    text-align: start;
+}
+
+.how-it-works-wrapper.rtl .step-item {
+    flex-direction: row-reverse;
+}
+
+.how-it-works-wrapper.rtl .step-with-image {
+    grid-template-columns: auto minmax(400px, 1fr);
+}
+
+.how-it-works-wrapper.rtl .section-note {
+    border-left: none;
+    border-right: 3px solid #000000;
+}
+
+.how-it-works-wrapper.rtl .how-it-works-intro {
+    border-left: none;
+    border-right: 4px solid #000000;
+}
+
+.how-it-works-wrapper.rtl .how-it-works-intro p {
+    text-align: right;
+}
+
+
+/* Section Body Layout */
+.section-body {
+    display: grid;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+/* With image: text left, image right */
+.section-body.with-image {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    align-items: start;
+}
+
+/* No image: full width */
+.section-body.no-image {
+    grid-template-columns: 1fr;
+}
+
+/* Left side */
+.section-left {
+    min-width: 0;
+}
+
+/* Right side image */
+.section-right {
+    width: 320px;
+}
+
+.section-right img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.step-with-image {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.step-without-image {
+    display: flex;
+    flex-direction: column;
+    /* Nur Text, kein Bild daneben */
+}
+
+.step-text-content {
+    flex: 1;
+
+}
+
+.step-image-container {
+    width: 280px;
+    flex-shrink: 0;
+}
+
+.step-image-container img {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+    display: block;
+}
+
+
+/* Neuer Container für die Gruppierung */
+.step-group {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 50px;
+    align-items: flex-start;
+    /* Wichtig: Bild bleibt oben stehen */
+}
+
+/* Alle Texte einer Gruppe rücken ohne Lücke untereinander */
+.step-texts-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    /* Abstand zwischen den Text-Schritten */
+}
+
+/* Bildspalte fixieren */
+.step-image-column {
+    width: 320px;
+    flex-shrink: 0;
+}
+
+/* Bestehende step-item Anpassung */
+.step-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+/* RTL Support für die neue Gruppe */
+.how-it-works-wrapper.rtl .step-group {
+    flex-direction: row-reverse;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .section-body.with-image {
+        grid-template-columns: 1fr;
+    }
+
+    .section-right {
+        width: 100%;
+        order: -1;
+        /* Bild oben auf Mobile */
+    }
+
+    .how-it-works-wrapper {
+        padding: 40px 15px;
+    }
+
+    .how-it-works-title {
+        font-size: 2rem;
+        margin-bottom: 40px;
+    }
+
+    .how-it-works-intro {
+        margin-bottom: 50px;
+        padding: 30px 20px;
+    }
+
+    .how-it-works-intro p {
+        font-size: 1.05rem;
+        line-height: 1.9;
+    }
+
+    .section-header {
+        padding: 20px 15px;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+    }
+
+    .section-icon {
+        font-size: 1.5rem;
+    }
+
+    .section-content.show {
+        padding: 0 15px 30px;
+    }
+
+    .section-description {
+        font-size: 1rem;
+    }
+
+    .step-item {
+        gap: 15px;
+    }
+
+    .step-number {
+        min-width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .step-title {
+        font-size: 1.05rem;
+    }
+
+    .step-description {
+        font-size: 0.95rem;
+    }
+
+    .section-image {
+        max-width: 100%;
+    }
+
+    .step-with-image {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .step-image-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .lightbox-close {
+        top: -35px;
+        font-size: 2.5rem;
+    }
+
+    .step-group {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .step-image-column {
+        width: 100%;
+        order: -1;
+        /* Bild über den Text bei Mobile */
+    }
+}
+
+
+@media (max-width: 480px) {
+    .how-it-works-title {
+        font-size: 1.6rem;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+    }
+
+    .step-number {
+        min-width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+}

@@ -1,0 +1,514 @@
+﻿{
+    "en": {
+        "title": "How it Works",
+        "intro": "Cmandi is an innovative platform that simplifies the interaction between sellers and buyers. By creating a profile, whether as a seller or a user, access to an easy and intuitive experience is guaranteed. Ordering products is a breeze, with the option to choose between delivery or in-store pickup. Thanks to our platform, users can track the status of their orders in real time, ensuring complete transparency. For sellers, order management is simplified with efficient sorting by status or date. Additionally, our chat feature enables direct communication between the seller and the buyer, facilitating a better relationship and an optimal user experience.",
+        "sections": [
+            {
+                "id": "create-account",
+                "title": "1. Create an Account",
+                "images": [
+                    "/images/how-it-works/register_1.png",
+                    "/images/how-it-works/register_2.png",
+                    "/images/how-it-works/register_3.png",
+                    "/images/how-it-works/register_4.png",
+                    "/images/how-it-works/register_5.png",
+                    "/images/how-it-works/register_6.png"
+                ],
+                "content": "Creating an account on Cmandi is quick and easy. Follow these steps to register as a buyer or seller.",
+                "steps": [
+                    {
+                        "number": "1",
+                        "title": "Access Registration Page",
+                        "description": "First, click on the Profile icon in the quick access menu at the top. The login page will appear. Below the login form, click on 'S'inscrire' (Register) to start the registration process."
+                    },
+                    {
+                        "number": "2",
+                        "title": "Choose Role and Enter Personal Information",
+                        "description": "Choose either 'Acheteur' (Buyer) or 'Vendeur' (Seller). Then enter your personal information: First Name, Last Name, Email, Password, Confirm Password, and Phone Number."
+                    },
+                    {
+                        "number": "3",
+                        "title": "Enter Address Details",
+                        "description": "Enter your address and select your City and Delegation. Uploading a profile photo is optional for users."
+                    },
+                    {
+                        "number": "4",
+                        "title": "Accept Terms and Conditions",
+                        "description": "There is a checkbox to accept the General Conditions and Privacy Policy. This must be read and accepted to create an account with us."
+                    },
+                    {
+                        "number": "5",
+                        "title": "Seller-Specific Information (For Sellers Only)",
+                        "description": "For sellers, an additional step is required: enter your Boutique Name and upload a photo (this is mandatory for sellers)."
+                    },
+                    {
+                        "number": "6",
+                        "title": "Complete Registration",
+                        "description": "After correctly entering all information, click 'S'inscrire' to complete the registration process."
+                    }
+                ]
+            },
+            {
+                "id": "login-explore",
+                "title": "2. Login and Explore",
+                "image": "/images/how-it-works/login.png",
+                "content": "Once your account is created, you can log in using your credentials and start exploring the platform.",
+                "steps": [
+                    {
+                        "number": "①",
+                        "title": "Enter Your Credentials",
+                        "description": "Enter your Email or Phone Number ① in the first field."
+                    },
+                    {
+                        "number": "②",
+                        "title": "Enter Password",
+                        "description": "Type your Password ② in the password field."
+                    },
+                    {
+                        "number": "③",
+                        "title": "Forgot Password?",
+                        "description": "If you forget your password, click Forgot Password? ③ to receive a reset link via email."
+                    },
+                    {
+                        "number": "④",
+                        "title": "Login",
+                        "description": "Click the Login button ④ to access your account."
+                    },
+                    {
+                        "number": "⑤",
+                        "title": "New User?",
+                        "description": "Don't have an account yet? Click Register ⑤ to create a new account."
+                    }
+                ]
+            },
+            {
+                "id": "homepage",
+                "title": "3. Navigate the Homepage",
+                "image": "/images/how-it-works/homepage.png",
+                "content": "The homepage is your gateway to discovering fashion. It offers powerful tools to browse, search, and filter products.",
+                "steps": [
+                    {
+                        "number": "①",
+                        "title": "Select Your Language",
+                        "description": "Choose between Arabic, English, or French ① using the language selector in the header."
+                    },
+                    {
+                        "number": "②",
+                        "title": "Browse Categories",
+                        "description": "Navigate through main categories: Women's, Men's, Kids', and Home ②. Click on any category to see subcategories."
+                    },
+                    {
+                        "number": "③",
+                        "title": "Search Products",
+                        "description": "Use the Search bar ③ to find products by name or keywords."
+                    },
+                    {
+                        "number": "④",
+                        "title": "Quick Access Icons",
+                        "description": "Use the header icons ④: Home (homepage), Profile (your account), Heart (saved products), and Cart (shopping cart)."
+                    },
+                    {
+                        "number": "⑤",
+                        "title": "Sort Products",
+                        "description": "Sort products by Date, Price (Low to High), Price (High to Low), or Rating ⑤ using the sort dropdown."
+                    },
+                    {
+                        "number": "⑥",
+                        "title": "Browse Products",
+                        "description": "Each product card ⑥ displays the image, name, price, and available sizes/colors. Click on any product to view details."
+                    },
+                    {
+                        "number": "⑦",
+                        "title": "Navigate Pages",
+                        "description": "Use the pagination controls ⑦ at the bottom to browse through multiple pages of products."
+                    }
+                ]
+            },
+            {
+                "id": "product-page",
+                "title": "4. View Product Details",
+                "image": "/images/how-it-works/product-page.png",
+                "content": "The product detail page provides all the information you need to make an informed purchase decision.",
+                "steps": [
+                    {
+                        "number": "①",
+                        "title": "View Product Images",
+                        "description": "Browse through product images ① and click to zoom in for a closer look."
+                    },
+                    {
+                        "number": "②",
+                        "title": "Select Size",
+                        "description": "Choose your preferred Size ② from the dropdown menu."
+                    },
+                    {
+                        "number": "③",
+                        "title": "Select Color",
+                        "description": "Pick your desired Color ③ from the available color swatches."
+                    },
+                    {
+                        "number": "④",
+                        "title": "Choose Quantity",
+                        "description": "Adjust the Quantity ④ using the +/- buttons based on available stock."
+                    },
+                    {
+                        "number": "⑤",
+                        "title": "Add to Cart",
+                        "description": "Click Add to Cart ⑤ to save the item for later checkout."
+                    },
+                    {
+                        "number": "⑥",
+                        "title": "Buy Now",
+                        "description": "Click Buy Now ⑥ to proceed directly to checkout with this item."
+                    },
+                    {
+                        "number": "⑦",
+                        "title": "View Seller Info",
+                        "description": "Check the seller's information ⑦, including their name, rating, and reviews."
+                    },
+                    {
+                        "number": "⑧",
+                        "title": "Read Description",
+                        "description": "Review the detailed product description ⑧ to learn more about materials, care instructions, and features."
+                    }
+                ]
+            }
+        ]
+    },
+    "fr": {
+        "title": "Comment ça marche",
+        "intro": "Cmandi est une plateforme innovante qui simplifie l'interaction entre vendeurs et acheteurs. En créant un profil, que ce soit en tant que vendeur ou utilisateur, l'accès à une expérience facile et intuitive est garanti. Commander des produits est un jeu d'enfant, avec la possibilité de choisir entre la livraison ou le retrait en magasin. Grâce à notre plateforme, les utilisateurs peuvent suivre l'état de leurs commandes en temps réel, garantissant une transparence totale. Pour les vendeurs, la gestion des commandes est simplifiée avec un tri efficace par statut ou par date. De plus, notre fonction de chat permet une communication directe entre le vendeur et l'acheteur, facilitant une meilleure relation et une expérience utilisateur optimale.",
+        "sections": [
+            {
+                "id": "create-account",
+                "title": "1. Créer un compte sur Cmandi",
+                "content": "Créer un compte sur Cmandi est rapide et facile. Suivez ces étapes pour vous inscrire en tant qu'acheteur ou vendeur.",
+                "steps": [
+                    {
+                        "number": "1",
+                        "title": "Accéder à la page d'inscription",
+                        "description": "Cliquez sur l'icône Profil ① dans le menu d'accès rapide en haut. La page de connexion apparaîtra. En dessous du formulaire de connexion, cliquez sur 'S'inscrire' ② pour commencer le processus d'inscription.",
+                        "image": "/images/how-it-works/register/fr/register_1.png"
+                    },
+                    {
+                        "number": "2",
+                        "title": "Choisir le rôle et entrer les informations personnelles",
+                        "description": "Choisissez soit 'Acheteur' ① soit 'Vendeur' ②. Ensuite, entrez vos informations personnelles ③: Prénom, Nom, Email, Mot de passe, Confirmer le mot de passe et Numéro de téléphone.",
+                        "image": "/images/how-it-works/register/fr/register_2.png"
+                    },
+                    {
+                        "number": "3",
+                        "title": "Entrer les détails de l'adresse",
+                        "description": "Entrez votre adresse  ① et sélectionnez votre Ville et Délégation ②. Le téléchargement d'une photo de profil est facultatif pour les utilisateurs ③.",
+                        "image": "/images/how-it-works/register/fr/register_3.png"
+                    },
+                    {
+                        "number": "4",
+                        "title": "Accepter les conditions générales",
+                        "description": "Il y a une case à cocher pour accepter les Conditions générales et la Politique de confidentialité ④. Cela doit être lu et accepté pour créer un compte chez nous."
+                    },
+                    {
+                        "number": "5",
+                        "title": "Informations spécifiques au vendeur (pour les vendeurs uniquement)",
+                        "description": "Pour les vendeurs, une étape supplémentaire est requise : entrez le nom de votre Boutique  ① et téléchargez une photo ② (ceci est obligatoire pour les vendeurs).",
+                        "image": "/images/how-it-works/register/fr/register_4.png"
+                    },
+                    {
+                        "number": "6",
+                        "title": "Finaliser l'inscription",
+                        "description": "Après avoir correctement saisi toutes les informations, cliquez sur 'S'inscrire' ③ pour terminer le processus d'inscription."
+                    }
+                ]
+            },
+            {
+                "id": "login",
+                "title": "2. Se connecter sur Cmandi",
+                "content": "Une fois votre compte créé, vous pouvez vous connecter avec vos identifiants et commencer à explorer la plateforme.",
+                "steps": [
+                    {
+                        "number": "1",
+                        "title": "Accéder à la page de connexion",
+                        "description": "Cliquez sur l’icône Profil ① dans le menu d’accès rapide en haut de la page. La page de connexion apparaîtra.",
+                        "image": "/images/how-it-works/login/fr/login_1.png"
+                    },
+                    {
+                        "number": "2",
+                        "title": "Se connecter",
+                        "description": "Entrez vos identifiants : e-mail ou numéro de téléphone ② et mot de passe ③. Cliquez sur le bouton « Se connecter » ④ pour accéder à votre compte."
+                    },
+                    {
+                        "number": "3",
+                        "title": "Mot de passe oublié ?",
+                        "description": "Si vous avez oublié votre mot de passe, cliquez sur « Mot de passe oublié ? » ⑤ pour recevoir un lien de réinitialisation par e-mail."
+                    }
+                ]
+            },
+            {
+                "id": "homepage",
+                "title": "3. Naviguer sur la page d'accueil",
+                "content": "La page d'accueil est votre porte d'entrée pour découvrir la mode. Elle offre des outils puissants pour parcourir, rechercher et filtrer les produits.",
+                "steps": [
+                    {
+                        "number": "1",
+                        "title": "Icônes d'accès rapide",
+                        "description": "Utilisez les icônes de l'en-tête: Accueil (page d'accueil), Panier (panier d'achat).  Cœur (produits sauvegardés) et Profil (votre compte). ①",
+                        "image": "/images/how-it-works/home_page/fr/home_1.png"
+                    },
+                    {
+                        "number": "2",
+                        "title": "Sélectionnez votre langue",
+                        "description": "Choisissez entre Arabe, Anglais ou Français ② à l'aide du sélecteur de langue dans l'en-tête."
+                    },
+                    {
+                        "number": "3",
+                        "title": "Rechercher des produits",
+                        "description": "Utilisez la Barre de recherche ③ pour trouver des produits par nom ou mots-clés."
+                    },
+                    {
+                        "number": "4",
+                        "title": "Parcourir les catégories",
+                        "description": "Naviguez à travers les catégories principales : Femmes, Hommes, Enfants et Maison ④ . Cliquez sur n'importe quelle catégorie pour voir les sous-catégories."
+                    },
+                    {
+                        "number": "5",
+                        "title": "Trier les produits",
+                        "description": "Triez les produits par Date, Prix (croissant), Prix (décroissant) ou Note ⑤ à l'aide du menu déroulant de tri."
+                    },
+                    {
+                        "number": "6",
+                        "title": "Parcourir les produits",
+                        "description": "Chaque carte produit ⑥ affiche l'image, le nom, le prix et les tailles/couleurs disponibles. Cliquez sur n'importe quel produit pour voir les détails.",
+                        "image": "/images/how-it-works/home_page/fr/home_2.png"
+                    },
+                    {
+                        "number": "7",
+                        "title": "Naviguer entre les pages",
+                        "description": "Utilisez les contrôles de pagination ⑦ en bas pour parcourir plusieurs pages de produits."
+                    }
+                ]
+            },
+            {
+                "id": "product-page",
+                "title": "4. Voir les détails du produit",
+                "image": "/images/how-it-works/product-page.png",
+                "content": "La page de détails du produit fournit toutes les informations dont vous avez besoin pour prendre une décision d'achat éclairée.",
+                "steps": [
+                    {
+                        "number": "①",
+                        "title": "Voir les images du produit",
+                        "description": "Parcourez les images du produit ① et cliquez pour zoomer pour un aperçu plus détaillé."
+                    },
+                    {
+                        "number": "②",
+                        "title": "Sélectionner la taille",
+                        "description": "Choisissez votre Taille ② préférée dans le menu déroulant."
+                    },
+                    {
+                        "number": "③",
+                        "title": "Sélectionner la couleur",
+                        "description": "Choisissez votre Couleur ③ souhaitée parmi les échantillons de couleurs disponibles."
+                    },
+                    {
+                        "number": "④",
+                        "title": "Choisir la quantité",
+                        "description": "Ajustez la Quantité ④ à l'aide des boutons +/- en fonction du stock disponible."
+                    },
+                    {
+                        "number": "⑤",
+                        "title": "Ajouter au panier",
+                        "description": "Cliquez sur Ajouter au panier ⑤ pour enregistrer l'article pour un paiement ultérieur."
+                    },
+                    {
+                        "number": "⑥",
+                        "title": "Acheter maintenant",
+                        "description": "Cliquez sur Acheter maintenant ⑥ pour procéder directement au paiement avec cet article."
+                    },
+                    {
+                        "number": "⑦",
+                        "title": "Voir les informations du vendeur",
+                        "description": "Consultez les informations du vendeur ⑦, y compris son nom, sa note et ses avis."
+                    },
+                    {
+                        "number": "⑧",
+                        "title": "Lire la description",
+                        "description": "Consultez la description détaillée du produit ⑧ pour en savoir plus sur les matériaux, les instructions d'entretien et les caractéristiques."
+                    }
+                ]
+            }
+        ]
+    },
+    "ar": {
+        "title": "كيف يعمل",
+        "intro": "Cmandi هي منصة مبتكرة تبسط التفاعل بين البائعين والمشترين. من خلال إنشاء ملف تعريف، سواء كبائع أو مستخدم، يتم ضمان الوصول إلى تجربة سهلة وبديهية. طلب المنتجات أمر سهل، مع خيار الاختيار بين التوصيل أو الاستلام من المتجر. بفضل منصتنا، يمكن للمستخدمين تتبع حالة طلباتهم في الوقت الفعلي، مما يضمن الشفافية الكاملة. بالنسبة للبائعين، تم تبسيط إدارة الطلبات مع الفرز الفعال حسب الحالة أو التاريخ. بالإضافة إلى ذلك، تتيح ميزة الدردشة لدينا التواصل المباشر بين البائع والمشتري، مما يسهل علاقة أفضل وتجربة مستخدم مثالية.",
+        "sections": [
+            {
+                "id": "create-account",
+                "title": "١. إنشاء حساب",
+                "images": [
+                    "/images/how-it-works/register_1.png",
+                    "/images/how-it-works/register_2.png",
+                    "/images/how-it-works/register_3.png",
+                    "/images/how-it-works/register_4.png",
+                    "/images/how-it-works/register_5.png",
+                    "/images/how-it-works/register_6.png"
+                ],
+                "content": "إنشاء حساب على Cmandi سريع وسهل. اتبع هذه الخطوات للتسجيل كمشتري أو بائع.",
+                "steps": [
+                    {
+                        "number": "١",
+                        "title": "الوصول إلى صفحة التسجيل",
+                        "description": "أولاً، انقر على أيقونة الملف الشخصي في قائمة الوصول السريع في الأعلى. ستظهر صفحة تسجيل الدخول. أسفل نموذج تسجيل الدخول، انقر على 'S'inscrire' (التسجيل) لبدء عملية التسجيل."
+                    },
+                    {
+                        "number": "٢",
+                        "title": "اختيار الدور وإدخال المعلومات الشخصية",
+                        "description": "اختر إما 'Acheteur' (مشتري) أو 'Vendeur' (بائع). ثم أدخل معلوماتك الشخصية: الاسم الأول، اسم العائلة، البريد الإلكتروني، كلمة المرور، تأكيد كلمة المرور، ورقم الهاتف."
+                    },
+                    {
+                        "number": "٣",
+                        "title": "إدخال تفاصيل العنوان",
+                        "description": "أدخل عنوانك واختر المدينة والمعتمدية. تحميل صورة الملف الشخصي اختياري للمستخدمين."
+                    },
+                    {
+                        "number": "٤",
+                        "title": "قبول الشروط والأحكام",
+                        "description": "يوجد مربع اختيار لقبول الشروط العامة وسياسة الخصوصية. يجب قراءة هذا وقبوله لإنشاء حساب معنا."
+                    },
+                    {
+                        "number": "٥",
+                        "title": "معلومات خاصة بالبائع (للبائعين فقط)",
+                        "description": "بالنسبة للبائعين، هناك خطوة إضافية مطلوبة: أدخل اسم البوتيك الخاص بك وقم بتحميل صورة (هذا إلزامي للبائعين)."
+                    },
+                    {
+                        "number": "٦",
+                        "title": "إكمال التسجيل",
+                        "description": "بعد إدخال جميع المعلومات بشكل صحيح، انقر على 'S'inscrire' لإكمال عملية التسجيل."
+                    }
+                ]
+            },
+            {
+                "id": "login-explore",
+                "title": "٢. تسجيل الدخول والاستكشاف",
+                "image": "/images/how-it-works/login.png",
+                "content": "بمجرد إنشاء حسابك، يمكنك تسجيل الدخول باستخدام بيانات الاعتماد الخاصة بك والبدء في استكشاف المنصة.",
+                "steps": [
+                    {
+                        "number": "①",
+                        "title": "أدخل بيانات الاعتماد الخاصة بك",
+                        "description": "أدخل البريد الإلكتروني أو رقم الهاتف ① في الحقل الأول."
+                    },
+                    {
+                        "number": "②",
+                        "title": "أدخل كلمة المرور",
+                        "description": "اكتب كلمة المرور ② في حقل كلمة المرور."
+                    },
+                    {
+                        "number": "③",
+                        "title": "نسيت كلمة المرور؟",
+                        "description": "إذا نسيت كلمة المرور الخاصة بك، انقر فوق نسيت كلمة المرور؟ ③ لتلقي رابط إعادة التعيين عبر البريد الإلكتروني."
+                    },
+                    {
+                        "number": "④",
+                        "title": "تسجيل الدخول",
+                        "description": "انقر فوق زر تسجيل الدخول ④ للوصول إلى حسابك."
+                    },
+                    {
+                        "number": "⑤",
+                        "title": "مستخدم جديد؟",
+                        "description": "ليس لديك حساب بعد؟ انقر فوق التسجيل ⑤ لإنشاء حساب جديد."
+                    }
+                ]
+            },
+            {
+                "id": "homepage",
+                "title": "٣. التنقل في الصفحة الرئيسية",
+                "image": "/images/how-it-works/homepage.png",
+                "content": "الصفحة الرئيسية هي بوابتك لاكتشاف الموضة. توفر أدوات قوية للتصفح والبحث وتصفية المنتجات.",
+                "steps": [
+                    {
+                        "number": "①",
+                        "title": "اختر لغتك",
+                        "description": "اختر بين العربية أو الإنجليزية أو الفرنسية ① باستخدام محدد اللغة في الرأس."
+                    },
+                    {
+                        "number": "②",
+                        "title": "تصفح الفئات",
+                        "description": "تنقل عبر الفئات الرئيسية: نساء، رجال، أطفال و منزل ②. انقر فوق أي فئة لرؤية الفئات الفرعية."
+                    },
+                    {
+                        "number": "③",
+                        "title": "البحث عن المنتجات",
+                        "description": "استخدم شريط البحث ③ للعثور على المنتجات بالاسم أو الكلمات الرئيسية."
+                    },
+                    {
+                        "number": "④",
+                        "title": "أيقونات الوصول السريع",
+                        "description": "استخدم أيقونات الرأس ④: الرئيسية (الصفحة الرئيسية)، الملف الشخصي (حسابك)، القلب (المنتجات المحفوظة) و السلة (عربة التسوق)."
+                    },
+                    {
+                        "number": "⑤",
+                        "title": "فرز المنتجات",
+                        "description": "فرز المنتجات حسب التاريخ، السعر (من الأقل إلى الأعلى)، السعر (من الأعلى إلى الأقل) أو التقييم ⑤ باستخدام القائمة المنسدلة للفرز."
+                    },
+                    {
+                        "number": "⑥",
+                        "title": "تصفح المنتجات",
+                        "description": "تعرض كل بطاقة منتج ⑥ الصورة والاسم والسعر والأحجام/الألوان المتاحة. انقر فوق أي منتج لعرض التفاصيل."
+                    },
+                    {
+                        "number": "⑦",
+                        "title": "التنقل بين الصفحات",
+                        "description": "استخدم عناصر التحكم في الترقيم ⑦ في الأسفل لتصفح صفحات متعددة من المنتجات."
+                    }
+                ]
+            },
+            {
+                "id": "product-page",
+                "title": "٤. عرض تفاصيل المنتج",
+                "image": "/images/how-it-works/product-page.png",
+                "content": "توفر صفحة تفاصيل المنتج جميع المعلومات التي تحتاجها لاتخاذ قرار شراء مستنير.",
+                "steps": [
+                    {
+                        "number": "①",
+                        "title": "عرض صور المنتج",
+                        "description": "تصفح صور المنتج ① وانقر للتكبير للحصول على نظرة أقرب."
+                    },
+                    {
+                        "number": "②",
+                        "title": "اختر الحجم",
+                        "description": "اختر الحجم ② المفضل لديك من القائمة المنسدلة."
+                    },
+                    {
+                        "number": "③",
+                        "title": "اختر اللون",
+                        "description": "اختر اللون ③ المطلوب من عينات الألوان المتاحة."
+                    },
+                    {
+                        "number": "④",
+                        "title": "اختر الكمية",
+                        "description": "اضبط الكمية ④ باستخدام أزرار +/- بناءً على المخزون المتاح."
+                    },
+                    {
+                        "number": "⑤",
+                        "title": "أضف إلى السلة",
+                        "description": "انقر فوق أضف إلى السلة ⑤ لحفظ العنصر للدفع لاحقًا."
+                    },
+                    {
+                        "number": "⑥",
+                        "title": "اشتر الآن",
+                        "description": "انقر فوق اشتر الآن ⑥ للمتابعة مباشرة إلى الدفع مع هذا العنصر."
+                    },
+                    {
+                        "number": "⑦",
+                        "title": "عرض معلومات البائع",
+                        "description": "تحقق من معلومات البائع ⑦، بما في ذلك اسمه وتقييمه ومراجعاته."
+                    },
+                    {
+                        "number": "⑧",
+                        "title": "اقرأ الوصف",
+                        "description": "راجع وصف المنتج التفصيلي ⑧ لمعرفة المزيد عن المواد وتعليمات العناية والميزات."
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -94,6 +94,7 @@
         "subCity": "Delegated City",
         "success": "Registration successful!",
         "image_updated_successfully": "Image updated successfully!",
+        "confirmPassword": "Confirm Password",
         "error": {
             "fillShopNameAddress": "Please fill in the shop name",
             "uploadProfileImage": "Please upload a profile image.",
@@ -395,27 +396,22 @@
         },
         "how_it_works": {
             "title": "How it Works",
-            "content": "Buying and selling on Cmandi is simple, secure, and fun. Follow these easy steps to get started.",
+            "content": "Cmandi is an innovative platform that simplifies the interaction between sellers and buyers. By creating a profile, whether as a seller or a user, access to an easy and intuitive experience is guaranteed. Ordering products is a breeze, with the option to choose between delivery or in-store pickup. Thanks to our platform, users can track the status of their orders in real time, ensuring complete transparency. For sellers, order management is simplified with efficient sorting by status or date. Additionally, our chat feature enables direct communication between the seller and the buyer, facilitating a better relationship and an optimal user experience. In the following sections, you will learn how everything truly works and how easy it is to use Cmandi.",
             "sections": [
                 {
                     "title": "1. Create an Account",
-                    "content": "Start by creating your free account. Click 'Login' then 'Register'. Fill in your details to join our community.",
+                    "content": "Creating an account on Cmandi is quick and easy. During registration, you have the option to choose whether you want to create a **buyer** or **seller** profile. Here's how it works:\n\n1. **Create a buyer account:**\n   If you only wish to buy products on our platform, select the **\"buyer\"** option. You will need to fill in your personal details such as your name, email address, phone number, and delivery address. Once your account is created, you can explore the products offered by sellers and easily place orders.\n\n2. **Create a seller account:**\n   If you want to sell your products on Cmandi, select the **\"seller\"** option during registration. In addition to personal information, you will need to provide your shop name and a profile image for your business. You will be able to manage your products, track orders, and communicate directly with your customers via the platform. The process is simple, but it requires uploading a profile image to represent your business.\n\n**Key differences:**\n- **Buyers**: Can purchase products, but do not have access to order management features.\n- **Sellers**: Can sell products, manage orders, and interact with buyers.\n\nChoose the profile that best suits your needs, and start exploring the many features offered by Cmandi!",
                     "image": "/images/screenshot_register.png"
                 },
                 {
                     "title": "2. Login and Explore",
-                    "content": "Log in to your account to access personalized features. Browse thousands of unique items from sellers worldwide.",
+                    "content": "Once your account is created, you can log in using your email or phone number along with your password. If you forget your password, simply click on the 'Forgot Password' link, enter your email, and you will receive a link to reset your password.",
                     "image": "/images/screenshot_login.png"
                 },
                 {
-                    "title": "3. Find and Order",
-                    "content": "Found something you love? Click 'Add to Cart' or 'Buy Now'. Our secure checkout process ensures your transaction is safe.",
+                    "title": "3. Homepage",
+                    "content": "On the homepage, you can choose between three languages offered by Cmandi: Arabic, English, and French. The top menu allows you to access the product categories: Women, Men, Kids, and Home. After selecting a category, a submenu appears with the corresponding subcategories. There is also a search field to find products by name. Products can be sorted by date, price ascending, price descending, or by reviews. At the top, there are four icons: the first for home, the second for profile, the third for saved products, and the fourth for the cart. Products are displayed with pagination, and when clicking on an image, you can enlarge or save it. For each product, available sizes, colors, and the price are shown.",
                     "image": "/images/screenshot_order.png"
-                },
-                {
-                    "title": "4. Track Your Order",
-                    "content": "Stay updated on your purchase. You can track your order status from your profile as it makes its way to you.",
-                    "image": "/images/step_delivery.png"
                 }
             ]
         },

@@ -14,6 +14,7 @@ import AddProduct from './components/new_product/add_product.js';
 import CartPage from './components/cart/cart_page.js';
 import MainChat from './components/chat/main_chat.js';
 import InfoPage from './components/info_pages/InfoPage.js';
+import HowItWorks from './components/how_it_works/HowItWorks.js';
 import HelpCenter from './components/info_pages/HelpCenter.js';
 import AdminProfile from "./components/admin/AdminProfile";
 import AdminOrderDetail from "./components/admin/AdminOrderDetail";
@@ -74,7 +75,7 @@ function App() {
           <Route path="/sustainability" element={<InfoPage pageKey="sustainability" />} />
           <Route path="/advertising" element={<InfoPage pageKey="advertising" />} />
           <Route path="/accessibility" element={<InfoPage pageKey="accessibility" />} />
-          <Route path="/how-it-works" element={<InfoPage pageKey="how_it_works" />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/article-verification" element={<InfoPage pageKey="article_verification" />} />
           <Route path="/info-board" element={<InfoPage pageKey="info_board" />} />
           <Route path="/help-center" element={<HelpCenter />} />

@@ -13,27 +13,24 @@ export default function Foot() {
           <h3>Cmandi</h3>
           <ul>
             <li><Link to="/about-us">{t('footer_pages.about_us.title')}</Link></li>
-            <li><Link to="/sustainability">{t('footer_pages.sustainability.title')}</Link></li>
-            <li><Link to="/press">{t('footer_pages.press.title')}</Link></li>
             <li><Link to="/advertising">{t('footer_pages.advertising.title')}</Link></li>
-            <li><Link to="/accessibility">{t('footer_pages.accessibility.title')}</Link></li>
+            <li><Link to="/mobile-apps">{t('footer_pages.mobile_apps.title')}</Link></li>
           </ul>
         </div>
         <div className="footer-column">
           <h3>Discover</h3>
           <ul>
             <li><Link to="/how-it-works">{t('footer_pages.how_it_works.title')}</Link></li>
-            <li><Link to="/article-verification">{t('footer_pages.article_verification.title')}</Link></li>
-            <li><Link to="/mobile-apps">{t('footer_pages.mobile_apps.title')}</Link></li>
-            <li><Link to="/info-board">{t('footer_pages.info_board.title')}</Link></li>
+            <li><Link to="/sell">{t('footer_pages.sell.title')}</Link></li>
+            <li><Link to="/buy">{t('footer_pages.buy.title')}</Link></li>
           </ul>
         </div>
         <div className="footer-column">
           <h3>Help</h3>
           <ul>
             <li><Link to="/help-center">{t('footer_pages.help_center.title')}</Link></li>
-            <li><Link to="/sell">{t('footer_pages.sell.title')}</Link></li>
-            <li><Link to="/buy">{t('footer_pages.buy.title')}</Link></li>
+            <li><Link to="/article-verification">{t('footer_pages.article_verification.title')}</Link></li>
+
             <li><Link to="/trust-safety">{t('footer_pages.trust_safety.title')}</Link></li>
           </ul>
         </div>
