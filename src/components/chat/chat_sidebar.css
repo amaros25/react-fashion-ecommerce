@@ -1,30 +1,70 @@
 .chat-sidebar {
   width: 300px;
-  background-color: #f7f7f7;
-  border-right: 1px solid #ddd;
-  overflow-y: auto;
+  background-color: #ffffff;
+  border-right: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
 }
 
+.conversation-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
 .chat-card {
-  padding: 15px;
+  padding: 16px;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.2s;
 }
 
 .chat-card:hover {
-  background-color: #e9e9e9;
+  background-color: #f8fafc;
 }
 
 .chat-card.active {
-  background-color: #e0e0e0;
+  background-color: #f1f5f9;
+  border-left: 4px solid #4a90e2;
 }
 
 .chat-date {
-  font-size: 0.8em;
-  color: #888;
-  margin-top: 5px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.pagination-chat {
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  border-top: 1px solid #f1f5f9;
+  background-color: #fff;
+}
+
+.page-btn {
+  padding: 4px 10px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.page-btn.active {
+  background-color: #4a90e2;
+  color: #fff;
+  border-color: #4a90e2;
+}
+
+.page-btn:hover:not(.active):not(:disabled) {
+  background-color: #f8fafc;
+}
+
+.page-btn:disabled {
+  cursor: default;
+  color: #cbd5e1;
 }
 
 .hidden {
@@ -37,7 +77,6 @@
   align-items: center;
   height: 100%;
   text-align: center;
-  color: #888;
-  font-size: 1.1em;
-  padding: 20px;
+  color: #94a3b8;
+  padding: 24px;
 }

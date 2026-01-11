@@ -2,6 +2,10 @@ import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import "./chat_window.css";
 
+/**
+ * ChatWindow component displays the message history of the selected conversation
+ * and provides the input for sending new messages.
+ */
 const ChatWindow = ({
   activeChat,
   userId,
@@ -16,29 +20,40 @@ const ChatWindow = ({
   isChatDisabled
 }) => {
   const { t, i18n } = useTranslation();
-  const messagesRef = useRef(null);
+  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
+
+  // Ref to track if we were at the bottom before a state update
   const wasScrolledToBottom = useRef(true);
-  const isRtl = i18n.dir() == "rtl";
+  const isRtl = i18n.dir() === "rtl";
 
-
+  // Auto-scroll to bottom on new messages if user was already at the bottom
   useEffect(() => {
-    if (activeChat && messagesRef.current && !isLoadingOlder) {
+    if (activeChat && messagesContainerRef.current && !isLoadingOlder) {
       if (wasScrolledToBottom.current) {
-        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+        messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
       }
     }
   }, [activeChat, newMessage, isLoadingOlder]);
 
+  /**
+   * Monitor scroll position to determine if we should auto-scroll on next update.
+   */
   const handleScroll = () => {
-    if (messagesRef.current) {
-      const scrollTop = messagesRef.current.scrollTop;
-      const scrollHeight = messagesRef.current.scrollHeight;
-      const clientHeight = messagesRef.current.clientHeight;
-      if (scrollHeight - scrollTop === clientHeight) {
-        wasScrolledToBottom.current = true;
-      } else {
-        wasScrolledToBottom.current = false;
-      }
+    if (messagesContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
+      // Define a "sticky" threshold (e.g. 10px from bottom)
+      const isAtBottom = scrollHeight - (scrollTop + clientHeight) < 10;
+      wasScrolledToBottom.current = isAtBottom;
+    }
+  };
+
+  /**
+   * Helper to send message when Enter is pressed.
+   */
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && newMessage.trim()) {
+      sendNewMessage(newMessage);
     }
   };
 
@@ -46,40 +61,50 @@ const ChatWindow = ({
     <div className="chat-window-content">
       {activeChat ? (
         <>
+          {/* Back button for mobile navigation */}
           {isMobile && (
             <button className="back-button" onClick={handleBackToSidebar}>
               &larr; {t('chat.backToChats')}
             </button>
           )}
-          <div className="messages" ref={messagesRef} onScroll={handleScroll}>
+
+          {/* Messages List Area */}
+          <div className="messages" ref={messagesContainerRef} onScroll={handleScroll}>
+            {/* "Load Older" button for pagination */}
             {hasMore && (
               <div className="load-more-container">
-                <button className="load-more-btn" onClick={loadOlderMessages}>
-                  {t('chat.loadOlderMessages')}
+                <button className="load-more-btn" onClick={loadOlderMessages} disabled={isLoadingOlder}>
+                  {isLoadingOlder ? t('chat.loading') : t('chat.loadOlderMessages')}
                 </button>
               </div>
             )}
+
+            {/* Render message bubbles */}
             {(activeChat?.messages || []).map((msg, idx) => {
               const isUserMessage = msg.senderId.toString() === userId;
               return (
                 <div
-                  key={idx}
-                  className={`message ${isUserMessage ? "user" : "admin"} ${msg.isRead ? "read" : "unread"} ${isRtl ? 'rtl' : ''}`}
+                  key={msg._id || idx}
+                  className={`message ${isUserMessage ? "user" : "partner"} ${msg.isRead ? "read" : "unread"} ${isRtl ? 'rtl' : ''}`}
                 >
-                  {msg.text}
-                  <div className="msg-date">
-                    {new Date(msg.createdAt).toLocaleTimeString()}
+                  <div className="msg-text">{msg.text}</div>
+                  <div className="msg-footer">
+                    <span className="msg-date">
+                      {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                    {isUserMessage && (
+                      <span className={`status-indicator ${msg.isRead ? 'read' : 'unread'}`}>
+                        {msg.isRead ? t('chat.read') : t('chat.unread')}
+                      </span>
+                    )}
                   </div>
-                  {isUserMessage && !msg.isRead && (
-                    <span className="unread-indicator">{t('chat.unread')}</span>
-                  )}
-                  {isUserMessage && msg.isRead && (
-                    <span className="read-indicator">{t('chat.read')}</span>
-                  )}
                 </div>
               );
             })}
+            <div ref={messagesEndRef} />
           </div>
+
+          {/* Input Area: Disabled if order status prevents chatting */}
           {isChatDisabled ? (
             <div className="chat-disabled-notice">
               {t('chat.disabledNotice')}
@@ -91,7 +116,7 @@ const ChatWindow = ({
                 placeholder={t('chat.messagePlaceholder')}
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendNewMessage(newMessage)}
+                onKeyDown={handleKeyDown}
               />
               <button
                 onClick={() => sendNewMessage(newMessage)}
@@ -103,9 +128,9 @@ const ChatWindow = ({
           )}
         </>
       ) : (
-        <>
-          <div className="no-chat">{t('chat.noChat')}</div>
-        </>
+        <div className="no-chat-selected">
+          <p>{t('chat.selectAChat') || t('chat.noChat')}</p>
+        </div>
       )}
     </div>
   );

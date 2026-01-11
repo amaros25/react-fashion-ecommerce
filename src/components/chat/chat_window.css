@@ -61,6 +61,15 @@
   border-bottom-right-radius: 4px;
 }
 
+.message.partner {
+  background-color: #e0f2fe;
+  /* Helles Blau */
+  color: #0369a1;
+  /* Dunklerer Text für Lesbarkeit */
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
 .message.admin {
   background-color: #2828c5;
   color: #fff;

@@ -1,121 +1,62 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 import "./main_chat.css";
 import "./chat_sidebar.css";
 
+/**
+ * ChatSidebar component displays the list of conversations and handles pagination.
+ */
 const ChatSidebar = ({
   chats = [],
   activeChat,
   newChatType,
-  setNewChatType,
-  newChatNumber,
-  setNewChatNumber,
-  startNewChatAndSendMessage,
-  is_chat_from_order_item,
-  setIsChatFromOrderItem,
-  isSidebarHidden,
-  handleOpenChat,
-  totalPages,
-  sidebarCurrentPage,
   setSidebarCurrentPage,
+  sidebarCurrentPage,
+  totalPages,
+  handleOpenChat,
+  isSidebarHidden
 }) => {
-
   const { t } = useTranslation();
 
-  const handleCancelChat = () => {
-    setIsChatFromOrderItem(false);
-    setNewChatType("product");
-    setNewChatNumber("");
-  };
-
-  const chatExists = (chatNumber) => {
-    return chats.some(
-      (chat) => chat.number === chatNumber && (chat.type === newChatType)
-    );
-  };
-
-  const getPaginationRange = (totalPages, currentPage) => {
+  /**
+   * Helper to generate the pagination range with ellipses if needed.
+   * e.g. [1, "...", 4, 5, 6, "...", 10]
+   */
+  const getPaginationRange = (total, current) => {
     const maxVisiblePages = 5;
     let range = [];
-    if (totalPages <= maxVisiblePages) {
-      range = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+    if (total <= maxVisiblePages) {
+      range = Array.from({ length: total }, (_, index) => index + 1);
     } else {
       range = [1];
-      if (currentPage <= 3) {
+      if (current <= 3) {
         range = [...range, 2, 3, 4];
-      } else if (currentPage >= totalPages - 2) {
-        range = [...range, totalPages - 3, totalPages - 2, totalPages - 1];
+      } else if (current >= total - 2) {
+        range = [...range, total - 3, total - 2, total - 1];
       } else {
-        range = [...range, currentPage - 1, currentPage, currentPage + 1];
+        range = [...range, current - 1, current, current + 1];
       }
-      range.push(totalPages);
+      range.push(total);
     }
+
+    // Add ellipses logic
     if (range[1] > 2) {
       range = [1, '...', ...range.slice(1)];
     }
-    if (range[range.length - 2] < totalPages - 1) {
-      range = [...range.slice(0, -1), '...', totalPages];
+    if (range[range.length - 2] < total - 1) {
+      range = [...range.slice(0, -1), '...', total];
     }
     return range;
   };
 
-  const sortedChats = Array.isArray(chats) ? chats.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) : [];
+  // Ensure chats are sorted by latest activity
+  const sortedChats = Array.isArray(chats)
+    ? [...chats].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+    : [];
 
   return (
     <div className={`chat-sidebar ${isSidebarHidden ? 'hidden' : ''}`}>
-      {/* <div className="new-chat">
-        <select
-          value={newChatType}
-          onChange={(e) => {
-            if (!is_chat_from_order_item) {
-              const value = e.target.value;
-              setNewChatType(value);
-              setNewChatNumber("");
-            }
-          }}
-          disabled={is_chat_from_order_item}
-        >
-          <option value="product">{t('chat.product') || "Product"}</option>
-          <option value="order">{t('chat.order') || "Order"}</option>
-        </select>
-        {(newChatType === "order" || newChatType === "product") && (
-          <input
-            type="text"
-            placeholder={newChatType === "order" ? t('chat.newChatPlaceholderOrder') : t('chat.newChatPlaceholderProduct')}
-            value={newChatNumber}
-            onChange={(e) => {
-              if (!is_chat_from_order_item) {
-                setNewChatNumber(e.target.value)
-              }
-            }}
-          />
-        )}
-        <button
-          className="chatsidebar-button"
-          onClick={() => {
-            if (newChatNumber.trim() === "") {
-              toast.error(t('chat.noChat'));
-              return;
-            }
-            if (chatExists(newChatNumber)) {
-              toast.error(t('chat.chatAlreadyExists'));
-              return;
-            }
-
-            startNewChatAndSendMessage("");
-          }}
-        >
-          {is_chat_from_order_item ? t('chat.newChatWithSeller') : t('chat.newChatWithAdmin')}
-        </button>
-
-        {is_chat_from_order_item && (
-          <button onClick={handleCancelChat} className="cancel-btn">
-            {t('chat.cancel_with_seller')}
-          </button>
-        )}
-
-      </div> */}
       <div className="conversation-list">
         {sortedChats.length === 0 ? (
           <div className="no-chats-message">
@@ -123,7 +64,11 @@ const ChatSidebar = ({
           </div>
         ) : (
           sortedChats.map((chat) => {
-            const lastMessage = chat.messages?.length > 0 ? chat.messages[chat.messages.length - 1].text : t('chat.noMessages');
+            // Get text of the last message or a placeholder
+            const lastMessage = chat.messages?.length > 0
+              ? chat.messages[chat.messages.length - 1].text
+              : t('chat.noMessages');
+
             return (
               <div
                 key={chat._id}
@@ -132,9 +77,7 @@ const ChatSidebar = ({
               >
                 <div>
                   <strong>{chat.type === "order" ? t('chat.order') : t('chat.product')}</strong>
-                  {(chat.type === "order" || chat.type === "product") && (
-                    `: ${chat.number || t('chat.noMessages')}`
-                  )}
+                  {`: ${chat.number || t('chat.noNumberAvailable')}`}
                 </div>
                 <div>
                   <strong>{t('chat.lastMessage')}:</strong> {lastMessage}
@@ -144,17 +87,18 @@ const ChatSidebar = ({
                 </div>
               </div>
             );
-          }))}
+          })
+        )}
       </div>
-      <div className="pagination">
+
+      {/* Pagination Controls */}
+      <div className="pagination-chat">
         {totalPages > 1 && (
           getPaginationRange(totalPages, sidebarCurrentPage).map((page, index) => (
             <button
               key={index}
               onClick={() => {
-                if (page !== '...') {
-                  setSidebarCurrentPage(page);  // Seite wechseln
-                }
+                if (page !== '...') setSidebarCurrentPage(page);
               }}
               className={`page-btn ${sidebarCurrentPage === page ? 'active' : ''}`}
               disabled={page === '...'}
@@ -164,8 +108,6 @@ const ChatSidebar = ({
           ))
         )}
       </div>
-
-
     </div>
   );
 };

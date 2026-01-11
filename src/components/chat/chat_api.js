@@ -1,15 +1,23 @@
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const fetchChats = async (role, userId, sellerId, newChatType, currentPage, token) => {
+/**
+ * Helper to get default headers for API requests.
+ */
+const getHeaders = (token) => ({
+  "Content-Type": "application/json",
+  ...(token ? { Authorization: `Bearer ${token}` } : {}),
+});
+
+/**
+ * Fetches the list of chats for a specific user/role with pagination.
+ */
+export const fetchChats = async (role, userId, sellerId, newChatType, currentPage, token, signal = null) => {
   try {
+    console.log("Fetching chats for role:", role, userId, sellerId, newChatType, currentPage, token, signal);
+    const limit = 8;
     let url = '';
-    const limit = 5;
-    console.log("**** fetchChats role: ", role);
-    console.log("**** fetchChats userId: ", userId);
-    console.log("**** fetchChats sellerId: ", sellerId);
-    console.log("**** fetchChats newChatType: ", newChatType);
-    console.log("**** fetchChats currentPage: ", currentPage);
-    console.log("**** fetchChats token: ", token);
+
+    // Determine the correct endpoint based on the user's role
     if (role === "admin") {
       url = `${apiUrl}/chats/user/${userId}?role=admin&page=${currentPage}&limit=${limit}`;
     } else {
@@ -17,95 +25,88 @@ export const fetchChats = async (role, userId, sellerId, newChatType, currentPag
         ? `${apiUrl}/chats/seller/${sellerId}?role=seller&page=${currentPage}&limit=${limit}`
         : `${apiUrl}/chats/user/${userId}?role=user&page=${currentPage}&limit=${limit}`;
     }
-    console.log("====> fetchChats url: ", url);
+
     const response = await fetch(url, {
-      headers: { Authorization: token ? `Bearer ${token}` : '' },
+      headers: getHeaders(token),
+      signal
     });
     const data = await response.json();
-    console.log("====> fetchChats data: ", data);
-    if (response.ok) {
-      return { success: true, data };
-    } else {
-      return { success: false, errorKey: data.message || "server_error" };
-    }
+
+    return response.ok
+      ? { success: true, data }
+      : { success: false, errorKey: data.message || "server_error" };
   } catch (err) {
+    if (err.name === 'AbortError') return { success: false, aborted: true };
     console.error("Error loading chats:", err);
     return { success: false, errorKey: "server_error" };
   }
 };
 
+/**
+ * Fetches full details and messages for a specific chat.
+ */
 export const openChat = async (chatId, userId, PAGE_LIMIT, token) => {
   try {
-    console.log("====> openChat chatId: ", chatId);
-    console.log("====> openChat userId: ", userId);
-    console.log("====> openChat PAGE_LIMIT: ", PAGE_LIMIT);
-    console.log("====> openChat token: ", token);
     const res = await fetch(`${apiUrl}/chats/${chatId}?page=1&limit=${PAGE_LIMIT}`, {
-      headers: { Authorization: token ? `Bearer ${token}` : '' },
+      headers: getHeaders(token),
     });
     const data = await res.json();
 
-    if (res.ok) {
-      return { success: true, data };
-    } else {
-      return { success: false, errorKey: data.message || "server_error" };
-    }
+    return res.ok
+      ? { success: true, data }
+      : { success: false, errorKey: data.message || "server_error" };
   } catch (err) {
-    console.error(err);
+    console.error("Error opening chat:", err);
     return { success: false, errorKey: "server_error" };
   }
 };
 
+/**
+ * Sends a new message in an existing chat.
+ */
 export const sendMessage = async (chatId, userId, newMessage, token) => {
   try {
-    console.log("====> sendMessage chatId: ", chatId);
-    console.log("====> sendMessage userId: ", userId);
-    console.log("====> sendMessage newMessage: ", newMessage);
-    console.log("====> sendMessage token: ", token);
     const payload = { senderId: userId, text: newMessage, isRead: false };
     const res = await fetch(`${apiUrl}/chats/${chatId}/message`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-
-
-        Authorization: token ? `Bearer ${token}` : '',
-      },
+      headers: getHeaders(token),
       body: JSON.stringify(payload),
     });
     const data = await res.json();
-    if (res.ok) {
-      return { success: true, data };
-    } else {
-      return { success: false, errorKey: data.message || "server_error" };
-    }
+
+    return res.ok
+      ? { success: true, data }
+      : { success: false, errorKey: data.message || "server_error" };
   } catch (err) {
     console.error("Error sending message", err);
     return { success: false, errorKey: "server_error" };
   }
 };
 
+/**
+ * Loads older messages for a chat (pagination).
+ */
 export const loadMoreMessages = async (chatId, currentPage, PAGE_LIMIT, token) => {
   try {
     const nextPage = currentPage + 1;
     const res = await fetch(
       `${apiUrl}/chats/${chatId}?page=${nextPage}&limit=${PAGE_LIMIT}`,
-      {
-        headers: { Authorization: token ? `Bearer ${token}` : '' },
-      }
+      { headers: getHeaders(token) }
     );
     const data = await res.json();
-    if (res.ok) {
-      return { success: true, data };
-    } else {
-      return { success: false, errorKey: data.message || "server_error" };
-    }
+
+    return res.ok
+      ? { success: true, data }
+      : { success: false, errorKey: data.message || "server_error" };
   } catch (err) {
-    console.error(err);
+    console.error("Error loading more messages:", err);
     return { success: false, errorKey: "server_error" };
   }
 };
 
+/**
+ * Persists a new chat in the database.
+ */
 export const startNewChat = async (role, userId, sellerId, newChatType, number, token) => {
   try {
     if (!newChatType || !number?.trim()) return { success: false, errorKey: "missing_data" };
@@ -119,58 +120,53 @@ export const startNewChat = async (role, userId, sellerId, newChatType, number, 
 
     const res = await fetch(`${apiUrl}/chats/create`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token ? `Bearer ${token}` : '',
-      },
+      headers: getHeaders(token),
       body: JSON.stringify(payload),
     });
 
     const data = await res.json();
-    if (res.ok) {
-      return { success: true, data };
-    } else {
-      return { success: false, errorKey: data.message || "server_error" };
-    }
+    return res.ok
+      ? { success: true, data }
+      : { success: false, errorKey: data.message || "server_error" };
   } catch (err) {
     console.error("Error creating chat", err);
     return { success: false, errorKey: "server_error" };
   }
 };
 
+/**
+ * Updates all messages in a chat as 'read' for the current user.
+ */
 export const markMessagesAsRead = async (chatId, token) => {
   try {
     const res = await fetch(`${apiUrl}/chats/${chatId}/messages/read`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token ? `Bearer ${token}` : '',
-      },
+      headers: getHeaders(token),
     });
 
     const data = await res.json();
-    if (res.ok) {
-      return { success: true, data };
-    } else {
-      return { success: false, errorKey: data.message || "server_error" };
-    }
+    return res.ok
+      ? { success: true, data }
+      : { success: false, errorKey: data.message || "server_error" };
   } catch (err) {
     console.error("Error marking messages as read:", err);
     return { success: false, errorKey: "server_error" };
   }
 };
 
+/**
+ * Fetches order details by order number to check chat eligibility.
+ */
 export const fetchOrderByNumber = async (orderNumber, token) => {
   try {
     const res = await fetch(`${apiUrl}/orders/number/${orderNumber}`, {
-      headers: { Authorization: token ? `Bearer ${token}` : '' },
+      headers: getHeaders(token),
     });
     const data = await res.json();
-    if (res.ok) {
-      return { success: true, data };
-    } else {
-      return { success: false, errorKey: data.message || "server_error" };
-    }
+
+    return res.ok
+      ? { success: true, data }
+      : { success: false, errorKey: data.message || "server_error" };
   } catch (err) {
     console.error("Error fetching order:", err);
     return { success: false, errorKey: "server_error" };

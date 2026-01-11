@@ -11,17 +11,19 @@
    margin: 1% 0;
    flex-direction: row;
    min-height: 70vh;
-
+   align-items: stretch;
+   /* Stretch sidebar and window to equal height */
  }
 
  .chat-sidebar {
    width: 300px;
    flex-direction: column;
-
    overflow: hidden;
    background-color: #ffffff;
-   min-height: 80vh;
+   height: 80vh;
+   /* Consistent height */
    max-height: 80vh;
+   align-self: stretch;
  }
 
  .chat-window {
@@ -30,6 +32,8 @@
    flex-direction: column;
    min-height: 80vh;
    max-height: 80vh;
+   align-self: stretch;
+   /* Stretch to fill .main-chat height */
  }
 
  .chat-window.active {
@@ -44,6 +48,8 @@
    overflow: hidden;
    min-height: 80vh;
    max-height: 80vh;
+   align-self: stretch;
+   /* Ensure it stays full height */
  }
 
  .chat-window.hidden {
@@ -86,8 +92,7 @@
 
    .chat-sidebar {
      display: flex;
-     flex: 1;
-     min-height: 50vh;
+     height: auto;
      max-height: 100vh;
    }
 
