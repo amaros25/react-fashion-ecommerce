@@ -1,10 +1,11 @@
 import "./profile_seller_header.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { cities, citiesData } from '../utils/const/cities';
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { FaTrash, FaStar, FaStarHalfAlt, FaExclamationTriangle, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
+import useProfileImageUpload from "../upload_image_profile/upload_image_profile";
 
 function ProfileSellerHeader({ seller, apiUrl, token }) {
   const { t } = useTranslation();
@@ -13,19 +14,24 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
   const [productCount, setProductCount] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
   const [sellerImage, setSellerImage] = useState("");
+  const { uploadProfileImage } = useProfileImageUpload(t);
+  const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     address: "",
     city: "",
     subCity: "",
     phone: ""
   });
+
   const [subCities, setSubCities] = useState([]);
   const [unreadMessages, setUnreadMessages] = useState(0);
 
   const avgRating = seller?.averageRating || 0;
   const reviewCount = seller?.reviewCount || 0;
-
+  console.log("ProfileSellerHeader seller: ", seller);
   useEffect(() => {
+    console.log("useEffect ProfileSellerHeader seller: ", seller);
+
     if (!seller?._id) return;
 
     const fetchStats = async () => {
@@ -58,29 +64,32 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
     };
 
     fetchStats();
+    console.log("useEffect ProfileSellerHeader seller: ", seller);
 
     // Initialize form data
-    if (seller.address && seller.address.length > 0) {
-      const lastAddress = seller.address[seller.address.length - 1];
+    console.log("useEffect ProfileSellerHeader seller.address: ", seller.address);
+    if (seller.address) {
+
       setFormData(prev => ({
         ...prev,
-        address: lastAddress.address,
-        city: cities[lastAddress.city],
-        subCity: citiesData[cities[lastAddress.city]]?.[lastAddress.subCity] || ""
+        address: seller.address,
+        city: cities[seller.city],
+        subCity: citiesData[cities[seller.city]]?.[seller.subCity] || ""
       }));
-      if (cities[lastAddress.city]) {
-        setSubCities(citiesData[cities[lastAddress.city]] || []);
+      if (cities[seller.city]) {
+        setSubCities(citiesData[cities[seller.city]] || []);
       }
     }
-
-    if (seller.phone && seller.phone.length > 0) {
+    console.log("useEffectProfileSellerHeader seller.phone: ", seller.phone);
+    if (seller.phone) {
       setFormData(prev => ({
         ...prev,
-        phone: seller.phone[seller.phone.length - 1].phone
+        phone: seller.phone
       }));
     }
-    if (seller.image && seller.image.length > 0) {
-      const lastImage = seller.image[seller.image.length - 1].imageUrl;
+    console.log("useEffect ProfileSellerHeader seller.image: ", seller.image);
+    if (seller.image) {
+      const lastImage = seller.image;
       setSellerImage(lastImage);
     }
   }, [seller, apiUrl, token]);
@@ -185,6 +194,32 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
     window.location.href = "/login";
   };
 
+  const handleProfileImageClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleProfileImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      // Bild hochladen
+      const userId = seller.userId || seller._id;
+      const role = "seller";
+      await uploadProfileImage(file, userId, role);
+
+      // Vorschau aktualisieren
+      const reader = new FileReader();
+      reader.onload = () => setSellerImage(reader.result);
+      reader.readAsDataURL(file);
+
+      toast.success(t("Profile image updated successfully") || "Profile image updated successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error(t("Failed to upload image") || "Failed to upload image");
+    }
+  };
+
   return (
     <div className="seller-profile-header-container">
       {!seller.active && (
@@ -199,8 +234,16 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
       <div className="seller-profile-minimal-card">
         <div className="seller-profile-top-row">
           <div className="seller-profile-identity">
-            <div className="seller-avatar-minimal">
+
+            <div className="seller-avatar-minimal" onClick={handleProfileImageClick} style={{ cursor: "pointer" }}>
               <img src={sellerImage || '/default-avatar.png'} alt={seller.shopName} />
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleProfileImageChange}
+              />
             </div>
             <div className="seller-info-minimal">
               <div className="seller-name-row">
@@ -221,19 +264,19 @@ function ProfileSellerHeader({ seller, apiUrl, token }) {
                 </div>
               </div>
               <p className="seller-email-minimal">{seller.firstName} {seller.lastName}</p>
-
+              <p className="seller-email-minimal">{seller.email}</p>
               <div className="seller-contact-minimal">
-                {seller.phone && seller.phone.length > 0 && (
+                {seller.phone && (
                   <span className="contact-pill">
-                    <FaPhone size={10} /> {seller.phone[seller.phone.length - 1].phone}
+                    <FaPhone size={10} /> {seller.phone}
                   </span>
                 )}
-                {seller.address && seller.address.length > 0 && (
+                {seller.address && (
                   <span className="contact-pill">
                     <FaMapMarkerAlt size={10} />
-                    {seller.address[seller.address.length - 1].address},&nbsp;
-                    {citiesData[cities[seller.address[seller.address.length - 1].city]][seller.address[seller.address.length - 1].subCity]},&nbsp;
-                    {cities[seller.address[seller.address.length - 1].city]}
+                    {seller.address},&nbsp;
+                    {citiesData[cities[seller.city]][seller.subCity]},&nbsp;
+                    {cities[seller.city]}
                   </span>
                 )}
               </div>

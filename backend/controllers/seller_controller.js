@@ -64,6 +64,25 @@ exports.getSellerById = async (req, res) => {
 
     if (!seller) return res.status(404).json({ message: "seller_not_found" });
 
+    let lastAddress = "";
+    let lastPhone = "";
+    if (Array.isArray(seller.address) && seller.address.length > 0) {
+      lastAddress = seller.address[seller.address.length - 1];
+    } else {
+      lastAddress = "";
+    }
+    if (Array.isArray(seller.phone) && seller.phone.length > 0) {
+      lastPhone = seller.phone[seller.phone.length - 1];
+    } else {
+      lastPhone = "";
+    }
+    let lastImage = "";
+    if (Array.isArray(seller.image) && seller.image.length > 0) {
+      lastImage = seller.image[seller.image.length - 1];
+    } else {
+      lastImage = "";
+    }
+
     const stats = await SellerReview.aggregate([
       { $match: { seller: seller._id } },
       {
@@ -76,13 +95,28 @@ exports.getSellerById = async (req, res) => {
     ]);
     seller.averageRating = stats.length > 0 ? stats[0].averageRating : 0;
     seller.reviewCount = stats.length > 0 ? stats[0].reviewCount : 0;
-    if (seller.address && seller.address.length > 0) {
-      seller.address = seller.address[seller.address.length - 1];
-    }
-    if (seller.phone && seller.phone.length > 0) {
-      seller.phone = seller.phone[seller.phone.length - 1];
-    }
-    res.json(seller);
+
+    seller.address = lastAddress;
+    seller.phone = lastPhone.phone;
+    seller.image = lastImage.imageUrl;
+
+    res.json({
+      _id: seller._id,
+      firstName: seller.firstName,
+      lastName: seller.lastName,
+      shopName: seller.shopName,
+      address: lastAddress.address,
+      city: lastAddress.city,
+      subCity: lastAddress.subCity,
+      phone: lastPhone.phone,
+      email: seller.email,
+      averageRating: seller.averageRating,
+      reviewCount: seller.reviewCount,
+      active: seller.active,
+      image: lastImage.imageUrl,
+    });
+
+
   } catch (err) {
     res.status(500).json({ message: "server_error" });
   }

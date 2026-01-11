@@ -444,20 +444,20 @@
                     {
                         "number": "4",
                         "title": "Gestion du profil vendeur",
-                        "description": "Sur la partie gauche du profil, vous trouverez l’image de votre boutique ①. À côté, le nom de votre boutique et la note globale du profil sont affichés. Par exemple, ce vendeur a 2 évaluations avec une note totale de 5 étoiles. En dessous, votre nom et prénom sont affichés ②. En dessous figurent votre adresse e-mail ③, votre numéro de téléphone ④ et votre adresse ⑤.",
-                        "image": "/images/how-it-works/user_profile/fr/profile_3.png"
+                        "description": "Sur la partie gauche du profil, l’image de la boutique ① est affichée, à côté le nom de la boutique et la note globale du profil apparaissent (par exemple, ce vendeur a 2 évaluations avec une note totale de 5 étoiles) ②, suivis du nom et prénom du propriétaire, de l’adresse e-mail  ③, du numéro de téléphone et de l’adresse ④.",
+                        "image": "/images/how-it-works/seller_profile/fr/seller_1.png"
                     },
                     {
                         "number": "5",
                         "title": "Messages",
                         "description": "Cette option vous redirige vers la page de chat. Si vous avez reçu de nouveaux messages non lus, un numéro s’affiche afin de vous informer de la présence de nouveaux messages ①.",
-                        "image": "/images/how-it-works/user_profile/fr/profile_4.png"
+                        "image": "/images/how-it-works/seller_profile/fr/seller_2.png"
                     },
                     {
                         "number": "6",
                         "title": "Paramètres",
                         "description": "Cette section vous permet de modifier votre numéro de téléphone ①, votre adresse ②, votre ville ③ et votre délégation ④. Après toute modification, cliquez sur le bouton de confirmation pour enregistrer les changements ⑤. Vous pouvez également supprimer définitivement votre profil si vous décidez de quitter la plateforme ⑥.",
-                        "image": "/images/how-it-works/user_profile/fr/profile_5.png"
+                        "image": "/images/how-it-works/seller_profile/fr/seller_3.png"
                     },
                     {
                         "number": "7",
@@ -467,12 +467,14 @@
                     {
                         "number": "8",
                         "title": "Vue d’ensemble du vendeur",
-                        "description": "Sous l’image et les informations de votre profil, vous trouverez trois indicateurs : le nombre total de produits postés par le vendeur ①, le nombre total de commandes ② et le nombre de commandes ouvertes qui ne sont pas encore finalisées ③."
+                        "description": "Sous l’image et les informations de votre profil, vous trouverez trois indicateurs : le nombre total de produits postés par le vendeur ①, le nombre total de commandes ② et le nombre de commandes ouvertes qui ne sont pas encore finalisées ③.",
+                        "image": "/images/how-it-works/seller_profile/fr/seller_4.png"
                     },
                     {
                         "number": "9",
                         "title": "Gestion des sections du vendeur",
-                        "description": "Quatre sections sont disponibles pour gérer votre activité : Ajouter un nouveau produit, Produits, Toutes les commandes et Factures."
+                        "description": "Quatre sections sont disponibles pour gérer votre activité : Ajouter un nouveau produit ①, voir et modifier les Produits ②, consulter les Commandes ③ et les Factures ④.",
+                        "image": "/images/how-it-works/seller_profile/fr/seller_5.png"
                     },
                     {
                         "number": "10",
@@ -482,7 +484,8 @@
                     {
                         "number": "11",
                         "title": "Produits",
-                        "description": "Cette section liste tous les produits du vendeur. Pour chaque produit, le statut ③ est affiché : « actif » (produit disponible), « en attente » (produit non encore validé par l’administrateur), « bloqué » (produit bloqué) ou « supprimé » (produit supprimé par le vendeur). Vous pouvez également voir le stock disponible pour les utilisateurs."
+                        "description": "Cette section liste tous les produits du vendeur. Pour chaque produit, le statut ③ est affiché : « actif » (produit disponible), « en attente » (produit non encore validé par l’administrateur), « bloqué » (produit bloqué) ou « supprimé » (produit supprimé par le vendeur). Vous pouvez également voir le stock disponible pour les utilisateurs ainsi que le nombre de commandes pour chaque produit.",
+                        "image": "/images/how-it-works/seller_profile/fr/seller_6.png"
                     },
                     {
                         "number": "12",
