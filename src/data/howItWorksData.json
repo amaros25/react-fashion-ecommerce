@@ -418,6 +418,83 @@
                         "image": "/images/how-it-works/user_profile/fr/profile_8.png"
                     }
                 ]
+            },
+            {
+                "id": "seller-profile",
+                "title": "6. Gérer votre profil vendeur",
+                "content": "La page de profil vendeur vous permet de consulter et gérer vos informations personnelles, vos produits, vos commandes, vos factures et vos paramètres.",
+                "steps": [
+                    {
+                        "number": "1",
+                        "title": "Accéder à la page de connexion",
+                        "description": "Cliquez sur l’icône Profil ① dans le menu d’accès rapide en haut de la page. La page de connexion s’affiche.",
+                        "image": "/images/how-it-works/user_profile/fr/profile_1.png"
+                    },
+                    {
+                        "number": "2",
+                        "title": "Se connecter ou créer un compte",
+                        "description": "Connectez-vous en tant qu’utilisateur en utilisant votre e-mail ou votre numéro de téléphone ① ainsi que votre mot de passe ② enregistré. Si vous n’avez pas encore de compte, cliquez sur « S’inscrire » ③ pour créer un nouveau profil.",
+                        "image": "/images/how-it-works/user_profile/fr/profile_2.png"
+                    },
+                    {
+                        "number": "3",
+                        "title": "Accéder à votre profil vendeur",
+                        "description": "Après vous être connecté, cliquez à nouveau sur l’icône Profil ④. Vous serez automatiquement redirigé vers votre page de profil vendeur. L’image de profil sera également utilisée sur la page de votre boutique."
+                    },
+                    {
+                        "number": "4",
+                        "title": "Gestion du profil vendeur",
+                        "description": "Sur la partie gauche du profil, vous trouverez l’image de votre boutique ①. À côté, le nom de votre boutique et la note globale du profil sont affichés. Par exemple, ce vendeur a 2 évaluations avec une note totale de 5 étoiles. En dessous, votre nom et prénom sont affichés ②. En dessous figurent votre adresse e-mail ③, votre numéro de téléphone ④ et votre adresse ⑤.",
+                        "image": "/images/how-it-works/user_profile/fr/profile_3.png"
+                    },
+                    {
+                        "number": "5",
+                        "title": "Messages",
+                        "description": "Cette option vous redirige vers la page de chat. Si vous avez reçu de nouveaux messages non lus, un numéro s’affiche afin de vous informer de la présence de nouveaux messages ①.",
+                        "image": "/images/how-it-works/user_profile/fr/profile_4.png"
+                    },
+                    {
+                        "number": "6",
+                        "title": "Paramètres",
+                        "description": "Cette section vous permet de modifier votre numéro de téléphone ①, votre adresse ②, votre ville ③ et votre délégation ④. Après toute modification, cliquez sur le bouton de confirmation pour enregistrer les changements ⑤. Vous pouvez également supprimer définitivement votre profil si vous décidez de quitter la plateforme ⑥.",
+                        "image": "/images/how-it-works/user_profile/fr/profile_5.png"
+                    },
+                    {
+                        "number": "7",
+                        "title": "Déconnexion",
+                        "description": "Si vous souhaitez vous déconnecter de votre compte, cliquez sur l’option « Déconnexion ». Vous serez alors automatiquement déconnecté de la plateforme."
+                    },
+                    {
+                        "number": "8",
+                        "title": "Vue d’ensemble du vendeur",
+                        "description": "Sous l’image et les informations de votre profil, vous trouverez trois indicateurs : le nombre total de produits postés par le vendeur ①, le nombre total de commandes ② et le nombre de commandes ouvertes qui ne sont pas encore finalisées ③."
+                    },
+                    {
+                        "number": "9",
+                        "title": "Gestion des sections du vendeur",
+                        "description": "Quatre sections sont disponibles pour gérer votre activité : Ajouter un nouveau produit, Produits, Toutes les commandes et Factures."
+                    },
+                    {
+                        "number": "10",
+                        "title": "Ajouter un nouveau produit",
+                        "description": "Pour ajouter de nouveaux produits, consultez la section « Ajouter nouveau produit » pour plus de détails sur la création et la publication d’un produit."
+                    },
+                    {
+                        "number": "11",
+                        "title": "Produits",
+                        "description": "Cette section liste tous les produits du vendeur. Pour chaque produit, le statut ③ est affiché : « actif » (produit disponible), « en attente » (produit non encore validé par l’administrateur), « bloqué » (produit bloqué) ou « supprimé » (produit supprimé par le vendeur). Vous pouvez également voir le stock disponible pour les utilisateurs."
+                    },
+                    {
+                        "number": "12",
+                        "title": "Toutes les commandes",
+                        "description": "Cette section affiche toutes les commandes passées pour vos produits. Pour plus d’informations, consultez la section « Gestion des commandes »."
+                    },
+                    {
+                        "number": "13",
+                        "title": "Factures",
+                        "description": "Cette section contient toutes les factures générées par la plateforme pour le vendeur. Chaque facture est liée à un produit spécifique. Pour plus de détails, consultez la section « Factures du vendeur »."
+                    }
+                ]
             }
         ]
     },

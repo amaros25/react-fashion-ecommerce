@@ -635,7 +635,9 @@
         "send": "SEND REQUEST",
         "success_msg": "Your message has been sent to our support team.",
         "error_msg": "Failed to send message. Please try again later.",
-        "message_required": "Please enter your message."
+        "message_required": "Please enter your message.",
+        "tab_order": "Report Order",
+        "tab_product": "Report Product"
     },
     "add_product_error": {
         "productImagesRequired": "Product images are required",

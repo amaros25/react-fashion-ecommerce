@@ -139,7 +139,7 @@ export default function OrderCard({ order, products, t, onStatusChange, onRating
         </div>
         <div className={`order-header-right ${i18n.language === "ar" ? "rtl-fix" : ""}`}>
           <span className="order-total-label">{t("cart_page.total")}:</span>
-          <span className="order-total-value">€{order.totalPrice.toFixed(3)}</span>
+          <span className="order-total-value"> {order.totalPrice.toFixed(3)}  {t("price_suf")}</span>
           <div className={`order-report-container`} onClick={goToHelpCenter}>
             <FaExclamationCircle className="report-order-icon" />
             <span className="report-text">{t("report_order") || "Report Problem"}</span>

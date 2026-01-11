@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-
 import ChatWindow from './chat_window';
 import ChatSidebar from './chat_sidebar';
-import { useTranslation } from "react-i18next";
 import { useChats } from "./use_chats";
 import "./main_chat.css";
-import { fetchChats } from "./chat_api";
+
 
 const MainChat = () => {
-  const { t, i18n } = useTranslation();
   const location = useLocation();
-  const { newOrderNumber: orderNumber, sellerId, partnerId, newChatType: routeChatType } = location.state || {};
+  const { newOrderNumber: orderNumber, sellerId, partnerId, newChatType: routeChatType, message: message } = location.state || {};
+  console.log("**** MainChat orderNumber: ", orderNumber);
+  console.log("**** MainChat sellerId: ", sellerId);
+  console.log("**** MainChat partnerId: ", partnerId);
+  console.log("**** MainChat routeChatType: ", routeChatType);
+  console.log("**** MainChat message: ", message);
   const [userId, setUserId] = useState(null);
   const [isChatFromOrderItem, setIsChatFromOrderItem] = useState(false);
 
@@ -33,7 +35,8 @@ const MainChat = () => {
     }
   }, [orderNumber]);
 
-  const chatHook = useChats(userId, partnerId || sellerId, routeChatType || "product", orderNumber || "");
+  const chatHook = useChats(userId, partnerId || sellerId || "admin", routeChatType || "", orderNumber || "", message || "");
+
 
   return (
     <div className="main-chat-container">

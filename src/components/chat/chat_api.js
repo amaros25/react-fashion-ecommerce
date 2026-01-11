@@ -4,6 +4,12 @@ export const fetchChats = async (role, userId, sellerId, newChatType, currentPag
   try {
     let url = '';
     const limit = 5;
+    console.log("**** fetchChats role: ", role);
+    console.log("**** fetchChats userId: ", userId);
+    console.log("**** fetchChats sellerId: ", sellerId);
+    console.log("**** fetchChats newChatType: ", newChatType);
+    console.log("**** fetchChats currentPage: ", currentPage);
+    console.log("**** fetchChats token: ", token);
     if (role === "admin") {
       url = `${apiUrl}/chats/user/${userId}?role=admin&page=${currentPage}&limit=${limit}`;
     } else {
@@ -11,12 +17,12 @@ export const fetchChats = async (role, userId, sellerId, newChatType, currentPag
         ? `${apiUrl}/chats/seller/${sellerId}?role=seller&page=${currentPage}&limit=${limit}`
         : `${apiUrl}/chats/user/${userId}?role=user&page=${currentPage}&limit=${limit}`;
     }
-
+    console.log("====> fetchChats url: ", url);
     const response = await fetch(url, {
       headers: { Authorization: token ? `Bearer ${token}` : '' },
     });
     const data = await response.json();
-
+    console.log("====> fetchChats data: ", data);
     if (response.ok) {
       return { success: true, data };
     } else {
@@ -30,6 +36,10 @@ export const fetchChats = async (role, userId, sellerId, newChatType, currentPag
 
 export const openChat = async (chatId, userId, PAGE_LIMIT, token) => {
   try {
+    console.log("====> openChat chatId: ", chatId);
+    console.log("====> openChat userId: ", userId);
+    console.log("====> openChat PAGE_LIMIT: ", PAGE_LIMIT);
+    console.log("====> openChat token: ", token);
     const res = await fetch(`${apiUrl}/chats/${chatId}?page=1&limit=${PAGE_LIMIT}`, {
       headers: { Authorization: token ? `Bearer ${token}` : '' },
     });
@@ -48,11 +58,17 @@ export const openChat = async (chatId, userId, PAGE_LIMIT, token) => {
 
 export const sendMessage = async (chatId, userId, newMessage, token) => {
   try {
+    console.log("====> sendMessage chatId: ", chatId);
+    console.log("====> sendMessage userId: ", userId);
+    console.log("====> sendMessage newMessage: ", newMessage);
+    console.log("====> sendMessage token: ", token);
     const payload = { senderId: userId, text: newMessage, isRead: false };
     const res = await fetch(`${apiUrl}/chats/${chatId}/message`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+
+
         Authorization: token ? `Bearer ${token}` : '',
       },
       body: JSON.stringify(payload),

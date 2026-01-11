@@ -12,10 +12,12 @@ const HelpCenter = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const userId = localStorage.getItem("userId");
-    const role = localStorage.getItem("role"); // 1 = User / Buyer, 2 = Seller
+    console.log("**** HelpCenter userId: ", userId);
+    const role = localStorage.getItem("role");
+    console.log("**** HelpCenter role: ", role);
     const token = localStorage.getItem("token");
 
-    const [activeTab, setActiveTab] = useState(0); // 0: Order, 1: Product, 2: Chat
+    const [activeTab, setActiveTab] = useState(0);
     const [form, setForm] = useState({
         message: "",
         productNumber: "",
@@ -33,7 +35,15 @@ const HelpCenter = () => {
         // setForm({ message: "", productNumber: "", orderNumber: "" }); 
     };
 
+    let userIdForChat = null;
+    let sellerIdForChat = null;
+    console.log("**** HelpCenter role: ", role);
 
+    userIdForChat = userId;
+    sellerIdForChat = "admin";
+
+    console.log("**** HelpCenter userIdForChat: ", userIdForChat);
+    console.log("**** HelpCenter sellerIdForChat: ", sellerIdForChat);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -74,6 +84,7 @@ const HelpCenter = () => {
             // Validation Logic
             if (activeTab === 0 && form.orderNumber) {
                 const orderRes = await fetchOrderByNumber(form.orderNumber, token);
+                console.log("**** HelpCenter orderRes: ", orderRes);
                 if (!orderRes.success) {
                     toast.error(t("help_center.unknown_number") || "Unknown Number");
                     setLoading(false);
@@ -85,6 +96,7 @@ const HelpCenter = () => {
                 // Fetch product to validate existence
                 const apiUrl = process.env.REACT_APP_API_URL;
                 const productRes = await fetch(`${apiUrl}/products/${form.productNumber}`);
+                console.log("**** HelpCenter productRes: ", productRes);
                 if (!productRes.ok) {
                     toast.error(t("help_center.unknown_number") || "Unknown Number");
                     setLoading(false);
@@ -97,7 +109,10 @@ const HelpCenter = () => {
                 state: {
                     newChatType: activeTab === 0 ? "order" : "product",
                     newOrderNumber: activeTab === 0 ? form.orderNumber : form.productNumber,
-                    message: form.message
+                    message: form.message,
+                    partnerId: sellerIdForChat,
+                    sellerId: userIdForChat
+
                 }
             });
 

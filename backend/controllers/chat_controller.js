@@ -88,6 +88,21 @@ exports.createChat = async (req, res) => {
     } else if (!userId && sellerId) {
       userId = "admin";
     }
+
+    // Check for existing chat to prevent duplicates and ensure it's moved to top
+    const existingChat = await Chat.findOne({
+      userId: userId,
+      sellerId: sellerId,
+      type: type,
+      number: number || null
+    });
+
+    if (existingChat) {
+      existingChat.updatedAt = new Date();
+      await existingChat.save();
+      return res.status(200).json(existingChat);
+    }
+
     const newChatData = {
       type,
       number: number || null,
@@ -100,6 +115,7 @@ exports.createChat = async (req, res) => {
     const newChat = new Chat(newChatData);
     await newChat.save();
     res.status(201).json(newChat);
+
   } catch (error) {
     console.error("Error creating chat:", error);
     res.status(500).json({ message: "server_error" });

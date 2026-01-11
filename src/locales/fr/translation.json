@@ -626,7 +626,9 @@
     "send": "ENVOYER LA DEMANDE",
     "success_msg": "Votre message a été envoyé à notre équipe d'assistance.",
     "error_msg": "Échec de l'envoi du message. Veuillez réessayer plus tard.",
-    "message_required": "Veuillez entrer votre message."
+    "message_required": "Veuillez entrer votre message.",
+    "tab_order": "Signaler un problème de commande",
+    "tab_product": "Signaler un problème de produit"
   },
   "add_product_error": {
     "productImagesRequired": "Veuillez ajouter des images du produit",

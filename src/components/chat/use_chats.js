@@ -1,13 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { fetchChats, openChat, sendMessage, loadMoreMessages, startNewChat, markMessagesAsRead, fetchOrderByNumber } from "./chat_api";
 import { ORDER_STATUS } from "../utils/const/order_status";
 import { useAuth } from "../../context/AuthContext";
 
-export const useChats = (userId, partnerId, initialType, initialNumber) => {
+export const useChats = (userId, partnerId, initialType, initialNumber, initialMessage) => {
   const { t } = useTranslation();
   const { token } = useAuth();
+  const hasInitializedFromMessage = useRef(false);
 
   const [activeChat, setActiveChat] = useState(null);
   const [newChatType, setNewChatType] = useState(initialType);
@@ -29,6 +30,31 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
   const [sidebarCurrentPage, setSidebarCurrentPage] = useState(1); // Pagination für Sidebar
   const [chatWindowCurrentPage, setChatWindowCurrentPage] = useState(1); // Pagination für Chat-Fenster
   const PAGE_LIMIT = 5;
+
+  useEffect(() => {
+    if (initialNumber || initialMessage) {
+      setSidebarCurrentPage(1);
+    }
+  }, [initialNumber, initialMessage]);
+
+  useEffect(() => {
+    if (
+      hasInitializedFromMessage.current ||
+      !userId ||
+      (!initialMessage?.trim() && !initialNumber?.trim())
+    ) {
+      return;
+    }
+
+    hasInitializedFromMessage.current = true;
+    if (initialMessage) setNewMessage(initialMessage);
+
+    // We don't call setIsNewChat(true) here anymore to keep it lazy.
+    // The loadChats logic will handle creating a temp chat if needed.
+    setIsChatWindowActive(true);
+    setIsSidebarHidden(isMobile);
+
+  }, [initialMessage, initialNumber, userId, isMobile]);
 
 
   const handleOpenChat = (chatId) => {
@@ -69,14 +95,20 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
       const sellerIdFromStorage = role === "seller" ? userId : partnerId;
 
       if (userId) {
-        const result = await fetchChats(role, userId, sellerIdFromStorage, newChatType, sidebarCurrentPage, token);
+        const result = await fetchChats(role, userId, sellerIdFromStorage, initialType || newChatType, sidebarCurrentPage, token);
         if (result.success) {
           const data = result.data;
           let currentChats = data.chats;
 
-          // Check for initial chat from navigation
-          if (initialNumber && initialType) {
-            const existingChat = currentChats.find(c => c.number === initialNumber && c.type === initialType);
+          // Handle initial chat priority on page 1
+          if (sidebarCurrentPage === 1 && initialNumber?.trim()) {
+            // Distinguish between seller/user and user/admin chats using partnerId
+
+            const existingChat = currentChats.find(c =>
+              c.number === initialNumber &&
+              c.type === (initialType || newChatType) &&
+              (c.sellerId === partnerId || c.userId === partnerId)
+            );
 
             if (existingChat) {
               if (activeChat?._id !== existingChat._id) {
@@ -84,22 +116,41 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
                 handleOpenChat(existingChat._id);
               }
             } else {
+
               const tempId = "temp_" + Date.now();
-              const alreadyExists = chats.find(c => c.number === initialNumber && c.type === initialType && c._id.startsWith("temp_"));
+
+              const alreadyExists = chats.find(c =>
+                c.number === initialNumber &&
+                c.type === (initialType || newChatType) &&
+                c._id.startsWith("temp_") &&
+                (c.sellerId === partnerId || c.userId === partnerId)
+              );
 
               if (!alreadyExists) {
+                const role = localStorage.getItem("role");
+                let tempSellerId = partnerId;
+                let tempUserId = userId;
+
+                if (role === "seller") {
+                  tempSellerId = userId;
+                  tempUserId = partnerId;
+                }
+
                 const tempChat = {
                   _id: tempId,
-                  type: initialType,
+                  type: initialType || newChatType,
                   number: initialNumber,
                   updatedAt: new Date().toISOString(),
                   messages: [],
-                  participants: [userId]
+                  participants: [userId, partnerId],
+                  userId: tempUserId,
+                  sellerId: tempSellerId
                 };
                 currentChats = [tempChat, ...currentChats];
                 setActiveChat(tempChat);
                 handleOpenChat(tempId);
               }
+
             }
           }
 
@@ -113,6 +164,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
 
     loadChats();
   }, [userId, partnerId, newChatType, sidebarCurrentPage, initialNumber, initialType]);
+
 
   const handlePageChange = (pageNumber) => {
     setSidebarCurrentPage(pageNumber);
@@ -130,6 +182,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
     }
 
     setChatWindowCurrentPage(1);
+    if (!chatId || !userId || !token) return;
     const result = await openChat(chatId, userId, PAGE_LIMIT, token);
     if (result.success) {
       const data = result.data;
@@ -184,6 +237,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
   };
 
   const startNewChatAndSendMessage = async (message) => {
+    setSidebarCurrentPage(1);
     const role = localStorage.getItem("role");
     if (!userId) return toast.error(t("must_login"));
 
@@ -221,7 +275,7 @@ export const useChats = (userId, partnerId, initialType, initialNumber) => {
       setActiveChat(chatResult.data);
 
       if (message.trim()) {
-        const msgResult = await sendMessage(chatResult.data._id, userId, message);
+        const msgResult = await sendMessage(chatResult.data._id, userId, message, token);
         if (msgResult.success) {
           setActiveChat(msgResult.data);
           setChats(prev => prev.map(c => c._id === chatResult.data._id ? msgResult.data : c));
