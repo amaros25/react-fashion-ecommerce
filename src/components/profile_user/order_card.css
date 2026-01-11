@@ -130,6 +130,37 @@
     direction: rtl !important;
 }
 
+
+.order-report-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: #b91c1c;
+    background-color: #fee2e2;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.order-report-container:hover {
+    color: #7f1d1d;
+    background-color: #fecaca;
+}
+
+.report-order-icon {
+    width: 14px;
+    height: 14px;
+    fill: #b91c1c;
+    transition: transform 0.2s;
+}
+
+.order-report-container:hover .report-order-icon {
+    transform: scale(1.2);
+}
+
 @media (max-width: 768px) {
     .seller-actions-row {
         flex-direction: column;

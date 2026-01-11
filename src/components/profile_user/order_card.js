@@ -7,9 +7,12 @@ import { ORDER_STATUS } from "../utils/const/order_status";
 import { FaTimes, FaStar } from "react-icons/fa";
 import OrderRatingModal from "./OrderRatingModal";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { FaExclamationCircle } from "react-icons/fa";
 
 export default function OrderCard({ order, products, t, onStatusChange, onRatingComplete }) {
   const { i18n } = useTranslation();
+  const navigate = useNavigate();
   const [showRatingModal, setShowRatingModal] = React.useState(false);
   const userId = localStorage.getItem("userId");
   const [hasRated, setHasRated] = React.useState(order.isRated || false);
@@ -121,17 +124,26 @@ export default function OrderCard({ order, products, t, onStatusChange, onRating
     })
     : '';
 
+  const goToHelpCenter = () => {
+    navigate("/help-center", { state: { orderNumber: order.orderNumber } });
+  };
+
   return (
     <div className="user-order-card">
       <div className="order-card-header">
         <div className={`order-header-left ${i18n.language === "ar" ? "rtl-fix" : ""}`}>
-          <span className="order-id-label">{t("order_id")}</span>
+          <span className="order-id-label">{t("orderNumber")}</span>
           <span className="order-id-value">{order.orderNumber}</span>
           {formattedDate && <span className="order-date">• {formattedDate}</span>}
+
         </div>
         <div className={`order-header-right ${i18n.language === "ar" ? "rtl-fix" : ""}`}>
           <span className="order-total-label">{t("cart_page.total")}:</span>
           <span className="order-total-value">€{order.totalPrice.toFixed(3)}</span>
+          <div className={`order-report-container`} onClick={goToHelpCenter}>
+            <FaExclamationCircle className="report-order-icon" />
+            <span className="report-text">{t("report_order") || "Report Problem"}</span>
+          </div>
         </div>
       </div>
 

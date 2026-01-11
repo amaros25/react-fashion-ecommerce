@@ -8,6 +8,6 @@ router.get("/", verifyToken, userController.getAllUsers);
 router.get("/:id", verifyToken, userController.getUserById);
 router.post("/create", userController.createUser); // Registration remains public
 router.patch("/:id/updateContact", verifyToken, userController.updateUser);
-router.put("/:id/updateImage", verifyToken, userController.updateUserImage);
+router.put("/:id/updateImage", userController.updateUserImage);
 
 module.exports = router;

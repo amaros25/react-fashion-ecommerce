@@ -19,7 +19,7 @@ router.put('/:id', verifyToken, sellerController.updateSeller);
 // POST: Rate seller
 router.post('/:id/rate', verifyToken, sellerController.rateSeller);
 
-router.put("/:id/updateImage", verifyToken, sellerController.updateSellerImage);
+router.put("/:id/updateImage", sellerController.updateSellerImage);
 
 router.get("/:sellerId/bills", verifyToken, sellerController.getSellerBills);
 

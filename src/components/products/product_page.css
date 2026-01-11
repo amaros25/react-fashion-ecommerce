@@ -8,13 +8,15 @@
 
 .product-main-content {
   display: flex;
-  gap: 60px;
+  gap: 40px;
   align-items: flex-start;
 }
 
 .product-left-column {
   flex: 1.2;
   position: sticky;
+
+  max-width: 50%;
   top: 20px;
 }
 
@@ -295,9 +297,8 @@
 
 /* Seller Section */
 .seller-section-container {
-  margin-top: 40px;
+  margin-top: 20px;
   padding-top: 30px;
-  border-top: 1px solid #eee;
 }
 
 .seller-section-title {

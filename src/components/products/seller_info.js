@@ -12,6 +12,19 @@ function SellerInfo({ seller }) {
   if (seller.image && seller.image.length > 0) {
     sellerImage = seller.image[seller.image.length - 1].imageUrl;
   }
+
+  let sellerCity = "";
+  let SellerSubCity = "";
+  if (Array.isArray(seller.address) && seller.address.length > 0) {
+    seller.address = seller.address[seller.address.length - 1];
+    sellerCity = cities[seller.address.city];
+    SellerSubCity = citiesData[cities[seller.address.city]][seller.address.subCity]
+  } else {
+    sellerCity = cities[seller.address.city];
+    SellerSubCity = citiesData[cities[seller.address.city]][seller.address.subCity]
+    console.log("Seller Info: ", sellerCity, SellerSubCity)
+  }
+  ;
   return (
     <div className="seller-info-card">
       {sellerImage && (
@@ -51,19 +64,13 @@ function SellerInfo({ seller }) {
           </div>
         </div>
         <div className="seller-card-meta">
-          <span className="seller-card-owner">{seller.firstName} {seller.lastName}</span>
           <div className="seller-card-location">
             <FaMapMarkerAlt className="location-icon" />
-            {seller.address && seller.address.length > 0 ? (
-              <span>
-                {citiesData[cities[seller.address[seller.address.length - 1].city]][seller.address[seller.address.length - 1].subCity]},&nbsp;
-                {cities[seller.address[seller.address.length - 1].city]}
-              </span>
-            ) : (
-              <span>No address set</span>
-            )}
+            <span>
+              {SellerSubCity},&nbsp;
+              {sellerCity}
+            </span>
           </div>
-
         </div>
       </div>
     </div >

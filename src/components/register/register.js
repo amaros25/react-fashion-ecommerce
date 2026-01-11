@@ -10,11 +10,11 @@ import useRegisterApi from "./hooks/useRegisterApi";
 import { Link } from "react-router-dom";
 import ValidateRegisterForm from "./validateregisterform";
 import { generateRegisterPayload } from "./generate_payload";
+import useProfileImageUpload from "../upload_image_profile/upload_image_profile";
 
 function Register() {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const cloudName = process.env.REACT_APP_CLOUD_NAME;
-  const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
+
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
@@ -29,8 +29,8 @@ function Register() {
   const [error, setError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-  const { uploadImage, registerUser, updateImage } = useRegisterApi(cloudName, uploadPreset);
-
+  const { registerUser } = useRegisterApi();
+  const { uploadProfileImage } = useProfileImageUpload(t);
   const cmandiLink = "/agb";
   const privacyLink = "/data_protection";
 
@@ -106,36 +106,7 @@ function Register() {
     toast.error(message);
   };
 
-  const upload_profile_image = async (userId) => {
-    if (!imageFile) {
-      console.log("No Image Selected");
-      return;
-    }
-    try {
-      const imageUrl = imageFile ? await uploadImage(imageFile) : "";
-      if (!imageUrl) {
-        console.error("Image upload failed");
-        toast.error(t("register.error.image_upload_failed"));
-        return;
-      }
-      let endpoint = "";
-      if (role === "seller") {
-        endpoint = `${apiUrl}/sellers/${userId}/updateImage`;
-      } else {
-        endpoint = `${apiUrl}/users/${userId}/updateImage`;
-      }
-      const updateResponse = await updateImage(endpoint, { imageUrl });
-      if (!updateResponse.success) {
-        console.error("Error updating image URL in DB:", updateResponse.error);
-      } else {
-        console.log("Image updated successfully");
-        toast.success(t("register.image_updated_successfully"));
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error.message);
-      toast.error(t("register.error.image_upload_failed"));
-    }
-  };
+
 
   const handleSubmit = async (e) => {
     console.log("handleSubmit formData: ", formData);
@@ -151,7 +122,8 @@ function Register() {
       const response = await registerUser(endpoint, payload);
       console.log("response: ", response);
       if (response.success) {
-        upload_profile_image(response.userId);
+
+        await uploadProfileImage(imageFile, response.userId, role);
         toast.success(t("register.user_created_successfully"));
         navigate("/login");
       } else {

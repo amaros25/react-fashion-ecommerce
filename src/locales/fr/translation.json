@@ -164,7 +164,9 @@
     "submit_review": "Soumettre l'avis",
     "stock_limit_reached": "Vous avez déjà le stock maximum disponible dans votre panier.",
     "in_cart": "dans le panier",
-    "currently": "Actuellement"
+    "currently": "Actuellement",
+    "show_less": "Afficher moins",
+    "show_more": "Afficher plus"
   },
   "cart_page": {
     "title": "Votre Panier",
@@ -722,5 +724,6 @@
   "fetch_order_failed": "Échec de la récupération des données de la commande.",
   "fetch_products_failed": "Échec de la récupération des produits.",
   "no_seller_id": "Aucun identifiant de vendeur fourni.",
-  "fetch_related_products_failed": "Échec de la récupération des produits connexes."
+  "fetch_related_products_failed": "Échec de la récupération des produits connexes.",
+  "report_order": "Signaler la commande"
 }

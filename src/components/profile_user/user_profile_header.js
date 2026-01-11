@@ -1,20 +1,23 @@
 import "./user_profile_header.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { cities, citiesData } from '../utils/const/cities';
 import { FaTrash, FaExclamationTriangle, FaMapMarkerAlt, FaPhone } from 'react-icons/fa';
+import useProfileImageUpload from "../upload_image_profile/upload_image_profile";
 
-function ProfileHeader({ user, totalOrders, openOrders }) {
+
+function ProfileHeader({ user }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem("token");
-
+  const fileInputRef = useRef(null);
   const [showSettings, setShowSettings] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [userImage, setUserImage] = useState('');
+  const { uploadProfileImage } = useProfileImageUpload(t);
   const [formData, setFormData] = useState({
     address: "",
     city: "",
@@ -57,9 +60,9 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
       }
     };
     fetchUnreadMessages();
-    if (user.image && user.image.length > 0) {
-      const lastImage = user.image[user.image.length - 1].imageUrl;
-      setUserImage(lastImage);
+    console.log("ProfileHeader user: ", user);
+    if (user.image) {
+      setUserImage(user.image);
     }
   }, [user, apiUrl, token]);
 
@@ -164,6 +167,34 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
     toast.info("Delete account functionality is currently disabled (logged to console).");
   };
 
+
+
+  const handleProfileImageClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleProfileImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      // Bild hochladen
+      const userId = user.userId || user._id;
+      const role = "shoper"; // oder "seller", falls relevant
+      await uploadProfileImage(file, userId, role);
+
+      // Vorschau aktualisieren
+      const reader = new FileReader();
+      reader.onload = () => setUserImage(reader.result);
+      reader.readAsDataURL(file);
+
+      toast.success(t("Profile image updated successfully") || "Profile image updated successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error(t("Failed to upload image") || "Failed to upload image");
+    }
+  };
+
   return (
     <div className="user-profile-header-container">
       {!user.active && (
@@ -178,8 +209,16 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
       <div className="user-profile-minimal-card">
         <div className="user-profile-top-row">
           <div className="user-profile-identity">
-            <div className="user-avatar-minimal">
+            <div className="user-avatar-minimal" onClick={handleProfileImageClick} style={{ cursor: "pointer" }}>
               <img src={userImage || '/default-avatar.png'} alt={user.firstName} />
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleProfileImageChange}
+              />
+
             </div>
             <div className="user-info-minimal">
               <h1 className="user-name-minimal">{user.firstName} {user.lastName}</h1>
@@ -211,19 +250,7 @@ function ProfileHeader({ user, totalOrders, openOrders }) {
           </div>
         </div>
 
-        <div className="user-stats-minimal">
-          <div className="stat-item-minimal">
-            <span className="stat-value">{totalOrders}</span>
-            <span className="stat-label">{t("total_orders") || "Total Orders"}</span>
-          </div>
-          <div className="stat-separator"></div>
-          <div className="stat-item-minimal">
-            <span className="stat-value">{openOrders}</span>
-            <span className="stat-label">{t("open_orders") || "Open Orders"}</span>
-          </div>
-        </div>
       </div>
-
       {/* Settings Modal */}
       {showSettings && (
         <div className="user-modal-overlay">

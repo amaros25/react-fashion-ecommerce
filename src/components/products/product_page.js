@@ -238,6 +238,16 @@ function ProductPage() {
             setMainImage={setMainImage}
             product={product}
           />
+
+          {/* Seller Info Section */}
+          <div
+            className="seller-section-container"
+            onClick={() => seller && navigate(`/shop/${seller.slug || seller._id}`)}
+            style={{ cursor: 'pointer' }}
+          >
+            <h3 className="seller-section-title">{t("product_page.explore_seller")}</h3>
+            <SellerInfo seller={seller} />
+          </div>
         </div>
 
         {/* Right Column: Info & Actions */}
@@ -312,12 +322,12 @@ function ProductPage() {
               <p className={showFullDescription ? "expanded" : "collapsed"}>
                 {product.description}
               </p>
-              {product.description && product.description.length > 150 && (
+              {product.description && product.description.length > 250 && (
                 <button
                   className="show-more-btn"
                   onClick={() => setShowFullDescription(!showFullDescription)}
                 >
-                  {showFullDescription ? "Show Less" : "Show More"}
+                  {showFullDescription ? (t("product_page.show_less")) : (t("product_page.show_more"))}
                 </button>
               )}
             </div>
@@ -344,15 +354,6 @@ function ProductPage() {
 
 
 
-            {/* Seller Info Section */}
-            <div
-              className="seller-section-container"
-              onClick={() => seller && navigate(`/shop/${seller.slug || seller._id}`)}
-              style={{ cursor: 'pointer' }}
-            >
-              <h3 className="seller-section-title">{t("product_page.explore_seller")}</h3>
-              <SellerInfo seller={seller} />
-            </div>
 
           </div>
         </div>

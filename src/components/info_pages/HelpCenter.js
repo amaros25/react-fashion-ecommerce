@@ -5,9 +5,11 @@ import { toast } from "react-toastify";
 import { FaPaperPlane, FaBox, FaTshirt, FaComments } from "react-icons/fa";
 import { fetchOrderByNumber } from "../chat/chat_api";
 import "./HelpCenter.css";
+import { useLocation } from "react-router-dom";
 
 const HelpCenter = () => {
     const { t, i18n } = useTranslation();
+    const location = useLocation();
     const navigate = useNavigate();
     const userId = localStorage.getItem("userId");
     const role = localStorage.getItem("role"); // 1 = User / Buyer, 2 = Seller
@@ -17,7 +19,7 @@ const HelpCenter = () => {
     const [form, setForm] = useState({
         message: "",
         productNumber: "",
-        orderNumber: ""
+        orderNumber: location.state?.orderNumber || ""
     });
     const [loading, setLoading] = useState(false);
 

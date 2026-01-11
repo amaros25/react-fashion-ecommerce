@@ -6,7 +6,7 @@ export const useOrderRating = (order, onRatingComplete) => {
     const { t } = useTranslation();
     const apiUrl = process.env.REACT_APP_API_URL;
     const userId = localStorage.getItem("userId");
-
+    const token = localStorage.getItem("token");
     const [sellerRating, setSellerRating] = useState(0);
     const [seller, setSeller] = useState(null);
     const [productRatings, setProductRatings] = useState(
@@ -58,7 +58,10 @@ export const useOrderRating = (order, onRatingComplete) => {
             // 1. Submit Seller Rating
             const sellerRes = await fetch(`${apiUrl}/sellers/${order.sellerId}/rate`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({
                     userId,
                     orderId: order._id,
@@ -77,7 +80,10 @@ export const useOrderRating = (order, onRatingComplete) => {
                 const { rating, comment } = productRatings[item.productId];
                 const prodRes = await fetch(`${apiUrl}/products/${item.productId}/rate`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
                     body: JSON.stringify({ userId, rating, comment })
                 });
                 if (!prodRes.ok) console.error(`Failed to rate product ${item.productId}`);

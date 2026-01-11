@@ -18,20 +18,24 @@ exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "user_not_found" });
-
     let lastAddress = "";
     let lastPhone = "";
     if (Array.isArray(user.address) && user.address.length > 0) {
       lastAddress = user.address[user.address.length - 1];
     } else {
-      return res.status(400).json({ message: "user_no_address" });
+      lastAddress = "";
     }
     if (Array.isArray(user.phone) && user.phone.length > 0) {
       lastPhone = user.phone[user.phone.length - 1];
     } else {
-      return res.status(400).json({ message: "user_no_phone" });
+      lastPhone = "";
     }
-
+    let lastImage = "";
+    if (Array.isArray(user.image) && user.image.length > 0) {
+      lastImage = user.image[user.image.length - 1];
+    } else {
+      lastImage = "";
+    }
     res.json({
       userId: user._id,
       firstName: user.firstName,
@@ -42,7 +46,7 @@ exports.getUserById = async (req, res) => {
       city: lastAddress.city,
       subCity: lastAddress.subCity,
       active: user.active,
-
+      image: lastImage.imageUrl,
     });
   } catch (err) {
     res.status(500).json({ message: "server_error" });

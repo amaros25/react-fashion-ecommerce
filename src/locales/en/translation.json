@@ -170,7 +170,9 @@
         "submit_review": "Submit Review",
         "stock_limit_reached": "You already have the maximum available stock in your cart.",
         "in_cart": "in cart",
-        "currently": "Currently"
+        "currently": "Currently",
+        "show_less": "Show Less",
+        "show_more": "Show More"
     },
     "cart_page": {
         "title": "Your Cart",
@@ -733,5 +735,6 @@
     "fetch_order_failed": "Failed to fetch order data.",
     "fetch_products_failed": "Failed to fetch products.",
     "no_seller_id": "No seller ID provided.",
-    "fetch_related_products_failed": "Failed to fetch related products."
+    "fetch_related_products_failed": "Failed to fetch related products.",
+    "report_order": "Report Order"
 }

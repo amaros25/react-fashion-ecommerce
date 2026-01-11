@@ -288,49 +288,134 @@
             },
             {
                 "id": "product-page",
-                "title": "4. Voir les détails du produit",
-                "image": "/images/how-it-works/product-page.png",
-                "content": "La page de détails du produit fournit toutes les informations dont vous avez besoin pour prendre une décision d'achat éclairée.",
+                "title": "4. Consulter la page du produit",
+                "content": "La page du produit vous permet de consulter tous les détails nécessaires avant de passer commande.",
                 "steps": [
                     {
-                        "number": "①",
-                        "title": "Voir les images du produit",
-                        "description": "Parcourez les images du produit ① et cliquez pour zoomer pour un aperçu plus détaillé."
+                        "number": "1",
+                        "title": "Sélectionner un produit",
+                        "description": "Choisissez un produit en cliquant sur n’importe quelle zone de la carte produit. ①",
+                        "image": "/images/how-it-works/product/fr/product_1.png"
                     },
                     {
-                        "number": "②",
-                        "title": "Sélectionner la taille",
-                        "description": "Choisissez votre Taille ② préférée dans le menu déroulant."
+                        "number": "2",
+                        "title": "Afficher les images du produit",
+                        "description": "La page du produit s’ouvre. L’image principale apparaît en grand ②, avec d’autres images en dessous ③. Cliquez sur une image pour l’afficher en grand.",
+                        "image": "/images/how-it-works/product/fr/product_2.png"
                     },
                     {
-                        "number": "③",
-                        "title": "Sélectionner la couleur",
-                        "description": "Choisissez votre Couleur ③ souhaitée parmi les échantillons de couleurs disponibles."
+                        "number": "3",
+                        "title": "Informations principales du produit",
+                        "description": "À côté des images se trouve le titre du produit ①. Un symbole permet d’enregistrer le produit dans vos favoris ②. En dessous, le statut du produit ③ est affiché : « actif » (produit disponible), « en attente » (produit non encore validé par l’administrateur), « bloqué » (produit bloqué) ou « supprimé » (produit supprimé par le vendeur). Le numéro du produit ④ est également affiché et doit être utilisé en cas de réclamation.",
+                        "image": "/images/how-it-works/product/fr/product_3.png"
                     },
                     {
-                        "number": "④",
-                        "title": "Choisir la quantité",
-                        "description": "Ajustez la Quantité ④ à l'aide des boutons +/- en fonction du stock disponible."
+                        "number": "4",
+                        "title": "Prix et évaluations du produit",
+                        "description": "Le prix du produit est affiché en Dinar ⑤. À droite, vous pouvez voir la note moyenne du produit ⑥. Dans cet exemple,  le produit a reçu deux avis avec une moyenne de 5 étoiles."
                     },
                     {
-                        "number": "⑤",
-                        "title": "Ajouter au panier",
-                        "description": "Cliquez sur Ajouter au panier ⑤ pour enregistrer l'article pour un paiement ultérieur."
+                        "number": "5",
+                        "title": "Choisir la taille, la couleur et la quantité",
+                        "description": "Sélectionnez une taille ⑦ disponible, puis les couleurs ⑧ correspondantes s’affichent. Ajustez la quantité ⑨ à l’aide des boutons + et −. La quantité minimale de commande est 1.",
+                        "image": "/images/how-it-works/product/fr/product_4.png"
                     },
                     {
-                        "number": "⑥",
-                        "title": "Acheter maintenant",
-                        "description": "Cliquez sur Acheter maintenant ⑥ pour procéder directement au paiement avec cet article."
+                        "number": "6",
+                        "title": "Description du produit",
+                        "description": "Sous cette section, vous trouverez la description détaillée du produit ⑩."
                     },
                     {
-                        "number": "⑦",
-                        "title": "Voir les informations du vendeur",
-                        "description": "Consultez les informations du vendeur ⑦, y compris son nom, sa note et ses avis."
+                        "number": "7",
+                        "title": "Avis des utilisateurs",
+                        "description": "À côté du titre « Avis », vous pouvez voir le nombre total d’évaluations ①. En ouvrant cette section, vous verrez le nombre d’étoiles attribuées par les utilisateurs ainsi que leurs commentaires.",
+                        "image": "/images/how-it-works/product/fr/product_5.png"
                     },
                     {
-                        "number": "⑧",
-                        "title": "Lire la description",
-                        "description": "Consultez la description détaillée du produit ⑧ pour en savoir plus sur les matériaux, les instructions d'entretien et les caractéristiques."
+                        "number": "8",
+                        "title": "Boutons de commande",
+                        "description": "Deux boutons sont disponibles : « Ajouter au panier » ② pour enregistrer le produit dans le panier, et « Acheter maintenant » ③ pour ajouter le produit au panier et accéder directement à la page du panier."
+                    },
+                    {
+                        "number": "9",
+                        "title": "Informations sur la boutique",
+                        "description": "Sous les images du produit se trouvent le nom de la boutique vendeuse ④ et sa note. La note de la boutique est différente de celle du produit. En cliquant sur le nom de la boutique, vous êtes redirigé vers la page de la boutique du vendeur, où vous pouvez consulter ses informations ainsi que ses autres produits. Les utilisateurs peuvent évaluer la boutique et le produit après une commande réussie. Dans cet exemple, la boutique « Alia Shop » a reçu deux avis avec une moyenne de 5 étoiles. La ville et la délégation de la boutique sont également affichées."
+                    },
+                    {
+                        "number": "10",
+                        "title": "Produits similaires",
+                        "description": "Sous le produit, vous trouverez des produits similaires ① appartenant à la même catégorie et susceptibles de vous intéresser.",
+                        "image": "/images/how-it-works/product/fr/product_6.png"
+                    }
+                ]
+            },
+            {
+                "id": "user-profile",
+                "title": "5. Gérer votre profil utilisateur",
+                "content": "La page de profil utilisateur vous permet de consulter et gérer vos informations personnelles, vos messages, vos commandes et vos paramètres.",
+                "steps": [
+                    {
+                        "number": "1",
+                        "title": "Accéder à la page de connexion",
+                        "description": "Cliquez sur l’icône Profil ① dans le menu d’accès rapide en haut de la page. La page de connexion s’affiche.",
+                        "image": "/images/how-it-works/user_profile/fr/profile_1.png"
+                    },
+                    {
+                        "number": "2",
+                        "title": "Se connecter ou créer un compte",
+                        "description": "Connectez-vous en tant qu’utilisateur en utilisant votre e-mail ou votre numéro de téléphone ① ainsi que votre mot de passe ② enregistré. Si vous n’avez pas encore de compte, cliquez sur « S’inscrire » ③ pour créer un nouveau profil.",
+                        "image": "/images/how-it-works/user_profile/fr/profile_2.png"
+                    },
+                    {
+                        "number": "3",
+                        "title": "Accéder automatiquement à votre profil",
+                        "description": "Après vous être connecté, cliquez à nouveau sur l’icône Profil ④. Vous serez automatiquement redirigé vers votre page de profil utilisateur."
+                    },
+                    {
+                        "number": "4",
+                        "title": "Informations personnelles",
+                        "description": "Sur la partie gauche du profil, vous trouverez votre photo de profil ①. Cliquez dessus pour la modifier et télécharger une nouvelle image. À côté, votre nom et prénom sont affichés ②. En dessous figurent votre adresse e-mail ③, votre numéro de téléphone ④ et votre adresse ⑤.",
+                        "image": "/images/how-it-works/user_profile/fr/profile_3.png"
+                    },
+                    {
+                        "number": "5",
+                        "title": "Gestion du profil",
+                        "description": "Sur la partie droite du profil, trois options sont disponibles pour gérer votre compte : Messages ⑥, Paramètres ⑦ et Déconnexion ⑧."
+                    },
+                    {
+                        "number": "6",
+                        "title": "Messages",
+                        "description": "Cette option vous redirige vers la page de chat. Si vous avez reçu de nouveaux messages non lus, un numéro s’affiche afin de vous informer de la présence de nouveaux messages. ①",
+                        "image": "/images/how-it-works/user_profile/fr/profile_4.png"
+                    },
+                    {
+                        "number": "7",
+                        "title": "Paramètres",
+                        "description": "Cette section vous permet de modifier votre numéro de téléphone ①, votre adresse ②, votre ville ③ et votre délégation ④. Après toute modification, cliquez sur le bouton de confirmation pour enregistrer les changements ⑤. Vous pouvez également supprimer définitivement votre profil si vous décidez de quitter la plateforme ⑥.",
+                        "image": "/images/how-it-works/user_profile/fr/profile_5.png"
+                    },
+                    {
+                        "number": "8",
+                        "title": "Déconnexion",
+                        "description": "Si vous souhaitez vous déconnecter de votre compte, cliquez sur l’option « Déconnexion ». Vous serez alors automatiquement déconnecté de la plateforme."
+                    },
+                    {
+                        "number": "9",
+                        "title": "Liste des commandes",
+                        "description": "En bas de la page de profil, vous trouverez la liste de vos commandes. Elles sont triées par date, avec les commandes les plus récentes affichées en haut. À côté du titre « Vos commandes » ①, le nombre total de commandes est indiqué ②.",
+                        "image": "/images/how-it-works/user_profile/fr/profile_6.png"
+                    },
+                    {
+                        "number": "10",
+                        "title": "Détails d’une commande",
+                        "description": "Chaque commande possède un numéro unique ①, utile en cas de réclamation. La date et l’heure de la commande sont affichées ②. À droite, vous voyez le prix total ③: il inclut les frais de livraison pour les commandes livrées, ou uniquement le prix du produit en cas de retrait. Après la date, un bouton « Signaler un problème » ④ permet de contacter l’administrateur. Pour chaque commande, le produit commandé est affiché avec son image ⑤, son titre ⑥, la taille choisie ⑦, la couleur ⑧ et la quantité ⑨.",
+                        "image": "/images/how-it-works/user_profile/fr/profile_7.png"
+                    },
+                    {
+                        "number": "11",
+                        "title": "Statut de la commande",
+                        "description": "Chaque commande dispose d’un statut indiquant son état d’avancement. Chaque changement de statut est accompagné d’un horodatage. Après la validation d’une commande, son statut est automatiquement « en attente ». Tant que la commande est dans cet état, l’utilisateur peut l’annuler en cliquant sur le bouton « Annuler ». Pour plus d’informations, consultez la section « Statut des commandes ».",
+                        "image": "/images/how-it-works/user_profile/fr/profile_8.png"
                     }
                 ]
             }

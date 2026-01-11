@@ -42,25 +42,27 @@
   gap: 20px;
 }
 
-.section-header {
+.section-header-user-profile {
   display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 10px;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #dddcdc;
+  padding-bottom: 15px;
 }
 
-.section-header h3 {
+.section-header-user-profile h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a1a1a;
+  text-transform: uppercase;
   margin: 0;
-  white-space: nowrap;
+  letter-spacing: -0.5px;
 }
 
-.section-line {
-  height: 1px;
-  background-color: #e5e7eb;
-  width: 100%;
+.user-profile-collection-count {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
 }
 
 /* Pagination */

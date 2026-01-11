@@ -8,7 +8,6 @@ import ProfileUserOrders from "./profile_user_oders";
 import LoadingSpinner from "../loading/loading_spinner"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import OrderStatusStepper from "./order_status_stepper";
 import { useAuth } from "../../context/AuthContext";
 
 export default function ProfileUser() {
@@ -20,7 +19,9 @@ export default function ProfileUser() {
   const [currentPage, setCurrentPage] = useState(1);
   const [refreshOrders, setRefreshOrders] = useState(0);
   const ordersPerPage = 5;
-
+  console.log("ProfileUser apiUrl: ", apiUrl);
+  console.log("ProfileUser userId: ", userId);
+  console.log("ProfileUser token: ", token);
   const { user, fetchUser, loading, error } = useUserData(apiUrl, userId, token);
   console.log("ProfileUser token: ", token);
   console.log("ProfileUser userId: ", userId);
@@ -117,14 +118,14 @@ export default function ProfileUser() {
   return (
     <div className="profile-user-page">
       <div className="profile-user-container">
-        <UserProfileHeader user={user} totalOrders={totalOrders} openOrders={openOrders} t={t} />
+        <UserProfileHeader user={user} t={t} />
 
         <div className="profile-content-section">
-          <div className="section-header">
-            <h3>{t("your_orders")}</h3>
-            <div className="section-line"></div>
-          </div>
 
+          <div className="section-header-user-profile">
+            <h2>{t("your_orders")}</h2>
+            <span className="user-profile-collection-count">{totalOrders} {t("orders")}</span>
+          </div>
           <ProfileUserOrders
             orders={orders}
             products={products}

@@ -16,6 +16,7 @@ export const useUserData = (apiUrl, userId, token) => {
 
     const fetchUser = useCallback(async () => {
         if (!userId || !token) return;
+        console.log("Fetching user data...");
 
         setLoading(true);
         setError(null);
@@ -28,7 +29,7 @@ export const useUserData = (apiUrl, userId, token) => {
             if (!res.ok) {
                 throw new Error(res.status === 404 ? "user_not_found" : "fetch_user_failed");
             }
-
+            console.log("User data:", res);
             const data = await res.json();
             setUser(data);
         } catch (err) {
