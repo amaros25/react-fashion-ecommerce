@@ -69,7 +69,7 @@ const ChatWindow = ({
           )}
 
           {/* Messages List Area */}
-          <div className="messages" ref={messagesContainerRef} onScroll={handleScroll}>
+          <div className={`messages ${isRtl ? 'rtl' : ''}`} ref={messagesContainerRef} onScroll={handleScroll}>
             {/* "Load Older" button for pagination */}
             {hasMore && (
               <div className="load-more-container">

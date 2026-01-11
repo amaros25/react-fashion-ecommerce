@@ -9,7 +9,6 @@ import "./chat_sidebar.css";
 const ChatSidebar = ({
   chats = [],
   activeChat,
-  newChatType,
   setSidebarCurrentPage,
   sidebarCurrentPage,
   totalPages,

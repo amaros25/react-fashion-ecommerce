@@ -21,10 +21,16 @@ const MainChat = () => {
     newChatType: routeChatType,
     message
   } = location.state || {};
+  console.log("MainChat orderNumber", orderNumber);
+  console.log("MainChat sellerId", sellerId);
+  console.log("MainChat partnerId", partnerId);
+  console.log("MainChat routeChatType", routeChatType);
+  console.log("MainChat message", message);
 
   const [userId, setUserId] = useState(null);
   const [isChatFromOrderItem, setIsChatFromOrderItem] = useState(false);
-
+  console.log("MainChat userId", userId);
+  console.log("MainChat isChatFromOrderItem", isChatFromOrderItem);
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,6 +59,7 @@ const MainChat = () => {
     message || ""
   );
 
+  console.log("MainChat chatHook", chatHook);
   return (
     <div className="main-chat-container">
       <div className="main-chat">
