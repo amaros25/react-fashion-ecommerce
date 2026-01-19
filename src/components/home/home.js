@@ -110,7 +110,7 @@ const Home = () => {
 
       <div className="latest-product-list">
         {latestProducts.map((product) => (
-          <ProductCard key={product._id} product={product} />
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
 

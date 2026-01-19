@@ -1,42 +1,51 @@
+import imageCompression from 'browser-image-compression';
 
+/**
+ * Hook for uploading images to Cloudinary with automatic compression.
+ * Balances quality and file size for professional results.
+ */
 export default function useUploadImageApi(cloudName, uploadPreset) {
 
     const uploadImage = async (imageFile) => {
         if (!imageFile) return "";
-        const formData = new FormData();
-        formData.append("file", imageFile);
-        formData.append("upload_preset", uploadPreset);
-        console.log("uploadImage formData: ", formData);
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-            method: "POST",
-            body: formData,
-        });
-        if (!res.ok) throw new Error("Image upload failed");
-        const data = await res.json();
-        console.log("uploadImage data: ", data);
-        return data.secure_url;
-    };
 
-    const updateImage = async (endpoint, payload) => {
-        console.log("updateImage endpoint: ", endpoint);
-        console.log("updateImage payload: ", payload);
+        const options = {
+            maxSizeMB: 2,             // 2MB limit for high quality product/profile images
+            maxWidthOrHeight: 2048,   // 2K resolution (good for zoom)
+            useWebWorker: true,
+            initialQuality: 0.9,      // High initial quality (90%)
+        };
+
         try {
-            const res = await fetch(endpoint, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
+            // 1. Compress image locally in the browser
+            const compressedFile = await imageCompression(imageFile, options);
+
+            // 2. Prepare FormData
+            const formData = new FormData();
+            formData.append("file", compressedFile);
+            formData.append("upload_preset", uploadPreset); // Fixed name to match argument
+
+            // 3. Upload to Cloudinary
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+                method: "POST",
+                body: formData,
             });
+
+            if (!res.ok) throw new Error("Image upload failed");
+
             const data = await res.json();
-            console.log("data: ", data);
-            if (res.ok) {
-                return { success: true };
-            } else {
-                console.log("data.message: ", data.message);
-                return { success: false, error: data.message };
-            }
+
+            // Pro-Tip: Add Cloudinary optimization flags to the URL
+            // This ensures f_auto (WebP/AVIF) and q_auto (AI-compression) on delivery
+            const optimizedUrl = data.secure_url.replace("/upload/", "/upload/f_auto,q_auto/");
+
+            return optimizedUrl;
+
         } catch (error) {
-            return { success: false, error: error.message };
+            console.error("Image processing/upload failed:", error);
+            throw error; // Rethrow so the component can show a toast error
         }
     };
-    return { uploadImage, updateImage };
+
+    return { uploadImage };
 }

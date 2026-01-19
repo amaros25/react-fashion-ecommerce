@@ -198,6 +198,7 @@
         "delivery": "Delivery",
         "pickup": "Pickup",
         "delivery_address": "Delivery Address",
+        "customer": "Customer",
         "add_address": "Please add your delivery address",
         "missed_address_add_in_profile": "Please add your delivery address in your profile",
         "no_address_set": "No address set",
@@ -268,7 +269,7 @@
         "shipped": "Shipped",
         "delivered": "Delivered",
         "received": "Received",
-        "user_cancelled": "Cancelled",
+        "user_cancelled": "Cancelled by User",
         "seller_cancelled": "Cancelled by Seller",
         "failed_delivery": "Delivery Failed",
         "second_try": "Second Delivery Attempt",
@@ -738,5 +739,18 @@
     "fetch_products_failed": "Failed to fetch products.",
     "no_seller_id": "No seller ID provided.",
     "fetch_related_products_failed": "Failed to fetch related products.",
-    "report_order": "Report Order"
+    "report_order": "Report Order",
+    "product_pending_admin_conf": "This product is waiting for admin confirmation and cannot be ordered yet.",
+    "rating_available_after_24h": "Rating available after 24 hours from order receipt",
+    "user_status": {
+        "pending": "Your account is pending review.",
+        "active": "Account active",
+        "banned": "Your account has been banned. Please contact support.",
+        "deleted": "This account is marked for deletion.",
+        "verified": "Verified account",
+        "unverified": "Please verify your account."
+    },
+    "account_inactive_msg": "Your account is currently inactive. Please contact admin.",
+    "your_seller_rating": "Your seller rating",
+    "your_product_rating": "Your product rating"
 }

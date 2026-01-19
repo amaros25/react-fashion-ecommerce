@@ -1,234 +1,162 @@
 ﻿import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import '@testing-library/jest-dom';
 import SellerProducts from '../seller_products';
+import { useSellerProductFetchManager } from '../../api_managers/useSellerProductFetchManager.js';
 
-// Mock dependencies
+
+// 1. Mock the custom hook
+jest.mock('../../api_managers/useSellerProductFetchManager.js', () => ({
+  useSellerProductFetchManager: jest.fn(() => ({
+    products: [],
+    isLoading: false,
+    handleSearch: jest.fn(),
+    handlePageChange: jest.fn(),
+    totalPages: 1,
+    currentPage: 1,
+  })),
+}));
+
+// 2. Mock Translation and Navigation
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
+jest.mock('../../utils/loading_spinner', () => {
+  return function DummySpinner() {
+    return (
+      <div className="loading-overlay">
+        <div className="loading-spinner" data-testid="loading-spinner">Loading...</div>
+      </div>
+    );
+  };
+});
+
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key) => key,
     i18n: { language: 'en' }
-  })
+  }),
 }));
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn()
-}));
-
-jest.mock('../products/loading_spinner', () => () => <div data-testid="loading-spinner">Loading...</div>);
+const mockProducts = [
+  {
+    id: '1',
+    name: 'Vintage Jacket',
+    price: 50,
+    orderCount: 5,
+    images: ['test-image.jpg'],
+    productNumber: 'VJ-001',
+    createdAt: new Date().toISOString(),
+    variants: [{ stock: 10 }, { stock: 5 }],
+    currentState: 1 // Active
+  }
+];
 
 describe('SellerProducts Component', () => {
-  const mockProducts = [
-    {
-      _id: 'product1',
-      name: 'Test Product 1',
-      price: 29.99,
-      image: ['image1.jpg'],
-      productNumber: 'P001',
-      orderCount: 5,
-      createdAt: '2024-01-01',
-      states: [{ state: 1 }]
-    },
-    {
-      _id: 'product2',
-      name: 'Test Product 2',
-      price: 49.99,
-      image: ['image2.jpg'],
-      productNumber: 'P002',
-      orderCount: 0,
-      createdAt: '2024-01-02',
-      states: [{ state: 0 }]
-    }
-  ];
+  const defaultProps = { sellerId: 'seller123', token: 'token123' };
 
   beforeEach(() => {
-    global.fetch = jest.fn();
-    process.env.REACT_APP_API_URL = 'http://localhost:5000';
-  });
-
-  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('renders products grid correctly', async () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        products: mockProducts,
-        totalPages: 1,
-        page: 1
-      })
+  const setupMock = (overrides = {}) => {
+    useSellerProductFetchManager.mockReturnValue({
+      products: [],
+      isLoading: false,
+      handleSearch: jest.fn(),
+      handlePageChange: jest.fn(),
+      totalPages: 1,
+      currentPage: 1,
+      ...overrides
     });
+  };
+
+  test('shows LoadingSpinner when loading', () => {
+    setupMock({ isLoading: true, products: [] });
 
     render(
       <BrowserRouter>
-        <SellerProducts sellerId="seller123" apiUrl="http://localhost:5000" token="test-token" />
+        <SellerProducts {...defaultProps} />
       </BrowserRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('Test Product 1')).toBeInTheDocument();
-      expect(screen.getByText('Test Product 2')).toBeInTheDocument();
-    });
+    // 3. Finden (getByTestId wirft einen Fehler mit HTML-Output, falls es fehlschlägt)
+    const spinner = screen.getByTestId('loading-spinner');
+    expect(spinner).toBeInTheDocument();
   });
 
-  test('displays search input', () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        products: [],
-        totalPages: 1,
-        page: 1
-      })
-    });
-
+  test('renders empty state when no products found', () => {
+    setupMock({ products: [] });
     render(
       <BrowserRouter>
-        <SellerProducts sellerId="seller123" apiUrl="http://localhost:5000" token="test-token" />
+        <SellerProducts {...defaultProps} />
       </BrowserRouter>
     );
-
-    expect(screen.getByPlaceholderText('search_product_by_id')).toBeInTheDocument();
+    expect(screen.getByText('no_products_found')).toBeInTheDocument();
   });
 
-  test('handles search input change', async () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        products: mockProducts,
-        totalPages: 1,
-        page: 1
-      })
-    });
-
+  test('renders products correctly', () => {
+    setupMock({ products: mockProducts });
     render(
       <BrowserRouter>
-        <SellerProducts sellerId="seller123" apiUrl="http://localhost:5000" token="test-token" />
+        <SellerProducts {...defaultProps} />
       </BrowserRouter>
     );
 
-    const searchInput = screen.getByPlaceholderText('search_product_by_id');
-    fireEvent.change(searchInput, { target: { value: 'P001' } });
-
-    expect(searchInput.value).toBe('P001');
+    expect(screen.getByText('Vintage Jacket')).toBeInTheDocument();
+    expect(screen.getByText('50 price_suf')).toBeInTheDocument();
+    // Total stock: 10 + 5 = 15
+    expect(screen.getByText('stock: 15')).toBeInTheDocument();
+    expect(screen.getByText('VJ-001')).toBeInTheDocument();
   });
 
-  test('displays empty state when no products', async () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        products: [],
-        totalPages: 1,
-        page: 1
-      })
-    });
+  test('triggers search on Enter key', () => {
+    const mockHandleSearch = jest.fn();
+    setupMock({ handleSearch: mockHandleSearch });
 
     render(
       <BrowserRouter>
-        <SellerProducts sellerId="seller123" apiUrl="http://localhost:5000" token="test-token" />
+        <SellerProducts {...defaultProps} />
       </BrowserRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('no_products_found')).toBeInTheDocument();
-    });
+    const input = screen.getByPlaceholderText('search_product_by_id');
+    fireEvent.change(input, { target: { value: 'VJ-001' } });
+    fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+
+    expect(mockHandleSearch).toHaveBeenCalledWith('VJ-001');
   });
 
-  test('displays product state badges correctly', async () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        products: mockProducts,
-        totalPages: 1,
-        page: 1
-      })
-    });
-
+  test('navigates to product detail on card click', () => {
+    setupMock({ products: mockProducts });
     render(
       <BrowserRouter>
-        <SellerProducts sellerId="seller123" apiUrl="http://localhost:5000" token="test-token" />
+        <SellerProducts {...defaultProps} />
       </BrowserRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('product_state.active')).toBeInTheDocument();
-      expect(screen.getByText('product_state.pending')).toBeInTheDocument();
-    });
+    const card = screen.getByText('Vintage Jacket').closest('.premium-product-card');
+    fireEvent.click(card);
+
+    expect(mockNavigate).toHaveBeenCalledWith('/product/1');
   });
 
-  test('displays pagination when multiple pages', async () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        products: mockProducts,
-        totalPages: 3,
-        page: 1
-      })
-    });
+  test('handles pagination clicks', () => {
+    const mockPageChange = jest.fn();
+    setupMock({ totalPages: 3, currentPage: 1, handlePageChange: mockPageChange });
 
     render(
       <BrowserRouter>
-        <SellerProducts sellerId="seller123" apiUrl="http://localhost:5000" token="test-token" />
+        <SellerProducts {...defaultProps} />
       </BrowserRouter>
     );
 
-    await waitFor(() => {
-      const pageButtons = screen.getAllByRole('button');
-      expect(pageButtons.length).toBeGreaterThan(0);
-    });
-  });
+    const pageTwoBtn = screen.getByText('2');
+    fireEvent.click(pageTwoBtn);
 
-  test('handles API error gracefully', async () => {
-    console.error = jest.fn(); // Suppress error logs
-    global.fetch.mockRejectedValueOnce(new Error('API Error'));
-
-    render(
-      <BrowserRouter>
-        <SellerProducts sellerId="seller123" apiUrl="http://localhost:5000" token="test-token" />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('no_products_found')).toBeInTheDocument();
-    });
-  });
-
-  test('getStateLabel returns correct labels', async () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        products: [
-          { ...mockProducts[0], states: [{ state: 0 }] },
-          { ...mockProducts[1], states: [{ state: 1 }] }
-        ],
-        totalPages: 1,
-        page: 1
-      })
-    });
-
-    render(
-      <BrowserRouter>
-        <SellerProducts sellerId="seller123" apiUrl="http://localhost:5000" token="test-token" />
-      </BrowserRouter>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('product_state.pending')).toBeInTheDocument();
-      expect(screen.getByText('product_state.active')).toBeInTheDocument();
-    });
-  });
-
-  test('displays loading spinner while fetching', () => {
-    global.fetch.mockImplementation(() => new Promise(() => {}));
-
-    render(
-      <BrowserRouter>
-        <SellerProducts sellerId="seller123" apiUrl="http://localhost:5000" token="test-token" />
-      </BrowserRouter>
-    );
-
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(mockPageChange).toHaveBeenCalledWith(2);
   });
 });

@@ -1,0 +1,915 @@
+.profile-header-container {
+    width: 100%;
+    margin-block: 10px;
+    font-family: 'Inter', sans-serif;
+    padding-inline: 10px;
+}
+
+.user-status-banner {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-top: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ffeeba;
+}
+
+.banner-pending {
+    border: 1px solid #ffeeba;
+}
+
+.banner-banned,
+.banner-deleted {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.profile-minimal-card {
+    background: #ffffff;
+    padding: 20px 0 40px 0;
+}
+
+.profile-top-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+}
+
+.profile-identity {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.profile-avatar-minimal {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #f3f4f6;
+    flex-shrink: 0;
+}
+
+.profile-avatar-minimal img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info-minimal {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-name-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-name-minimal {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+}
+
+.profile-identity-details {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.rating-minimal {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9rem;
+    color: #111827;
+    font-weight: 600;
+}
+
+.star-icon-minimal {
+    color: #111827;
+    font-size: 0.85rem;
+}
+
+.rating-count {
+    color: #6b7280;
+    font-weight: 400;
+    font-size: 0.85rem;
+}
+
+.profile-email-minimal {
+    font-size: 0.95rem;
+    color: #000;
+    margin: 0;
+    font-weight: 400;
+}
+
+.profile-realname-minimal {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.profile-contact-minimal {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 16px;
+    border-top: 1px solid #000;
+    margin-top: 4px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: #000;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.rating-wrapper {
+    margin-bottom: 5px;
+}
+
+.contact-item svg {
+    color: #000;
+    opacity: 0.6;
+}
+
+.contact-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f3f4f6;
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: #4b5563;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.contact-pill svg {
+    color: #111827;
+    flex-shrink: 0;
+}
+
+.contact-pill:hover {
+    background: #e5e7eb;
+}
+
+.actions-minimal {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.action-btn-minimal {
+    background: transparent;
+    border: 1px solid #111827;
+    color: #111827;
+    width: 140px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    padding: 0;
+}
+
+.action-btn-minimal:hover {
+    background: #111827;
+    color: #fff;
+}
+
+.action-btn-minimal.logout {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.action-btn-minimal.logout:hover {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.badge-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid #fff;
+}
+
+.stats-minimal {
+    display: flex;
+    gap: 50px;
+}
+
+.stat-item-minimal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+/* Der äußere Container - sehr dezent */
+.seller-rating-header-zone {
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+    border-left: 1px solid #eee;
+    /* Trennung vom Rest des Headers */
+    padding-left: 12px;
+}
+
+/* Der goldene Badge (Edel & Flach statt Gradient) */
+.already-rated-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    /* Fast eckig wie bei Zara */
+    background-color: #fdfaf0;
+    /* Ganz zartes Champagner-Weiß */
+    border: 1px solid #f1e6c9;
+    /* Subtile Kante */
+}
+
+/* Text im Badge - Kleiner, feiner Schriftschnitt */
+.mini-label {
+    font-size: 12px;
+    font-weight: 400;
+    /* Weniger fett für High-End Look */
+    color: #8a7b52;
+    /* Sanftes Taupe-Gold */
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    /* Typischer Zara-Letter-Spacing */
+}
+
+/* Die Sterne - Winzig und elegant */
+.order-seller-rating-display {
+    display: flex;
+    gap: 1px;
+    font-size: 10px;
+    /* Sehr klein halten */
+}
+
+.star-active {
+    color: #c5a059;
+    /* Mattes Gold */
+}
+
+.order-seller-rating-display svg {
+    width: 10px;
+    /* Fixe kleine Größe für Icons */
+    height: 10px;
+}
+
+/* Der Button zum Bewerten (Minimalist Outline) */
+.rate-seller-btn-minimal {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: transparent;
+    border: 1px solid #111;
+    /* Schwarze dünne Linie wie Zara Logo */
+    color: #111;
+    padding: 3px 10px;
+    border-radius: 0px;
+    /* Komplett eckig für den Runway-Look */
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.rate-seller-btn-minimal:hover {
+    background: #111;
+    color: #fff;
+}
+
+.rate-seller-btn-minimal .icon {
+    font-size: 9px;
+}
+
+
+@media (max-width: 768px) {
+    .profile-info-minimal {
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-name-minimal {
+        font-size: 1.4rem;
+        justify-content: center;
+    }
+
+    .profile-contact-minimal {
+        width: 100%;
+        align-items: center;
+    }
+
+    .profile-header-container {
+        padding: 0 5px;
+    }
+
+    .profile-minimal-card {
+        padding: 15px 0 10px 0;
+        gap: 15px;
+    }
+
+    .profile-top-row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .profile-identity {
+        order: 1;
+        flex: 1;
+    }
+
+    .profile-avatar-minimal {
+        width: 80px;
+        height: 80px;
+    }
+
+    .rating-minimal {
+        font-size: 0.85rem;
+    }
+
+    .profile-email-minimal {
+        font-size: 0.85rem;
+    }
+
+    .actions-minimal {
+        order: 3;
+        flex-shrink: 0;
+    }
+
+    .action-btn-minimal {
+        padding: 8px 18px;
+        font-size: 0.8rem;
+    }
+
+    .stats-minimal {
+        order: 2;
+        padding-top: 0;
+        margin: 0 20px;
+    }
+
+    .stat-value {
+        font-size: 1.1rem;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+    }
+
+    .modal-header {
+        padding: 18px;
+    }
+
+    .modal-header h2 {
+        font-size: 1rem;
+    }
+
+    .profile-modal-body {
+        padding: 18px;
+    }
+
+    .profile-form-group {
+        margin-bottom: 15px;
+    }
+
+    .profile-form-group label {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+    }
+
+    .profile-form-group input,
+    .profile-form-group select {
+        padding: 9px;
+        font-size: 0.9rem;
+    }
+
+    .profile-form-row {
+        gap: 15px;
+    }
+
+    .profile-modal-footer {
+        padding: 15px 18px;
+    }
+
+    .save-btn {
+        padding: 9px 18px;
+        font-size: 0.85rem;
+    }
+
+    .profile-cancel-btn {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .profile-contact-minimal {
+        gap: 6px;
+    }
+
+    .contact-pill {
+        padding: 4px 10px;
+        font-size: 0.8rem;
+    }
+
+    .profile-header-container {
+        padding: 0 3px;
+    }
+
+    .profile-minimal-card {
+        padding: 12px 0 8px 0;
+        gap: 12px;
+    }
+
+    .profile-top-row {
+        gap: 15px;
+    }
+
+    .profile-avatar-minimal {
+        width: 70px;
+        height: 70px;
+    }
+
+    .profile-name-minimal {
+        font-size: 1.1rem;
+    }
+
+    .rating-minimal {
+        font-size: 0.8rem;
+    }
+
+    .star-icon-minimal {
+        font-size: 0.8rem;
+    }
+
+    .rating-count {
+        font-size: 0.75rem;
+    }
+
+    .profile-email-minimal {
+        font-size: 0.8rem;
+    }
+
+    .profile-contact-minimal {
+        gap: 6px;
+        margin-top: 6px;
+    }
+
+    .action-btn-minimal {
+        padding: 7px 14px;
+        font-size: 0.67rem;
+        min-width: 100px;
+    }
+
+    .badge-count {
+        font-size: 0.65rem;
+        min-width: 16px;
+        height: 16px;
+        top: -6px;
+        right: -6px;
+    }
+
+    .stats-minimal {
+        gap: 20px;
+        padding-top: 10px;
+    }
+
+    .stat-value {
+        font-size: 1rem;
+    }
+
+    .stat-label {
+        font-size: 0.65rem;
+    }
+
+    .modal-header {
+        padding: 15px;
+    }
+
+    .modal-header h2 {
+        font-size: 0.95rem;
+    }
+
+    .profile-close-modal-btn {
+        font-size: 20px;
+    }
+
+    .profile-modal-body {
+        padding: 15px;
+    }
+
+    .profile-form-group {
+        margin-bottom: 12px;
+    }
+
+    .profile-form-group label {
+        font-size: 0.75rem;
+        margin-bottom: 5px;
+    }
+
+    .profile-form-group input,
+    .profile-form-group select {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+
+    .profile-form-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .profile-modal-footer {
+        padding: 12px 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .profile-modal-actions-right {
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .profile-save-btn,
+    .profile-cancel-btn {
+        width: 100%;
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        text-align: center;
+    }
+
+    .profile-delete-account-link {
+        font-size: 0.8rem;
+        justify-content: center;
+    }
+
+    .stat-item-minimal .stat-label {
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-header-container {
+        padding: 0 2px;
+    }
+
+    .profile-minimal-card {
+        padding: 10px 0 6px 0;
+        gap: 10px;
+    }
+
+    .profile-top-row {
+        gap: 12px;
+    }
+
+    .profile-avatar-minimal {
+        width: 60px;
+        height: 60px;
+    }
+
+    .profile-name-minimal {
+        font-size: 1rem;
+    }
+
+    .rating-minimal {
+        font-size: 0.75rem;
+    }
+
+    .star-icon-minimal {
+        font-size: 0.7rem;
+    }
+
+    .rating-count {
+        font-size: 0.7rem;
+    }
+
+    .profile-email-minimal {
+        font-size: 0.75rem;
+    }
+
+    .action-btn-minimal {
+        padding: 6px 12px;
+        font-size: 0.65rem;
+        min-width: 90px;
+        min-height: 44px;
+    }
+
+    .badge-count {
+        font-size: 0.6rem;
+        min-width: 14px;
+        height: 14px;
+        top: -5px;
+        right: -5px;
+    }
+
+    .stats-minimal {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .stat-value {
+        font-size: 0.9rem;
+    }
+
+    .stat-label {
+        font-size: 0.6rem;
+    }
+
+    .modal-content {
+        max-width: 95%;
+        margin: 0 10px;
+    }
+
+    .modal-header {
+        padding: 12px;
+    }
+
+    .modal-header h2 {
+        font-size: 0.9rem;
+    }
+
+    .profile-close-modal-btn {
+        font-size: 18px;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .profile-modal-body {
+        padding: 12px;
+    }
+
+    .profile-form-group {
+        margin-bottom: 10px;
+    }
+
+    .profile-form-group label {
+        font-size: 0.7rem;
+        margin-bottom: 4px;
+    }
+
+    .profile-form-group input,
+    .profile-form-group select {
+        padding: 7px;
+        font-size: 0.8rem;
+        min-height: 44px;
+    }
+
+    .profile-modal-footer {
+        padding: 10px 12px;
+    }
+
+    .profile-save-btn,
+    .profile-cancel-btn {
+        padding: 7px 14px;
+        font-size: 0.75rem;
+        min-height: 44px;
+    }
+
+    .profile-delete-account-link {
+        font-size: 0.75rem;
+        min-height: 44px;
+    }
+}
+
+.profile-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(2px);
+}
+
+.profile-modal-content {
+    background: #fff;
+    width: 95%;
+    max-width: 650px;
+    padding: 40px;
+    border: 1px solid #000;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.profile-modal-header {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-modal-header h2 {
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.profile-close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #000;
+}
+
+.profile-modal-body {
+    padding-bottom: 20px;
+}
+
+.profile-form-group {
+    margin-bottom: 20px;
+}
+
+.profile-form-group label {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    margin-bottom: 8px;
+}
+
+.profile-form-group input,
+.profile-form-group select {
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 1px solid #000;
+    font-size: 14px;
+    border-radius: 0;
+    outline: none;
+    background: transparent;
+}
+
+.profile-form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.profile-form-group.half {
+    flex: 1;
+}
+
+.profile-modal-footer {
+    padding-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+}
+
+.profile-modal-actions-right {
+    display: contents;
+}
+
+.profile-save-btn,
+.profile-cancel-btn,
+.profile-delete-account-link {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 5px 8px;
+    box-sizing: border-box;
+    white-space: normal;
+    line-height: 1.1;
+    word-wrap: break-word;
+}
+
+.profile-save-btn {
+    background: transparent;
+    color: #000;
+    border: 1px solid #000;
+    padding-inline: 4px;
+}
+
+.profile-save-btn:hover {
+    background: #000;
+    color: #fff;
+}
+
+.profile-cancel-btn {
+    background: transparent;
+    border: 1px solid #ccc;
+    color: #666;
+}
+
+.profile-cancel-btn:hover {
+    border-color: #000;
+    color: #000;
+}
+
+.profile-delete-account-link {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    gap: 8px;
+}
+
+.profile-delete-account-link:hover {
+    background: #ef4444;
+    color: #fff;
+}

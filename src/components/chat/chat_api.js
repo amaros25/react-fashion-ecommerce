@@ -18,13 +18,9 @@ export const fetchChats = async (role, userId, sellerId, newChatType, currentPag
     let url = '';
 
     // Determine the correct endpoint based on the user's role
-    if (role === "admin") {
-      url = `${apiUrl}/chats/user/${userId}?role=admin&page=${currentPage}&limit=${limit}`;
-    } else {
-      url = role === "seller"
-        ? `${apiUrl}/chats/seller/${sellerId}?role=seller&page=${currentPage}&limit=${limit}`
-        : `${apiUrl}/chats/user/${userId}?role=user&page=${currentPage}&limit=${limit}`;
-    }
+    // In the PostgreSQL backend, /chats/user/:userId is the unified endpoint for both users and sellers
+    // because participants are stored as participant1Id and participant2Id
+    url = `${apiUrl}/chats/user/${userId}?page=${currentPage}&limit=${limit}`;
 
     const response = await fetch(url, {
       headers: getHeaders(token),
@@ -113,10 +109,16 @@ export const startNewChat = async (role, userId, sellerId, newChatType, number, 
 
     const payload = {
       type: newChatType,
-      number: number,
-      userId: userId || "admin",
-      sellerId: sellerId || "admin"
+      subjectNumber: number, // In PostgreSQL it is subjectNumber
+      participant1Id: userId || 1, // Participant1 is usually the user/buyer
+      participant2Id: sellerId || 1 // Participant2 is usually the seller
     };
+
+    // If it's an order chat, we also pass the orderId explicitly if possible
+    // (In current logic, number often is the order number)
+    if (newChatType === "order") {
+      // payload.orderId = ...
+    }
 
     const res = await fetch(`${apiUrl}/chats/create`, {
       method: "POST",
@@ -137,11 +139,12 @@ export const startNewChat = async (role, userId, sellerId, newChatType, number, 
 /**
  * Updates all messages in a chat as 'read' for the current user.
  */
-export const markMessagesAsRead = async (chatId, token) => {
+export const markMessagesAsRead = async (chatId, userId, token) => {
   try {
     const res = await fetch(`${apiUrl}/chats/${chatId}/messages/read`, {
       method: "PATCH",
       headers: getHeaders(token),
+      body: JSON.stringify({ userId }) // PostgreSQL expects userId to know who is reading
     });
 
     const data = await res.json();

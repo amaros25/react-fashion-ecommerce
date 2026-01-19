@@ -3,18 +3,19 @@ import "./product_images.css";
 
 function ProductImage({ mainImage, setMainImage, product }) {
   if (!product) return null;
+  const allImages = Array.isArray(product.images) ? product.images : [];
 
   return (
     <div className="product-images">
       <img
-        src={mainImage}
+        src={mainImage || "/placeholder-image.png"}
         alt={product.name}
         className="main-image"
         loading="lazy"
       />
       <div className="thumbnail-row">
-        {Array.isArray(product.image) && product.image.length > 0 ? (
-          product.image.map((img, index) => (
+        {allImages.length > 1 ? (
+          allImages.map((img, index) => (
             <img
               key={index}
               src={img}
@@ -25,13 +26,13 @@ function ProductImage({ mainImage, setMainImage, product }) {
             />
           ))
         ) : (
-          product.image && (
+          mainImage && (
             <img
-              src={product.image}
+              src={mainImage}
               alt={product.name}
               className="thumbnail active"
               loading="lazy"
-              onClick={() => setMainImage(product.image)}
+
             />
           )
         )}

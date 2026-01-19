@@ -1,3 +1,15 @@
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.product-name,
+.product-price,
+.product-color-desc {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    text-transform: uppercase;
+}
+
 /* Container style */
 .container {
     padding: 20px;
@@ -21,7 +33,7 @@
     position: relative;
     padding-bottom: 0;
     background-color: #EDEBEB;
-    border-radius: 12px;
+    border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08),
         0 8px 20px rgba(0, 0, 0, 0.06);
     overflow: hidden;
@@ -135,11 +147,12 @@
 .product-info .product-name {
     font-family: 'Inter', 'Helvetica Neue', sans-serif;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 500;
     color: #111;
     margin: 0;
     line-height: 1.4;
     text-transform: none;
+    letter-spacing: 0.5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -189,20 +202,18 @@
 
 .product-card-container .product-price {
     font-size: 15px;
-    font-weight: 600;
-    color: #111;
-    /* Default price black */
+    font-weight: 550;
+    color: #000;
 }
 
 .product-card-container .product-price.discounted {
     color: #d0021b;
-    /* Sale price red */
-    font-weight: 700;
-    font-size: 16px;
+    font-weight: 550;
+    font-size: 15px;
 }
 
 .product-price-original {
-    font-size: 13px;
+    font-size: 15px;
     text-decoration: line-through;
     color: #999;
     margin-right: 4px;
@@ -215,9 +226,7 @@
     font-weight: 600;
     padding: 2px 5px;
     border-radius: 0;
-    /* Boxy look for Zara style */
     margin-left: auto;
-    /* Push to right */
     letter-spacing: 0.5px;
 }
 

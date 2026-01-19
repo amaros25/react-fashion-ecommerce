@@ -4,8 +4,8 @@ import "./loading_spinner.css";
 
 function LoadingSpinner() {
   return (
-    <div className="loading-overlay">
-      <div className="loading-spinner"></div>
+    <div className="loading-overlay ">
+      <div className="loading-spinner" data-testid="loading-spinner"></div>
     </div>
   );
 }

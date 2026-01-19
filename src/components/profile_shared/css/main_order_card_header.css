@@ -1,0 +1,350 @@
+/* --- MAIN ORDER CARD HEADER (Scoping: moch-*) --- */
+
+/* Generic container/font */
+.moch-container {
+    padding: 0 0 16px 0;
+    border-bottom: 0.5px solid #e5e5e5;
+    margin-bottom: 20px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* DESKTOP LAYOUT (Default: Matches Original) */
+.moch-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.moch-left-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.moch-shop-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.moch-shop-name {
+    font-weight: 500;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #000;
+}
+
+
+/* Meta Data (ID, Date) */
+.moch-meta-wrapper {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    color: #888;
+    text-transform: uppercase;
+    align-items: center;
+}
+
+.moch-id-label {
+    color: inherit;
+    font-size: 13px;
+    /* Optional: Show or hide depending on preference, currently keeping visible for desktop consistency if needed */
+}
+
+.moch-date {
+    display: inline-block;
+    padding-left: 10px;
+    border-left: 0.5px solid #e5e5e5;
+}
+
+/* Badges */
+
+.moch-badge-wrapper {
+    padding-left: 8px;
+    border-left: 1px solid #ddd;
+    font-weight: 400;
+    color: #999;
+
+}
+
+.moch-badge {
+    padding: 2px 8px;
+    background-color: #ffffff;
+    color: #333;
+    font-size: 13px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    width: fit-content;
+}
+
+.moch-badge.delivery {
+    background-color: #d3e2f7;
+}
+
+.moch-badge.pickup {
+    background-color: #faebbc;
+}
+
+/* Right Section (Price, Report) */
+.moch-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.moch-right-section {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    flex-direction: column;
+}
+
+.moch-total-label {
+    /* Usually hidden or small */
+    font-size: 13px;
+    color: #888;
+    text-transform: uppercase;
+    margin-right: 4px;
+}
+
+.moch-price {
+    font-size: 14px;
+    font-weight: 400;
+    color: #000;
+    letter-spacing: 0.5px;
+}
+
+.moch-report-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+    color: #000000;
+    background-color: transparent;
+    border: 1px solid #e5e5e5;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 6px 8px;
+    border-radius: 0;
+    margin-top: 8px;
+}
+
+/* Icon Farbe erzwingen */
+.moch-report-link svg {
+    font-size: 12px;
+    color: inherit;
+}
+
+/* Hover Effekt: Invertieren oder Rahmen abdunkeln */
+.moch-report-link:hover {
+    border-color: #ee4c4c;
+    background-color: #fcfcfc;
+    color: #000;
+}
+
+/* Falls du den Text in einem span hast */
+.moch-report-link .report-text {
+    color: inherit;
+}
+
+/* Ratings */
+.moch-rating-zone {
+    display: flex;
+    align-items: center;
+}
+
+.moch-rated-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.moch-mini-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0px;
+}
+
+.moch-stars {
+    display: flex;
+    gap: 1px;
+}
+
+.moch-stars svg {
+    width: 12px;
+    height: 12px;
+}
+
+.star-active {
+    color: #c5a059;
+}
+
+.moch-rate-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 10px;
+    text-decoration: underline;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #666;
+}
+
+.moch-rate-btn:hover {
+    color: #000;
+}
+
+
+/* --- MOBILE / TABLET APP LAYOUT ( < 768px ) --- */
+@media (max-width: 768px) {
+    .moch-container {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        /* Left: Info, Right: Price/Action */
+        grid-template-rows: auto auto auto;
+        /* Rows: 1.Shop/Price, 2.Meta, 3.Badge/Rating */
+        row-gap: 6px;
+        /* Tighter gap for app feel */
+        align-items: start;
+        padding-bottom: 12px;
+        margin-bottom: 12px;
+    }
+
+    /* Flatten flex containers to generic block/contents so grid works */
+    .moch-left-section,
+    .moch-right-section {
+        display: contents;
+    }
+
+    /* ROW 1: Shop Name & Price */
+    .moch-shop-info {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: center;
+    }
+
+    .moch-shop-name {
+        font-size: 14px;
+        /* Slightly smaller than desktop for mobile balance */
+        font-weight: 600;
+        /* Bolder for hierarchy */
+    }
+
+    .moch-price {
+        grid-column: 2;
+        grid-row: 1;
+        font-size: 14px;
+        font-weight: 500;
+        align-self: center;
+        text-align: right;
+    }
+
+    .moch-total-label {
+        display: none;
+        /* Cleaner look */
+    }
+
+    /* ROW 2: Order ID & Date */
+    /* Since these are in the left section in DOM, we need to place them */
+    .moch-meta-wrapper {
+        grid-column: 1;
+        grid-row: 2;
+        /* Reset flex for specific mobile layout if needed, or keep flex row */
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 10px;
+        /* Small meta text */
+        color: #999;
+        margin-top: -2px;
+        /* Pull tighter to title */
+    }
+
+    .moch-id-label {
+        display: none;
+        /* Hide "Order #" label, just show number */
+    }
+
+    .moch-id-value {
+        font-family: 'Courier New', Courier, monospace;
+        /* Tech feel for ID */
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #555;
+    }
+
+    .moch-date {
+        padding-left: 8px;
+        border-left: 1px solid #ddd;
+        font-weight: 400;
+        color: #999;
+    }
+
+    /* Report Link: Moves to Row 2, Right side */
+    .moch-report-link {
+        grid-column: 2;
+        grid-row: 2;
+        justify-self: end;
+        align-self: center;
+    }
+
+    /* ROW 3: Badge & Ratings */
+    /* Badge */
+    .moch-badge {
+        grid-column: 1 / -1;
+        /* Span full if needed, or share with rating */
+        grid-row: 3;
+        align-self: center;
+        width: fit-content;
+        /* Override desktop margin */
+        margin-top: 4px;
+    }
+
+    /* If rating exists, place it next to badge or below? Let's put it next.
+       But DOM structure: badge is sibling of rating-zone? Checking JS...
+       Yes, both are in left-section.
+    */
+    /* Fix layout for Rating Zone & Badge in Row 3 */
+    .moch-rating-zone {
+        grid-column: 1 / -1;
+        grid-row: 3;
+        /* Note: We will override this specific placement below to prevent overlap */
+    }
+
+    /* We need to push the rating to the right of the badge visually. */
+    .moch-badge {
+        grid-column: 1;
+        grid-row: 3;
+        margin-right: 10px;
+    }
+
+    .moch-rating-zone {
+        grid-column: 1;
+        grid-row: 3;
+        margin-left: 70px;
+        /* Indent to avoid badge overlap */
+        margin-top: 4px;
+        padding-left: 0;
+        border-left: none;
+    }
+
+    /* Refine Rating Button for Mobile App Look */
+    .moch-rate-btn {
+        border: 1px solid #000;
+        padding: 4px 10px;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+}

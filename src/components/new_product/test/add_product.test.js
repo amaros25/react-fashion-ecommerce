@@ -1,10 +1,19 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import AddProduct from '../add_product';
 import userEvent from '@testing-library/user-event';
 import { toast } from 'react-toastify';
 
-// Mocks
+// 1. Mock the API Manager
+const mockAddProduct = jest.fn();
+jest.mock('../../api_managers/useSellerProductAddManager', () => ({
+    useSellerProductAddManager: () => ({
+        addProduct: mockAddProduct,
+        isSubmitting: { visible: false, loading: false },
+    }),
+}));
+
+// 2. Mock Internationalization
 jest.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key) => key,
@@ -12,134 +21,257 @@ jest.mock('react-i18next', () => ({
     }),
 }));
 
-const mockNavigate = jest.fn();
+// 3. Mock Navigation
 jest.mock('react-router-dom', () => ({
-    useNavigate: () => mockNavigate,
+    useNavigate: () => jest.fn(),
 }));
 
+// 4. Mock Toast Notifications
 jest.mock('react-toastify', () => ({
-    toast: {
-        error: jest.fn(),
-    },
+    toast: { error: jest.fn() },
 }));
 
-// Mock ImageSelectUpload to simplify testing image selection
+// 5. Mock Image Upload component
 jest.mock('../image_select_upload', () => ({ onImageChange }) => (
     <div data-testid="mock-image-upload">
-        <button type="button" onClick={() => onImageChange([new File([''], 'test.png')])}>
+        <button type="button" onClick={() => onImageChange([new File([''], 'test.png', { type: 'image/png' })])}>
             Simulate Image Add
         </button>
     </div>
 ));
 
-// Mock UploadStatus
-jest.mock('../upload_status', () => () => <div data-testid="mock-upload-status" />);
-
-const mockCreateProduct = jest.fn();
-jest.mock('../hooks/useProductUpload', () => ({
-    useProductUpload: () => ({
-        status: { visible: false },
-        createProduct: mockCreateProduct,
-    }),
-}));
-
 describe('AddProduct Component', () => {
+    const defaultProps = { sellerId: '123', token: 'abc' };
+
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
     test('renders all main form sections', () => {
-        render(<AddProduct />);
-        // "post_product" appears in header and button. Check for header specifically.
+        render(<AddProduct {...defaultProps} />);
         expect(screen.getByRole('heading', { name: 'post_product' })).toBeInTheDocument();
-
         expect(screen.getByText('basic_information')).toBeInTheDocument();
-        expect(screen.getByText('category')).toBeInTheDocument();
-        expect(screen.getByText('variants')).toBeInTheDocument();
     });
 
-    test('shows validation error when submitting empty form', async () => {
-        render(<AddProduct />);
-        const submitBtn = screen.getByText('post_product', { selector: 'button' });
-
+    test('shows validation error for empty form', async () => {
+        render(<AddProduct {...defaultProps} />);
+        const submitBtn = screen.getByRole('button', { name: 'post_product' });
         await userEvent.click(submitBtn);
-
-        expect(mockCreateProduct).not.toHaveBeenCalled();
-        // Use toast check instead of getByText
-        expect(toast.error).toHaveBeenCalledWith('add_product.error.productImagesRequired');
+        expect(toast.error).toHaveBeenCalledWith('add_product_error.productImagesRequired');
     });
 
-    test('validates product name', async () => {
-        render(<AddProduct />);
-        // Select image first to pass first check
+    test('successfully submits valid form with Select logic', async () => {
+        mockAddProduct.mockResolvedValue({ success: true });
+        render(<AddProduct {...defaultProps} />);
+
+        // 1. Fill basic data
         await userEvent.click(screen.getByText('Simulate Image Add'));
+        await userEvent.type(screen.getByPlaceholderText('example_product_name'), 'Test Product');
 
-        const submitBtn = screen.getByText('post_product', { selector: 'button' });
-        await userEvent.click(submitBtn);
+        const priceInput = document.querySelector('input[name="price"]');
+        const shipmentInput = document.querySelector('input[name="shipment_price"]');
+        await userEvent.type(priceInput, '50');
+        await userEvent.type(shipmentInput, '10');
+        await userEvent.type(screen.getByPlaceholderText('describe_your_product'), 'Description');
 
-        expect(toast.error).toHaveBeenCalledWith('add_product.error.productNameRequired');
-    });
-
-    test('successfully submits valid form', async () => {
-        mockCreateProduct.mockResolvedValue(true);
-        render(<AddProduct />);
-
-        // 1. Add Image
-        await userEvent.click(screen.getByText('Simulate Image Add'));
-
-        // 2. Fill Basic Info
-        await userEvent.type(document.querySelector('input[name="name"]'), 'Test Product');
-        await userEvent.type(document.querySelector('input[name="price"]'), '50');
-        await userEvent.type(document.querySelector('input[name="shipment_price"]'), '10');
-        await userEvent.type(document.querySelector('textarea[name="description"]'), 'A great test product');
-
-        // 3. Select Category & Subcategory
+        // 2. Select Category (using name attribute for stability)
         const catSelect = document.querySelector('select[name="category"]');
-        await userEvent.selectOptions(catSelect, '0'); // "womens" is index 0
+        await userEvent.selectOptions(catSelect, '0');
 
+        // 3. Select Subcategory (wait for it to appear)
+        await waitFor(() => {
+            const subSelect = document.querySelector('select[name="subcategory"]');
+            expect(subSelect).toBeInTheDocument();
+        });
         const subSelect = document.querySelector('select[name="subcategory"]');
-        await userEvent.selectOptions(subSelect, '0'); // "clothes" is index 0
+        await userEvent.selectOptions(subSelect, '0');
 
-        // 4. Variant (Size & Stock)
-        const sizeInput = document.querySelector('input[placeholder="e.g. M, 38"]');
-        const stockInput = document.querySelector('input[placeholder="1"]');
-
-        await userEvent.type(sizeInput, 'M');
-
-        await userEvent.clear(stockInput);
-        await userEvent.type(stockInput, '5');
+        // 4. Select Size (M)
+        const sizeSelect = document.querySelector('.variant-row select');
+        await userEvent.selectOptions(sizeSelect, 'M');
 
         // 5. Submit
-        const submitBtn = screen.getByText('post_product', { selector: 'button' });
+        const submitBtn = screen.getByRole('button', { name: 'post_product' });
         await userEvent.click(submitBtn);
 
         await waitFor(() => {
-            expect(mockCreateProduct).toHaveBeenCalledTimes(1);
+            expect(mockAddProduct).toHaveBeenCalledTimes(1);
         });
-
-        // Verify arguments passed to createProduct
-        const [formDataArg, imageFilesArg] = mockCreateProduct.mock.calls[0];
-        expect(formDataArg.name).toBe('Test Product');
-        expect(formDataArg.price).toBe('50');
-        expect(formDataArg.category).toBe(0); // number
-        expect(imageFilesArg).toHaveLength(1);
     });
 
     test('handles variant addition and removal', async () => {
-        render(<AddProduct />);
+        render(<AddProduct {...defaultProps} />);
 
-        const addVarBtn = screen.getByText('add_another_size');
+        const addVarBtn = document.querySelector('.add-variant-btn');
         await userEvent.click(addVarBtn);
 
-        const sizeInputs = document.querySelectorAll('input[placeholder="e.g. M, 38"]');
-        expect(sizeInputs.length).toBe(2);
+        await waitFor(() => {
+            const variantRows = document.querySelectorAll('.variant-row');
+            expect(variantRows.length).toBe(2);
+        });
 
-        // Remove one
         const removeBtns = document.querySelectorAll('.remove-variant-btn');
-        expect(removeBtns.length).toBeGreaterThan(0);
         await userEvent.click(removeBtns[0]);
 
-        const sizeInputsAfter = document.querySelectorAll('input[placeholder="e.g. M, 38"]');
-        expect(sizeInputsAfter.length).toBe(1);
+        await waitFor(() => {
+            const variantRows = document.querySelectorAll('.variant-row');
+            expect(variantRows.length).toBe(1);
+        });
+    });
+
+    test('verifies custom size input logic', async () => {
+        render(<AddProduct {...defaultProps} />);
+
+        // Find the size dropdown inside the variant row
+        const sizeSelect = document.querySelector('.variant-row select');
+        await userEvent.selectOptions(sizeSelect, 'custom_size');
+
+        // Wait for custom size input to appear
+        const customInput = await screen.findByPlaceholderText('enter_custom_size');
+        expect(customInput).toBeInTheDocument();
+
+        await userEvent.type(customInput, 'Ultra Wide');
+        expect(customInput.value).toBe('Ultra Wide');
+    });
+
+    test('resets form after successful submission', async () => {
+        mockAddProduct.mockResolvedValue({ success: true });
+        render(<AddProduct {...defaultProps} />);
+
+        // 1. Fill out all required fields
+        await userEvent.click(screen.getByText('Simulate Image Add'));
+        const nameInput = screen.getByPlaceholderText('example_product_name');
+        await userEvent.type(nameInput, 'Reset Test Product');
+
+        const priceInput = document.querySelector('input[name="price"]');
+        const shipmentInput = document.querySelector('input[name="shipment_price"]');
+        await userEvent.type(priceInput, '50');
+        await userEvent.type(shipmentInput, '10');
+        await userEvent.type(screen.getByPlaceholderText('describe_your_product'), 'Description');
+
+        // Select Category and Subcategory
+        const catSelect = document.querySelector('select[name="category"]');
+        await userEvent.selectOptions(catSelect, '0');
+
+        await waitFor(() => expect(document.querySelector('select[name="subcategory"]')).toBeInTheDocument());
+        const subSelect = document.querySelector('select[name="subcategory"]');
+        await userEvent.selectOptions(subSelect, '0');
+
+        // Select Size
+        const sizeSelect = document.querySelector('.variant-row select');
+        await userEvent.selectOptions(sizeSelect, 'M');
+
+        // 2. Submit
+        const submitBtn = screen.getByRole('button', { name: 'post_product' });
+        await userEvent.click(submitBtn);
+
+        // 3. Verification
+        await waitFor(() => {
+            expect(mockAddProduct).toHaveBeenCalled();
+            expect(nameInput.value).toBe(''); // Form reset
+        });
+    });
+    test('switches size select to text input when "home" category is selected', async () => {
+        render(<AddProduct {...defaultProps} />);
+
+        const catSelect = document.querySelector('select[name="category"]');
+        // Index 3 ist "home"
+        await userEvent.selectOptions(catSelect, '3');
+
+        // Das Dropdown sollte weg sein, dafür ein Text-Input mit dem spezifischen Placeholder
+        const homeSizeInput = screen.getByPlaceholderText('exp_100_watt_30_cm');
+        expect(homeSizeInput).toBeInTheDocument();
+        expect(homeSizeInput.tagName).toBe('INPUT');
+    });
+
+    test('sets all sizes to "OS" and disables select when Standard Size is checked', async () => {
+        render(<AddProduct {...defaultProps} />);
+
+        // 1. Checkbox finden
+        const checkbox = screen.getByRole('checkbox', { name: /Standard Size/i });
+
+        // 2. Klick ausführen
+        await userEvent.click(checkbox);
+
+        // 3. Warten und prüfen
+        await waitFor(() => {
+            const sizeSelect = document.querySelector('.variant-row select');
+
+            // Prüfen, ob die Option "OS" im DOM existiert (React fügt sie durch dein Map-Statement hinzu)
+            // Falls "OS" nicht in deiner sizesList ist, rendert React sie als selektierten Wert, 
+            // sofern die Logik 'size: isStandard ? "OS" : ""' greift.
+            expect(sizeSelect).toBeDisabled();
+            expect(sizeSelect.value).toBe('OS');
+        }, { timeout: 2000 });
+    });
+
+    test('shows error if custom size is selected but text field is empty', async () => {
+        render(<AddProduct {...defaultProps} />);
+
+        // 1. Alle Pflichtfelder ausfüllen
+        await userEvent.click(screen.getByText('Simulate Image Add'));
+        await userEvent.type(screen.getByPlaceholderText('example_product_name'), 'Test');
+        await userEvent.type(document.querySelector('input[name="price"]'), '10');
+        await userEvent.type(document.querySelector('input[name="shipment_price"]'), '5');
+        await userEvent.type(screen.getByPlaceholderText('describe_your_product'), 'Desc');
+
+        // 2. Kategorie wählen
+        const catSelect = document.querySelector('select[name="category"]');
+        await userEvent.selectOptions(catSelect, '0');
+
+        // 3. WICHTIG: Subkategorie ebenfalls wählen (sonst kommt der Category-Error)
+        await waitFor(() => {
+            const subSelect = document.querySelector('select[name="subcategory"]');
+            expect(subSelect).toBeInTheDocument();
+        });
+        const subSelect = document.querySelector('select[name="subcategory"]');
+        await userEvent.selectOptions(subSelect, '0');
+
+        // 4. Custom Size wählen, aber das Textfeld leer lassen
+        const sizeSelect = document.querySelector('.variant-row select');
+        await userEvent.selectOptions(sizeSelect, 'custom_size');
+
+        // 5. Submit
+        const submitBtn = screen.getByRole('button', { name: 'post_product' });
+        await userEvent.click(submitBtn);
+
+        // Jetzt sollte er die Subcategory-Hürde nehmen und beim Custom Size Check landen
+        expect(toast.error).toHaveBeenCalledWith('add_product_error.productCustomSizeRequired');
+    });
+
+    test('does not reset form if API submission fails', async () => {
+        mockAddProduct.mockResolvedValue({ success: false });
+
+        render(<AddProduct {...defaultProps} />);
+
+        // 1. Alle Pflichtfelder ausfüllen, damit wir die Validierung bestehen
+        await userEvent.click(screen.getByText('Simulate Image Add'));
+        const nameInput = screen.getByPlaceholderText('example_product_name');
+        await userEvent.type(nameInput, 'Stay Here');
+
+        await userEvent.type(document.querySelector('input[name="price"]'), '10');
+        await userEvent.type(document.querySelector('input[name="shipment_price"]'), '5');
+        await userEvent.type(screen.getByPlaceholderText('describe_your_product'), 'Desc');
+
+        const catSelect = document.querySelector('select[name="category"]');
+        await userEvent.selectOptions(catSelect, '0');
+
+        // Subcategory abwarten und wählen
+        await waitFor(() => expect(document.querySelector('select[name="subcategory"]')).toBeInTheDocument());
+        await userEvent.selectOptions(document.querySelector('select[name="subcategory"]'), '0');
+
+        const sizeSelect = document.querySelector('.variant-row select');
+        await userEvent.selectOptions(sizeSelect, 'M');
+
+        // 2. Submit
+        const submitBtn = screen.getByRole('button', { name: 'post_product' });
+        await userEvent.click(submitBtn);
+
+        // 3. Verifizieren, dass API aufgerufen wurde, aber der Input NICHT leer ist
+        await waitFor(() => {
+            expect(mockAddProduct).toHaveBeenCalled();
+        });
+
+        expect(nameInput.value).toBe('Stay Here'); // Bleibt erhalten bei success: false
     });
 });

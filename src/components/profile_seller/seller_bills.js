@@ -43,11 +43,11 @@ function SellerBills({ sellerId, apiUrl, token }) {
                 <>
                     <div className="bills-list">
                         {bills.map((bill) => {
-                            const order = bill.orderId || {};
-                            const product = bill.productId || {};
+                            const order = bill.order || {};
+                            const product = bill.product || {};
 
                             return (
-                                <div key={bill._id} className="bill-card-zara">
+                                <div key={bill.id} className="bill-card-zara">
                                     <div className="bill-card-header">
                                         <div className="header-left">
                                             <div className="title-status-group">
@@ -62,7 +62,7 @@ function SellerBills({ sellerId, apiUrl, token }) {
                                         </div>
                                         <div className="header-right">
                                             <span className="cost-label">{t("bill_costs")}</span>
-                                            <span className="cost-value">{bill.amount.toFixed(3)} {t("price_suf")}</span>
+                                            <span className="cost-value">{Number(bill.amount || 0).toFixed(3)} {t("price_suf")}</span>
                                         </div>
                                     </div>
 
@@ -80,11 +80,11 @@ function SellerBills({ sellerId, apiUrl, token }) {
                                         <div className="body-row">
                                             <div className="info-block">
                                                 <span className="label-zara">{t("bill_date")}</span>
-                                                <span className="value-zara">{new Date(bill.date).toLocaleDateString()}</span>
+                                                <span className="value-zara">{new Date(bill.createdAt).toLocaleString()}</span>
                                             </div>
                                             <div className="info-block">
                                                 <span className="label-zara">{t("bill_commission_rate")}</span>
-                                                <span className="value-zara">3% ({product.price?.toFixed(3)} x 3%)</span>
+                                                <span className="value-zara">3% ({Number(product.price || 0).toFixed(3)} x 3%)</span>
                                             </div>
                                         </div>
                                     </div>

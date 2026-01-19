@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css";
-import "./modal.css";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
-
+import useLoginApi from "./hooks/useLoginApi";
+import "./login.css";
+import "./modal.css";
 
 function Login() {
-  const apiUrl = process.env.REACT_APP_API_URL;
+
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -22,6 +22,7 @@ function Login() {
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetLoading, setResetLoading] = useState(false);
+  const { loginUser, requestPasswordReset } = useLoginApi();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -30,58 +31,40 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      const res = await fetch(`${apiUrl}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        const errorKey = data.message || "login_failed";
-        if (res.status === 403 && data.message === "already_logged_in") {
-          toast.warn(t("already_logged_in"), {
-            position: "top-center",
-            theme: "colored",
-          });
-          setError("");
-          return;
-        }
-        throw new Error(errorKey);
-      }
-
-      if (!data.token) {
-        throw new Error("login_failed");
-      }
-
-      const userData = {
-        address: data.address,
-        phone: data.phone,
-        city: data.city,
-        subCity: data.subCity
-      };
+    const result = await loginUser(email, password);
+    if (result.success) {
+      const { token, user } = result.data;
 
       login({
-        token: data.token,
-        role: data.role,
-        userId: data.userId,
-        userData
+        token: token,
+        role: user.role,
+        userId: user.id,
+        userData: {
+          address: user.profile?.address,
+          phone: user.profile?.phone,
+          city: user.profile?.city,
+          subCity: user.profile?.subCity
+        }
       });
 
-      if (data.role === "seller") {
-        navigate("/profile_seller");
-      } else if (data.role === "admin") {
-        navigate("/profile_admin");
+
+      const routes = {
+        seller: "/profile_seller",
+        admin: "/profile_admin",
+        user: "/profile_user"
+      };
+      navigate(routes[user.role] || "/profile_user");
+
+    } else {
+      if (result.status === 403 && result.error === "already_logged_in") {
+        toast.warn(t("already_logged_in"));
       } else {
-        navigate("/profile_user");
+        setError(t(result.error));
       }
-    } catch (err) {
-      setError(t(err.message));
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
+
 
   const handleForgotPassword = () => {
     setShowForgotModal(true);
@@ -90,29 +73,15 @@ function Login() {
   const handleResetRequest = async (e) => {
     e.preventDefault();
     setResetLoading(true);
-    try {
-      const res = await fetch(`${apiUrl}/auth/request-password-reset`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: resetEmail }),
-      });
-      const data = await res.json();
-
-      if (res.ok) {
-        toast.success(t(data.message || "reset_email_sent"), {
-          position: "top-center",
-          autoClose: 5000,
-        });
-        setShowForgotModal(false);
-        setResetEmail("");
-      } else {
-        toast.error(t(data.message || "reset_email_error"));
-      }
-    } catch (err) {
-      toast.error(t("reset_email_error"));
-    } finally {
-      setResetLoading(false);
+    const result = await requestPasswordReset(resetEmail);
+    if (result.success) {
+      toast.success(t(result.message));
+      setShowForgotModal(false);
+      setResetEmail("");
+    } else {
+      toast.error(t(result.message));
     }
+    setResetLoading(false);
   };
 
   return (

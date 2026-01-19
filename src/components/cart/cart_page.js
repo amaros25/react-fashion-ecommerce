@@ -7,19 +7,29 @@ import { fetchSellersByIds, createMultipleOrders } from "./hooks/api";
 import "./cart_page.css";
 import { cities, citiesData } from '../utils/const/cities';
 import { ORDER_STATUS } from "../utils/const/order_status";
+// import { useUserDataApi } from "../profile_user/hooks/useUserData";
+import { useAuth } from "../../context/AuthContext";
+import { useUserProfileManager } from "../api_managers/userProfileHookManager.js"; // Pfad anpassen falls nötig
+import { useQueryClient } from '@tanstack/react-query';
 
 const CartPage = () => {
+  const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
+  const { userId, token } = useAuth();
 
+  console.log("CartPage userId: ", userId);
+  console.log("CartPage token: ", token);
+  // const { user, loading, error } = useUserDataApi(apiUrl, userId, token);
+  const { user, loading, error } = useUserProfileManager(userId, token);
+  console.log("CartPage user: ", user);
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [groupedCart, setGroupedCart] = useState({});
   const [sellers, setSellers] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDelivery, setIsDelivery] = useState(true);
-  const [user, setUser] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const [token, setToken] = useState(null);
+
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -33,23 +43,6 @@ const CartPage = () => {
       toast.error(t(result.errorKey));
     }
   };
-
-  // Load User Data from localStorage
-  useEffect(() => {
-    const storedUserId = localStorage.getItem("userId");
-    const storedToken = localStorage.getItem("token");
-    const storedUserData = localStorage.getItem("userData");
-    setUserId(storedUserId);
-    setToken(storedToken);
-    if (storedUserData) {
-      try {
-        const parsedData = JSON.parse(storedUserData);
-        setUser(parsedData);
-      } catch (err) {
-        toast.error(t("errors.parse_user_data") || "Error parsing user data. Please try again later.");
-      }
-    }
-  }, []);
 
   // Load Cart
   useEffect(() => {
@@ -72,22 +65,33 @@ const CartPage = () => {
 
   // Remove Item
   const handleRemoveItem = (sellerId, index) => {
-    const updatedGroup = groupedCart[sellerId].filter((_, i) => i !== index);
-    const newCart = cart.filter(
-      (item) =>
-        !(
-          item.sellerId === sellerId &&
-          groupedCart[sellerId].indexOf(item) === index
-        )
-    );
+    // Get the item to remove from the grouped structure
+    const itemToRemove = groupedCart[sellerId][index];
+
+    // Create a new cart array by removing only the specific instance
+    // Note: We use a flag to only remove one instance in case of duplicates
+    let removed = false;
+    const newCart = cart.filter((item) => {
+      if (!removed &&
+        item.productId === itemToRemove.productId &&
+        item.variantId === itemToRemove.variantId) {
+        removed = true;
+        return false;
+      }
+      return true;
+    });
+
     setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+
+    // Update groupedCart
+    const updatedGroup = groupedCart[sellerId].filter((_, i) => i !== index);
     if (updatedGroup.length === 0) {
       const { [sellerId]: _, ...rest } = groupedCart;
       setGroupedCart(rest);
     } else {
       setGroupedCart({ ...groupedCart, [sellerId]: updatedGroup });
     }
-    localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
   // Submit Order
@@ -106,12 +110,13 @@ const CartPage = () => {
     setIsSubmitting(true);
 
     try {
-      const result = await createMultipleOrders(groupedCart, userId, token, ORDER_STATUS.PENDING, isDelivery);
+      const result = await createMultipleOrders(groupedCart, user, userId, token, ORDER_STATUS.PENDING, isDelivery);
       if (result.success) {
         toast.success(t("orders_created_success"));
         localStorage.removeItem("cart");
         setCart([]);
         setGroupedCart({});
+        await queryClient.invalidateQueries({ queryKey: ['orders', userId] });
         navigate("/profile_user");
       } else {
         toast.error(t(result.errorKey));
@@ -125,20 +130,20 @@ const CartPage = () => {
 
   const calculateSellerTotal = (sellerItems) => {
     const subtotal = sellerItems.reduce(
-      (sum, item) => sum + item.price * (item.quantity || 1),
+      (sum, item) => sum + Number(item.price) * (item.quantity || 1),
       0
     );
-    const shippingCost = isDelivery ? sellerItems.reduce((sum, item) => sum + (item.delprice || 0), 0) : 0;
+    const shippingCost = isDelivery ? sellerItems.reduce((sum, item) => sum + (Number(item.delprice) || 0), 0) : 0;
     return subtotal + shippingCost;
   };
 
   const calculateTotal = () => {
     return Object.entries(groupedCart).reduce((total, [_, items]) => {
       const subtotal = items.reduce(
-        (sum, item) => sum + item.price * (item.quantity || 1),
+        (sum, item) => sum + Number(item.price) * (item.quantity || 1),
         0
       );
-      const shippingCost = isDelivery ? items.reduce((sum, item) => sum + (item.delprice || 0), 0) : 0;
+      const shippingCost = isDelivery ? items.reduce((sum, item) => sum + (Number(item.delprice) || 0), 0) : 0;
       return total + subtotal + shippingCost;
     }, 0);
   };
@@ -188,7 +193,7 @@ const CartPage = () => {
                   )}
                   <div className="items-list">
                     {items.map((item, i) => (
-                      <div key={item.productId} className="cart-item-modern">
+                      <div key={item.variantId || i} className="cart-item-modern">
                         <div className="item-image-wrapper" onClick={() => navigate(`/product/${item.productId}`)}>
                           <img src={item.image} alt={item.name} />
                         </div>
@@ -209,8 +214,7 @@ const CartPage = () => {
                           </div>
                           <div className="item-price-row">
                             <span className="quantity">Qty: {item.quantity}</span>
-                            <span className="price">
-                              {(item.price * item.quantity).toFixed(3)} {t("price_suf")}
+                            <span className="price">{(Number(item.price) * item.quantity).toFixed(3)} {t("price_suf")}
                             </span>
                           </div>
                         </div>
@@ -218,7 +222,7 @@ const CartPage = () => {
                     ))}
                   </div>
                   <div className="seller-subtotal">
-                    <span>{t("cart_page.shipping")}: {items.reduce((sum, item) => sum + (item.delprice || 0), 0).toFixed(3)} {t("price_suf")}</span>
+                    <span>{t("cart_page.shipping")}: {items.reduce((sum, item) => sum + (Number(item.delprice) || 0), 0).toFixed(3)} {t("price_suf")}</span>
                     <span className="subtotal-val">
                       {t("cart_page.subtotal")}: {calculateSellerTotal(items).toFixed(3)} {t("price_suf")}
                     </span>
@@ -282,12 +286,12 @@ const CartPage = () => {
 
               <div className="summary-row">
                 <span>{t("cart_page.subtotal")}</span>
-                <span>{cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(3)} {t("price_suf")}</span>
+                <span>{cart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0).toFixed(3)} {t("price_suf")}</span>
               </div>
               {isDelivery && (
                 <div className="summary-row">
                   <span>{t("cart_page.shipping")}</span>
-                  <span>{cart.reduce((sum, item) => sum + (item.delprice || 0), 0).toFixed(3)} {t("price_suf")}</span>
+                  <span>{cart.reduce((sum, item) => sum + (Number(item.delprice) || 0), 0).toFixed(3)} {t("price_suf")}</span>
                 </div>
               )}
               <div className="divider"></div>

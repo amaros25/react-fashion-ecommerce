@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -17,117 +17,102 @@ import "./product_page.css";
 
 function ProductPage() {
   const { t, i18n } = useTranslation();
+  const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
+
   const initialProduct = location.state?.product || null;
+
+  const { product: loadedProduct, loading: productLoading, error: productError } = useProductData(id);
+
   const [product, setProduct] = useState(initialProduct);
   const [mainImage, setMainImage] = useState("");
-  const { id } = useParams();
 
-  const { product: loadedProduct, loading: productLoading, error: productError } = useProductData(initialProduct ? null : id);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+
+  const role = localStorage.getItem("role")?.toLowerCase();
+  const isLoggedIn = !!localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
+  // const [rating, setRating] = useState(0);
+  // const [hoverRating, setHoverRating] = useState(0);
+  // const [comment, setComment] = useState("");
 
 
   // Reset product when navigating to a different product
   useEffect(() => {
-    const newProduct = location.state?.product || null;
-    console.log("newProduct", newProduct);
-    setProduct(newProduct);
-    setSelectedSize("");
-    setSelectedColor("");
-    setQuantity(1);
-  }, [id, location.state]);
-
-  useEffect(() => {
-    if (!product && loadedProduct) {
+    if (initialProduct) {
+      setProduct(initialProduct);
+    } else if (loadedProduct) {
       setProduct(loadedProduct);
     }
-  }, [product, loadedProduct]);
+  }, [initialProduct, loadedProduct]);
 
   useEffect(() => {
-    if (!product) return;
-
-    if (Array.isArray(product.image) && product.image.length > 0) {
-      setMainImage(product.image[0]);
-    } else if (product.image) {
-      setMainImage(product.image);
+    if (product) {
+      const images = product.images || [];
+      setMainImage(images.length > 0 ? images[0] : "/placeholder.jpg");
+      setSelectedSize("");
+      setSelectedColor("");
+      setQuantity(1);
     }
-    const direction = i18n.language === "ar" ? "rtl" : "ltr";
-    document.documentElement.setAttribute("dir", direction);
-  }, [product, i18n.language]);
+  }, [id, product?.id]);
+
 
   const { seller, loading: sellerLoading, error: sellerError } = useSellerData(product?.sellerId);
 
-  const [quantity, setQuantity] = useState(1);
-  const [role, setRole] = useState(localStorage.getItem("role")?.toLowerCase());
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
-  const userId = localStorage.getItem("userId");
-  // New State for UI
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
-  const [showFullDescription, setShowFullDescription] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [hoverRating, setHoverRating] = useState(0);
-  const [comment, setComment] = useState("");
+  const variants = product?.variants || [];
+  const availableSizes = useMemo(() =>
+    [...new Set(variants.map(v => v.size))], [variants]
+  );
+  const availableColors = useMemo(() =>
+    [...new Set(variants.map(v => v.color))], [variants]
+  );
 
-  const navigate = useNavigate();
+  const isColorAvailable = (color) => {
+    if (!selectedSize) return true;
+    return variants.some(v => v.size === selectedSize && v.color === color && v.stock > 0);
+  };
+
+  const isSizeAvailable = (size) => {
+    if (!selectedColor) return true;
+    return variants.some(v => v.color === selectedColor && v.size === size && v.stock > 0);
+  };
+
+  const canOrderProduct = () => {
+    if (!product || variants.length === 0 || product.status === 0) return false;
+    const hasStock = variants.some(v => v.stock > 0);
+    return role !== "seller" && hasStock;
+  };
 
   useEffect(() => {
     if (role === "seller") {
       toast.error(t("seller_cannot_buy_alter"));
     }
-  }, [role, t]);
-
-  const [refresh, setRefresh] = useState(false);
-
-  const availableSizes = product?.sizes
-    ? Array.from(new Set(product.sizes.map(s => s.size)))
-    : [];
-
-  const availableColors = product?.sizes
-    ? Array.from(new Set(product.sizes.map(s => s.color)))
-    : [];
-
-  // Check availability for color based on selected size
-  const isColorAvailable = (color) => {
-    if (!product || !product.sizes) return true;
-    if (!selectedSize) return true;
-    return product.sizes.some(s => s.size === selectedSize && s.color === color && s.stock > 0);
-  };
-
-  // Check availability for size based on selected color
-  const isSizeAvailable = (size) => {
-    if (!product || !product.sizes) return true;
-    if (!selectedColor) return true;
-    return product.sizes.some(s => s.size === size && s.color === selectedColor && s.stock > 0);
-  };
-
-  const canOrderProduct = () => {
-    if (!product || !product.sizes) return false;
-    const lastState = product.states?.[product.states.length - 1]?.state;
-    const hasStock = product.sizes.some(s => s.stock > 0);
-    return role !== "seller" && lastState === 1 && hasStock;
-  };
+  }, [role]);
 
   // Auto-select if only one option is available
   useEffect(() => {
-    if (!product || !product.sizes) return;
-
-    // Default Size
+    if (!product || !product.variants || product.variants.length === 0) return;
     const inStockSizes = availableSizes.filter(size => isSizeAvailable(size));
     if (inStockSizes.length === 1 && !selectedSize) {
       setSelectedSize(inStockSizes[0]);
     }
-
-    // Default Color
     const inStockColors = availableColors.filter(color => isColorAvailable(color));
     if (inStockColors.length === 1 && !selectedColor) {
       setSelectedColor(inStockColors[0]);
     }
   }, [product, selectedSize, selectedColor, availableSizes, availableColors]);
 
-  console.log("DEBUG ProductPage:", { productLoading, sellerLoading, productExists: !!product, sellerExists: !!seller, id });
+  if (productLoading && !product) return <LoadingSpinner />;
+  if (productError) return <div className="error-container"><p>{t("error_loading_product")}</p></div>;
+  if (!product) return null;
 
   if (productLoading || (product && sellerLoading)) {
-    console.log("DEBUG Showing LoadingSpinner");
     return <LoadingSpinner />;
   }
 
@@ -143,7 +128,16 @@ function ProductPage() {
     return null; // Or some fallback
   }
 
+  const selectedVariant = product.variants?.find(
+    (v) => v.size === selectedSize && v.color === selectedColor
+  );
+
   const handleBuyClick = (buyNow = false) => {
+
+    if (product.status === 0) {
+      toast.error(t("product_pending_admin_conf"));
+      return;
+    }
     if (role === "seller") {
       toast.error(t("seller_cannot_buy_alter"));
       return;
@@ -158,37 +152,35 @@ function ProductPage() {
       return;
     }
 
-    const stockInfo = product.sizes.find(
-      (s) => s.size === selectedSize && s.color === selectedColor
-    );
-
-    if (!stockInfo) {
-      toast.error(t("product_page.invalid_selection"));
+    const stockInfo = variants.find(v => v.size === selectedSize && v.color === selectedColor);
+    if (!stockInfo || stockInfo.stock < quantity) {
+      toast.error(t("product_page.exceeds_stock"));
       return;
     }
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingInCart = cart.find(
       (item) =>
-        item.productId === product._id &&
+        item.productId === product.id &&
         item.size === selectedSize &&
         item.color === selectedColor
     );
-
     const cartQuantity = existingInCart ? existingInCart.quantity : 0;
     const totalRequested = cartQuantity + quantity;
-
-    if (totalRequested > stockInfo.stock) {
+    if (totalRequested > selectedVariant.stock) {
       if (cartQuantity > 0) {
-        toast.error(`${t("product_page.exceeds_stock")} (${stockInfo.stock} ${t("product_page.available")}). ${t("product_page.currently")} ${cartQuantity} ${t("product_page.in_cart")}.`);
+        toast.error(
+          `${t("product_page.exceeds_stock")} (${selectedVariant.stock} ${t("product_page.available")}). ` +
+          `${t("product_page.currently")} ${cartQuantity} ${t("product_page.in_cart")}.`
+        );
       } else {
-        toast.error(`${t("product_page.exceeds_stock")} (${stockInfo.stock} ${t("product_page.available")})`);
+        toast.error(`${t("product_page.exceeds_stock")} (${selectedVariant.stock} ${t("product_page.available")})`);
       }
       return;
     }
 
     const newItem = {
-      productId: product._id,
+      productId: product.id,
       name: product.name,
       price: product.price,
       delprice: product.delprice || 0,
@@ -196,27 +188,25 @@ function ProductPage() {
       size: selectedSize,
       color: selectedColor,
       quantity: quantity,
-      sellerId: seller._id,
+      sellerId: product.sellerId || seller?.id || seller?._id,
+      variantId: selectedVariant.id,
     };
 
-    const existingIndex = cart.findIndex(
-      (item) =>
-        item.productId === newItem.productId &&
-        item.size === newItem.size &&
-        item.color === newItem.color
-    );
+    if (existingInCart) {
+      const existingIndex = cart.findIndex(
+        (item) =>
+          item.productId === product.id &&
+          item.size === selectedSize &&
+          item.color === selectedColor
+      );
+      cart[existingIndex].quantity = totalRequested;
 
-    if (existingIndex >= 0) {
-      const totalQuantity = cart[existingIndex].quantity + newItem.quantity;
-      cart[existingIndex].quantity = totalQuantity;
       if (!buyNow) toast.success(t("product_page.cart_updated"));
     } else {
       cart.push(newItem);
       if (!buyNow) toast.success(t("product_page.added_to_cart"));
     }
-
     localStorage.setItem("cart", JSON.stringify(cart));
-
     if (buyNow) {
       navigate("/cart_page");
     }
@@ -224,8 +214,7 @@ function ProductPage() {
 
 
   return (
-    <div className="product-page">
-
+    <div className="product-page" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className="breadcrumb-container">
         <Breadcrumb category={product.category} subCategory={product.subcategory} productName={product.name} />
       </div>
@@ -242,9 +231,8 @@ function ProductPage() {
           {/* Seller Info Section */}
           <div
             className="seller-section-container"
-            onClick={() => seller && navigate(`/shop/${seller.slug || seller._id}`)}
-            style={{ cursor: 'pointer' }}
-          >
+            onClick={() => seller && navigate(`/shop/${seller.shopName || seller.id}`)}
+            style={{ cursor: 'pointer' }}>
             <h3 className="seller-section-title">{t("product_page.explore_seller")}</h3>
             <SellerInfo seller={seller} />
           </div>
@@ -253,22 +241,19 @@ function ProductPage() {
         {/* Right Column: Info & Actions */}
         <div className="product-right-column">
           <ProductInfoHeader product={product} userId={userId} />
-
-
           <div className="product-selection-section">
-
             {/* Size Selection */}
             <div className="selection-group">
               <label className="selection-label">{t("product_page.size")}</label>
               <div className="size-options">
-                {availableSizes.map((sizeOption, index) => (
+                {availableSizes.map((size, index) => (
                   <button
                     key={index}
-                    className={`size-button ${selectedSize === sizeOption ? 'selected' : ''} ${!isSizeAvailable(sizeOption) ? 'disabled' : ''}`}
-                    onClick={() => setSelectedSize(sizeOption)}
-                    disabled={!isSizeAvailable(sizeOption)}
+                    className={`size-button ${selectedSize === size ? 'selected' : ''} ${!isSizeAvailable(size) ? 'disabled' : ''}`}
+                    onClick={() => setSelectedSize(size)}
+                    disabled={!isSizeAvailable(size)}
                   >
-                    {sizeOption == "OS" ? t("product_page.one_size") : sizeOption}
+                    {size == "OS" ? t("product_page.one_size") : size}
                   </button>
                 ))}
               </div>
@@ -323,45 +308,19 @@ function ProductPage() {
                 {product.description}
               </p>
               {product.description && product.description.length > 250 && (
-                <button
-                  className="show-more-btn"
-                  onClick={() => setShowFullDescription(!showFullDescription)}
-                >
-                  {showFullDescription ? (t("product_page.show_less")) : (t("product_page.show_more"))}
-                </button>
+                <button className="show-more-btn" onClick={() => setShowFullDescription(!showFullDescription)}>{showFullDescription ? (t("product_page.show_less")) : (t("product_page.show_more"))}</button>
               )}
             </div>
-            <CommentProduct product={product} onReviewAdded={() => setRefresh(prev => !prev)} />
-
+            <CommentProduct product={product} onReviewAdded={() => setRefresh(!refresh)} />
             {/* Action Buttons */}
             <div className="action-buttons">
-              <button
-                className="add-to-cart-btn"
-                onClick={() => handleBuyClick(false)}
-
-                disabled={!canOrderProduct()}
-              >
-                {t("product_page.add_to_cart")}
-              </button>
-              <button
-                className="buy-now-btn"
-                onClick={() => handleBuyClick(true)}
-                disabled={!canOrderProduct()}
-              >
-                {t("product_page.buy_now")}
-              </button>
+              <button className="add-to-cart-btn" onClick={() => handleBuyClick(false)} disabled={!canOrderProduct()}> {t("product_page.add_to_cart")}</button>
+              <button className="buy-now-btn" onClick={() => handleBuyClick(true)} disabled={!canOrderProduct()}>{t("product_page.buy_now")}</button>
             </div>
-
-
-
-
           </div>
         </div>
       </div>
-
-      <RelatedProducts
-        category={product.category}
-        currentProductId={product._id}
+      <RelatedProducts category={product.category} currentProductId={product.id}
       />
 
     </div >

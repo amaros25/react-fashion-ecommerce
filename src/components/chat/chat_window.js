@@ -81,10 +81,10 @@ const ChatWindow = ({
 
             {/* Render message bubbles */}
             {(activeChat?.messages || []).map((msg, idx) => {
-              const isUserMessage = msg.senderId.toString() === userId;
+              const isUserMessage = String(msg.senderId) === String(userId);
               return (
                 <div
-                  key={msg._id || idx}
+                  key={msg.id || idx}
                   className={`message ${isUserMessage ? "user" : "partner"} ${msg.isRead ? "read" : "unread"} ${isRtl ? 'rtl' : ''}`}
                 >
                   <div className="msg-text">{msg.text}</div>

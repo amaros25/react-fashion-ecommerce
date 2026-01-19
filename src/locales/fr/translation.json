@@ -192,6 +192,7 @@
     "delivery": "Livraison",
     "pickup": "Retrait",
     "delivery_address": "Adresse de livraison",
+    "customer": "Client",
     "add_address": "Veuillez ajouter votre adresse de livraison",
     "missed_address_add_in_profile": "Veuillez ajouter votre adresse de livraison dans votre profil",
     "no_address_set": "Aucune adresse définie",
@@ -262,10 +263,8 @@
     "shipped": "Expédiée",
     "delivered": "Livrée",
     "received": "Reçue",
-    "user_cancelled": "Annulée",
-    "seller_cancelled": "Annulée",
-    "failed_delivery": "Échec de livraison",
-    "second_try": "Deuxième tentative",
+    "user_cancelled": "Annulée par l'utilisateur",
+    "seller_cancelled": "Annulée par le vendeur",
     "third_try": "Troisième tentative",
     "return_requested": "Retour demandé",
     "return_confirmed": "Retour confirmé",
@@ -727,5 +726,18 @@
   "fetch_products_failed": "Échec de la récupération des produits.",
   "no_seller_id": "Aucun identifiant de vendeur fourni.",
   "fetch_related_products_failed": "Échec de la récupération des produits connexes.",
-  "report_order": "Signaler la commande"
+  "report_order": "Signaler la commande",
+  "product_pending_admin_conf": "Ce produit est en attente de confirmation par l'administrateur et ne peut pas encore être commandé.",
+  "rating_available_after_24h": "L'évaluation sera disponible 24h après la livraison",
+  "user_status": {
+    "pending": "Votre compte est en attente d'examen.",
+    "active": "Compte actif",
+    "banned": "Votre compte a été banni. Veuillez contacter le support.",
+    "deleted": "Ce compte est marqué pour suppression.",
+    "verified": "Compte vérifié",
+    "unverified": "Veuillez vérifier votre compte."
+  },
+  "account_inactive_msg": "Votre compte est actuellement inactif. Veuillez contacter l'administrateur.",
+  "your_seller_rating": "Votre avis sur le vendeur",
+  "your_product_rating": "Votre avis produit"
 }

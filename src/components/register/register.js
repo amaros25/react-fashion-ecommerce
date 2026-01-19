@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import "./register.css";
 import { useTranslation } from "react-i18next";
 import ImageSelectUpload from '../new_product/image_select_upload.js';
 import { toast } from "react-toastify";
 import { cities, citiesData } from '../utils/const/cities.js';
-import useRegisterApi from "./hooks/useRegisterApi";
 import { Link } from "react-router-dom";
 import ValidateRegisterForm from "./validateregisterform";
-import { generateRegisterPayload } from "./generate_payload";
 import useProfileImageUpload from "../upload_image_profile/upload_image_profile";
+import "./register.css";
+import { useAuthManager } from "../api_managers/useAuthManager";
 
 function Register() {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -18,7 +17,7 @@ function Register() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  const [role, setRole] = useState("shoper");
+  const [role, setRole] = useState("user");
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedSubCity, setSelectedSubCity] = useState(null);
   const [subCities, setSubCities] = useState([]);
@@ -28,8 +27,9 @@ function Register() {
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { registerUser } = useRegisterApi();
+  const authManager = useAuthManager();
   const { uploadProfileImage } = useProfileImageUpload(t);
   const cmandiLink = "/agb";
   const privacyLink = "/data_protection";
@@ -81,6 +81,7 @@ function Register() {
       lastName: "",
       email: "",
       password: "",
+      confirmPassword: "",
       phone: "",
       shopName: "",
       address: "",
@@ -107,37 +108,63 @@ function Register() {
   };
 
 
+  const generateRegisterPayload = () => {
+    const payload = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      phone: formData.phone,
+      address: formData.address,
+      city: selectedCityIndex,
+      subCity: selectedSubCityIndex,
+      role: role,
+    };
+    if (role === "seller") {
+      payload.shopName = formData.shopName;
+    }
+    return { payload };
+  };
 
   const handleSubmit = async (e) => {
-    console.log("handleSubmit formData: ", formData);
     e.preventDefault();
     setError("");
-    const error = ValidateRegisterForm(formData, role, acceptedTerms, imageFile, selectedCity, selectedSubCity, t);
-    if (error) {
-      handleValidationError(error);
+    setIsSubmitting(true);
+    const validationError = ValidateRegisterForm(
+      formData,
+      role,
+      acceptedTerms,
+      imageFile,
+      selectedCity,
+      selectedSubCity,
+      t);
+    if (validationError) {
+      setIsSubmitting(false);
+      handleValidationError(validationError);
       return;
     }
     try {
-      const { endpoint, payload } = generateRegisterPayload(apiUrl, formData, role, selectedCityIndex, selectedSubCityIndex);
-      const response = await registerUser(endpoint, payload);
-      console.log("response: ", response);
-      if (response.success) {
+      const payloadObj = generateRegisterPayload();
+      const response = await authManager.register(payloadObj.payload);
 
-        await uploadProfileImage(imageFile, response.userId, role);
+      if (response.success) {
+        if (imageFile) {
+          await uploadProfileImage(imageFile, response.userId, response.token);
+        }
         toast.success(t("register.user_created_successfully"));
         navigate("/login");
       } else {
-        if (response.error === "shop_name_taken") {
-          setError(t("register.error.shop_name_taken"));
-          toast.error(t("register.error.shop_name_taken"));
-        } else {
-          setError(t("register.error." + response.error));
-          toast.error(t("register.error." + response.error));
-        }
+        const errorKey = response.error === "shop_name_taken" ? "shop_name_taken" : response.error;
+        setError(t("register.error." + errorKey));
+        toast.error(t("register.error." + errorKey));
       }
     } catch (err) {
-      setError(t("register.registrationFailed") + err.message);
-      toast.error(t("register.registrationFailed") + err.message);
+      const serverErrorMessage = err.response?.data?.message || err.response?.data?.error || err.message;
+      console.log("Server Error Data:", err.response?.data);
+      setError(serverErrorMessage);
+      toast.error(`${t("register.registrationFailed")}: ${serverErrorMessage}`);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -145,15 +172,17 @@ function Register() {
     <div className="register-page">
 
       <div className="register-page-content">
+
         <div className="register-container" dir={i18n.language === "ar" ? "rtl" : "ltr"} >
+
           <form className="register-form" onSubmit={handleSubmit} lang={i18n.language}>
             <h2>{t("register.title")}</h2>
             {error && <p className="error">{error}</p>}
 
             <div className="role-selection">
               <div
-                className={`role-option ${role === 'shoper' ? 'active' : ''}`}
-                onClick={() => handleRoleChange('shoper')}
+                className={`role-option ${role === 'user' ? 'active' : ''}`}
+                onClick={() => handleRoleChange('user')}
               >
                 {t("register.shoper")}
               </div>
@@ -267,7 +296,7 @@ function Register() {
               </>
             )}
 
-            {role === "shoper" && (
+            {role === "user" && (
               <>
                 <label>{t("register.profileImageOptional")}</label>
                 <ImageSelectUpload onImageChange={handleImageChange} maximages={1} />
@@ -307,7 +336,9 @@ function Register() {
               </label>
             </div>
 
-            <button type="submit">{t("register.submit")}</button>
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? t("register.processing") : t("register.submit")}
+            </button>
 
             <p className="login-link">
               {t("register.alreadyRegistered")}

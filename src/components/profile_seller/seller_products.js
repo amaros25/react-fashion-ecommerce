@@ -1,92 +1,66 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import "./seller_products.css";
 import { useNavigate } from "react-router-dom";
-import LoadingSpinner from "../utils/loading_spinner";
 import { FaSearch, FaBoxOpen } from "react-icons/fa";
+import LoadingSpinner from "../utils/loading_spinner";
+import "./seller_products.css";
+import { useSellerProductFetchManager } from "../api_managers/useSellerProductFetchManager.js";
 
-function SellerProducts({ sellerId, apiUrl, token }) {
+function SellerProducts({ sellerId, token }) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [limit] = useState(12); // Increased limit for better grid view
 
-  const fetchProducts = async (page = 1) => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        `${apiUrl}/products/seller/${sellerId}?page=${page}&limit=${limit}&search=${encodeURIComponent(
-          search
-        )}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const data = await res.json();
+  // 1. Destructure using 'currentPage' as defined in your manager
+  const {
+    products,
+    isLoading,
+    handleSearch,
+    handlePageChange,
+    totalPages,
+    currentPage
+  } = useSellerProductFetchManager(sellerId, token);
 
-      setProducts(data.products || []);
-      setTotalPages(data.totalPages || 1);
-      setCurrentPage(data.page || 1);
-    } catch (err) {
-      console.error(t("error_loading_products"), err);
-      setProducts([]);
-    } finally {
-      setLoading(false);
+  const [localSearch, setLocalSearch] = useState('');
+
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch(localSearch);
     }
   };
 
-  useEffect(() => {
-    if (sellerId) fetchProducts(currentPage);
-  }, [sellerId, currentPage]);
-
-  const getStateLabel = (state) => {
-    switch (state) {
-      case 0: return t("product_state.pending");
-      case 1: return t("product_state.active");
-      case 2: return t("product_state.blocked");
-      case 3: return t("product_state.deleted");
-      default: return t("product_state.unknown");
-    }
-  };
-
-  const getStateClass = (state) => {
-    switch (state) {
-      case 0: return "state-pending";
-      case 1: return "state-active";
-      case 2: return "state-blocked";
-      case 3: return "state-deleted";
-      default: return "state-unknown";
-    }
-  };
   const calculateTotalStock = (product) => {
-    if (!product || !Array.isArray(product.sizes)) {
-      return 0;
+    if (!product || !Array.isArray(product.variants)) return 0;
+    return product.variants.reduce((total, v) => total + (v.stock || 0), 0);
+  };
+
+  const getStateInfo = (product) => {
+    const stateValue = product.currentState ?? 0;
+    switch (stateValue) {
+      case 0: return { label: t("product_state.pending"), class: "state-pending" };
+      case 1: return { label: t("product_state.active"), class: "state-active" };
+      case 2: return { label: t("product_state.blocked"), class: "state-blocked" };
+      case 3: return { label: t("product_state.deleted"), class: "state-deleted" };
+      default: return { label: t("product_state.unknown"), class: "state-unknown" };
     }
-    return product.sizes.reduce((total, size) => total + (size.stock || 0), 0);
   };
 
   return (
-    <div
-      className="seller-products-container"
-      dir={i18n.language === "ar" ? "rtl" : "ltr"}
-    >
+    <div className="seller-products-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className="products-header-actions">
         <div className="search-wrapper">
           <FaSearch className="search-icon" />
           <input
             type="text"
             placeholder={t("search_product_by_id")}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && fetchProducts(1)}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onKeyDown={onKeyDown}
           />
         </div>
       </div>
 
       <div className="product-list-grid">
-        {!loading && products.length === 0 ? (
+        {!isLoading && products.length === 0 ? (
           <div className="no-products-state">
             <FaBoxOpen className="no-products-icon" />
             <p>{t("no_products_found")}</p>
@@ -94,13 +68,13 @@ function SellerProducts({ sellerId, apiUrl, token }) {
         ) : (
           products.map((product) => (
             <div
-              key={product._id}
+              key={product.id}
               className="premium-product-card"
-              onClick={() => navigate(`/product/${product._id}`)}
+              onClick={() => navigate(`/product/${product.id}`)}
             >
               <div className="card-image-container">
                 <img
-                  src={product.image?.[0]}
+                  src={product.images?.[0]}
                   alt={product.name}
                   className="card-image"
                 />
@@ -118,7 +92,6 @@ function SellerProducts({ sellerId, apiUrl, token }) {
                   <span className="card-price">
                     {product.price ? `${product.price} ${t("price_suf")}` : t("price_not_available")}
                   </span>
-
                   <span className="card-orders">
                     {product.orderCount > 0 ? `${product.orderCount} ${t("orders")}` : t("no_orders")}
                   </span>
@@ -128,11 +101,10 @@ function SellerProducts({ sellerId, apiUrl, token }) {
                   <span className="date-added">
                     {t("added_date")}: {new Date(product.createdAt).toLocaleDateString(i18n.language)}
                   </span>
-                  <span className={`current-state-badge ${getStateClass(product.states?.[product.states.length - 1]?.state)}`}>
-                    {getStateLabel(product.states?.[product.states.length - 1]?.state)}
+                  <span className={`current-state-badge ${getStateInfo(product).class}`}>
+                    {getStateInfo(product).label}
                   </span>
                 </div>
-
               </div>
             </div>
           ))
@@ -141,19 +113,23 @@ function SellerProducts({ sellerId, apiUrl, token }) {
 
       {totalPages > 1 && (
         <div className="pagination-container">
-          {[...Array(totalPages)].map((_, i) => (
-            <button
-              key={i + 1}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`page-btn ${i + 1 === currentPage ? "active" : ""}`}
-            >
-              {i + 1}
-            </button>
-          ))}
+          {[...Array(totalPages)].map((_, i) => {
+            const pageNum = i + 1;
+            return (
+              <button
+                key={pageNum}
+                onClick={() => handlePageChange(pageNum)}
+                // 2. FIXED: Changed 'page' to 'currentPage'
+                className={`page-btn ${pageNum === currentPage ? "active" : ""}`}
+              >
+                {pageNum}
+              </button>
+            );
+          })}
         </div>
       )}
 
-      {loading && <LoadingSpinner />}
+      {isLoading && <LoadingSpinner />}
     </div>
   );
 }

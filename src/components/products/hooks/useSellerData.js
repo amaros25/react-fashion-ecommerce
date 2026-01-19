@@ -8,34 +8,31 @@ export const useSellerData = (sellerId) => {
 
     useEffect(() => {
         if (!sellerId) {
-            console.log("DEBUG useSellerData: No sellerId, setting loading false");
             setSeller(null);
             setLoading(false);
             return;
         }
-        console.log("DEBUG useSellerData: Fetching seller", sellerId);
-        setLoading(true);
-        fetch(`${apiUrl}/sellers/${sellerId}`)
-            .then((res) => {
-                console.log("DEBUG useSellerData: Fetch response received", res.status);
+        const fetchSeller = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const res = await fetch(`${apiUrl}/users/public-seller/${sellerId}`, { method: "GET", });
                 if (!res.ok) {
-                    throw new Error(res.status === 404 ? "seller_not_found" : "server_error");
+                    throw new Error(res.status === 404 ? "user_not_found" : "server_error");
                 }
-                return res.json();
-            })
-            .then((data) => {
-                console.log("DEBUG useSellerData: Data received", data._id);
+                const data = await res.json();
+                console.log("Seller: ", data);
                 setSeller(data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error("DEBUG useSellerData: Error", err);
-                setError(err.message || "server_error");
+            } catch (err) {
+                setError(err.message);
                 setSeller(null);
+            } finally {
                 setLoading(false);
-            });
+            }
+        };
+
+        fetchSeller();
         window.scrollTo(0, 0);
     }, [sellerId, apiUrl]);
-
     return { seller, loading, error };
 };

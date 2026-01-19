@@ -1,0 +1,354 @@
+.order-item-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: background-color 0.2s;
+  border-radius: 0;
+  /* WICHTIG: Kein Margin hier! */
+  margin: 0;
+}
+
+/* Die Linie als Pseudo-Element für volle Kontrolle */
+.order-item-link::after {
+  content: "";
+  position: absolute;
+  /* Wir platzieren die Linie genau auf der Kante */
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background-color: #e4e2e2;
+  /* Dein Rot-Ton */
+  z-index: 1;
+}
+
+/* Entfernt die Linie beim letzten Produkt */
+.order-items-container .order-item-link:last-child::after {
+  display: none;
+}
+
+.order-items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0 !important;
+  /* Verhindert zusätzliche Abstände zwischen den Items */
+}
+
+.order-item-link:hover {
+  background-color: #fafafa;
+}
+
+.order-item-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Oben und unten EXAKT gleich viel Padding */
+  padding: 16px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.order-item-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.order-item-image-container {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #f3f4f6;
+  flex-shrink: 0;
+  border: 1px solid #e5e7eb;
+}
+
+.order-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.order-product-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #e5e7eb;
+}
+
+.order-product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-product-title {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.order-product-variants {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.variant-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.variant-label {
+  color: #9ca3af;
+}
+
+.variant-value {
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.color-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  display: inline-block;
+}
+
+.chat-with-seller-btn {
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chat-with-seller-btn:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+  color: #111827;
+}
+
+
+/* --- GEMEINSAME STYLES FÜR RATING BADGES (ZARA STYLE) --- */
+
+/* Container für Produkt-Rating & Seller-Rating Badge */
+.product-rating-minimal-badge,
+.already-rated-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  /* Etwas mehr Abstand zwischen Sternen und Text */
+  padding: 5px 12px;
+  /* Erhöhte Höhe für bessere Sichtbarkeit */
+  background-color: #fdfaf0;
+  /* Champagner-Weiß */
+  border: 1px solid #f1e6c9;
+  /* Subtile goldene Kante */
+  border-radius: 2px;
+  /* Fast eckig für High-End Look */
+  margin-top: 5px;
+}
+
+/* Sterne-Gruppe */
+.star-display-small,
+.order-seller-rating-display {
+  display: flex;
+  gap: 2px;
+}
+
+/* Einzelne Sterne (Größe angepasst) */
+.star-display-small svg,
+.order-seller-rating-display svg {
+  width: 13px;
+  /* Von 9px auf 13px erhöht */
+  height: 13px;
+}
+
+/* Farbe der aktiven Sterne */
+.star-active {
+  color: #c5a059 !important;
+  /* Mattes Gold */
+}
+
+/* Farbe der leeren Sterne */
+.star-empty,
+.star-icon-minimal.empty {
+  color: #e4e5e9;
+  opacity: 0.6;
+}
+
+/* Text-Labels (YOUR RATING / SELLER RATING) */
+.rating-label-fine,
+.mini-label {
+  font-size: 11px;
+  /* Von 9px auf 11px erhöht */
+  font-weight: 500;
+  color: #8a7b52;
+  /* Edles Taupe-Gold */
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  /* Typischer Zara-Letter-Spacing */
+  line-height: 1;
+}
+
+/* --- SPEZIFISCH FÜR DEN HEADER (SELLER RATING) --- */
+.seller-rating-header-zone {
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+  padding-left: 15px;
+  border-left: 1px solid #eee;
+  /* Trennlinie im Header */
+}
+
+/* --- SPEZIFISCH FÜR DEN BUTTON (WENN NOCH NICHT BEWERTET) --- */
+.rate-seller-btn-minimal {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #111;
+  /* Clean Black Outline */
+  color: #111;
+  padding: 5px 15px;
+  border-radius: 0px;
+  /* Komplett eckig */
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.rate-seller-btn-minimal:hover {
+  background: #111;
+  color: #fff;
+}
+
+.rate-seller-btn-minimal .icon {
+  font-size: 10px;
+}
+
+/* Tablet Responsive */
+@media (max-width: 768px) {
+  .order-item-card {
+    padding: 10px;
+  }
+
+  .order-item-left {
+    gap: 14px;
+  }
+
+  .order-item-image-container {
+    width: 65px;
+    height: 65px;
+  }
+
+  .order-product-title {
+    font-size: 0.9rem;
+  }
+
+  .order-product-variants {
+    font-size: 0.8rem;
+    gap: 10px;
+  }
+
+  .chat-with-seller-btn {
+    padding: 7px 14px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .order-item-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px;
+  }
+
+  .order-item-left {
+    gap: 12px;
+  }
+
+  .order-item-image-container {
+    width: 60px;
+    height: 60px;
+  }
+
+  .order-product-title {
+    font-size: 0.85rem;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .order-product-variants {
+    font-size: 0.75rem;
+    gap: 8px;
+  }
+
+  .order-item-right {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .chat-with-seller-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+/* Small Mobile Responsive */
+@media (max-width: 480px) {
+  .order-item-card {
+    padding: 6px;
+    gap: 10px;
+  }
+
+  .order-item-left {
+    gap: 10px;
+  }
+
+  .order-item-image-container {
+    width: 55px;
+    height: 55px;
+  }
+
+  .order-product-title {
+    font-size: 0.8rem;
+  }
+
+  .order-product-variants {
+    font-size: 0.7rem;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .color-swatch {
+    width: 14px;
+    height: 14px;
+  }
+
+  .chat-with-seller-btn {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    min-height: 44px;
+    /* Touch target minimum */
+    width: 100%;
+  }
+}

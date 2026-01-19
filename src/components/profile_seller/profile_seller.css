@@ -1,9 +1,12 @@
 .profile-seller-container {
   width: 100%;
+
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
+  display: block;
+
   gap: 10px;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 80px;
 }
 
 .profile-left {

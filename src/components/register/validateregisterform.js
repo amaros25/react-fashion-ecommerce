@@ -5,8 +5,8 @@ const ValidateRegisterForm = (formData, role, acceptedTerms, imageFile, selected
     const isValidEmail = (email) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email);
     const isStrongPassword = (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
     const isValidPhone = (phone) => /^[0-9]{8,15}$/.test(phone);
-    const isValidName = (name) => /^[a-zA-Z\s]+$/.test(name);
-    const isValidAddress = (address) => /^[a-zA-Z0-9\s,.-]+(?:\s*[a-zA-Z0-9]+)*$/.test(address);
+    const isValidName = (name) => /^[\p{L}\s]+$/u.test(name);
+    const isValidAddress = (address) => address && address.length >= 5;
 
 
     // Check first name
@@ -69,7 +69,7 @@ const ValidateRegisterForm = (formData, role, acceptedTerms, imageFile, selected
 
     // Seller checks
     if (role === "seller") {
-        if (!formData.shopName) {
+        if (!formData.shopName || formData.shopName.trim().length < 3) {
             return t("register.error.fillShopNameAddress");
         }
         if (!imageFile) {

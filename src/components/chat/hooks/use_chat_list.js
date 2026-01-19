@@ -87,39 +87,45 @@ export const useChatList = (userId, partnerId, token, initialType, initialNumber
                     hasHandledInitial.current = true;
 
                     const existingChat = currentChats.find(c =>
-                        c.number === currentInitialNumber &&
+                        c.subjectNumber === currentInitialNumber &&
                         c.type === currentInitialType &&
-                        (c.sellerId === partnerId || c.userId === partnerId)
+                        (c.participant1Id == partnerId || c.participant2Id == partnerId)
                     );
 
                     if (existingChat) {
-                        handleOpenChatRef.current(existingChat._id);
+                        handleOpenChatRef.current(existingChat.id);
                     } else {
                         const tempId = "temp_" + Date.now();
                         const alreadyExistsTemp = chatsRef.current.find(c =>
-                            c.number === currentInitialNumber &&
+                            c.subjectNumber === currentInitialNumber &&
                             c.type === currentInitialType &&
-                            c._id.startsWith("temp_") &&
-                            (c.sellerId === partnerId || c.userId === partnerId)
+                            c.id.toString().startsWith("temp_") &&
+                            (c.participant1Id == partnerId || c.participant2Id == partnerId)
                         );
 
                         if (!alreadyExistsTemp) {
                             const chatEntry = {
-                                _id: tempId,
+                                id: tempId,
                                 type: currentInitialType,
-                                number: currentInitialNumber,
+                                subjectNumber: currentInitialNumber,
                                 updatedAt: new Date().toISOString(),
                                 messages: [],
-                                participants: [userId, partnerId],
-                                userId: role === "seller" ? partnerId : userId,
-                                sellerId: role === "seller" ? userId : partnerId
+                                participant1Id: role === "seller" ? partnerId : userId,
+                                participant2Id: role === "seller" ? userId : partnerId
                             };
                             currentChats = [chatEntry, ...currentChats];
                             handleOpenChatRef.current(tempId);
                         }
                     }
                 }
-                setChatsRef.current(currentChats);
+                setChatsRef.current(currentChats.map(c => ({
+                    ...c,
+                    // Ensure ID is string for "temp_" checks
+                    id: c.id?.toString() || c._id?.toString(),
+                    // Flatten otherParticipant info for sidebar
+                    otherParticipant: c.otherParticipant ||
+                        (c.participant1Id == userId ? c.participant2 : c.participant1)
+                })));
             } else if (!result.aborted) {
                 toast.error(tRef.current(result.errorKey));
             }

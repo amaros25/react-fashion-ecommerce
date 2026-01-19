@@ -8,71 +8,53 @@ import { useTranslation } from "react-i18next";
 
 function ProductInfoHeader({ product, userId }) {
     const { t, i18n } = useTranslation();
-    const apiUrl = process.env.REACT_APP_API_URL;
-    // Reviews : function used to get the reviews of a product
-    const reviews = product.reviews || [];
-    // Filter only reviews with rating > 0
-    const ratingsWithValue = reviews.filter(r => r.rating > 0);
-    const reviewCount = ratingsWithValue.length;
+
+    const reviewCount = product.reviewCount || 0;
+    const averageRating = Number(product.avgRating) || 0;
+
     const savedProductsKey = `saved_products_${userId}`;
 
-    // Get saved products : function used to get the saved products list from the local storage
     const getSavedProducts = () => {
+        if (!userId) return [];
         const saved = localStorage.getItem(savedProductsKey);
-        console.log("saved products:", saved);
         return saved ? JSON.parse(saved) : [];
     };
-
-    // Toggle saved product : function used to add or remove a product from the saved products list
+    const [isProductSaved, setIsProductSaved] = useState(getSavedProducts().includes(product.id));
     const toggleSavedProduct = () => {
-        const savedProducts = getSavedProducts();
-        const isProductSaved = savedProducts.includes(product._id);
         if (!userId) {
             toast.info(t("product_page.login_to_save"));
             return;
         }
-        if (isProductSaved) {
-            // Product remove from saved products list
-            const updatedProducts = savedProducts.filter(id => id !== product._id);
-            localStorage.setItem(savedProductsKey, JSON.stringify(updatedProducts));
-            setIsProductSaved(false);
+
+        const savedProducts = getSavedProducts();
+        const isCurrentlySaved = savedProducts.includes(product.id);
+
+        let updatedProducts;
+        if (isCurrentlySaved) {
+            updatedProducts = savedProducts.filter(id => id !== product.id);
             toast.info(t("product_page.remove_from_saved"));
         } else {
-            // Product add to saved products list
-            savedProducts.push(product._id);
-            localStorage.setItem(savedProductsKey, JSON.stringify(savedProducts));
-            setIsProductSaved(true);
+            updatedProducts = [...savedProducts, product.id];
             toast.success(t("product_page.add_to_saved"));
         }
+
+        localStorage.setItem(savedProductsKey, JSON.stringify(updatedProducts));
+        setIsProductSaved(!isCurrentlySaved);
     };
-    const [isProductSaved, setIsProductSaved] = useState(getSavedProducts().includes(product._id));
 
-    // Calculate average rating : function used to calculate the average rating of a product
-    const averageRating =
-        ratingsWithValue.length > 0
-            ? ratingsWithValue.reduce((sum, r) => sum + r.rating, 0) / ratingsWithValue.length
-            : 0;
-
-
-    const getStateLabel = (state) => {
-        switch (state) {
-            case 0: return t("product_state.pending");
-            case 1: return t("product_state.active");
-            case 2: return t("product_state.blocked");
-            case 3: return t("product_state.deleted");
-            default: return t("product_state.unknown");
+    const getStateInfo = (product) => {
+        if (!product.states || product.states.length === 0) return { label: t("unknown"), class: "state-unknown" };
+        const currentState = product.states[product.states.length - 1].state;
+        switch (currentState) {
+            case 0: return { label: t("product_state.pending"), class: "state-pending" };
+            case 1: return { label: t("product_state.active"), class: "state-active" };
+            case 2: return { label: t("product_state.blocked"), class: "state-blocked" };
+            case 3: return { label: t("product_state.deleted"), class: "state-deleted" };
+            default: return { label: t("product_state.unknown"), class: "state-unknown" };
         }
     };
 
-    const getStateClass = (state) => {
-        switch (state) {
-            case 0: return "state-pending";
-            case 1: return "state-active";
-            case 2: return "state-blocked";
-            case 3: return "state-deleted";
-            default: return "state-unknown";
-        }
-    };
+
     return (
         <>
             <div className="product-header-column">
@@ -88,8 +70,8 @@ function ProductInfoHeader({ product, userId }) {
 
                 </div>
                 <div className="product-badges">
-                    <span className={`current-state-badge ${getStateClass(product.states?.[product.states.length - 1]?.state)}`}>
-                        {getStateLabel(product.states?.[product.states.length - 1]?.state)}
+                    <span className={`current-state-badge ${getStateInfo(product).class}`}>
+                        {getStateInfo(product).label}
                     </span>
                     <span className="product-number-badge">
                         {product.productNumber}
@@ -100,13 +82,15 @@ function ProductInfoHeader({ product, userId }) {
                 <div className="product-price-container">
                     {product.discountedPercent > 0 ? (
                         <>
-                            <span className="product-price-strikethrough">{product.price} {t("price_suf")}</span>
+                            <span className="product-price-strikethrough">
+                                {Number(product.price).toFixed(2)} {t("price_suf")}
+                            </span>
                             <span className="product-price-header-info">
-                                {(product.price * (1 - product.discountedPercent / 100)).toFixed(0)} {t("price_suf")}
+                                {(Number(product.price) * (1 - Number(product.discountedPercent) / 100)).toFixed(2)} {t("price_suf")}
                             </span>
                         </>
                     ) : (
-                        <span className="product-price-header-info">{product.price} {t("price_suf")}</span>
+                        <span className="product-price-header-info">{Number(product.price).toFixed(2)} {t("price_suf")}</span>
                     )}
                 </div>
                 <div className="product-rating-container">

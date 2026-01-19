@@ -9,7 +9,8 @@ export default function useProfileImageUpload(t) {
 
     const { uploadImage, updateImage } = useUploadImageApi(cloudName, uploadPreset);
 
-    const uploadProfileImage = async (imageFile, userId, role) => {
+    const uploadProfileImage = async (imageFile, userId, token) => {
+
         if (!imageFile) {
             console.log("No Image Selected");
             return;
@@ -17,18 +18,15 @@ export default function useProfileImageUpload(t) {
 
         try {
             const imageUrl = await uploadImage(imageFile);
-
             if (!imageUrl) {
                 toast.error(t("register.error.image_upload_failed"));
                 return;
             }
 
-            const endpoint =
-                role === "seller"
-                    ? `${apiUrl}/sellers/${userId}/updateImage`
-                    : `${apiUrl}/users/${userId}/updateImage`;
+            const endpoint = `${apiUrl}/users/${userId}/updateImage`;
+            console.log("uploadProfileImage endpoint: ", endpoint);
 
-            const updateResponse = await updateImage(endpoint, { imageUrl });
+            const updateResponse = await updateImage(endpoint, { imageUrl, userId }, token);
 
             if (!updateResponse.success) {
                 console.error("Error updating image URL:", updateResponse.error);

@@ -37,3 +37,31 @@
     transform: rotate(360deg);
   }
 }
+
+.main-content {
+  min-height: 100vh;
+  display: block;
+}
+
+/* Speziell für iPad & Tablets (769px bis 1204px) */
+@media screen and (min-width: 769px) and (max-width: 1204px) {
+  .main-content {
+    min-height: 200vh;
+    padding-bottom: 100px;
+    overflow-y: visible;
+    display: block;
+  }
+
+  .profile-seller-container {
+    height: auto;
+    overflow: visible;
+  }
+}
+
+/* Für große PC Monitore (über 1204px) */
+@media screen and (min-width: 1205px) {
+  .main-content {
+    min-height: 80vh;
+    /* Normaler PC braucht meist weniger Platz-Erzwingung */
+  }
+}

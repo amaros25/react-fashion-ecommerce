@@ -70,13 +70,16 @@ const ChatSidebar = ({
 
             return (
               <div
-                key={chat._id}
-                className={`chat-card ${activeChat?._id === chat._id ? "active" : ""}`}
-                onClick={() => handleOpenChat(chat._id)}
+                key={chat.id}
+                className={`chat-card ${activeChat?.id === chat.id ? "active" : ""}`}
+                onClick={() => handleOpenChat(chat.id)}
               >
                 <div>
+                  <strong>{chat.otherParticipant?.name || t('chat.customer')}</strong>
+                </div>
+                <div>
                   <strong>{chat.type === "order" ? t('chat.order') : t('chat.product')}</strong>
-                  {`: ${chat.number || t('chat.noNumberAvailable')}`}
+                  {`: ${chat.subjectNumber || t('chat.noNumberAvailable')}`}
                 </div>
                 <div>
                   <strong>{t('chat.lastMessage')}:</strong> {lastMessage}

@@ -1,0 +1,47 @@
+/* --- MAIN ORDER CARD FOOTER (MOCF) --- */
+
+.mocf-container {
+    padding-top: 15px;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: hidden;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.mocf-actions-row {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+/* --- RESPONSIVE DESIGN --- */
+
+@media (max-width: 768px) {
+    .mocf-container {
+        padding-top: 12px;
+        gap: 15px;
+    }
+
+    .mocf-actions-row {
+        justify-content: stretch;
+        flex-direction: column;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .mocf-container {
+        padding-top: 12px;
+        gap: 12px;
+    }
+
+    /* Child buttons should likely take full width or span */
+    .mocf-actions-row>* {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+}
