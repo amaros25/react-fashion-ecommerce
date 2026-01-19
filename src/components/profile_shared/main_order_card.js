@@ -6,7 +6,7 @@ import OrderItem from "./order_item.js";
 import MainOrderCardHeader from "./main_order_card_header.js";
 import MainOrderCardFooter from "./main_order_card_footer.js";
 import MainOrderCardModals from "./main_order_card_modals.js";
-
+import { cities, citiesData } from '../utils/const/cities';
 import "./main_order_card.css";
 
 function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, isUpdating, viewMode = "user" }) {
@@ -29,10 +29,15 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
 
     const canRateSeller = () => {
         if (viewMode !== "user" || order.sellerReview || !userId) return false;
-        const completion = order.statusHistory?.find(s =>
-            [Number(ORDER_STATUS.DELIVERED), Number(ORDER_STATUS.PICKED_UP)].includes(Number(s.status))
+        const hasCompletedStatus = order.statusHistory?.some(s =>
+            [
+                Number(ORDER_STATUS.DELIVERED),
+                Number(ORDER_STATUS.PICKED_UP),
+                Number(ORDER_STATUS.RETURN_RECEIVED)
+            ].includes(Number(s.status))
         );
-        return !!completion && Number(completion.status) === Number(ORDER_STATUS.DELIVERED);
+
+        return !!hasCompletedStatus;
     };
 
     const renderUserButtons = () => {
@@ -48,7 +53,6 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
     };
 
     const handleStatusUpdateInitiated = (targetStatus) => {
-        // Liste der Status-Codes, die eine Begründung/Kommentar erfordern
         const statusRequiringComment = [
             Number(ORDER_STATUS.CANCELLED_SELLER),
             Number(ORDER_STATUS.RETURN_REFUSED),
@@ -57,10 +61,8 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
         ];
 
         if (statusRequiringComment.includes(Number(targetStatus))) {
-            // Modal öffnen für Begründung
             setCommentModal({ isOpen: true, targetStatus: targetStatus });
         } else {
-            // Direktes Update ohne Kommentar
             onStatusChange(order.id, targetStatus);
         }
     };
@@ -156,8 +158,38 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
         navigate('/chat', { state: { newOrderNumber: order.orderNumber, partnerId: targetId, newChatType: 'order' } });
     };
 
+    const renderChatButton = () => {
+        if (!isChatAllowed()) return null;
+        return (
+            <button key="chat" className="chat-with-seller-main-btn" onClick={handleChat}>
+                <FaRegCommentDots /> {viewMode === "user" ? t("chat_seller") : t("chat_user")}
+            </button>
+        );
+    };
+
     const formattedDate = order.createdAt ? new Date(order.createdAt).toLocaleString() : '';
     const seenProducts = new Set();
+    const showContactInfo = viewMode === "seller" && currentStatus >= Number(ORDER_STATUS.CONFIRMED);
+    console.log("order", order);
+
+    let buyerPhone = "";
+    let buyerCompleteAddress = "";
+
+    try {
+        buyerPhone = order.buyerSnapshot?.p;
+    } catch (error) {
+        console.log("error", error);
+        buyerPhone = t("failed_load_address");
+    }
+    try {
+        const buyerAddress = order.buyerSnapshot?.a;
+        const buyerCityText = cities[order.buyerSnapshot?.c];
+        const buyerSubCityText = citiesData[buyerCityText][order.buyerSnapshot?.sc];
+        buyerCompleteAddress = `${buyerAddress}, ${buyerSubCityText}, ${buyerCityText}`;
+    } catch (error) {
+        console.log("error", error);
+        buyerCompleteAddress = t("failed_load_address");
+    }
 
     return (
         <div className={`unified-order-card ${viewMode === "seller" ? "seller-style" : "user-style"}`}>
@@ -170,9 +202,23 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
             {viewMode === "seller" && (
                 <div className="order-customer-details">
                     <div className="customer-info-block">
-                        <span className="info-label">{t("cart_page.customer")}</span>
+                        <span className="info-label">{t("cart_page.customer")}: </span>
                         <span className="info-value">{order.buyer ? `${order.buyer.firstName} ${order.buyer.lastName}` : t("loading_user_error")}</span>
                     </div>
+                    {showContactInfo && order.buyerSnapshot && (
+                        <>
+                            {isDelivery && (
+                                <div className="customer-info-block">
+                                    <span className="info-label">{t("address")}: </span>
+                                    <span className="info-value">{buyerCompleteAddress}</span>
+                                </div>
+                            )}
+                            <div className="customer-info-block">
+                                <span className="info-label">{t("phone")}: </span>
+                                <span className="info-value">{buyerPhone}</span>
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
 
@@ -194,6 +240,7 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
             <MainOrderCardFooter
                 order={order} t={t} viewMode={viewMode}
                 renderUserButtons={renderUserButtons} renderSellerButtons={renderSellerButtons}
+                renderChatButton={renderChatButton}
             />
 
             <MainOrderCardModals
@@ -203,14 +250,9 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
                 setHasRated={setHasRated} commentModal={commentModal} setCommentModal={setCommentModal}
                 onStatusChange={onStatusChange} t={t}
             />
-
-            {isChatAllowed() && (
-                <button className="chat-with-seller-main-btn" onClick={handleChat}>
-                    <FaRegCommentDots /> {viewMode === "user" ? t("chat_seller") : t("chat_user")}
-                </button>
-            )}
         </div>
     );
+
 }
 
 export default MainOrderCard;

@@ -212,7 +212,7 @@ function ProductPage() {
     }
   };
 
-
+  console.log(product)
   return (
     <div className="product-page" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className="breadcrumb-container">

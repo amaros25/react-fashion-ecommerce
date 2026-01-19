@@ -62,19 +62,61 @@
 }
 
 /* --- DIE EINZELNE KARTE (unified-order-card) --- */
+/* --- DIE EINZELNE KARTE (unified-order-card) --- */
 .unified-order-card {
     background: #fff;
+    /* User request: "schicker", not invisible, not black. */
     border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border-radius: 4px;
+    /* Slightly sharper */
+    padding: 24px;
+    margin-bottom: 24px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .unified-order-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    border-color: #d1d5db;
 }
+
+/* --- CHAT BUTTON (Zara Style, Bottom Right) --- */
+.chat-with-seller-main-btn {
+    align-self: flex-end;
+    /* Pushes to right in flex-col */
+    background-color: #fff;
+    border: 1px solid #000;
+    color: #000;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 0;
+    /* Square/Zara style */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+}
+
+.chat-with-seller-main-btn:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+/* RTL Override for Chat Button */
+[dir="rtl"] .chat-with-seller-main-btn {
+    align-self: flex-start;
+    /* Pushes to left in RTL */
+    flex-direction: row-reverse;
+}
+
 
 /* Header innerhalb der Karte */
 .order-card-header {
@@ -159,59 +201,63 @@
     flex-wrap: wrap;
 }
 
-/* --- BUTTON STYLES --- */
-.seller-btn {
-    display: flex;
+.seller-btn,
+.chat-with-seller-main-btn {
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    font-weight: 500;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 24px;
+    background-color: #fff !important;
+    border: 1px solid #000 !important;
+    border-style: solid !important;
+    box-shadow: none !important;
+    outline: none !important;
+    box-sizing: border-box;
+    color: #000 !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 0 !important;
+    /* Force square corners over external css */
     cursor: pointer;
-    border: none;
     transition: all 0.2s ease;
+    min-height: 40px;
+    /* User preferred height */
+    margin: 0;
+    width: auto;
+    font-family: inherit;
 }
 
-.btn-confirm {
-    background-color: #3b82f6;
-    color: #fff;
+.seller-btn:hover,
+.chat-with-seller-main-btn:hover {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #000 !important;
 }
 
-.btn-primary {
-    background-color: #111827;
-    color: #fff;
-}
-
-.btn-success {
-    background-color: #10b981;
-    color: #fff;
-}
-
-.btn-warning {
-    background-color: #f59e0b;
-    color: #fff;
-}
-
-.btn-cancel {
-    background-color: #ef4444;
-    color: #fff;
-}
-
-.btn-cancel-outline {
-    background-color: transparent;
-    border: 1px solid #ef4444;
-    color: #ef4444;
-}
-
-.btn-rate {
-    background-color: #ffc107;
-    color: #000;
-}
-
+/* Force all specific buttons to match the shared style exactly */
+.btn-confirm,
+.btn-primary,
+.btn-success,
+.btn-warning,
+.btn-cancel,
+.btn-cancel-outline,
+.btn-rate,
 .btn-return {
-    background-color: #6b7280;
-    color: #fff;
+    background-color: #fff !important;
+    border: 1px solid #000 !important;
+    color: #000 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Ensure Cancel hover is also consistent (Black/White) */
+.btn-cancel:hover {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #000 !important;
 }
 
 

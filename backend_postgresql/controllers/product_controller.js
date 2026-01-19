@@ -65,7 +65,8 @@ const productController = {
             const not = req.query.not ? parseInt(req.query.not) : null;
             const sortBy = req.query.sort || 'newest';
             const offset = (page - 1) * limit;
-            const where = {};
+            const where = { status: 1 }; // Only Active Products
+
             if (category !== null && !isNaN(category)) where.category = category;
             if (subcategory !== null && !isNaN(subcategory)) where.subcategory = subcategory;
             if (not) where.id = { [Op.ne]: not };

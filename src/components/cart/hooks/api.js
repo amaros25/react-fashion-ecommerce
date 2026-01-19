@@ -49,9 +49,6 @@ export const fetchSeller = async (sellerId, token) => {
     }
 };
 
-
-
-
 /**
  * Create a new order
  * @param {Object} orderData - Order data
@@ -132,23 +129,16 @@ export const createMultipleOrders = async (groupedCart, user_data, userId, token
                 size: item.size,
                 quantity: item.quantity,
             }));
-
-            const shippingCost = isDelivery ? items.reduce((sum, i) => sum + (Number(i.delprice) || 0), 0) : 0;
-            const totalPrice = items.reduce((sum, i) => sum + Number(i.price) * i.quantity, 0) + shippingCost;
-
             const orderData = {
                 userId,
                 sellerId,
                 items: formattedItems, // Enthält jetzt die variantId
-                totalPrice,
                 status: [{ update: orderStatus, date: new Date() }],
                 notes: "",
-                paymentMethod: "Cash on Delivery",
+                paymentMethod: "",
                 is_delivery: isDelivery,
                 selectedAddress,
             };
-
-            console.log("***** createMultipleOrders orderData", orderData);
             const result = await createOrder(orderData, token);
             if (!result.success) {
                 return result; // Bricht ab, wenn eine Bestellung fehlschlägt

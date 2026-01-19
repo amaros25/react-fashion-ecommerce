@@ -80,9 +80,9 @@ export default function OrderItem({ item, product, order, t, showRatingButton, i
         <div className="order-item-left">
           <div className="order-item-image-container">
             {/* ÄNDERUNG: product?.images (mit s) anstatt product?.image */}
-            {item.product?.images?.[0] ? (
+            {item.product?.mainImage ? (
               <img
-                src={item.product?.images?.[0]}
+                src={item.product?.mainImage}
                 alt={item.product?.name}
                 className="order-product-image"
               />
@@ -94,9 +94,30 @@ export default function OrderItem({ item, product, order, t, showRatingButton, i
           </div>
 
           <div className="order-product-info">
-            <p className="order-product-title">
-              {item.product?.name || t("loading_product")}
-            </p>
+            <div className="order-product-header-row">
+              <p className="order-product-title">
+                {item.product?.name || t("loading_product")}
+              </p>
+
+              {/* RATING / RATE BUTTON (Next to Title) */}
+              <div className="order-product-rating-inline">
+                {/* 1. If rated: Show Stars */}
+                {viewMode === "user" && isRated && (
+                  renderUserRating()
+                )}
+
+                {/* 2. If NOT rated: Show Rate Button */}
+                {viewMode === "user" && !isRated && showRatingButton && isEligibleStatus && (
+                  <button className="rate-product-btn" onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onRateClick();
+                  }}>
+                    {t("rate_products")}
+                  </button>
+                )}
+              </div>
+            </div>
 
             {/* Product Variants (Size, Color, Quantity) */}
             <div className="order-product-variants">
@@ -129,36 +150,20 @@ export default function OrderItem({ item, product, order, t, showRatingButton, i
                 <span className="variant-value">{item.quantity}</span>
               </div>
             </div>
+            <div className="order-product-variants">
+              <span className="variant-label">{t("price")}:</span>
+              <span className="variant-value">{item.product?.price}</span>
+              <span className="variant-label">{t("cart_page.shipping")}:</span>
+              <span className="variant-value">{item.product?.delprice}</span>
+            </div>
           </div>
         </div>
 
         {/* Right Side: Chat Button (Only shown on the last item to avoid duplicates) */}
         <div className="order-item-right">
-
-
-          <div className="item-rating-actions">
-            {/* 2. Wenn bereits bewertet wurde: IMMER Sterne zeigen (egal ob showRatingButton true/false) */}
-            {viewMode === "user" && isRated && (
-              renderUserRating()
-            )}
-
-            {/* 3. Wenn NOCH NICHT bewertet wurde: Button zeigen (nur beim ersten Mal) */}
-            {viewMode === "user" && !isRated && showRatingButton && isEligibleStatus && (
-              <button className="seller-btn btn-rate" onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                // Hier Funktion zum Modal öffnen aufrufen, falls nötig
-                onRateClick();
-              }}>
-                <FaStar /> {t("order_state_buttons.rate")}
-              </button>
-            )}
-            {/* 1. Chat Button bleibt gleich */}
-
-          </div>
-
+          {/* logic handled elsewhere or removed, preserving layout container */}
         </div>
       </div>
-    </Link >
+    </Link>
   );
 }

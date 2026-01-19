@@ -10,12 +10,36 @@
     font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-.mocf-actions-row {
+/* Revised Footer Layout: Split Chat & Actions */
+.mocf-footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    gap: 15px;
+
+}
+
+.mocf-chat-section {
+    display: flex;
+    align-items: center;
+}
+
+/* Ensure Chat Button is part of this section logic internally, or just sits here */
+
+.mocf-actions-group {
     display: flex;
     gap: 10px;
-    justify-content: flex-end;
+    align-items: center;
     flex-wrap: wrap;
 }
+
+/* RTL Support is automatic with space-between:
+   LTR: Start=Left (Chat), End=Right (Actions)
+   RTL: Start=Right (Chat), End=Left (Actions)
+*/
 
 /* --- RESPONSIVE DESIGN --- */
 
@@ -25,23 +49,20 @@
         gap: 15px;
     }
 
-    .mocf-actions-row {
-        justify-content: stretch;
-        flex-direction: column;
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .mocf-container {
-        padding-top: 12px;
-        gap: 12px;
+    .mocf-footer-bottom {
+        flex-direction: column-reverse;
+        /* Stack actions above chat? Or just stack. User didn't specify mobile order, standard is fine. */
+        align-items: stretch;
+        gap: 15px;
     }
 
-    /* Child buttons should likely take full width or span */
-    .mocf-actions-row>* {
+    .mocf-chat-section,
+    .mocf-actions-group {
         width: 100%;
-        display: flex;
         justify-content: center;
+    }
+
+    .mocf-actions-group {
+        flex-direction: column;
     }
 }

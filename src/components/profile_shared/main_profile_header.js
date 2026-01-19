@@ -21,7 +21,6 @@ function MainProfileHeader({
     updateImage,
     viewMode = "user"
 }) {
-    console.log("data", data);
     const cloudName = process.env.REACT_APP_CLOUD_NAME;
     const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
     const { uploadImage } = useUploadImageApi(cloudName, uploadPreset);
@@ -115,7 +114,6 @@ function MainProfileHeader({
 
     const renderRating = () => {
         if (viewMode !== "seller") return null;
-        console.log("avgRating", data.averageRating);
         return (
             <div className="rating-minimal">
                 {[1, 2, 3, 4, 5].map((star) => {

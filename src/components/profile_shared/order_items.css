@@ -139,6 +139,51 @@
   color: #111827;
 }
 
+/* NEW: Combined Header for Title + Rating */
+.order-product-header-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  /* Wraps on small screens if title long */
+  gap: 12px;
+}
+
+.order-product-title {
+  font-weight: 600;
+  color: #111827;
+  font-size: 1.1rem;
+  /* Increased from 0.95rem */
+  margin: 0;
+}
+
+/* NEW: Rate Product Button (High Contrast / Zara Style) */
+.rate-product-btn {
+  background-color: #fff;
+  border: 1px solid #000;
+  padding: 2px 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 2px;
+  cursor: pointer;
+  color: #000;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.rate-product-btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Inline Rating Container */
+.order-product-rating-inline {
+  display: flex;
+  align-items: center;
+}
+
+
 
 /* --- GEMEINSAME STYLES FÜR RATING BADGES (ZARA STYLE) --- */
 
@@ -147,17 +192,12 @@
 .already-rated-container {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  /* Etwas mehr Abstand zwischen Sternen und Text */
-  padding: 5px 12px;
-  /* Erhöhte Höhe für bessere Sichtbarkeit */
-  background-color: #fdfaf0;
-  /* Champagner-Weiß */
-  border: 1px solid #f1e6c9;
-  /* Subtile goldene Kante */
-  border-radius: 2px;
-  /* Fast eckig für High-End Look */
-  margin-top: 5px;
+  gap: 8px;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  margin-top: 0;
 }
 
 /* Sterne-Gruppe */
@@ -194,7 +234,7 @@
   font-size: 11px;
   /* Von 9px auf 11px erhöht */
   font-weight: 500;
-  color: #8a7b52;
+  color: #c5c2b8;
   /* Edles Taupe-Gold */
   text-transform: uppercase;
   letter-spacing: 1.2px;

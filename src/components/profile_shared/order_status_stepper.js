@@ -72,7 +72,7 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
 
     // Helper to extract status and date from inconsistent log structures
     const getStatus = (log) => log.status !== undefined ? Number(log.status) : Number(log.update);
-    const getDate = (log) => log.timestamp || log.date;
+    const getDate = (log) => log.createdAt || log.date;
 
     const lastStatus = getStatus(lastLog);
 
@@ -147,8 +147,6 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
     }
 };
 
-
-
 const OrderStatusStepper = ({ order, t }) => {
     const isRTL = document.documentElement.dir === "rtl";
     const sortedHistory = [...(order.statusHistory || [])].sort(
@@ -203,22 +201,31 @@ const OrderStatusStepper = ({ order, t }) => {
                 {displaySteps.map((step, index) => {
                     // Find actual index in full array for numbering and logic
                     const actualIndex = steps.findIndex(s => s.key === step.key);
-                    const isCompleted = actualIndex < currentIndex;
-                    const isCurrent = actualIndex === currentIndex;
 
+                    // Only successful final statuses should be visually "Completed" (Checkmark)
+                    const SUCCESS_STATUSES = [
+                        STATUS.DELIVERED,
+                        STATUS.PICKED_UP,
+                        STATUS.RETURN_RECEIVED
+                    ];
+
+                    const isSuccessFinal = SUCCESS_STATUSES.includes(Number(lastStatus));
+                    const isCompleted = actualIndex < currentIndex || (actualIndex === currentIndex && isSuccessFinal);
+                    const isCurrent = actualIndex === currentIndex;
                     const itemClass = `stepper-item ${isCompleted ? "completed" : ""} ${isCurrent ? "current" : ""} ${isCurrent && isFailed ? "failed" : ""}`;
-                    console.log("actualIndex", actualIndex, "currentIndex", currentIndex, "isCompleted", isCompleted, "isCurrent", isCurrent);
                     return (
                         <div key={step.key} className={itemClass}>
                             <div className="step-counter">
                                 {isCompleted ? "✓" : (isCurrent && isFailed ? "✕" : actualIndex + 1)}
                             </div>
-                            <div className="step-name">{t(step.label)}</div>
-                            {step.date && (
-                                <div className="step-date">
-                                    {new Date(step.date).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
-                                </div>
-                            )}
+                            <div className="step-content">
+                                <div className="step-name">{t(step.label)}</div>
+                                {step.date && (
+                                    <div className="step-date">
+                                        {new Date(step.date).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                                    </div>
+                                )}
+                            </div>
                             {index < displaySteps.length - 1 && <div className="step-line"></div>}
                         </div>
                     );

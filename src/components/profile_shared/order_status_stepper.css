@@ -72,6 +72,7 @@
     font-weight: bold;
     font-size: 14px;
     margin-bottom: 8px;
+    margin-inline-start: 10px;
     transition: background-color 0.3s, color 0.3s;
     border: 2px solid #fff;
     box-shadow: 0 0 0 2px #e0e0e0;
@@ -81,6 +82,7 @@
     background-color: #4caf50;
     color: white;
     box-shadow: 0 0 0 2px #4caf50;
+
 }
 
 .stepper-item.current .step-counter {
@@ -96,6 +98,14 @@
     font-weight: 500;
     word-break: break-word;
     max-width: 100%;
+}
+
+.step-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 10px;
 }
 
 .stepper-item.completed .step-name,
@@ -210,16 +220,27 @@
         font-size: 13px;
     }
 
+    .step-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1;
+        min-width: 0;
+        /* Prevents overflow issues */
+    }
+
     .step-name {
         text-align: left;
-        flex: 1;
+        width: 100%;
         font-size: 11px;
     }
 
     .step-date {
         text-align: left;
         margin-top: 2px;
-        font-size: 9px;
+        font-size: 10px;
+        /* Slight bump for readability or keep small */
+        width: 100%;
     }
 
     .step-line {
@@ -239,6 +260,27 @@
 
     .order-stepper.stepper-collapsed .step-name {
         text-align: center;
+    }
+
+    .order-stepper.stepper-collapsed .step-content {
+        align-items: center;
+    }
+
+    .order-stepper.stepper-collapsed .step-date {
+        text-align: center;
+    }
+
+    /* RTL Mobile Overrides */
+    .rtl .step-content {
+        align-items: flex-end;
+    }
+
+    .rtl .step-name {
+        text-align: right;
+    }
+
+    .rtl .step-date {
+        text-align: right;
     }
 
     .stepper-toggle-btn {

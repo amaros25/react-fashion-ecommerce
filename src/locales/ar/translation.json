@@ -270,8 +270,8 @@
     "picked_up": "تم الاستلام",
     "pick_up_failed": "فشل الاستلام",
     "no_response": "لا يجيب",
-    "cancelled_user": "ملغي",
-    "cancelled_seller": "ملغي",
+    "cancelled_user": "ملغاة من قبلك",
+    "cancelled_seller": "ملغاة من قبل البائع",
     "first_try_delivery_failed": "فشل المحاولة الأولى",
     "second_try_delivery_failed": "فشل المحاولة الثانية"
   },
@@ -737,5 +737,10 @@
   },
   "account_inactive_msg": "حسابك غير نشط حاليًا. يرجى الاتصال بالمسؤول.",
   "your_seller_rating": "تقييمك للبائع",
-  "your_product_rating": "تقييمك للمنتج"
+  "your_product_rating": "تقييمك للمنتج",
+  "show_history": "عرض السجل",
+  "hide_history": "إخفاء السجل",
+  "seller_review_placeholder": "اكتب تعليقاً...",
+  "failed_load_address": "تعذر تحميل العنوان",
+  "failed_load_phone": "تعذر تحميل الهاتف"
 }

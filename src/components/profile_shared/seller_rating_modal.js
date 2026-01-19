@@ -36,9 +36,8 @@ export default function SellerRatingModal({ order, onClose, onRatingComplete }) 
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-
     const shopName = order.seller?.shopName || t("seller");
-    const sellerImage = order.seller?.image || "/placeholder.png";
+    const sellerImage = order.seller?.imageUrl || "/placeholder.png";
 
     const handleSubmit = async () => {
         if (rating === 0) {
@@ -97,7 +96,7 @@ export default function SellerRatingModal({ order, onClose, onRatingComplete }) 
                     />
                     <span className="srm-seller-name">{shopName}</span>
                     <p className="srm-order-ref">
-                        {t("order_number")}: {order.orderNumber}
+                        {t("help_center.order_number")}: {order.orderNumber}
                     </p>
                 </div>
 

@@ -4,7 +4,7 @@ import Pagination from './pagination.js';
 import { FilterContext } from '../filter_context/filter_context';
 import ProductCard from '../product_card/product_card';
 import { useParams } from 'react-router-dom';
-import { useHomeProducts } from './hooks/useHomeProducts';
+import { useHomeProductManager } from '../api_managers/useHomeProductManager';
 import './home.css';
 import '../products/new_product_list.css';
 import { categoryKeys, subCategories } from '../utils/const/category';
@@ -14,8 +14,6 @@ import { debounce } from 'lodash';
 const Home = () => {
   const { t, i18n } = useTranslation();
   const { category, subcategory } = useParams();
-  console.log("category: ", category);
-  console.log("subcategory: ", subcategory);
   const { searchTerm, sortBy } = useContext(FilterContext);
   const urlCategory = categoryKeys.includes(category) ? categoryKeys.indexOf(category) : null;
   const urlSubcategory = category && subcategory && subcategory !== "all" && subCategories[category]
@@ -24,11 +22,10 @@ const Home = () => {
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(24);
-  const [loading, setLoading] = useState(false);
-  const [fetchError, setFetchError] = useState(null);
+  // Remove local loading/error states that are now managed or derived
+  // kept for layout control if needed, but manager provides them.
 
-
-  const { latestProducts, totalPages, readingDataDone, readingError } = useHomeProducts(
+  const { latestProducts, totalPages, readingDataDone, fetchError } = useHomeProductManager(
     page,
     limit,
     urlCategory,
@@ -51,38 +48,10 @@ const Home = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    let timer;
-    if (readingError) {
-      setLoading(false);
-      setFetchError(t("home_error.error_while_reading_data"));
-      return;
-    }
-    if (!readingDataDone) {
-      setLoading(true);
-      setFetchError(null);
-      timer = setTimeout(() => {
-        if (latestProducts.length === 0 && readingDataDone) {
-          setLoading(false);
-          setFetchError(t("home_error.noProducts"));
-          return
-        } else if (latestProducts.length === 0 && !readingDataDone) {
-          setLoading(false);
-          setFetchError(t("home_error.fetchTimeout"));
-          return
-        }
-      }, 10000);
-    } else {
-      if (latestProducts.length === 0) {
-        setFetchError(t("home_error.noProducts"));
-      } else {
-        setFetchError(null);
-      }
-      setLoading(false);
-      clearTimeout(timer);
-    }
-    return () => clearTimeout(timer);
-  }, [latestProducts, readingDataDone]);
+  // Simplified Error/Loading Logic relying on Manager
+  // The complex timeout logic in previous Home.js was likely to handle slow legacy fetch
+  // We can trust readingDataDone from the new hook for now.
+  const isLoading = !readingDataDone;
 
   useEffect(() => {
     if (i18n.language === 'ar') {
@@ -105,7 +74,7 @@ const Home = () => {
 
   return (
     <div className="main-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-      {loading && !fetchError && <LoadingSpinner />}
+      {isLoading && !fetchError && <LoadingSpinner />}
       {fetchError && <div className="error-message">{fetchError}</div>}
 
       <div className="latest-product-list">
@@ -123,6 +92,6 @@ const Home = () => {
       )}
     </div>
   );
-}
+};
 
 export default Home;

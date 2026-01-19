@@ -46,7 +46,7 @@ export default function ProductRatingModal({ order, productId, onClose, onRating
     const product = itemInfo?.product;
 
     // Logik für das Bild: Nimm das erste Element aus dem images-Array (da es direkt ein String ist)
-    const productImageUrl = product?.images?.[0] || itemInfo?.image || "/placeholder.png";
+    const productImageUrl = product?.mainImage || "/placeholder.png";
 
     const handleSubmit = async () => {
         if (rating === 0) return toast.error(t("please_select_rating"));

@@ -739,7 +739,7 @@
     "fetch_products_failed": "Failed to fetch products.",
     "no_seller_id": "No seller ID provided.",
     "fetch_related_products_failed": "Failed to fetch related products.",
-    "report_order": "Report Order",
+    "report_order": "Report",
     "product_pending_admin_conf": "This product is waiting for admin confirmation and cannot be ordered yet.",
     "rating_available_after_24h": "Rating available after 24 hours from order receipt",
     "user_status": {
@@ -751,6 +751,11 @@
         "unverified": "Please verify your account."
     },
     "account_inactive_msg": "Your account is currently inactive. Please contact admin.",
-    "your_seller_rating": "Your seller rating",
-    "your_product_rating": "Your product rating"
+    "your_seller_rating": "Seller rating",
+    "your_product_rating": "Product rating",
+    "show_history": "Show history",
+    "hide_history": "Hide history",
+    "seller_review_placeholder": "Write a comment...",
+    "failed_load_address": "Failed to load address",
+    "failed_load_phone": "Failed to load phone"
 }

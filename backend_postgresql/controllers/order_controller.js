@@ -10,7 +10,6 @@ const orderController = {
     // GET: Get order by ID
     getOrderByID: async (req, res) => {
         try {
-            console.log("Order ID: ", req.params.id);
             const order = await Order.findByPk(req.params.id, {
                 include: [
                     { model: User, as: 'buyer', attributes: ['id', 'firstName', 'lastName', 'email'] },
@@ -87,7 +86,14 @@ const orderController = {
                     {
                         model: OrderItem, as: 'items',
                         include: [
-                            { model: Product, as: 'product', attributes: ['id', 'name', 'images'] },
+                            {
+                                model: Product, as: 'product', attributes: [
+                                    'id',
+                                    'name',
+                                    [sequelize.literal(`"items->product" . "images" ->> 0`), 'mainImage'],
+                                    'price',
+                                    'delprice']
+                            },
                             { model: ProductVariant, as: 'variant', attributes: ['id', 'size', 'color'] }
                         ]
                     },
@@ -115,7 +121,6 @@ const orderController = {
     // GET: Get orders by User ID
     getOrderByUserID: async (req, res) => {
         try {
-            console.log("User ID: ", req.params.id);
             const userId = req.params.id;
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
@@ -146,7 +151,12 @@ const orderController = {
                         include: [
                             {
                                 model: Product, as: 'product',
-                                attributes: ['id', 'name', 'images'],
+                                attributes: [
+                                    'id',
+                                    'name',
+                                    [sequelize.literal(`"items->product" . "images" ->> 0`), 'mainImage'],
+                                    'price',
+                                    'delprice'],
                                 include: [
                                     {
                                         model: ProductReview,
@@ -186,16 +196,19 @@ const orderController = {
     createOrder: async (req, res) => {
         const t = await sequelize.transaction();
         try {
-            const { items, is_delivery, userId, sellerId, selectedAddress } = req.body;
+            const { items, is_delivery, userId, sellerId } = req.body;
             let calculatedTotal = 0;
             const buyer = await User.findByPk(userId, { transaction: t });
             if (!buyer) throw new Error('user_not_found');
 
             const buyerSnapshot = {
-                p: selectedAddress?.phone || buyer.phone || "",
+                p: buyer.phone || "",
                 ...(is_delivery && {
-                    a: `${selectedAddress?.address || buyer.address || ""}, ${selectedAddress?.subCity || buyer.subCity || ""}, ${selectedAddress?.city || buyer.city || ""}`
-                })
+                    a: buyer.address || "",    // Nur die Straße/Hausnummer
+                    sc: buyer.subCity ?? "",  // Sub-City (Viertel)
+                    c: buyer.city ?? ""          // City
+                }),
+
             };
 
             const order = await Order.create({
@@ -213,17 +226,18 @@ const orderController = {
                     transaction: t,
                     lock: t.LOCK.UPDATE
                 });
-                console.log("Variant: ", variant);
-                console.log("Item: ", item);
 
                 if (!variant || variant.stock < item.quantity) {
                     throw new Error('insufficient_stock');
                 }
 
                 const product = await Product.findByPk(variant.productId, { transaction: t });
-                const itemPrice = parseFloat(product.price);
+
+                const itemPrice = parseFloat(product.price || 0);
+                const itemDelPrice = parseFloat(product.delprice || 0);
                 calculatedTotal += (itemPrice * item.quantity);
 
+                price_incl_delivery = is_delivery ? (calculatedTotal + itemDelPrice) : calculatedTotal;
                 // 3. OrderItem in der neuen Tabelle erstellen
                 await OrderItem.create({
                     orderId: order.id,
@@ -237,7 +251,7 @@ const orderController = {
                 await variant.decrement('stock', { by: item.quantity, transaction: t });
                 await product.increment('orderCount', { by: 1, transaction: t });
             }
-            await order.update({ totalPrice: calculatedTotal }, { transaction: t });
+            await order.update({ totalPrice: price_incl_delivery }, { transaction: t });
             // Stats Updates
             await UserStats.increment('orderCount', { by: 1, where: { userId: userId }, transaction: t });
             await UserStats.increment(['orderCount', 'openOrders'], { by: 1, where: { userId: sellerId }, transaction: t });
@@ -301,7 +315,6 @@ const orderController = {
             if (newStatus === 1 && oldStatus === 0) { // 1 = Confirmed, 0 = Pending
                 const rawAmount = parseFloat(order.totalPrice) * 0.03;
                 const roundedAmount = Number(rawAmount.toFixed(1));
-                console.log("roundedAmount: ", roundedAmount);
                 await SellerBill.create({
                     orderId: order.id,
                     sellerId: order.sellerId,

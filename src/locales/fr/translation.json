@@ -278,8 +278,8 @@
     "picked_up": "Retiré",
     "pick_up_failed": "Échec du retrait",
     "no_response": "Pas de réponse",
-    "cancelled_user": "Annulée",
-    "cancelled_seller": "Annulée",
+    "cancelled_user": "Annulée par vous",
+    "cancelled_seller": "Annulée par le vendeur",
     "first_try_delivery_failed": "Échec tentative 1",
     "second_try_delivery_failed": "Échec tentative 2"
   },
@@ -656,7 +656,7 @@
   "rate_your_experience": "Évaluez votre expérience",
   "evaluate_experience": "Évaluez votre expérience",
   "rate_seller": "Évaluer le vendeur",
-  "rate_products": "Évaluer les produits",
+  "rate_products": "Évaluer le produit",
   "add_comment_placeholder": "Ajouter un commentaire (facultatif)...",
   "submit_rating": "Soumettre",
   "submitting": "Envoi...",
@@ -726,7 +726,7 @@
   "fetch_products_failed": "Échec de la récupération des produits.",
   "no_seller_id": "Aucun identifiant de vendeur fourni.",
   "fetch_related_products_failed": "Échec de la récupération des produits connexes.",
-  "report_order": "Signaler la commande",
+  "report_order": "Signaler",
   "product_pending_admin_conf": "Ce produit est en attente de confirmation par l'administrateur et ne peut pas encore être commandé.",
   "rating_available_after_24h": "L'évaluation sera disponible 24h après la livraison",
   "user_status": {
@@ -738,6 +738,11 @@
     "unverified": "Veuillez vérifier votre compte."
   },
   "account_inactive_msg": "Votre compte est actuellement inactif. Veuillez contacter l'administrateur.",
-  "your_seller_rating": "Votre avis sur le vendeur",
-  "your_product_rating": "Votre avis produit"
+  "your_seller_rating": "Avis vendeur",
+  "your_product_rating": "Avis produit",
+  "show_history": "Voir l'historique",
+  "hide_history": "Masquer l'historique",
+  "seller_review_placeholder": "Écrire un commentaire...",
+  "failed_load_address": "Erreur chargement adresse",
+  "failed_load_phone": "Erreur chargement téléphone"
 }

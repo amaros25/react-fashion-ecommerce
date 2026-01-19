@@ -8,25 +8,49 @@
     font-family: "Helvetica Neue", Arial, sans-serif;
     width: 100%;
     box-sizing: border-box;
-}
-
-/* DESKTOP LAYOUT (Default: Matches Original) */
-.moch-container {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
 }
 
+/* DESKTOP LAYOUT (Default: Matches Original) */
 .moch-left-section {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
+/* Desktop Groups */
+.moch-group-shop,
+.moch-group-meta,
+.moch-group-price {
+    display: flex;
+    align-items: center;
+}
+
+.moch-separator-line {
+    display: block;
+    width: 0;
+    height: 12px;
+    border-left: 0.5px solid #e5e5e5;
+    margin: 0 10px;
+}
+
+.moch-separator-desktop {
+    display: none;
+    /* Deprecated/Removed from JS, but safe to hide */
+}
+
+/* Specific adjustment for Rating Zone in group */
+.moch-rating-zone {
+    margin-top: 0;
+    /* Reset margin since it's inline now */
+}
+
+
 .moch-shop-info {
     display: flex;
     align-items: center;
-    gap: 6px;
 }
 
 .moch-shop-name {
@@ -37,12 +61,17 @@
     color: #000;
 }
 
+.moch-separator {
+    display: none;
+    /* Hide old separator entirely */
+}
 
 /* Meta Data (ID, Date) */
 .moch-meta-wrapper {
     display: flex;
     gap: 10px;
     font-size: 13px;
+    /* Kept 13px for Desktop */
     color: #888;
     text-transform: uppercase;
     align-items: center;
@@ -51,7 +80,7 @@
 .moch-id-label {
     color: inherit;
     font-size: 13px;
-    /* Optional: Show or hide depending on preference, currently keeping visible for desktop consistency if needed */
+    /* Kept 13px */
 }
 
 .moch-date {
@@ -61,20 +90,13 @@
 }
 
 /* Badges */
-
-.moch-badge-wrapper {
-    padding-left: 8px;
-    border-left: 1px solid #ddd;
-    font-weight: 400;
-    color: #999;
-
-}
-
 .moch-badge {
     padding: 2px 8px;
-    background-color: #ffffff;
+    /* Slightly larger padding for Desktop look */
+    background-color: #f5f5f5;
     color: #333;
     font-size: 13px;
+    /* Kept 13px */
     border-radius: 2px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -84,24 +106,20 @@
 
 .moch-badge.delivery {
     background-color: #d3e2f7;
+    /* Preserved blue tint */
 }
 
 .moch-badge.pickup {
     background-color: #faebbc;
+    /* Preserved yellow tint */
 }
 
 /* Right Section (Price, Report) */
-.moch-price-row {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-}
-
 .moch-right-section {
     display: flex;
+    flex-direction: column;
     align-items: flex-end;
     gap: 4px;
-    flex-direction: column;
 }
 
 .moch-total-label {
@@ -133,33 +151,18 @@
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 6px 8px;
-    border-radius: 0;
     margin-top: 8px;
+    border-radius: 0;
 }
 
-/* Icon Farbe erzwingen */
-.moch-report-link svg {
-    font-size: 12px;
-    color: inherit;
-}
-
-/* Hover Effekt: Invertieren oder Rahmen abdunkeln */
 .moch-report-link:hover {
     border-color: #ee4c4c;
     background-color: #fcfcfc;
     color: #000;
 }
 
-/* Falls du den Text in einem span hast */
-.moch-report-link .report-text {
-    color: inherit;
-}
-
 /* Ratings */
-.moch-rating-zone {
-    display: flex;
-    align-items: center;
-}
+/* .moch-rating-zone defined above for reset */
 
 .moch-rated-container {
     display: inline-flex;
@@ -190,42 +193,57 @@
 }
 
 .moch-rate-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    font-size: 10px;
-    text-decoration: underline;
+    background-color: #fff;
+    border: 1px solid #000;
+    padding: 2px 10px;
+    /* Slightly wider for button feel */
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 2px;
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
-    color: #666;
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    min-width: 80px;
+    /* Ensure it looks substantial */
+    text-align: center;
 }
 
 .moch-rate-btn:hover {
-    color: #000;
+    background-color: #000;
+    color: #fff;
 }
-
 
 /* --- MOBILE / TABLET APP LAYOUT ( < 768px ) --- */
 @media (max-width: 768px) {
     .moch-container {
         display: grid;
         grid-template-columns: 1fr auto;
-        /* Left: Info, Right: Price/Action */
         grid-template-rows: auto auto auto;
-        /* Rows: 1.Shop/Price, 2.Meta, 3.Badge/Rating */
         row-gap: 6px;
-        /* Tighter gap for app feel */
         align-items: start;
         padding-bottom: 12px;
         margin-bottom: 12px;
     }
 
-    /* Flatten flex containers to generic block/contents so grid works */
     .moch-left-section,
-    .moch-right-section {
+    .moch-right-section,
+    .moch-group-shop,
+    .moch-group-meta,
+    .moch-group-price {
         display: contents;
+    }
+
+    .moch-separator-desktop,
+    .moch-separator-line {
+        display: none;
     }
 
     /* ROW 1: Shop Name & Price */
@@ -237,9 +255,11 @@
 
     .moch-shop-name {
         font-size: 14px;
-        /* Slightly smaller than desktop for mobile balance */
         font-weight: 600;
-        /* Bolder for hierarchy */
+    }
+
+    .moch-separator {
+        display: none;
     }
 
     .moch-price {
@@ -253,33 +273,26 @@
 
     .moch-total-label {
         display: none;
-        /* Cleaner look */
     }
 
     /* ROW 2: Order ID & Date */
-    /* Since these are in the left section in DOM, we need to place them */
     .moch-meta-wrapper {
         grid-column: 1;
         grid-row: 2;
-        /* Reset flex for specific mobile layout if needed, or keep flex row */
         display: flex;
         align-items: center;
         gap: 8px;
         font-size: 10px;
-        /* Small meta text */
         color: #999;
         margin-top: -2px;
-        /* Pull tighter to title */
     }
 
     .moch-id-label {
         display: none;
-        /* Hide "Order #" label, just show number */
     }
 
     .moch-id-value {
         font-family: 'Courier New', Courier, monospace;
-        /* Tech feel for ID */
         font-weight: 600;
         letter-spacing: 0.5px;
         color: #555;
@@ -298,53 +311,48 @@
         grid-row: 2;
         justify-self: end;
         align-self: center;
+        padding: 4px 6px;
+        /* Reset padding for mobile if needed */
+        margin-top: 0;
+        border: none;
+        /* Make it less button-like on mobile if desired, or keep */
     }
 
     /* ROW 3: Badge & Ratings */
-    /* Badge */
-    .moch-badge {
-        grid-column: 1 / -1;
-        /* Span full if needed, or share with rating */
-        grid-row: 3;
-        align-self: center;
-        width: fit-content;
-        /* Override desktop margin */
-        margin-top: 4px;
-    }
-
-    /* If rating exists, place it next to badge or below? Let's put it next.
-       But DOM structure: badge is sibling of rating-zone? Checking JS...
-       Yes, both are in left-section.
-    */
-    /* Fix layout for Rating Zone & Badge in Row 3 */
-    .moch-rating-zone {
-        grid-column: 1 / -1;
-        grid-row: 3;
-        /* Note: We will override this specific placement below to prevent overlap */
-    }
-
-    /* We need to push the rating to the right of the badge visually. */
     .moch-badge {
         grid-column: 1;
         grid-row: 3;
         margin-right: 10px;
+        margin-top: 4px;
+        font-size: 9px;
+        /* Mobile small badge */
+        padding: 2px 6px;
     }
 
     .moch-rating-zone {
         grid-column: 1;
         grid-row: 3;
         margin-left: 70px;
-        /* Indent to avoid badge overlap */
+        /* Offset to avoid badge overlap */
         margin-top: 4px;
         padding-left: 0;
         border-left: none;
     }
 
-    /* Refine Rating Button for Mobile App Look */
     .moch-rate-btn {
         border: 1px solid #000;
         padding: 4px 10px;
         border-radius: 4px;
         text-decoration: none;
     }
+
+    .moch-mini-label {
+        font-size: 11px;
+        font-weight: 400;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0px;
+        white-space: nowrap;
+    }
+
 }

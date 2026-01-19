@@ -48,5 +48,16 @@ export const productApi = {
         });
 
         return response.data;
+    },
+
+    /**
+     * Fetch latest products with filtering, searching, and sorting.
+     * @param {object} params - Query parameters (page, limit, category, etc.)
+     */
+    getLatestProducts: async (params) => {
+        const response = await axios.get(`${API_URL}/products/latest`, {
+            params: params,
+        });
+        return response.data;
     }
 };
