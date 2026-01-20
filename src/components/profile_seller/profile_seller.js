@@ -36,7 +36,10 @@ function ProfileSeller() {
     error: sellerError,
     updateAddress,
     updatePhone,
-    updateImage
+    updateImage,
+    isUpdatingAddress,
+    isUpdatingPhone,
+    isUpdatingImage
   } = useUserProfileManager(userId, token);
 
   if (sellerLoading || !seller) {
@@ -52,6 +55,9 @@ function ProfileSeller() {
         updateAddress={updateAddress}
         updatePhone={updatePhone}
         updateImage={updateImage}
+        isUpdatingAddress={isUpdatingAddress}
+        isUpdatingPhone={isUpdatingPhone}
+        isUpdatingImage={isUpdatingImage}
         viewMode="seller"
       />
 

@@ -70,19 +70,16 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
     const lastLog = statusLog[statusLog.length - 1];
     if (!lastLog) return steps;
 
-    // Helper to extract status and date from inconsistent log structures
     const getStatus = (log) => log.status !== undefined ? Number(log.status) : Number(log.update);
     const getDate = (log) => log.createdAt || log.date;
-
     const lastStatus = getStatus(lastLog);
 
     if (!is_delivery) {
-        // --- LOGIC FOR PICKUP ---
+        // --- LOGIC FOR PICKUP (Bleibt unverändert) ---
         let pickupSteps = [];
         if (lastStatus === STATUS.PENDING) {
             pickupSteps.push("pending", "confirmed", "ready_pickup");
-        }
-        else if ([STATUS.CONFIRMED, STATUS.READY_TO_PICKUP, STATUS.PICKED_UP].includes(lastStatus)) {
+        } else if ([STATUS.CONFIRMED, STATUS.READY_TO_PICKUP, STATUS.PICKED_UP].includes(lastStatus)) {
             pickupSteps.push("pending", "confirmed", "ready_pickup", "picked_up");
         } else if (lastStatus === STATUS.PICK_UP_FAILED) {
             pickupSteps.push("pending", "confirmed", "ready_pickup", "pick_up_failed");
@@ -103,25 +100,28 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
         });
         return steps;
     } else {
-        // --- LOGIC FOR DELIVERY ---
+        // --- VEREINFACHTE LOGIK FÜR DELIVERY ---
         let deliverySteps = [];
-        // Standard Success Path
-        if (lastStatus >= STATUS.PENDING && lastStatus <= STATUS.DELIVERED) {
-            deliverySteps = ["pending", "confirmed", "shipped"];
-            if (statusLog.some(s => getStatus(s) === STATUS.FIRST_TRY_DELIVERY_FAILED)) deliverySteps.push("first_try_delivery_failed");
-            if (statusLog.some(s => getStatus(s) === STATUS.SECOND_TRY_DELIVERY)) deliverySteps.push("second_try_delivery");
-            deliverySteps.push("delivered");
+
+        // Prüfen: Ist die Bestellung auf dem Erfolgsweg?
+        const isNormalPath = [STATUS.PENDING, STATUS.CONFIRMED, STATUS.SHIPPED, STATUS.DELIVERED].includes(lastStatus);
+
+        // Prüfen: Ist die Zustellung (egal in welchem Versuch) gescheitert?
+        const isDeliveryFailed = [STATUS.FIRST_TRY_DELIVERY_FAILED, STATUS.SECOND_TRY_DELIVERY, STATUS.FAILED_DELIVERY].includes(lastStatus);
+
+        if (isNormalPath) {
+            // Zeigt: Ausstehend -> Bestätigt -> Versendet -> Geliefert (Grau wenn noch nicht erreicht)
+            deliverySteps = ["pending", "confirmed", "shipped", "delivered"];
         }
-        // Failure or Return paths
+        else if (isDeliveryFailed) {
+            // Zeigt: Ausstehend -> Bestätigt -> Versendet -> Zustellung fehlgeschlagen
+            deliverySteps = ["pending", "confirmed", "shipped", "failed_delivery"];
+        }
         else if (lastStatus === STATUS.NO_RESPONSE) {
             deliverySteps = ["pending", "no_response"];
         }
-        else if (lastStatus === STATUS.FAILED_DELIVERY) {
-            deliverySteps = ["pending", "confirmed", "shipped", "failed_delivery"];
-        }
         else if ([STATUS.RETURN_REQUESTED, STATUS.RETURN_CONFIRMED, STATUS.RETURN_REFUSED, STATUS.RETURN_SHIPPED, STATUS.RETURN_RECEIVED, STATUS.RETURN_NOT_RECEIVED].includes(lastStatus)) {
             deliverySteps = ["pending", "confirmed", "shipped", "delivered", "return_requested"];
-            // Add specific return sub-steps only if they exist in log
             const returnStates = ["return_confirmed", "return_refused", "return_shipped", "return_received", "return_not_received"];
             returnStates.forEach(rs => {
                 if (statusLog.some(s => mapStatusToStepperState(getStatus(s), true) === rs)) deliverySteps.push(rs);
@@ -136,7 +136,15 @@ const getStepsFromLog = (t, statusLog, is_delivery) => {
         }
 
         deliverySteps.forEach((key) => {
-            const log = statusLog.find(s => mapStatusToStepperState(getStatus(s), true) === key);
+            // Spezial-Logik für failed_delivery: Suche Datum von Status 11, 12 oder 13
+            const log = statusLog.find(s => {
+                const sKey = mapStatusToStepperState(getStatus(s), true);
+                if (key === "failed_delivery") {
+                    return ["failed_delivery", "first_try_delivery_failed", "second_try_delivery"].includes(sKey);
+                }
+                return sKey === key;
+            });
+
             steps.push({
                 key,
                 label: t(`order_state.${key}`),

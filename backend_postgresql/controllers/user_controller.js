@@ -1,13 +1,17 @@
+const { handleError } = require('./error_handler.js');
 const { User, SellerBill, UserStats, UserProfileHistory, Order, Product, UserReview, ProductReview, sequelize } = require('../models');
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 require('dotenv').config({ path: './env' });
 const jwt = require('jsonwebtoken');
+
 /**
  * Controller to handle user-related operations for MySQL
  */
-const userController = {
 
+
+
+const userController = {
 
     getSellersByIds: async (req, res) => {
         try {
@@ -38,7 +42,7 @@ const userController = {
             res.json(formattedUsers);
         } catch (error) {
             console.error('Error fetching users by IDs:', error);
-            res.status(500).json({ message: "failed_to_fetch_users_by_ids" });
+            await handleError(res, error, null, "failed_to_fetch_users_by_ids");
         }
     },
 
@@ -53,7 +57,7 @@ const userController = {
                     attributes: ['reviewCount', 'avgRating']
                 }]
             });
-            if (!seller) return res.status(404).json({ message: "seller_not_found" });
+            if (!seller) throw new Error("seller_not_found");
             const publicData = {
                 shopName: seller.shopName,
                 imageUrl: seller.imageUrl || '',
@@ -66,7 +70,7 @@ const userController = {
             };
             res.json(publicData);
         } catch (error) {
-            res.status(500).json({ message: "failed_to_fetch_seller" });
+            await handleError(res, error, null, "failed_to_fetch_seller");
         }
     },
 
@@ -74,10 +78,22 @@ const userController = {
     // GET: User by ID with history formatting
     getUserById: async (req, res) => {
         try {
-            const user = await User.findByPk(req.params.id, {
-                include: [{ model: UserStats, as: 'stats', attributes: ['avgRating', 'reviewCount', 'unreadMessages', 'orderCount'] }]
-            });
-            if (!user) return res.status(404).json({ message: "user_not_found" });
+            const identifier = req.params.id;
+            let user;
+            if (!isNaN(identifier)) {
+                user = await User.findByPk(identifier, {
+                    include: [{ model: UserStats, as: 'stats', attributes: ['avgRating', 'reviewCount', 'unreadMessages', 'orderCount'] }]
+                });
+            }
+            // 2. Versuch: Falls nicht gefunden, suche über shopName
+            if (!user) {
+                user = await User.findOne({
+                    where: { shopSlug: identifier },
+                    include: [{ model: UserStats, as: 'stats', attributes: ['avgRating', 'reviewCount', 'unreadMessages', 'orderCount'] }]
+                });
+            }
+
+            if (!user) throw new Error("user_not_found");
 
             if (user.role == "seller") {
                 res.json({
@@ -87,6 +103,7 @@ const userController = {
                     email: user.email,
                     role: user.role,
                     shopName: user.shopName,
+                    shopSlug: user.shopSlug,
                     active: user.active,
                     phone: user.phone || "",
                     address: user.address || "",
@@ -108,6 +125,7 @@ const userController = {
                     email: user.email,
                     role: user.role,
                     shopName: user.shopName,
+                    shopSlug: user.shopSlug,
                     active: user.active,
                     phone: user.phone || "",
                     address: user.address || "",
@@ -124,7 +142,7 @@ const userController = {
 
         } catch (error) {
             console.error('Error fetching user by ID:', error);
-            res.status(500).json({ message: "failed_to_fetch_user_by_id" });
+            await handleError(res, error, null, "failed_to_fetch_user_by_id");
         }
     },
 
@@ -139,15 +157,15 @@ const userController = {
                 shopName, role
             } = req.body;
 
-            if (!firstName || !lastName || !email || !password || !phone || !address || !role) return res.status(400).json({ message: "missing_data" });
-            if (role === 'seller' && !shopName) return res.status(400).json({ message: "shop_name_required" });
+            if (!firstName || !lastName || !email || !password || !phone || !address || !role) throw new Error("missing_data");
+            if (role === 'seller' && !shopName) throw new Error("shop_name_required");
             const existingUserMail = await User.findOne({ where: { email } });
-            if (existingUserMail) return res.status(400).json({ message: "user_exists_email" });
+            if (existingUserMail) throw new Error("user_exists_email");
             const existingUserPhone = await User.findOne({ where: { phone: phone } });
-            if (existingUserPhone) return res.status(400).json({ message: "user_exists_phone" });
+            if (existingUserPhone) throw new Error("user_exists_phone");
             if (shopName) {
                 const existingShop = await User.findOne({ where: { shopName } });
-                if (existingShop) return res.status(400).json({ message: "shop_name_already_taken" });
+                if (existingShop) throw new Error("shop_name_already_taken");
             }
             t = await sequelize.transaction();
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -167,7 +185,7 @@ const userController = {
             }, { transaction: t });
 
             await t.commit();
-            if (!user) return res.status(500).json({ message: "registration_failed" });
+            if (!user) throw new Error("registration_failed");
             const token = jwt.sign(
                 { id: user.id, role: user.role },
                 process.env.JWT_SECRET,
@@ -181,9 +199,8 @@ const userController = {
                 token: token
             });
         } catch (error) {
-            if (t) await t.rollback();
             console.error('Error creating user:', error);
-            res.status(500).json({ message: "registration_failed" });
+            await handleError(res, error, t, "registration_failed");
         }
     },
 
@@ -195,12 +212,10 @@ const userController = {
             const { imageUrl } = req.body;
             const user = await User.findByPk(req.params.id);
             if (!user) {
-                if (t) await t.rollback();
-                return res.status(404).json({ message: "user_not_found" });
+                throw new Error("user_not_found");
             }
             if (user.imageUrl === imageUrl) {
-                if (t) await t.rollback();
-                return res.json({ message: "no_changes_detected", user });
+                throw new Error("no_changes_detected");
             }
             await UserProfileHistory.create({
                 userId: user.id,
@@ -216,9 +231,8 @@ const userController = {
                 imageUrl: user.imageUrl
             });
         } catch (error) {
-            if (t) await t.rollback();
             console.error('Error updating user image:', error);
-            res.status(500).json({ message: "image_update_failed" });
+            await handleError(res, error, t, "image_update_failed");
         }
     },
 
@@ -228,14 +242,12 @@ const userController = {
         try {
             const { address: addressObj } = req.body;
             if (!addressObj) {
-                if (t) await t.rollback();
-                return res.status(400).json({ message: "missing_address_data" });
+                throw new Error("missing_address_data");
             }
             const { address, city, subCity } = addressObj;
             const user = await User.findByPk(req.params.id);
             if (!user) {
-                if (t) await t.rollback();
-                return res.status(404).json({ message: "user_not_found" });
+                throw new Error("user_not_found");
             }
             const changes = {};
             if (address !== undefined && user.address !== address) {
@@ -248,8 +260,7 @@ const userController = {
                 changes.subCity = subCity;
             }
             if (Object.keys(changes).length === 0) {
-                if (t) await t.rollback();
-                return res.json({ message: "no_changes_detected", user });
+                throw new Error("no_changes_detected");
             }
             await UserProfileHistory.create({
                 userId: user.id,
@@ -266,9 +277,8 @@ const userController = {
                 subCity: user.subCity
             });
         } catch (error) {
-            if (t) await t.rollback();
             console.error('Error updating user:', error);
-            res.status(500).json({ message: "address_update_failed" });
+            await handleError(res, error, t, "address_update_failed");
         }
     },
 
@@ -278,19 +288,15 @@ const userController = {
             const { phone } = req.body;
             const user = await User.findByPk(req.params.id);
             if (!user) {
-                if (t) await t.rollback();
-                return res.status(404).json({ message: "user_not_found" });
+                throw new Error("user_not_found");
             }
             if (user.phone === phone) {
-                if (t) await t.rollback();
-                return res.json({ message: "no_changes_detected", user });
+                throw new Error("no_changes_detected");
             }
             const phoneExists = await User.findOne({ where: { phone } });
             if (phoneExists && phoneExists.id !== user.id) {
-                if (t) await t.rollback();
-                return res.status(400).json({ message: "phone_already_in_use" });
+                throw new Error("phone_already_in_use");
             }
-
             await UserProfileHistory.create({
                 userId: user.id,
                 changeType: 'phone',
@@ -304,9 +310,8 @@ const userController = {
                 phone: user.phone
             });
         } catch (error) {
-            if (t) await t.rollback();
             console.error('Error updating user:', error);
-            res.status(500).json({ message: "phone_update_failed" });
+            await handleError(res, error, t, "phone_update_failed");
         }
     },
 
@@ -316,7 +321,7 @@ const userController = {
             const { page = 1, limit = 10 } = req.query;
             const offset = (page - 1) * limit;
 
-            if (req.user.id !== parseInt(sellerId) && req.user.role !== 'admin') return res.status(403).json({ message: "unauthorized_access" });
+            if (req.user.id !== parseInt(sellerId) && req.user.role !== 'admin') throw new Error("unauthorized_access");
 
             const { count, rows } = await SellerBill.findAndCountAll({
                 where: { sellerId },
@@ -336,7 +341,7 @@ const userController = {
             });
         } catch (error) {
             console.error('Error fetching seller bills:', error);
-            res.status(500).json({ message: "failed_to_fetch_seller_bills" });
+            await handleError(res, error, null, "failed_to_fetch_seller_bills");
         }
     },
 
@@ -350,8 +355,7 @@ const userController = {
 
             // 1. Validation
             if (!senderId || !orderId || !sellerRating || !Array.isArray(productRatings)) {
-                await t.rollback();
-                return res.status(400).json({ message: "missing_data" });
+                throw new Error("missing_data");
             }
 
             // --- PART A: RATE SELLER (Only ONCE per order) ---
@@ -359,8 +363,7 @@ const userController = {
             // Check if seller was already rated for this order
             const existingUserReview = await UserReview.findOne({ where: { senderId, orderId } });
             if (existingUserReview) {
-                await t.rollback();
-                return res.status(400).json({ message: "order_already_rated" });
+                throw new Error("order_already_rated");
             }
 
             // Create Seller Review (linking to the first product as a reference if needed)
@@ -411,9 +414,8 @@ const userController = {
             res.json({ message: "success_rate_all" });
 
         } catch (error) {
-            if (t) await t.rollback();
             console.error('Multi-Rating Error:', error);
-            res.status(500).json({ message: "failed_to_submit_ratings" });
+            await handleError(res, error, t, "rate_user_and_product_failed");
         }
     }
 };

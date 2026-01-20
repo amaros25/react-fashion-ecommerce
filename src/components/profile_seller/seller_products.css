@@ -286,6 +286,11 @@
   color: #666;
 }
 
+.state-out-of-stock {
+  background: #ffd0d0;
+  color: #9b1c1c;
+}
+
 @media (max-width: 768px) {
   .seller-products-container {
     padding: 8px 0;

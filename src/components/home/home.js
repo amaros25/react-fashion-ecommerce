@@ -33,7 +33,7 @@ const Home = () => {
     searchTerm,
     sortBy
   );
-
+  console.log("latestProducts", latestProducts);
   useEffect(() => {
     const handleResize = debounce(() => {
       const width = window.innerWidth;
@@ -71,7 +71,7 @@ const Home = () => {
       scrollup();
     }
   };
-
+  console.log("fetchError", fetchError);
   return (
     <div className="main-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       {isLoading && !fetchError && <LoadingSpinner />}

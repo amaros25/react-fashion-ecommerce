@@ -1,5 +1,7 @@
 module.exports = {
-  testEnvironment: 'jsdom', // Definiert die Testumgebung (jsdom für DOM-Tests)
+  setupFiles: ['./backend_postgresql/controllers/tests/jest.setup.js'],
+  testEnvironment: 'node',
+  // Definiert die Testumgebung (jsdom für DOM-Tests)
   moduleNameMapper: {
     '\\.css$': 'identity-obj-proxy', // Mock von CSS-Dateien
     '^react-router-dom$': '<rootDir>/__mocks__/react-router-dom.js', // Mock für react-router-dom

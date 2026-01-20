@@ -13,7 +13,7 @@ export const useUserProfileManager = (userId, token) => {
     const imageMutation = userHooks.useUpdateImage({ userId, token });
 
     // 2. Combine loading states to provide a global loading indicator
-    const isLoading =
+    const isProcessing =
         userQuery.isLoading ||
         addressMutation.isPending ||
         phoneMutation.isPending ||
@@ -21,21 +21,27 @@ export const useUserProfileManager = (userId, token) => {
 
     // 3. Aggregate error messages from all operations
 
-    const getErrorMessage = (mutation) => {
-        return mutation.error?.response?.data?.message || mutation.error?.message || null;
+    const extractBackendError = (err) => {
+        if (!err) return null;
+        return err.response?.data?.message || err.message || "operation_failed";
     };
-    const error =
-        getErrorMessage(phoneMutation) ||
-        getErrorMessage(addressMutation) ||
-        getErrorMessage(imageMutation) ||
-        (userQuery.error ? "fetch_user_failed" : null);
+
+    const combinedError =
+        extractBackendError(phoneMutation.error) ||
+        extractBackendError(addressMutation.error) ||
+        extractBackendError(imageMutation.error) ||
+        extractBackendError(userQuery.error);
 
     // 4. Return unified data, status, and action functions
     return {
         // Data and status
         user: userQuery.data,
-        loading: isLoading,
-        error: error,
+        loading: isProcessing,
+        error: combinedError,
+
+        addressMutation,
+        phoneMutation,
+        imageMutation,
 
         // Specific pending states (useful for disabling specific buttons)
         isUpdatingAddress: addressMutation.isPending,

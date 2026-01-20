@@ -8,30 +8,100 @@
 }
 
 .shop-hero {
-    padding: 20px 20px 10px;
+    position: relative;
+    height: 450px;
+    min-height: 350px;
     display: flex;
     justify-content: center;
-    text-align: center;
-    background-color: #fff;
+    align-items: center;
+    overflow: hidden;
+    background-color: #f8f8f8;
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
+    margin-bottom: 40px;
+    box-shadow: inset 0 -30px 50px rgba(0, 0, 0, 0.05);
+}
+
+.shop-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg,
+            rgba(0, 0, 0, 0.05) 0%,
+            rgba(0, 0, 0, 0.15) 50%,
+            rgba(0, 0, 0, 0.4) 100%);
+    z-index: 1;
 }
 
 .shop-hero-content {
-    max-width: 800px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
+    position: relative;
+    z-index: 2;
+    text-align: center;
 }
 
 .shop-title {
-    font-size: 4rem;
-    font-weight: 800;
-    text-transform: uppercase;
+    font-size: 3.5rem;
+    font-weight: 900;
     letter-spacing: -1px;
-    line-height: 1;
-    margin: 0;
     color: #000;
+    text-transform: uppercase;
+    display: inline-block;
+
+    /* Wir entfernen den Hintergrund und den Backdrop-Filter von der Box */
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0;
+    border: none;
+
+    /* Trick 1: Ein sehr weicher, weißer Glow direkt hinter den Buchstaben */
+    /* Das ersetzt den Kasten-Blur und macht nur den Bereich hinter der Schrift lesbar */
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
+
+    /* Trick 2: Ein minimaler Text-Schatten für die Schärfe */
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.shop-info-bottom-right {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 3;
+    max-width: 300px;
+}
+
+.info-glass-block {
+    background: rgba(255, 255, 255, 0.253);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    padding: 15px 15px;
+    border-radius: 2px;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.shop-owner {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #000;
+    font-weight: 700;
+}
+
+.shop-location,
+.rating-text {
+    font-size: 0.7rem;
+    color: #333;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .shop-meta {
@@ -40,21 +110,6 @@
     align-items: center;
     gap: 8px;
     margin-top: 10px;
-}
-
-.shop-owner {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #666;
-}
-
-.shop-location {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.85rem;
-    color: #888;
 }
 
 .shop-location .icon {
@@ -71,7 +126,10 @@
 
 .stars-static {
     display: flex;
-    gap: 4px;
+    gap: 2px;
+    background: transparent;
+    /* Hier kein extra Hintergrund nötig */
+    padding: 0;
 }
 
 .stars-static .star {
@@ -80,12 +138,6 @@
 
 .stars-static .star.filled {
     color: #000;
-}
-
-.rating-text {
-    font-size: 0.8rem;
-    color: #666;
-    font-weight: 500;
 }
 
 .rate-action {
@@ -142,9 +194,9 @@
 }
 
 .shop-collection {
-    max-width: 1600px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 10px;
 }
 
 .collection-header {
@@ -154,6 +206,7 @@
     margin-bottom: 30px;
     border-bottom: 1px solid #000;
     padding-bottom: 15px;
+    width: 100%;
 }
 
 .collection-header h2 {
@@ -173,7 +226,7 @@
 .shop-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 40px 20px;
+    gap: 30px 15px;
     width: 100%;
 }
 

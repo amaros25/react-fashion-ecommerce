@@ -281,7 +281,8 @@
     "cancelled_user": "Annulée par vous",
     "cancelled_seller": "Annulée par le vendeur",
     "first_try_delivery_failed": "Échec tentative 1",
-    "second_try_delivery_failed": "Échec tentative 2"
+    "second_try_delivery_failed": "Échec tentative 2",
+    "failed_delivery": "Livraison échouée"
   },
   "no_products_found": "Aucun produit trouvé",
   "number": "Numéro",
@@ -543,7 +544,8 @@
     "active": "Actif",
     "blocked": "Bloqué",
     "deleted": "Supprimé",
-    "unknown": "Inconnu"
+    "unknown": "Inconnu",
+    "out_of_stock": "En rupture de stock"
   },
   "kitchen": "Cuisine",
   "furniture": "Meubles",
@@ -600,7 +602,7 @@
     "pick_up_failed": "Échec du retrait",
     "mark_shipped": "Marquer comme expédié",
     "mark_delivered": "Marquer comme livré",
-    "first_try_delivery_failed": "Échec de la première tentative de livraison",
+    "mark_failed_delivery": "Échec de livraison",
     "second_try_delivery": "Deuxième tentative de livraison",
     "cancelled": "Annulé",
     "failed_delivery": "Livraison échouée",
@@ -744,5 +746,9 @@
   "hide_history": "Masquer l'historique",
   "seller_review_placeholder": "Écrire un commentaire...",
   "failed_load_address": "Erreur chargement adresse",
-  "failed_load_phone": "Erreur chargement téléphone"
+  "failed_load_phone": "Erreur chargement téléphone",
+  "please_provide_reason": "Veuillez indiquer le motif de l'échec de la livraison. Cela sera visible par le client.",
+  "write_comment_placeholder": "Écrivez le motif ici (ex: adresse incorrecte, client injoignable)...",
+  "order_state_update": "Mise à jour du statut",
+  "view_reason": "Voir le motif"
 }

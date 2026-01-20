@@ -16,13 +16,13 @@ app.use((req, res, next) => {
 
 // Main SQL API entry point
 app.use('/api/', sqlRoutes);
-
+module.exports = { app, sequelize, connectDB };
 const PORT = process.env.PORT_SQL || 5001;
 
 const startServer = async () => {
     try {
         await connectDB();
-
+        await sequelize.sync({ alter: true });
         // Sync database (caution: { alter: true } matches models to DB)
         // For first run, you might want this to create tables.
         await sequelize.sync({ force: false }); // Change to force: true to drop and recreate
@@ -35,5 +35,8 @@ const startServer = async () => {
         console.error('Failed to start SQL server:', error);
     }
 };
+if (process.env.NODE_ENV !== 'test') {
+    startServer();
+}
 
-startServer();
+

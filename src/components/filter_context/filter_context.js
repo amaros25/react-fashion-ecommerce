@@ -7,15 +7,14 @@ export function FilterProvider({ children }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
 
-  // Home Page Cache
-  const [cachedHomeProducts, setCachedHomeProducts] = useState([]);
-  const [cachedTotalPages, setCachedTotalPages] = useState(0);
-  const [cacheParams, setCacheParams] = useState(null);
+  // Die Cache-States für Produkte wurden entfernt, 
+  // da TanStack Query das intern im Speicher verwaltet.
 
   const handleSearch = (searchInput) => {
     setSearchTerm(searchInput);
-    // Optional: Reset cache on new search so we force fetch?
-    // Actually, useHomeProducts logic will see mismatched params and fetch anyway.
+    // Kein manuelles Cache-Reset nötig! 
+    // TanStack Query erkennt die Änderung im searchTerm 
+    // und lädt automatisch neu oder nutzt den passenden Cache.
   };
 
   return (
@@ -24,13 +23,7 @@ export function FilterProvider({ children }) {
       setSearchTerm,
       handleSearch,
       sortBy,
-      setSortBy,
-      cachedHomeProducts,
-      setCachedHomeProducts,
-      cachedTotalPages,
-      setCachedTotalPages,
-      cacheParams,
-      setCacheParams
+      setSortBy
     }}>
       {children}
     </FilterContext.Provider>

@@ -2,41 +2,29 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import "./related_products.css";
 import ProductCard from '../product_card/product_card';
-import useRelatedProducts from "./hooks/useRelatedProducts";
 import LoadingSpinner from "../utils/loading_spinner";
+import { useRelatedProductManager } from "../api_managers/useRelatedProductManager";
 
 function RelatedProducts({ category, currentProductId }) {
+  const { t } = useTranslation();
 
-  const { t, i18n } = useTranslation();
-  const { latestProducts, loading, error } = useRelatedProducts(
+  // Nutze den spezialisierten Manager
+  const { relatedProducts, isLoading, isError, hasData } = useRelatedProductManager(
     category,
     currentProductId
   );
 
-  useEffect(() => {
-    if (i18n.language === "ar") {
-      document.body.classList.add("rtl");
-    } else {
-      document.body.classList.remove("rtl");
-    }
-  }, [i18n.language]);
-  if (loading) return <LoadingSpinner />;
-
-  if (error) {
-    return (
-      <div className="related-error">
-        <p>{t(error)}</p>
-      </div>
-    );
-  }
+  if (isLoading) return <LoadingSpinner />;
+  if (isError) return <div>{t("fetch_related_products_failed")}</div>;
+  if (!hasData) return null;
 
   return (
     <div className="related-container">
       <hr className="product-divider" />
       <h2 className="related-title">{t("related_products.title")}</h2>
       <div className="related-grid">
-        {latestProducts.map((product) => (
-          <ProductCard key={product._id} product={product} />
+        {relatedProducts.map((product) => (
+          <ProductCard key={product._id || product.id} product={product} />
         ))}
       </div>
     </div>

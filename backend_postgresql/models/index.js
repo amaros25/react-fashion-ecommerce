@@ -38,8 +38,8 @@ User.hasMany(Order, { foreignKey: 'sellerId', as: 'sales' });
 Order.belongsTo(User, { foreignKey: 'sellerId', as: 'seller' });
 
 // User - Product Review
-User.hasMany(ProductReview, { foreignKey: 'userId', as: 'reviews' });
-ProductReview.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(ProductReview, { foreignKey: 'userId', as: 'productReviews' });
+ProductReview.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 //User - can have Review
 User.hasMany(UserReview, { foreignKey: 'receiverId', as: 'receivedReviews' });

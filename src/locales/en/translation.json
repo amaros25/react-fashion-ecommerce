@@ -554,7 +554,8 @@
         "active": "Active",
         "blocked": "Blocked",
         "deleted": "Deleted",
-        "unknown": "Unknown"
+        "unknown": "Unknown",
+        "out_of_stock": "Out of Stock"
     },
     "kitchen": "Kitchen",
     "furniture": "Furniture",
@@ -611,7 +612,7 @@
         "pick_up_failed": "Pickup Failed",
         "mark_shipped": "Mark as Shipped",
         "mark_delivered": "Mark as Delivered",
-        "first_try_delivery_failed": "First Delivery Attempt Failed",
+        "mark_failed_delivery": "Delivery failed",
         "second_try_delivery": "Second Delivery Attempt",
         "cancelled": "Cancelled",
         "failed_delivery": "Delivery Failed",
@@ -757,5 +758,9 @@
     "hide_history": "Hide history",
     "seller_review_placeholder": "Write a comment...",
     "failed_load_address": "Failed to load address",
-    "failed_load_phone": "Failed to load phone"
+    "failed_load_phone": "Failed to load phone",
+    "please_provide_reason": "Please provide a reason for the delivery failure. This will be visible to the customer.",
+    "write_comment_placeholder": "Write the reason here (e.g., incorrect address, customer not reachable)...",
+    "order_state_update": "Update Order Status",
+    "view_reason": "View reason"
 }

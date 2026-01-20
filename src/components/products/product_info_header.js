@@ -42,9 +42,17 @@ function ProductInfoHeader({ product, userId }) {
         setIsProductSaved(!isCurrentlySaved);
     };
 
+    const calculateTotalStock = (product) => {
+        if (!product || !Array.isArray(product.variants)) return 0;
+        return product.variants.reduce((total, v) => total + (v.stock || 0), 0);
+    };
+
+
     const getStateInfo = (product) => {
-        if (!product.states || product.states.length === 0) return { label: t("unknown"), class: "state-unknown" };
-        const currentState = product.states[product.states.length - 1].state;
+        const currentState = product.currentState;
+        if (calculateTotalStock(product) === 0) {
+            return { label: t("product_state.out_of_stock"), class: "state-out-of-stock" };
+        }
         switch (currentState) {
             case 0: return { label: t("product_state.pending"), class: "state-pending" };
             case 1: return { label: t("product_state.active"), class: "state-active" };
@@ -53,7 +61,6 @@ function ProductInfoHeader({ product, userId }) {
             default: return { label: t("product_state.unknown"), class: "state-unknown" };
         }
     };
-
 
     return (
         <>

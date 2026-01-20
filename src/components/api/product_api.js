@@ -35,20 +35,7 @@ export const productApi = {
         return response.data;
     },
 
-    /**
-     * Fetch details for a single product by its ID.
-     * Includes reviews and variants as defined in the 'getProductByID' controller.
-     */
-    getProductDetails: async (id, token) => {
 
-        const response = await axios.post(`${API_URL}/products/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        return response.data;
-    },
 
     /**
      * Fetch latest products with filtering, searching, and sorting.
@@ -58,6 +45,28 @@ export const productApi = {
         const response = await axios.get(`${API_URL}/products/latest`, {
             params: params,
         });
+        console.log("response", response.data);
         return response.data;
-    }
+    },
+
+
+    /**
+     * NEU: Lädt NUR die fehlenden Daten (Reviews, Varianten),
+     * wenn die Basis-Daten schon von der Home-Seite kommen.
+     */
+
+    getRemainingProductDetails: async (id) => {
+        const response = await axios.get(`${API_URL}/products/${id}/remaining`);
+        return response.data;
+    },
+
+    /**
+     * NEU: Lädt das KOMPLETTE Produkt.
+     * Wird genutzt bei Refresh (F5) oder Direktlink.
+     */
+    getProductDetailsComplete: async (id) => {
+        const response = await axios.get(`${API_URL}/products/${id}/complete`);
+        return response.data;
+    },
+
 };

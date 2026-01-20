@@ -72,8 +72,13 @@
     font-size: 0.75rem;
 }
 
-.review-rating {
+.review-rating-comment {
     margin-bottom: 8px;
+    display: flex;
+    /* Verhindert Zeilenumbruch der Sterne */
+    gap: 2px;
+    color: #ffc107 !important;
+    /* DAS HIER WÜRDE DEIN JS ÜBERSCHREIBEN */
 }
 
 .review-text {

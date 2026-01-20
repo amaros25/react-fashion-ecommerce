@@ -87,7 +87,7 @@ function App() {
 
               <Route path="/cart_page" element={<CartPage />} />
               <Route path="/chat" element={<MainChat />} />
-              <Route path="/shop/:sellerId" element={<ShopPage />} />
+              <Route path="/:shopSlug" element={<ShopPage />} />
               <Route path="/home/:category/:subcategory" element={<Home />} />
               <Route path="/home/:category" element={<Home />} />
 

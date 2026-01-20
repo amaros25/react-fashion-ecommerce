@@ -1,6 +1,9 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../db');
 
+
+const reservedNames = ['login', 'register', 'cart', 'admin', 'settings', 'home', 'api', 'shop'];
+
 const User = sequelize.define('User', {
     id: {
         type: DataTypes.INTEGER,
@@ -42,6 +45,11 @@ const User = sequelize.define('User', {
         allowNull: true,
         unique: true
     },
+    shopSlug: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true
+    },
     address: {
         type: DataTypes.STRING,
         allowNull: true
@@ -69,9 +77,32 @@ const User = sequelize.define('User', {
         indexes: [
             { unique: true, fields: ['email'] },
             { unique: true, fields: ['phone'] },
-            { unique: true, fields: ['shopName'] },
+            { unique: true, fields: ['shopSlug'] },
             { fields: ['role', 'active'] }
-        ]
+        ],
+        hooks: {
+            beforeSave: (user) => {
+                if (user.shopName) {
+                    // 1. Slug generieren
+                    const slug = user.shopName
+                        .toLowerCase()
+                        .trim()
+                        .replace(/[^\w\s-]/g, '')
+                        .replace(/[\s_-]+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+
+                    // 2. Prüfen, ob der Name reserviert ist
+                    if (reservedNames.includes(slug)) {
+                        throw new Error('This shop name is reserved and cannot be used.');
+                    }
+
+                    // 3. Den bereinigten Slug zuweisen
+                    user.shopSlug = slug;
+                } else {
+                    user.shopSlug = null;
+                }
+            }
+        }
     });
 
 User.afterCreate(async (user, options) => {

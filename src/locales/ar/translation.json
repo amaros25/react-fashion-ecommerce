@@ -538,7 +538,8 @@
     "active": "متاح",
     "blocked": "محظور",
     "deleted": "محذوف",
-    "unknown": "غير معروف"
+    "unknown": "غير معروف",
+    "out_of_stock": "غير متوفر في المخزون"
   },
   "kitchen": "المطبخ",
   "furniture": "أثاث",
@@ -595,7 +596,7 @@
     "pick_up_failed": "فشل الاستلام",
     "mark_shipped": "وضع علامة تم الشحن",
     "mark_delivered": "وضع علامة تم التسليم",
-    "first_try_delivery_failed": "فشل محاولة التسليم الأولى",
+    "mark_failed_delivery": "فشل التوصيل",
     "second_try_delivery": "محاولة التسليم الثانية",
     "cancelled": "تم الإلغاء",
     "failed_delivery": "فشل التسليم",
@@ -742,5 +743,9 @@
   "hide_history": "إخفاء السجل",
   "seller_review_placeholder": "اكتب تعليقاً...",
   "failed_load_address": "تعذر تحميل العنوان",
-  "failed_load_phone": "تعذر تحميل الهاتف"
+  "failed_load_phone": "تعذر تحميل الهاتف",
+  "please_provide_reason": "يرجى تقديم سبب لفشل التوصيل. سيكون هذا مرئياً للزبون.",
+  "write_comment_placeholder": "اكتب السبب هنا (مثلاً: العنوان غير صحيح، تعذر الاتصال بالزبون)...",
+  "order_state_update": "تحديث حالة الطلب",
+  "view_reason": "عرض السبب"
 }

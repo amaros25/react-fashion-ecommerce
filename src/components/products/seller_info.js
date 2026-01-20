@@ -6,10 +6,10 @@ import "./seller_info.css";
 
 function SellerInfo({ seller }) {
   if (!seller) return null;
-
+  console.log("SellerInfo:", seller);
   const reviewCount = seller.stats?.reviewCount || 0;
-  const averageRating = seller.stats?.averageRating || 0;
-  const sellerImage = seller.image || '/default-avatar.png';
+  const averageRating = seller.stats?.avgRating || 0;
+  const sellerImage = seller.imageUrl || '/default-avatar.png';
   const cityName = cities ? cities[seller.city] : null;
   const SellerSubCity = (cityName && citiesData && citiesData[cityName])
     ? citiesData[cityName][seller.subCity]

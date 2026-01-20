@@ -30,6 +30,7 @@ export default function ProfileUser() {
     updatePhone,
     updateImage
   } = useUserProfileManager(userId, token);
+
   /**
    * 2. FETCH ORDERS & MANAGE STATUS UPDATES
    * This custom hook now handles both:
@@ -47,8 +48,21 @@ export default function ProfileUser() {
     updating,
     paginate,
     updateStatus,
-    refetch: refetchOrders
+    refetch: refetchOrders,
+    error: ordersError
   } = useOrderManager({ role: 'user', id: userId, token: token, initialLimit: ordersPerPage });
+
+  useEffect(() => {
+    const finalError = userError || ordersError;
+    console.log("finalError: ", finalError);
+    if (finalError) {
+      toast.error(t(finalError), {
+        position: "top-center",
+        autoClose: 5000
+      });
+    }
+  }, [userError, ordersError, t]);
+
 
   /**
    * AUTHENTICATION GUARD
@@ -67,10 +81,13 @@ export default function ProfileUser() {
    * - The hook automatically validates the status against the current cache.
    * - If successful, the cache is invalidated, causing the list to refresh automatically.
    */
-  const handleStatusChange = async (orderId, newStatus) => {
+  const handleStatusChange = async (orderId, newStatus, comment) => {
     try {
+      console.log("orderId: ", orderId);
+      console.log("newStatus: ", newStatus);
+      console.log("comment: ", comment);
       // Trigger the mutation and wait for it to finish
-      await updateStatus({ orderId, newStatus });
+      await updateStatus({ orderId, newStatus, comment });
 
       toast.success(
         t("statusUpdated", { status: t(`order_state.${newStatus}`) }),

@@ -11,12 +11,13 @@ export const useOrderRatingManager = (order, userId, token, onRatingComplete) =>
 
     // 1. LOCAL STATE: Stars and Comments
     const [sellerRating, setSellerRating] = useState(0);
-    const [productRatings, setProductRatings] = useState(
-        order.items.reduce((acc, item) => ({
+    const [productRatings, setProductRatings] = useState(() => {
+        const items = order?.items || [];
+        return items.reduce((acc, item) => ({
             ...acc,
             [item.productId]: { rating: 0, comment: "" }
-        }), {})
-    );
+        }), {});
+    });
 
     // 2. MUTATION HOOK
     const ratingMutation = ratingHooks.useSubmitRating(userId);

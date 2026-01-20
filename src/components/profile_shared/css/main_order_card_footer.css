@@ -41,6 +41,74 @@
    RTL: Start=Right (Chat), End=Left (Actions)
 */
 
+.mocf-zara-trigger {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #f3f4f6;
+    /* Sehr feine Linie */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mocf-zara-trigger:hover {
+    border-bottom-color: #000;
+}
+
+.mocf-zara-icon {
+    font-size: 0.8rem;
+    color: #000;
+    margin-inline-end: 10px;
+}
+
+.mocf-zara-text {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    /* High-Fashion Spacing */
+    font-weight: 500;
+    color: #000;
+    flex-grow: 1;
+    text-align: start;
+}
+
+.mocf-zara-arrow {
+    font-size: 0.6rem;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #999;
+}
+
+.mocf-zara-arrow.open {
+    transform: rotate(180deg);
+}
+
+.mocf-zara-content {
+    padding: 15px 0;
+    animation: zaraFade 0.4s ease;
+}
+
+.mocf-zara-comment {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #333;
+    font-weight: 300;
+    text-align: start;
+}
+
+.mocf-zara-date {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.6rem;
+    color: #b0b0b0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: start;
+}
+
 /* --- RESPONSIVE DESIGN --- */
 
 @media (max-width: 768px) {

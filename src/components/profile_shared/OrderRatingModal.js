@@ -38,8 +38,7 @@ export default function OrderRatingModal({ order, products, onClose, onRatingCom
     const { t } = useTranslation();
 
     // Hole userId und token (meistens aus einem Auth-Context oder localStorage)
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
+    const { userId, token } = useAuth();
 
     // Nutze den neuen Manager
     const {
@@ -59,7 +58,7 @@ export default function OrderRatingModal({ order, products, onClose, onRatingCom
     const sellerImage = order.seller?.image || "/placeholder.png";
 
     return ReactDOM.createPortal(
-        <div className="orm-overlay" onClick={onClose}>
+        <div className="orm-overlay" onClick={!isSubmitting ? onClose : undefined}>
             <div className="orm-content" onClick={e => e.stopPropagation()}>
 
                 {/* HEADER */}

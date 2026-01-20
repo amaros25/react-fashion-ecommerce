@@ -1,6 +1,6 @@
 const { User, Product, Order } = require('../models');
 const { Op } = require('sequelize');
-
+const { handleError } = require('./error_handler.js');
 /**
  * Controller to handle admin operations
  */
@@ -9,8 +9,8 @@ const adminController = {
     getDashboardStats: async (req, res) => {
         try {
             const totalUsers = await User.count();
-            // Wenn Seller jetzt User mit einer speziellen Rolle sind:
-            const totalSellers = await User.count({ where: { isSeller: true } });
+            // Korrigiert: Nutze das role Feld aus deinem Model
+            const totalSellers = await User.count({ where: { role: 'seller' } });
             const totalProducts = await Product.count();
             const totalOrders = await Order.count();
 
@@ -21,8 +21,7 @@ const adminController = {
                 totalOrders
             });
         } catch (error) {
-            console.error('Error fetching dashboard stats:', error);
-            res.status(500).json({ error: 'Failed to fetch dashboard stats' });
+            await handleError(res, error, null, "get_dashboard_stats_failed");
         }
     },
 
@@ -30,13 +29,13 @@ const adminController = {
     getAllUsers: async (req, res) => {
         try {
             const users = await User.findAll({
+                where: { role: 'user' },
                 attributes: { exclude: ['password'] },
                 order: [['createdAt', 'DESC']]
             });
             res.json(users);
         } catch (error) {
-            console.error('Error fetching all users:', error);
-            res.status(500).json({ error: 'Failed to fetch users' });
+            await handleError(res, error, null, "get_all_users_failed");
         }
     },
 
@@ -44,17 +43,16 @@ const adminController = {
     getAllSellers: async (req, res) => {
         try {
             const sellers = await User.findAll({
-                where: { isSeller: true }, // Filtert nur die Verkäufer heraus
+                // Korrigiert: role statt isSeller
+                where: { role: 'seller' },
                 attributes: { exclude: ['password'] },
                 order: [['createdAt', 'DESC']]
             });
             res.json(sellers);
         } catch (error) {
-            console.error('Error fetching all sellers:', error);
-            res.status(500).json({ error: 'Failed to fetch sellers' });
+            await handleError(res, error, null, "get_all_sellers_failed");
         }
     },
-
     // Get all products (JSONB Daten kommen automatisch mit)
     getAllProducts: async (req, res) => {
         try {
@@ -64,8 +62,7 @@ const adminController = {
             });
             res.json(products);
         } catch (error) {
-            console.error('Error fetching all products:', error);
-            res.status(500).json({ error: 'Failed to fetch products' });
+            await handleError(res, error, null, "get_all_products_failed");
         }
     },
 
@@ -75,23 +72,23 @@ const adminController = {
             const orders = await Order.findAll({ order: [['createdAt', 'DESC']] });
             res.json(orders);
         } catch (error) {
-            console.error('Error fetching all orders:', error);
-            res.status(500).json({ error: 'Failed to fetch orders' });
+            await handleError(res, error, null, "get_all_orders_failed");
         }
     },
 
     // Toggle user active status
     toggleUser: async (req, res) => {
         try {
-            const user = await User.findByPk(req.params.id);
-            if (!user) return res.status(404).json({ message: "user_not_found" });
+            const { id } = req.params;
+            const { status } = req.body;
+            const user = await User.findByPk(id);
+            if (!user) throw new Error("user_not_found");
 
-            user.active = req.body.active;
+            user.active = status;
             await user.save();
             res.json({ message: "success_update_status", active: user.active });
         } catch (err) {
-            console.error('Error toggling user:', err);
-            res.status(500).json({ message: "server_error" });
+            await handleError(res, err, null, "toggle_user_failed");
         }
     },
 

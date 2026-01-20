@@ -81,10 +81,9 @@ export const useSellerProductAddManager = (sellerId, token) => {
             console.error("Manager Error while adding product:", err);
 
             // Determine the correct error message to show
-            const errorKey = err.message === "Image upload failed"
-                ? "image_upload_failed"
-                : (err.response?.data?.error || "server_error");
-
+            const backendMessage = err.response?.data?.message;
+            console.log("Backend message:", backendMessage);
+            const errorKey = backendMessage || "server_error";
             toast.error(t(errorKey));
             return { success: false, error: errorKey };
         }

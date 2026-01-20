@@ -21,6 +21,13 @@ export const useOrderManager = ({ role, id, token, initialLimit = 10 }) => {
         orderNumber: searchTerm
     };
 
+    const getErrorMessage = (error) => {
+        if (!error) return null;
+
+        const errorForUI = ordersQuery.error?.response?.data?.message || ordersQuery.error?.message;
+        return errorForUI;
+    };
+
     // Hooks aufrufen (TanStack Query)
     const ordersQuery = isSeller
         ? orderHooks.useSellerOrdersQuery(id, queryParams, token)
@@ -36,9 +43,6 @@ export const useOrderManager = ({ role, id, token, initialLimit = 10 }) => {
      * Zentralisierte Status-Update Logik mit Validierung
      */
     const handleUpdateStatus = async ({ orderId, newStatus, comment = "" }) => {
-        console.log("handleUpdateStatus orderId: ", orderId);
-        console.log("handleUpdateStatus newStatus: ", newStatus);
-        console.log("handleUpdateStatus comment: ", comment);
         // Cache Validierung
         const queryKey = isSeller
             ? ['sellerOrders', id, queryParams]
@@ -74,7 +78,7 @@ export const useOrderManager = ({ role, id, token, initialLimit = 10 }) => {
         // Status
         loading: ordersQuery.isLoading || ordersQuery.isFetching,
         updating: statusMutation.isPending,
-        error: ordersQuery.error?.message || statusMutation.error?.message || null,
+        error: getErrorMessage(ordersQuery.error) || getErrorMessage(statusMutation.error),
 
         // Aktionen
         paginate: (newPage) => setPage(newPage),

@@ -19,6 +19,9 @@ function MainProfileHeader({
     updateAddress,
     updatePhone,
     updateImage,
+    isUpdatingAddress,
+    isUpdatingPhone,
+    isUpdatingImage,
     viewMode = "user"
 }) {
     const cloudName = process.env.REACT_APP_CLOUD_NAME;
@@ -26,6 +29,7 @@ function MainProfileHeader({
     const { uploadImage } = useUploadImageApi(cloudName, uploadPreset);
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const isAnyUpdating = isUpdatingAddress || isUpdatingPhone || isUpdatingImage;
 
     const fileInputRef = useRef(null);
     const [showSettings, setShowSettings] = useState(false);
@@ -39,12 +43,12 @@ function MainProfileHeader({
 
     useEffect(() => {
         if (data) {
-            const cityName = cities[data.city] || "";
+            const cityName = cities[data?.city] || "";
             setFormData({
-                address: data.address || "",
+                address: data?.address || "",
                 city: cityName,
-                subCity: citiesData[cityName]?.[data.subCity] || "",
-                phone: data.phone || ""
+                subCity: citiesData[cityName]?.[data?.subCity] || "",
+                phone: data?.phone || ""
             });
             if (cityName) {
                 setSubCities(citiesData[cityName] || []);
@@ -79,7 +83,7 @@ function MainProfileHeader({
             toast.success(t("profile_updated"));
             setShowSettings(false);
         } catch (error) {
-            toast.error(error.response?.data?.message || t("update_failed"));
+            console.error("Update in Header failed", error);
         }
     };
 
@@ -97,13 +101,13 @@ function MainProfileHeader({
             await updateImage({ imageUrl });
             toast.success(t("profile_image_updated"));
         } catch (error) {
-            toast.error(t("update_failed"));
+            console.error("Update in Header failed", error);
         }
     };
 
     const getStatusIcon = () => {
         const iconStyle = { display: 'inline-block', verticalAlign: 'middle', marginLeft: '5px', width: '24px', height: '24px' };
-        switch (data.active) {
+        switch (data?.active) {
             case 'pending': return <MdHourglassEmpty style={{ ...iconStyle, color: '#f59e0b' }} />;
             case 'verified': return <MdVerified style={{ ...iconStyle, color: '#0095f6' }} />;
             case 'banned': return <MdBlock style={{ ...iconStyle, color: '#ef4444' }} />;
@@ -128,15 +132,15 @@ function MainProfileHeader({
         );
     };
 
-    const userCity = cities[data.city] || "";
-    const userSubCity = citiesData[userCity]?.[data.subCity] || "";
+    const userCity = cities[data?.city] || "";
+    const userSubCity = citiesData[userCity]?.[data?.subCity] || "";
 
     return (
         <div className="profile-header-container">
             {/* Status Banner */}
-            {data.active && !['active', 'verified'].includes(data.active) && (
-                <div className={`user-status-banner banner-${data.active}`}>
-                    <FaExclamationTriangle /> <span>{t(`user_status.${data.active}`)}</span>
+            {data?.active && !['active', 'verified'].includes(data?.active) && (
+                <div className={`user-status-banner banner-${data?.active}`}>
+                    <FaExclamationTriangle /> <span>{t(`user_status.${data?.active}`)}</span>
                 </div>
             )}
 
@@ -145,36 +149,37 @@ function MainProfileHeader({
                     {/* Identity Section */}
                     <div className="profile-identity">
                         <div className="profile-avatar-minimal" onClick={() => fileInputRef.current.click()}>
-                            <img src={data.imageUrl || '/default-avatar.png'} alt="Profile" />
+                            <img src={data?.imageUrl || '/default-avatar.png'} alt="Profile" style={{ opacity: isUpdatingImage ? 0.5 : 1 }} />
+                            {isUpdatingImage && <div className="avatar-loader">...</div>}
                             <input type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleProfileImageChange} />
                         </div>
                         <div className="profile-info-minimal">
                             <div className="profile-name-row">
                                 <h1 className="profile-name-minimal">
-                                    {viewMode === "seller" ? data.shopName : `${data.firstName} ${data.lastName}`}
+                                    {viewMode === "seller" ? data?.shopName : `${data?.firstName} ${data?.lastName}`}
                                     <span className="status-icon-wrapper">{getStatusIcon()}</span>
                                 </h1>
                                 <div className="rating-wrapper">{renderRating()}</div>
                             </div>
 
                             <div className="profile-identity-details">
-                                <p className="profile-email-minimal">{data.email}</p>
+                                <p className="profile-email-minimal">{data?.email}</p>
                                 {viewMode === "seller" && (
-                                    <p className="profile-realname-minimal">{data.firstName} {data.lastName}</p>
+                                    <p className="profile-realname-minimal">{data?.firstName} {data?.lastName}</p>
                                 )}
                             </div>
 
                             <div className="profile-contact-minimal">
-                                {data.phone && (
+                                {data?.phone && (
                                     <div className="contact-item">
                                         <FaPhone size={12} />
-                                        <span>{data.phone}</span>
+                                        <span>{data?.phone}</span>
                                     </div>
                                 )}
-                                {(data.address || userCity) && (
+                                {(data?.address || userCity) && (
                                     <div className="contact-item">
                                         <FaMapMarkerAlt size={12} />
-                                        <span>{[data.address, userSubCity, userCity].filter(Boolean).join(', ')}</span>
+                                        <span>{[data?.address, userSubCity, userCity].filter(Boolean).join(', ')}</span>
                                     </div>
                                 )}
                             </div>
@@ -184,15 +189,15 @@ function MainProfileHeader({
                     {viewMode === "seller" && (
                         <div className="stats-minimal">
                             <div className="stat-item-minimal">
-                                <span className="stat-value">{data.productCount}</span>
+                                <span className="stat-value">{data?.productCount}</span>
                                 <span className="stat-label">{t("products")}</span>
                             </div>
                             <div className="stat-item-minimal">
-                                <span className="stat-value">{data.orderCount}</span>
+                                <span className="stat-value">{data?.orderCount}</span>
                                 <span className="stat-label">{t("total_orders")}</span>
                             </div>
                             <div className="stat-item-minimal">
-                                <span className="stat-value">{data.openOrders}</span>
+                                <span className="stat-value">{data?.openOrders}</span>
                                 <span className="stat-label">{t("open_orders")}</span>
                             </div>
                         </div>
@@ -203,7 +208,7 @@ function MainProfileHeader({
                         <div className="actions-minimal">
                             <button className="action-btn-minimal" onClick={() => navigate('/chat')}>
                                 {t("messages")}
-                                {data.unreadMessages > 0 && <span className="badge-count">{data.unreadMessages}</span>}
+                                {data?.unreadMessages > 0 && <span className="badge-count">{data?.unreadMessages}</span>}
                             </button>
                             <button className="action-btn-minimal" onClick={() => setShowSettings(true)}>
                                 {t("settings")}
@@ -230,23 +235,23 @@ function MainProfileHeader({
                         <div className="profile-modal-body">
                             <div className="profile-form-group">
                                 <label>{t("phone_number")}</label>
-                                <input type="text" name="phone" value={formData.phone} onChange={handleInputChange} />
+                                <input type="text" name="phone" value={formData.phone} onChange={handleInputChange} disabled={isAnyUpdating} />
                             </div>
                             <div className="profile-form-group">
                                 <label>{t("street_address")}</label>
-                                <input type="text" name="address" value={formData.address} onChange={handleInputChange} />
+                                <input type="text" name="address" value={formData.address} onChange={handleInputChange} disabled={isAnyUpdating} />
                             </div>
                             <div className="profile-form-row">
                                 <div className="profile-form-group half">
                                     <label>{t("city")}</label>
-                                    <select name="city" value={formData.city} onChange={handleCityChange}>
+                                    <select name="city" value={formData.city} onChange={handleCityChange} disabled={isAnyUpdating}>
                                         <option value="">{t("select_city")}</option>
                                         {cities.map(c => <option key={c} value={c}>{c}</option>)}
                                     </select>
                                 </div>
                                 <div className="profile-form-group half">
                                     <label>{t("subcity")}</label>
-                                    <select name="subCity" value={formData.subCity} onChange={handleInputChange}>
+                                    <select name="subCity" value={formData.subCity} onChange={handleInputChange} disabled={isAnyUpdating}>
                                         <option value="">{t("select_subcity")}</option>
                                         {subCities.map(sc => <option key={sc} value={sc}>{sc}</option>)}
                                     </select>
@@ -259,7 +264,7 @@ function MainProfileHeader({
                             </button>
                             <div className="profile-modal-actions-right">
                                 <button className="profile-cancel-btn" onClick={() => setShowSettings(false)}>{t("cancel")}</button>
-                                <button className="profile-save-btn" onClick={handleUpdate}>{t("save_changes")}</button>
+                                <button className="profile-save-btn" onClick={handleUpdate} disabled={isAnyUpdating}>{isAnyUpdating ? t("saving") : t("save_changes")}</button>
                             </div>
                         </div>
                     </div>

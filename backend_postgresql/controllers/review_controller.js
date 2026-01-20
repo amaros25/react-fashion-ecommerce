@@ -1,15 +1,15 @@
 const { UserReview, ProductReview, UserStats, Product, sequelize } = require('../models');
+const { handleError } = require('./error_handler.js');
+
 
 class ReviewController {
-    // --- PART 1: RATE SELLER ---
     static async rateSeller(req, res) {
         const t = await sequelize.transaction();
         try {
             const { sellerId, orderId, userId, rating, comment } = req.body;
 
             if (!sellerId || !orderId || !userId || !rating) {
-                await t.rollback();
-                return res.status(400).json({ message: "missing_data" });
+                throw new Error("missing_data");
             }
 
             const existingReview = await UserReview.findOne({
@@ -17,8 +17,7 @@ class ReviewController {
             });
 
             if (existingReview) {
-                await t.rollback();
-                return res.status(400).json({ message: "seller_already_rated_for_this_order" });
+                throw new Error("seller_already_rated_for_this_order");
             }
 
             await UserReview.create({
@@ -43,9 +42,7 @@ class ReviewController {
             res.json({ message: "seller_rating_success" });
 
         } catch (error) {
-            if (t) await t.rollback();
-            console.error('Seller Rating Error:', error);
-            res.status(500).json({ message: "failed_to_rate_seller" });
+            await handleError(res, error, t, "failed_to_rate_seller");
         }
     }
 
@@ -56,8 +53,7 @@ class ReviewController {
             const { productId, userId, rating, comment } = req.body;
 
             if (!productId || !userId || !rating) {
-                await t.rollback();
-                return res.status(400).json({ message: "missing_data" });
+                throw new Error("missing_data");
             }
 
             // Optional: Hier prüfen, ob User das Produkt schon mal bewertet hat
@@ -78,15 +74,15 @@ class ReviewController {
                     reviewCount: newCount,
                     avgRating: parseFloat(newAvg.toFixed(2))
                 }, { transaction: t });
+            } else {
+                throw new Error("product_not_found");
             }
 
             await t.commit();
             res.json({ message: "product_rating_success" });
 
         } catch (error) {
-            if (t) await t.rollback();
-            console.error('Product Rating Error:', error);
-            res.status(500).json({ message: "failed_to_rate_product" });
+            await handleError(res, error, t, "failed_to_rate_product");
         }
     }
 }

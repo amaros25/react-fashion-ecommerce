@@ -1,32 +1,75 @@
-import { useLayoutEffect, useCallback } from 'react';
+import { useLayoutEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigationType } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaStar, FaRegStar, FaStarHalfAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import ProductCard from '../product_card/product_card';
 import Pagination from '../home/pagination';
 import LoadingSpinner from '../utils/loading_spinner';
-import { useShopData } from './hooks/useShopData';
 import './shop_page.css';
 import { cities, citiesData } from '../utils/const/cities';
-import { toast } from "react-toastify";
+
+import { useUserProfileManager } from "../api_managers/userProfileHookManager.js";
+import { useSellerProductFetchManager } from '../api_managers/useSellerProductFetchManager';
 
 const ShopPage = () => {
-    const { sellerId } = useParams();
+    const { shopSlug } = useParams();
+    console.log("ShopPage shopSlug:", shopSlug);
+
     const navType = useNavigationType();
     const { t } = useTranslation();
-    let cityName = "";
-    let subCityName = "";
+    const token = localStorage.getItem("token");
 
+
+    console.log("ShopPage decodedShopName:", shopSlug);
+    // 1. Manager: Findet den User anhand des shopName (via dein angepasstes Backend)
     const {
-        seller,
+        user: seller,
+        loading: sellerLoading,
+        error: sellerError
+    } = useUserProfileManager(shopSlug, token)
+
+    // 2. Manager: Lädt die Produkte des Sellers
+    // WICHTIG: Er nutzt die seller?.id, die erst nach dem ersten Manager-Call bekannt ist
+    const {
         products,
-        loading,
-        page,
-        setPage,
         totalPages,
-        totalItems,
-        error
-    } = useShopData(sellerId);
+        isLoading: productsLoading,
+        currentPage: page,
+        handlePageChange
+    } = useSellerProductFetchManager(seller?.id, token);
+
+    const loading = sellerLoading || productsLoading;
+
+    const locationInfo = useMemo(() => {
+        // 1. Prüfen, ob seller überhaupt da ist
+        if (!seller) return { cityName: "", subCityName: "" };
+
+        try {
+            // 2. Prüfen, ob city und subCity existieren (können 0 sein, daher !== undefined)
+            const cityKey = seller.city;
+            const subCityKey = seller.subCity;
+
+            const hasCity = cityKey !== undefined && cityKey !== null;
+            const hasSubCity = subCityKey !== undefined && subCityKey !== null;
+
+            if (!hasCity) return { cityName: "", subCityName: "" };
+
+            // 3. Namen aus deinen Daten-Objekten mappen
+            const cName = cities[cityKey] || "";
+
+            // subCity nur suchen, wenn auch der Key da ist
+            const sName = (hasSubCity && citiesData[cName])
+                ? citiesData[cName][subCityKey] || ""
+                : "";
+
+            return { cityName: cName, subCityName: sName };
+        } catch (error) {
+            console.error("Address error in ShopPage:", error);
+            return { cityName: "", subCityName: "" };
+        }
+    }, [seller]);
+
+
     const averageRating = seller?.averageRating || 0;
     const reviewCount = seller?.reviewCount || 0;
 
@@ -38,84 +81,73 @@ const ShopPage = () => {
         if (!loading) {
             if (navType === 'POP') {
                 const savedPosition = window.localStorage.getItem('scrollPosition');
-                if (savedPosition) {
-                    window.scrollTo(0, parseInt(savedPosition, 10));
-                }
+                if (savedPosition) window.scrollTo(0, parseInt(savedPosition, 10));
             } else {
                 window.scrollTo(0, 0);
             }
         }
     }, [loading, navType]);
 
-    if (error) {
+    if (sellerError) {
         return (
             <div className="shop-error-container">
-                <p>{t(error)}</p>
-                <button onClick={() => window.location.reload()}>{t('Retry')}</button>
+                <p>{t('shop_not_found')}</p>
             </div>
         );
-    }
-
-    const getCityName = () => {
-        try {
-            if (seller && Array.isArray(seller.address) && seller.address.length > 0) {
-                const lastAddress = seller.address[seller.address.length - 1];
-                cityName = cities[lastAddress.city];
-                subCityName = citiesData[cities[lastAddress.city]]?.[lastAddress.subCity] || "";
-            } else if (seller && seller.address && typeof seller.address === "object") {
-                const address = seller.address;
-                cityName = cities[address.city];
-                subCityName = citiesData[cities[address.city]]?.[address.subCity] || "";
-            } else {
-                console.log("No valid address found.");
-            }
-        } catch (error) {
-            console.error("Error getting city name:", error);
-            toast.error(t('Failed to get city name'));
-        }
     };
-
-    getCityName();
 
     return (
         <div className="shop-page-container">
 
-            <header className="shop-hero">
+            <header className="shop-hero"
+                style={{
+                    backgroundImage: seller?.imageUrl ? `url(${seller.imageUrl})` : 'none',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                }}>
+                <div className="shop-hero-overlay"></div>
+
+                {/* Der Titel bleibt zentral */}
                 <div className="shop-hero-content">
                     <h1 className="shop-title">{seller?.shopName || "SELLER SHOP"}</h1>
-                    <div className="shop-meta">
+                </div>
+
+                {/* Der Info-Block wandert nach rechts unten */}
+                <div className="shop-info-bottom-right">
+                    <div className="info-glass-block">
                         <span className="shop-owner">
                             {t('cart_page.curated_by')} {seller?.firstName} {seller?.lastName}
                         </span>
 
                         <span className="shop-location">
                             <FaMapMarkerAlt className="icon" />
-                            {subCityName}, {cityName}
+                            {locationInfo.subCityName && locationInfo.cityName
+                                ? `${locationInfo.subCityName}, ${locationInfo.cityName}`
+                                : t('location_not_available')}
                         </span>
-                    </div>
-                    <div className="shop-rating-display">
-                        <div className="stars-static">
-                            {[1, 2, 3, 4, 5].map((star) => {
-                                const diff = averageRating - (star - 1);
-                                if (diff >= 1) {
-                                    return <FaStar key={star} className="star filled" size={18} />;
-                                } else if (diff >= 0.5) {
-                                    return <FaStarHalfAlt key={star} className="star filled" size={18} />;
-                                } else {
-                                    return <FaRegStar key={star} className="star empty" size={18} />;
-                                }
-                            })}
+
+                        <div className="shop-rating-display">
+                            <div className="stars-static">
+                                {[1, 2, 3, 4, 5].map((star) => {
+                                    const diff = averageRating - (star - 1);
+                                    return (
+                                        <span key={star}>
+                                            {diff >= 1 ? <FaStar className="star filled" size={14} /> :
+                                                diff >= 0.5 ? <FaStarHalfAlt className="star filled" size={14} /> :
+                                                    <FaRegStar className="star empty" size={14} />}
+                                        </span>
+                                    );
+                                })}
+                            </div>
+                            <span className="rating-text">({reviewCount})</span>
                         </div>
-                        <span className="rating-text">
-                            ({reviewCount} {t('product_page.reviews')})
-                        </span>
                     </div>
                 </div>
             </header>
             <section className="shop-collection">
                 <div className="collection-header">
                     <h2>{t('cart_page.latest_collection')}</h2>
-                    <span className="collection-count">{totalItems} {t('cart_page.items')}</span>
+                    {/* <span className="collection-count">{totalItems} {t('cart_page.items')}</span> */}
                 </div>
                 <div className="shop-products-area" style={{ minHeight: '600px', position: 'relative' }}>
                     {loading && (
@@ -134,14 +166,12 @@ const ShopPage = () => {
                             </div>
                         )}
                     </div>
-                    {products.length > 0 && !loading && (
+                    {!loading && products.length > 0 && totalPages > 1 && (
                         <div className="shop-pagination">
                             <Pagination
                                 page={page}
                                 totalPages={totalPages}
-                                onPageChange={(p) => {
-                                    setPage(p);
-                                }}
+                                onPageChange={handlePageChange}
                             />
                         </div>
                     )}

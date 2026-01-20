@@ -1,5 +1,6 @@
 const { Order, Product, UserStats, User, SellerBill, OrderStatusHistory, OrderItem, ProductVariant, ProductReview, UserReview, sequelize } = require('../models');
 const { Op } = require('sequelize');
+const { handleError } = require('./error_handler.js');
 
 /**
  * Controller to handle order-related operations for MySQL
@@ -23,19 +24,17 @@ const orderController = {
             });
 
             if (!order) {
-                return res.status(404).json({ message: "order_not_found_get_order_by_id" });
+                throw new Error("order_not_found_get_order_by_id");
             }
             res.json(order);
         } catch (error) {
-            console.error('Error fetching order by ID:', error);
-            res.status(500).json({ message: "server_error_get_order_by_id" });
+            await handleError(res, error, null, "get_order_by_id_error");
         }
     },
     // GET: Get order by order number
     getOrderByNumber: async (req, res) => {
         try {
             const { orderNumber } = req.params;
-
             const order = await Order.findOne({
                 where: { orderNumber: orderNumber },
                 include: [
@@ -54,15 +53,12 @@ const orderController = {
                     [{ model: OrderStatusHistory, as: 'statusHistory' }, 'createdAt', 'DESC']
                 ]
             });
-
             if (!order) {
-                return res.status(404).json({ message: "order_not_found" });
+                throw new Error("order_not_found");
             }
-
             res.json(order);
         } catch (error) {
-            console.error('Error fetching order by number:', error);
-            res.status(500).json({ message: "server_error_get_order_by_number" });
+            await handleError(res, error, null, "get_order_by_number_error");
         }
     },
 
@@ -99,7 +95,6 @@ const orderController = {
                     },
                     { model: User, as: 'buyer', attributes: ['firstName', 'lastName'] }
                 ],
-                // Dies stellt sicher, dass die History innerhalb der Order sortiert ist
                 order: [
                     ['createdAt', 'DESC'],
                     [{ model: OrderStatusHistory, as: 'statusHistory' }, 'createdAt', 'DESC']
@@ -113,8 +108,7 @@ const orderController = {
                 totalPages: Math.ceil(count / limit)
             });
         } catch (error) {
-            console.error('Error fetching seller orders:', error);
-            res.status(500).json({ message: "server_error" });
+            await handleError(res, error, null, "get_seller_orders_error");
         }
     },
 
@@ -176,7 +170,7 @@ const orderController = {
                 ]
             });
 
-            if (count === 0) { return res.status(404).json({ message: "no_orders_found" }); }
+            if (count === 0) { throw new Error("no_orders_found") }
             const cleanRows = rows.map(row => row.get({ plain: true }));
 
             res.json({
@@ -186,31 +180,29 @@ const orderController = {
                 orders: cleanRows
             });
         } catch (error) {
-            console.error('Error fetching user orders:', error);
-            res.status(500).json({ message: "server_error" });
+            await handleError(res, error, null, "get_user_orders_error");
         }
     },
 
-    // POST: Create new order
     // POST: Create new order
     createOrder: async (req, res) => {
         const t = await sequelize.transaction();
         try {
             const { items, is_delivery, userId, sellerId } = req.body;
             let calculatedTotal = 0;
+            let minDeliveryPrice = Infinity;
+            if (!items || items.length === 0) throw new Error("at_least_one_item_required");
             const buyer = await User.findByPk(userId, { transaction: t });
             if (!buyer) throw new Error('user_not_found');
 
             const buyerSnapshot = {
                 p: buyer.phone || "",
                 ...(is_delivery && {
-                    a: buyer.address || "",    // Nur die Straße/Hausnummer
-                    sc: buyer.subCity ?? "",  // Sub-City (Viertel)
-                    c: buyer.city ?? ""          // City
+                    a: buyer.address || "",
+                    sc: buyer.subCity ?? "",
+                    c: buyer.city ?? ""
                 }),
-
             };
-
             const order = await Order.create({
                 userId,
                 sellerId,
@@ -219,9 +211,7 @@ const orderController = {
                 is_delivery: is_delivery,
                 buyerSnapshot: buyerSnapshot
             }, { transaction: t });
-
             for (const item of items) {
-                // 2. Variante finden und Stock prüfen (mit Sperre gegen Race Conditions)
                 const variant = await ProductVariant.findByPk(item.variantId, {
                     transaction: t,
                     lock: t.LOCK.UPDATE
@@ -232,13 +222,15 @@ const orderController = {
                 }
 
                 const product = await Product.findByPk(variant.productId, { transaction: t });
-
+                if (product.currentState !== 1) {
+                    throw new Error("product_not_active");
+                }
                 const itemPrice = parseFloat(product.price || 0);
                 const itemDelPrice = parseFloat(product.delprice || 0);
                 calculatedTotal += (itemPrice * item.quantity);
-
-                price_incl_delivery = is_delivery ? (calculatedTotal + itemDelPrice) : calculatedTotal;
-                // 3. OrderItem in der neuen Tabelle erstellen
+                if (itemDelPrice < minDeliveryPrice) {
+                    minDeliveryPrice = itemDelPrice;
+                }
                 await OrderItem.create({
                     orderId: order.id,
                     productId: product.id,
@@ -247,12 +239,12 @@ const orderController = {
                     priceAtPurchase: itemPrice
                 }, { transaction: t });
 
-                // 4. Stock abziehen
                 await variant.decrement('stock', { by: item.quantity, transaction: t });
                 await product.increment('orderCount', { by: 1, transaction: t });
             }
+            const finalDeliveryCharge = minDeliveryPrice === Infinity ? 0 : minDeliveryPrice;
+            const price_incl_delivery = is_delivery ? (calculatedTotal + finalDeliveryCharge) : calculatedTotal;
             await order.update({ totalPrice: price_incl_delivery }, { transaction: t });
-            // Stats Updates
             await UserStats.increment('orderCount', { by: 1, where: { userId: userId }, transaction: t });
             await UserStats.increment(['orderCount', 'openOrders'], { by: 1, where: { userId: sellerId }, transaction: t });
 
@@ -260,11 +252,7 @@ const orderController = {
             res.status(201).json(order);
 
         } catch (error) {
-            if (t) await t.rollback();
-            console.error("Error creating order:", error);
-            const clientErrors = ['product_not_found', 'product_variant_not_found', 'insufficient_stock', 'product_pending_admin_conf'];
-            const statusCode = clientErrors.includes(error.message) ? 400 : 500;
-            res.status(statusCode).json({ message: error.message || "server_error" });
+            await handleError(res, error, t, "create_order_error");
         }
     },
     // PUT: Update order status
@@ -273,23 +261,23 @@ const orderController = {
         try {
             const orderId = req.params.id;
             const { status, comment } = req.body;
+
+            if (comment && comment.length > 100) {
+                throw new Error("comment_too_long");
+            }
             const order = await Order.findByPk(orderId, {
                 include: [{ model: OrderItem, as: 'items' }],
                 transaction: t
             });
             if (!order) {
-                await t.rollback();
-                return res.status(404).json({ message: "order_not_found" });
+                throw new Error("order_not_found");
             }
             const oldStatus = parseInt(order.currentStatus);
             const newStatus = parseInt(status);
-
-            // 1. Replenishment Stock in ProductVariant
             const replenishmentStatuses = [30, 31, 42];
             if (replenishmentStatuses.includes(newStatus) && !replenishmentStatuses.includes(oldStatus)) {
                 if (order.items.length === 0) {
-                    await t.rollback();
-                    return res.status(400).json({ message: "order_items_not_found" });
+                    throw new Error("order_items_not_found");
                 }
                 for (const item of order.items) {
                     await ProductVariant.increment('stock', {
@@ -299,20 +287,13 @@ const orderController = {
                     });
                 }
             }
-
-            // 2. Order Status update
             await order.update({ currentStatus: newStatus }, { transaction: t });
-
-            // 3. Order Status History new entry
             await OrderStatusHistory.create({
                 orderId: order.id,
                 status: newStatus,
                 comment: comment
             }, { transaction: t });
-
-
-            // 4. Seller Bill Creation
-            if (newStatus === 1 && oldStatus === 0) { // 1 = Confirmed, 0 = Pending
+            if (Number(newStatus) === 3 || Number(newStatus) === 41) {
                 const rawAmount = parseFloat(order.totalPrice) * 0.03;
                 const roundedAmount = Number(rawAmount.toFixed(1));
                 await SellerBill.create({
@@ -321,8 +302,6 @@ const orderController = {
                     amount: roundedAmount,
                 }, { transaction: t });
             }
-
-            // 3. Seller State Update when order is closed
             const closingStatuses = [10, 30, 31, 42];
             if (closingStatuses.includes(newStatus) && !closingStatuses.includes(oldStatus) && oldStatus !== 0) {
                 await UserStats.decrement('openOrders', {
@@ -335,17 +314,12 @@ const orderController = {
             await t.commit();
             res.json({
                 message: "status_updated",
-                currentStatus: newStatus
+                currentStatus: newStatus,
+                comment: comment
             });
 
         } catch (error) {
-            if (t) await t.rollback();
-            console.error("DETAILED BACKEND ERROR:", error); // Schau in dein Terminal!
-            res.status(500).json({
-                message: "server_error",
-                details: error.message, // Schickt den echten Fehler ans Frontend
-                stack: error.stack
-            });
+            await handleError(res, error, t, "update_order_status_error");
         }
     },
 
@@ -353,21 +327,17 @@ const orderController = {
     getOrderCountByProduct: async (req, res) => {
         try {
             const { productId } = req.params;
-
-            // Wir zählen in der OrderItem-Tabelle, wie oft dieses Produkt vorkommt
             const count = await OrderItem.count({
                 where: {
                     productId: parseInt(productId)
                 }
             });
-
             res.json({
                 productId: parseInt(productId),
                 totalOrders: count
             });
         } catch (error) {
-            console.error("Error counting product orders:", error);
-            res.status(500).json({ message: "server_error_get_order_count" });
+            await handleError(res, error, null, "get_order_count_by_product_error");
         }
     },
 
@@ -375,11 +345,7 @@ const orderController = {
     getSellerOrderStats: async (req, res) => {
         try {
             const { sellerId } = req.params;
-
-            // 1. Total Orders
             const totalOrders = await Order.count({ where: { sellerId } });
-
-            // 2. Open Orders
             const openOrders = await Order.count({
                 where: { sellerId, currentStatus: 1 }
             });
@@ -388,8 +354,7 @@ const orderController = {
                 openOrders,
             });
         } catch (error) {
-            console.error("Error fetching order stats:", error);
-            res.status(500).json({ message: "server_error" });
+            await handleError(res, error, null, "get_seller_order_stats_error");
         }
     }
 };

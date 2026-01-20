@@ -44,7 +44,7 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
         const buttons = [];
         if (currentStatus === Number(ORDER_STATUS.PENDING)) {
             buttons.push(
-                <button key="cancel" disabled={isUpdating} className="seller-btn btn-cancel" onClick={() => onStatusChange(order.id, ORDER_STATUS.CANCELLED_USER)}>
+                <button key="cancel" disabled={isUpdating} className="seller-btn btn-cancel" onClick={() => handleStatusUpdateInitiated(ORDER_STATUS.CANCELLED_USER)}>
                     <FaTimes /> {t("order_state_buttons.cancel")}
                 </button>
             );
@@ -54,10 +54,12 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
 
     const handleStatusUpdateInitiated = (targetStatus) => {
         const statusRequiringComment = [
+            Number(ORDER_STATUS.CANCELLED_USER),
             Number(ORDER_STATUS.CANCELLED_SELLER),
             Number(ORDER_STATUS.RETURN_REFUSED),
-            Number(ORDER_STATUS.FIRST_TRY_DELIVERY_FAILED),
-            Number(ORDER_STATUS.PICK_UP_FAILED)
+            Number(ORDER_STATUS.PICK_UP_FAILED),
+            Number(ORDER_STATUS.FAILED_DELIVERY), // Neu hinzugefügt
+            Number(ORDER_STATUS.FIRST_TRY_DELIVERY_FAILED) // Falls du diesen Key noch nutzt
         ];
 
         if (statusRequiringComment.includes(Number(targetStatus))) {
@@ -66,7 +68,6 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
             onStatusChange(order.id, targetStatus);
         }
     };
-
 
     const renderSellerButtons = () => {
         const buttons = [];
@@ -99,14 +100,15 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
             );
         }
         else if (status === Number(ORDER_STATUS.SHIPPED)) {
+            // VEREINFACHTE LOGIK: Nur noch Delivered oder Failed
             buttons.push(
                 <button key="del" disabled={isUpdating} className="seller-btn btn-success" onClick={() => handleStatusUpdateInitiated(ORDER_STATUS.DELIVERED)}>
                     {t("order_state_buttons.mark_delivered")}
                 </button>
             );
             buttons.push(
-                <button key="fail" disabled={isUpdating} className="seller-btn btn-warning" onClick={() => handleStatusUpdateInitiated(ORDER_STATUS.FIRST_TRY_DELIVERY_FAILED)}>
-                    <FaTimes /> {t("order_state_buttons.first_try_delivery_failed")}
+                <button key="fail" disabled={isUpdating} className="seller-btn btn-danger" onClick={() => handleStatusUpdateInitiated(ORDER_STATUS.FAILED_DELIVERY)}>
+                    <FaTimes /> {t("order_state_buttons.mark_failed_delivery")}
                 </button>
             );
         }
@@ -141,6 +143,8 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
                 </button>
             );
         }
+        // Der alte Block für FIRST_TRY_DELIVERY_FAILED wurde entfernt, 
+        // da wir direkt von SHIPPED zu FAILED springen.
 
         return buttons;
     };

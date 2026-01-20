@@ -1,21 +1,10 @@
-```javascript
-import { useState, useEffect, useContext } from 'react';
 import { useLatestProductsQuery } from '../api_hooks/product_hooks';
-import { FilterContext } from '../filter_context/filter_context';
 import { useTranslation } from "react-i18next";
 
 export const useHomeProductManager = (page, limit, urlCategory, urlSubcategory, searchTerm, sortBy) => {
     const { t } = useTranslation();
-    const {
-        cachedHomeProducts, setCachedHomeProducts,
-        cachedTotalPages, setCachedTotalPages,
-        cacheParams, setCacheParams
-    } = useContext(FilterContext);
 
-    const [latestProducts, setLatestProducts] = useState(cachedHomeProducts || []);
-    const [totalPages, setTotalPages] = useState(cachedTotalPages || 0);
-    const [fetchError, setFetchError] = useState(null);
-
+    // 1. Definiere die aktuellen Parameter
     const currentParams = {
         page,
         limit,
@@ -25,40 +14,27 @@ export const useHomeProductManager = (page, limit, urlCategory, urlSubcategory, 
         sort: sortBy
     };
 
-    const { data, isLoading, isError, error } = useLatestProductsQuery(currentParams);
+    // 2. Nutze den Query Hook. 
+    // Er erkennt automatisch anhand der params (im QueryKey), ob er Daten aus dem Cache nimmt oder neu lädt.
+    const { data, isLoading, isError } = useLatestProductsQuery(currentParams);
 
-    useEffect(() => {
-        if (data) {
-             const products = data.products || [];
-             const total = data.totalPages || 0;
-             
-             setLatestProducts(products);
-             setTotalPages(total);
-             
-             // Sync with Context Cache (optional but good for preservation across context resets if needed)
-             setCachedHomeProducts(products);
-             setCachedTotalPages(total);
-             setCacheParams(currentParams);
+    // 3. Daten ableiten (Kein useState/useEffect nötig!)
+    const latestProducts = data?.products || [];
+    const totalPages = data?.totalPages || 0;
 
-             if (products.length === 0) {
-                 setFetchError(t("home_error.noProducts"));
-             } else {
-                 setFetchError(null);
-             }
-        }
-        
-        if (isError) {
-             setFetchError(t("home_error.error_while_reading_data"));
-        }
-
-    }, [data, isError, error, t]);
+    // 4. Fehler-Logik zentralisieren
+    let fetchError = null;
+    if (isError) {
+        fetchError = t("home_error.error_while_reading_data");
+    } else if (!isLoading && latestProducts.length === 0) {
+        fetchError = t("home_error.noProducts");
+    }
 
     return {
         latestProducts,
         totalPages,
         readingDataDone: !isLoading,
-        readingError: isError || !!fetchError,
+        readingError: isError || (latestProducts.length === 0 && !isLoading),
         fetchError
     };
 };
-```

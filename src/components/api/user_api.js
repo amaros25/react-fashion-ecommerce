@@ -37,19 +37,6 @@ export const fetchUser = async (userId, token) => {
 };
 
 
-/**
- * Fetch a specific seller.
- */
-export const fetchSeller = async (userId, token) => {
-    try {
-        const res = await axios.get(`${BASE_URL}/users/${userId}/seller`, getAuthHeaders(token));
-        return res.data;
-    } catch (error) {
-        console.error("Error fetching seller:", error);
-        throw error;
-    }
-};
-
 
 /**
  * Update user address.

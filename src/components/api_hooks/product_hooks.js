@@ -1,15 +1,14 @@
+// api_hooks/product_hooks.js
 import { useQuery } from '@tanstack/react-query';
 import { productApi } from '../api/product_api';
 
-/**
- * Hook to fetch latest products using TanStack Query.
- * @param {object} params - Query parameters.
- */
 export const useLatestProductsQuery = (params) => {
+    const { enabled, ...apiParams } = params;
     return useQuery({
         queryKey: ['latestProducts', params],
-        queryFn: () => productApi.getLatestProducts(params),
-        keepPreviousData: true,
-        staleTime: 1000 * 60 * 5, // 5 minutes cache
+        queryFn: () => productApi.getLatestProducts(apiParams),
+        placeholderData: (previousData) => previousData,
+        staleTime: 1000 * 60 * 5, // 5 Minuten "frisch"
+        enabled: enabled !== false
     });
 };

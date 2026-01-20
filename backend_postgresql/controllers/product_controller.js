@@ -1,6 +1,7 @@
-const { Product, ProductReview, UserStats, ProductVariant } = require('../models');
+const { Product, ProductReview, UserStats, ProductVariant, User } = require('../models');
 const { sequelize } = require('../models');
 const { Op, fn, col } = require('sequelize');
+const { handleError } = require('./error_handler.js');
 
 
 
@@ -65,19 +66,16 @@ const productController = {
             const not = req.query.not ? parseInt(req.query.not) : null;
             const sortBy = req.query.sort || 'newest';
             const offset = (page - 1) * limit;
-            const where = { status: 1 }; // Only Active Products
-
+            const where = { currentState: 1 }; // TODO change to 1 
             if (category !== null && !isNaN(category)) where.category = category;
             if (subcategory !== null && !isNaN(subcategory)) where.subcategory = subcategory;
             if (not) where.id = { [Op.ne]: not };
-
             if (search) {
                 const searchWords = search.trim().split(/\s+/);
                 where[Op.and] = searchWords.map(word => ({
                     name: { [Op.iLike]: `%${word}%` }
                 }));
             }
-
             let order = [];
             switch (sortBy) {
                 case 'price_asc':
@@ -99,6 +97,7 @@ const productController = {
                 limit,
                 order,
                 distinct: true,
+                attributes: ['id', 'name', 'price', 'discountedPercent', 'images', 'sellerId', 'createdAt'],
                 include: [
                     {
                         model: ProductVariant,
@@ -109,7 +108,12 @@ const productController = {
             });
 
             const totalAllProducts = await Product.count();
-
+            console.log("rows", rows);
+            console.log("count", count);
+            console.log("page", page);
+            console.log("totalPages", Math.ceil(count / limit));
+            console.log("totalItems", count);
+            console.log("totalAllProducts", totalAllProducts);
             res.json({
                 products: rows,
                 page,
@@ -118,42 +122,108 @@ const productController = {
                 totalAllProducts
             });
         } catch (error) {
-            console.error('Error fetching latest products:', error);
-            res.status(500).json({ error: 'server_error_fetching_latest_products' });
+            await handleError(res, error, null, "failed_to_fetch_latest_products");
         }
     },
 
 
     // GET: Get a single product by ID
-    getProductByID: async (req, res) => {
+    getRemainingProductDetails: async (req, res) => {
         try {
             const { id } = req.params;
             const productId = parseInt(id, 10);
             if (isNaN(productId) || productId <= 0) {
-                return res.status(400).json({ error: 'invalid_product_id_format' });
+                throw new Error("invalid_product_id_format");
             }
             const product = await Product.findByPk(productId, {
+                attributes: {
+                    exclude: [
+                        'name', 'price', 'discountedPercent', 'images', 'sellerId', 'createdAt'
+                    ]
+                },
                 include: [
-                    { model: ProductReview, as: 'reviews', limit: 10, order: [['created_at', 'DESC']] },
-                    { model: ProductVariant, as: 'variants' }
+                    {
+                        model: ProductReview,
+                        as: 'reviews',
+                        limit: 10,
+                        order: [['created_at', 'DESC']],
+                        include: [
+                            { model: User, as: 'user', attributes: ['firstName', 'lastName'] }
+                        ]
+                    },
+
+                    {
+                        model: User,
+                        as: 'seller',
+                        attributes: ['id', 'shopName', 'shopSlug', 'imageUrl', 'city', 'subCity'],
+                        include: [
+                            {
+                                model: UserStats,
+                                as: 'stats',
+                                attributes: ['reviewCount', 'avgRating']
+                            }
+                        ]
+                    }
+                ]
+            });
+            if (!product) throw new Error('product_not_found');
+            res.json(product);
+        } catch (error) {
+            await handleError(res, error, null, "failed_to_fetch_remaining_details");
+        }
+    },
+
+    getProductDetailsComplete: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const productId = parseInt(id, 10);
+
+            if (isNaN(productId) || productId <= 0) {
+                throw new Error("invalid_product_id_format");
+            }
+
+            const product = await Product.findByPk(productId, {
+                include: [
+                    {
+                        model: ProductReview,
+                        as: 'reviews',
+                        limit: 10,
+                        order: [['created_at', 'DESC']],
+                        include: [
+                            { model: User, as: 'user', attributes: ['firstName', 'lastName'] }
+                        ]
+                    },
+                    {
+                        model: ProductVariant,
+                        as: 'variants'
+                    },
+                    {
+                        model: User,
+                        as: 'seller',
+                        attributes: ['id', 'shopName', 'shopSlug', 'imageUrl', 'city', 'subCity'],
+                        include: [
+                            {
+                                model: UserStats,
+                                as: 'stats',
+                                attributes: ['reviewCount', 'avgRating']
+                            }
+                        ]
+
+                    }
                 ]
             });
 
-            if (!product) {
-                return res.status(404).json({ error: 'product_not_found' });
-            }
-
+            if (!product) throw new Error("product_not_found");
             res.json(product);
         } catch (error) {
-            console.error('Error fetching product by ID:', error);
-            res.status(500).json({ error: 'server_error_fetching_product_by_id' });
+            await handleError(res, error, null, "failed_to_fetch_complete_details");
         }
     },
 
     // GET: Get products by IDs
     getProductsByIDs: async (req, res) => {
         const { ids } = req.query;
-        if (!ids) return res.status(400).json({ message: "missing_product_ids" });
+        if (!ids) throw new Error("missing_product_ids");
         const productIds = ids.split(',').map(id => parseInt(id)).filter(id => !isNaN(id));
         try {
             const products = await Product.findAll({
@@ -163,12 +233,10 @@ const productController = {
                 ]
             });
 
-            if (products.length === 0) return res.status(404).json({ message: "product_not_found" });
-
+            if (products.length === 0) throw new Error("products_not_found");
             res.json(products);
         } catch (err) {
-            console.error('Error fetching products by IDs:', err);
-            res.status(500).json({ message: "server_error_fetching_products_by_ids" });
+            await handleError(res, err, null, "failed_to_fetch_products_by_ids");
         }
     },
 
@@ -177,7 +245,7 @@ const productController = {
         const { sellerId } = req.params;
         const sId = parseInt(sellerId, 10);
         if (isNaN(sId) || sId <= 0) {
-            return res.status(400).json({ error: 'invalid_seller_id' });
+            throw new Error("invalid_seller_id");
         }
         const page = Math.max(1, parseInt(req.query.page, 10) || 1);
         const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
@@ -191,7 +259,6 @@ const productController = {
                     { productNumber: { [Op.iLike]: `%${search}%` } }
                 ];
             }
-
             const { count, rows } = await Product.findAndCountAll({
                 where,
                 offset,
@@ -205,7 +272,6 @@ const productController = {
                 ],
                 distinct: true
             });
-
             res.json({
                 products: rows,
                 totalCount: count,
@@ -213,20 +279,17 @@ const productController = {
                 totalPages: Math.ceil(count / limit),
             });
         } catch (error) {
-            console.error("Error fetching seller products:", error);
-            res.status(500).json({ message: "error_fetching_products" });
+            await handleError(res, error, null, "failed_to_fetch_products_by_seller");
         }
     },
 
     // POST: Create a new product
     createProduct: async (req, res) => {
-        console.log("Add new product formData", req.body);
         const validation = validateProductData(req.body);
         if (!validation.isValid) {
-            return res.status(400).json({ error: validation.message });
+            throw new Error(validation.message);
         }
         const { sellerId, name, description, price, delprice, category, subcategory, images, variants } = req.body;
-        console.log("Add new product formData", req.body);
         const t = await sequelize.transaction();
         try {
             const product = await Product.create({
@@ -251,9 +314,7 @@ const productController = {
             const fullProduct = await Product.findByPk(product.id, { include: [{ model: ProductVariant, as: 'variants' }] });
             res.status(201).json({ success: true, data: fullProduct });
         } catch (error) {
-            if (t) await t.rollback();
-            console.error('Error creating product:', error);
-            res.status(500).json({ message: 'error_adding_product' });
+            await handleError(res, error, t, "failed_to_create_product");
         }
     },
 
@@ -263,13 +324,11 @@ const productController = {
         const productId = req.params.id;
         const { userId, rating, comment } = req.body;
         const t = await sequelize.transaction();
-
         try {
             // 1. Produkt & Verkäufer finden
             const product = await Product.findByPk(productId, { transaction: t });
             if (!product) {
-                await t.rollback();
-                return res.status(404).json({ message: "product_not_found" });
+                throw new Error("product_not_found");
             }
 
             // 2. Doppelte Bewertung verhindern
@@ -279,8 +338,7 @@ const productController = {
             });
 
             if (existingReview) {
-                await t.rollback();
-                return res.status(400).json({ message: "review_already_exists_error" });
+                throw new Error("review_already_exists_error");
             }
 
             // 3. Neue Produktbewertung erstellen
@@ -336,9 +394,7 @@ const productController = {
             });
 
         } catch (err) {
-            if (t) await t.rollback();
-            console.error("Error in addReview:", err);
-            res.status(500).json({ message: "failed_to_add_review_error" });
+            await handleError(res, err, t, "failed_to_add_review_error");
         }
     }
 };

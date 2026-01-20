@@ -28,21 +28,17 @@ export const fetchUserOrders = async ({ userId, token, page, limit }) => {
         };
 
     } catch (error) {
-        // Handle 404 as a special case to return empty state
-        if (error.response && error.response.status === 404) {
-            return { orders: [], totalOrders: 0, totalPages: 1 };
-        }
 
-        // Rethrow other errors for the UI/TanStack Query to handle
+
         console.error("Error fetching user orders:", error);
-        throw new Error("fetch_orders_failed");
+        throw error;
     }
 };
 
 /**
  * Update the status of an order using Axios.
  */
-export const updateOrderStatus = async ({ orderId, newStatus, token }) => {
+export const updateOrderStatus = async ({ orderId, newStatus, token, comment = "" }) => {
     console.log("updateOrderStatus: orderId: ", orderId);
     console.log("updateOrderStatus: newStatus: ", newStatus);
     console.log("updateOrderStatus: token: ", token);
@@ -54,7 +50,7 @@ export const updateOrderStatus = async ({ orderId, newStatus, token }) => {
         // Axios automatically stringifies the body to JSON
         const response = await axios.put(
             `${BASE_URL}/orders/${orderId}/status`,
-            { status: newStatus },
+            { status: newStatus, comment },
             config
         );
 
