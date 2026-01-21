@@ -119,17 +119,20 @@
 .shop-rating-display {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 5px;
+    align-items: flex-start;
+    gap: 4px;
     margin-top: 5px;
+}
+
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .stars-static {
     display: flex;
     gap: 2px;
-    background: transparent;
-    /* Hier kein extra Hintergrund nötig */
-    padding: 0;
 }
 
 .stars-static .star {
@@ -138,6 +141,25 @@
 
 .stars-static .star.filled {
     color: #000;
+}
+
+.review-count {
+    font-size: 0.7rem;
+    color: #333;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.views-row {
+    margin-top: 2px;
+}
+
+.views-text {
+    font-size: 0.65rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
 }
 
 .rate-action {

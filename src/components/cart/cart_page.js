@@ -3,128 +3,43 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaTrash, FaArrowRight, FaShoppingBag, FaStore } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { fetchSellersByIds, createMultipleOrders } from "./hooks/api";
-import "./cart_page.css";
 import { cities, citiesData } from '../utils/const/cities';
 import { ORDER_STATUS } from "../utils/const/order_status";
-// import { useUserDataApi } from "../profile_user/hooks/useUserData";
 import { useAuth } from "../../context/AuthContext";
-import { useUserProfileManager } from "../api_managers/userProfileHookManager.js"; // Pfad anpassen falls nötig
+import { useUserProfileManager } from "../api_managers/userProfileHookManager.js";
+import { useCartManager } from "../api_managers/useCartManager.js";
 import { useQueryClient } from '@tanstack/react-query';
-
+import "./cart_page.css";
 const CartPage = () => {
   const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
   const { userId, token } = useAuth();
 
-  console.log("CartPage userId: ", userId);
-  console.log("CartPage token: ", token);
-  // const { user, loading, error } = useUserDataApi(apiUrl, userId, token);
-  const { user, loading, error } = useUserProfileManager(userId, token);
-  console.log("CartPage user: ", user);
-  const navigate = useNavigate();
-  const [cart, setCart] = useState([]);
-  const [groupedCart, setGroupedCart] = useState({});
-  const [sellers, setSellers] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDelivery, setIsDelivery] = useState(true);
+  const { user, loading: userLoading } = useUserProfileManager(userId, token);
+  const {
+    cart,
+    groupedCart,
+    sellersMap,
+    isLoadingSellers,
+    isSubmitting,
+    handleRemoveItem,
+    submitGroups
+  } = useCartManager(userId, token, queryClient);
 
+  const navigate = useNavigate();
+  const [isDelivery, setIsDelivery] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Fetch Sellers
-  const getSellersByIds = async (sellerIds) => {
-    const result = await fetchSellersByIds(sellerIds);
-    if (result.success) {
-      setSellers(result.data);
-    } else {
-      toast.error(t(result.errorKey));
-    }
-  };
-
-  // Load Cart
-  useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(savedCart);
-    let sellerIds = [];
-    const grouped = savedCart.reduce((acc, item) => {
-      if (!acc[item.sellerId]) acc[item.sellerId] = [];
-      acc[item.sellerId].push(item);
-      if (!sellerIds.includes(item.sellerId)) {
-        sellerIds.push(item.sellerId);
-      }
-      return acc;
-    }, {});
-    setGroupedCart(grouped);
-    if (sellerIds.length > 0) {
-      getSellersByIds(sellerIds);
-    }
-  }, []);
-
-  // Remove Item
-  const handleRemoveItem = (sellerId, index) => {
-    // Get the item to remove from the grouped structure
-    const itemToRemove = groupedCart[sellerId][index];
-
-    // Create a new cart array by removing only the specific instance
-    // Note: We use a flag to only remove one instance in case of duplicates
-    let removed = false;
-    const newCart = cart.filter((item) => {
-      if (!removed &&
-        item.productId === itemToRemove.productId &&
-        item.variantId === itemToRemove.variantId) {
-        removed = true;
-        return false;
-      }
-      return true;
-    });
-
-    setCart(newCart);
-    localStorage.setItem("cart", JSON.stringify(newCart));
-
-    // Update groupedCart
-    const updatedGroup = groupedCart[sellerId].filter((_, i) => i !== index);
-    if (updatedGroup.length === 0) {
-      const { [sellerId]: _, ...rest } = groupedCart;
-      setGroupedCart(rest);
-    } else {
-      setGroupedCart({ ...groupedCart, [sellerId]: updatedGroup });
-    }
-  };
-
   // Submit Order
   const handleNewOrder = async () => {
-    if (!userId || !token) {
-      toast.error(t("product_page.must_login"));
+    const result = await submitGroups(user, isDelivery, ORDER_STATUS.PENDING);
+    if (result.success) {
+      navigate("/profile_user");
+    } else if (result.loginRequired) {
       navigate("/login");
-      return;
-    }
-
-    if (isDelivery && (!user?.address)) {
-      toast.error(t("cart_page.address_required") || "Please add your delivery address first");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const result = await createMultipleOrders(groupedCart, user, userId, token, ORDER_STATUS.PENDING, isDelivery);
-      if (result.success) {
-        toast.success(t("orders_created_success"));
-        localStorage.removeItem("cart");
-        setCart([]);
-        setGroupedCart({});
-        await queryClient.invalidateQueries({ queryKey: ['orders', userId] });
-        navigate("/profile_user");
-      } else {
-        toast.error(t(result.errorKey));
-      }
-    } catch (err) {
-      toast.error(t("orders_created_error"));
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -177,7 +92,7 @@ const CartPage = () => {
           <div className="cart-items-section">
 
             {Object.entries(groupedCart).map(([sellerId, items]) => {
-              const seller = sellers[sellerId];
+              const seller = sellersMap[sellerId];
               return (
                 <div key={sellerId} className="seller-group">
                   {seller ? (
@@ -188,7 +103,7 @@ const CartPage = () => {
                   ) : (
                     <div className="seller-header-modern">
                       <FaStore className="store-icon" />
-                      <span className="cart-seller-name">Loading...</span>
+                      <span className="cart-seller-name">{isLoadingSellers ? t("loading") : t("unknown_seller")}</span>
                     </div>
                   )}
                   <div className="items-list">

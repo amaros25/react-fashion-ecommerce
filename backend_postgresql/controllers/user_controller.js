@@ -82,14 +82,14 @@ const userController = {
             let user;
             if (!isNaN(identifier)) {
                 user = await User.findByPk(identifier, {
-                    include: [{ model: UserStats, as: 'stats', attributes: ['avgRating', 'reviewCount', 'unreadMessages', 'orderCount'] }]
+                    include: [{ model: UserStats, as: 'stats', attributes: ['avgRating', 'reviewCount', 'unreadMessages', 'orderCount', 'views'] }]
                 });
             }
             // 2. Versuch: Falls nicht gefunden, suche über shopName
             if (!user) {
                 user = await User.findOne({
                     where: { shopSlug: identifier },
-                    include: [{ model: UserStats, as: 'stats', attributes: ['avgRating', 'reviewCount', 'unreadMessages', 'orderCount'] }]
+                    include: [{ model: UserStats, as: 'stats', attributes: ['avgRating', 'reviewCount', 'unreadMessages', 'orderCount', 'views'] }]
                 });
             }
 
@@ -115,7 +115,8 @@ const userController = {
                     reviewCount: user.stats?.reviewCount || 0,
                     averageRating: user.stats?.avgRating || 0,
                     productCount: user.stats?.productCount || 0,
-                    unreadMessages: user.stats?.unreadMessages || 0
+                    unreadMessages: user.stats?.unreadMessages || 0,
+                    views: user.stats?.views || 0
                 });
             } else {
                 res.json({
@@ -135,7 +136,8 @@ const userController = {
                     orderCount: user.stats?.orderCount || 0,
                     reviewCount: user.stats?.reviewCount || 0,
                     averageRating: user.stats?.avgRating || 0,
-                    unreadMessages: user.stats?.unreadMessages || 0
+                    unreadMessages: user.stats?.unreadMessages || 0,
+                    views: user.stats?.views || 0
                 });
             }
 
@@ -416,6 +418,20 @@ const userController = {
         } catch (error) {
             console.error('Multi-Rating Error:', error);
             await handleError(res, error, t, "rate_user_and_product_failed");
+        }
+    },
+
+    incrementViews: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const stats = await UserStats.findOne({ where: { userId: id } });
+            if (!stats) throw new Error("stats_not_found");
+
+            await stats.increment('views', { by: 1 });
+            res.json({ message: "success", views: stats.views + 1 });
+        } catch (error) {
+            console.error('Error incrementing views:', error);
+            await handleError(res, error, null, "failed_to_increment_views");
         }
     }
 };

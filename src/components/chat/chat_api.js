@@ -41,9 +41,9 @@ export const fetchChats = async (role, userId, sellerId, newChatType, currentPag
 /**
  * Fetches full details and messages for a specific chat.
  */
-export const openChat = async (chatId, userId, PAGE_LIMIT, token) => {
+export const openChat = async (chatId, userId, PAGE_LIMIT, token, offset = 0) => {
   try {
-    const res = await fetch(`${apiUrl}/chats/${chatId}?page=1&limit=${PAGE_LIMIT}`, {
+    const res = await fetch(`${apiUrl}/chats/${chatId}?offset=${offset}&limit=${PAGE_LIMIT}`, {
       headers: getHeaders(token),
     });
     const data = await res.json();
@@ -82,11 +82,10 @@ export const sendMessage = async (chatId, userId, newMessage, token) => {
 /**
  * Loads older messages for a chat (pagination).
  */
-export const loadMoreMessages = async (chatId, currentPage, PAGE_LIMIT, token) => {
+export const loadMoreMessages = async (chatId, currentOffset, PAGE_LIMIT, token) => {
   try {
-    const nextPage = currentPage + 1;
     const res = await fetch(
-      `${apiUrl}/chats/${chatId}?page=${nextPage}&limit=${PAGE_LIMIT}`,
+      `${apiUrl}/chats/${chatId}?offset=${currentOffset}&limit=${PAGE_LIMIT}`,
       { headers: getHeaders(token) }
     );
     const data = await res.json();
@@ -139,12 +138,12 @@ export const startNewChat = async (role, userId, sellerId, newChatType, number, 
 /**
  * Updates all messages in a chat as 'read' for the current user.
  */
-export const markMessagesAsRead = async (chatId, userId, token) => {
+export const markMessagesAsRead = async (chatId, userId, token, messageIds = []) => {
   try {
     const res = await fetch(`${apiUrl}/chats/${chatId}/messages/read`, {
       method: "PATCH",
       headers: getHeaders(token),
-      body: JSON.stringify({ userId }) // PostgreSQL expects userId to know who is reading
+      body: JSON.stringify({ userId, messageIds }) // Optional granular update
     });
 
     const data = await res.json();

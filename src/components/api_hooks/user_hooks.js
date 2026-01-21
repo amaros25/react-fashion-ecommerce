@@ -101,3 +101,15 @@ export const useUpdateImage = ({ userId, token }) => {
     });
 };
 
+export const useIncrementViews = () => {
+    return useMutation({
+        mutationFn: (userId) => userApi.incrementViews(userId),
+        onSuccess: (data) => {
+            console.log("Views incremented:", data);
+        },
+        onError: (error) => {
+            console.error("Failed to increment views:", error);
+        }
+    });
+};
+

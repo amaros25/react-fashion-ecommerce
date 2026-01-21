@@ -9,10 +9,10 @@ import "./chat_sidebar.css";
 const ChatSidebar = ({
   chats = [],
   activeChat,
-  setSidebarCurrentPage,
-  sidebarCurrentPage,
+  sidebarPage,
+  setSidebarPage,
   totalPages,
-  handleOpenChat,
+  handleSelectChat,
   isSidebarHidden
 }) => {
   const { t } = useTranslation();
@@ -71,17 +71,25 @@ const ChatSidebar = ({
             return (
               <div
                 key={chat.id}
-                className={`chat-card ${activeChat?.id === chat.id ? "active" : ""}`}
-                onClick={() => handleOpenChat(chat.id)}
+                className={`chat-card ${activeChat?.id === chat.id ? "active" : ""} ${chat.unreadCount > 0 ? "unread" : ""}`}
+                onClick={() => handleSelectChat(chat.id)}
               >
-                <div>
-                  <strong>{chat.otherParticipant?.name || t('chat.customer')}</strong>
+                <div className="chat-card-header">
+                  <strong>
+                    {chat.type === "support" || chat.participant1Id === 1 || chat.participant2Id === 1
+                      ? t("chat.chatWithAdmin")
+                      : (chat.otherParticipant?.name || t("chat.customer"))
+                    }
+                  </strong>
+                  {chat.unreadCount > 0 && (
+                    <span className="unread-badge">{chat.unreadCount}</span>
+                  )}
                 </div>
                 <div>
                   <strong>{chat.type === "order" ? t('chat.order') : t('chat.product')}</strong>
                   {`: ${chat.subjectNumber || t('chat.noNumberAvailable')}`}
                 </div>
-                <div>
+                <div className="last-message-preview">
                   <strong>{t('chat.lastMessage')}:</strong> {lastMessage}
                 </div>
                 <div className="chat-date">
@@ -96,16 +104,16 @@ const ChatSidebar = ({
       {/* Pagination Controls */}
       <div className="pagination-chat">
         {totalPages > 1 && (
-          getPaginationRange(totalPages, sidebarCurrentPage).map((page, index) => (
+          getPaginationRange(totalPages, sidebarPage).map((p, index) => (
             <button
               key={index}
               onClick={() => {
-                if (page !== '...') setSidebarCurrentPage(page);
+                if (p !== '...') setSidebarPage(p);
               }}
-              className={`page-btn ${sidebarCurrentPage === page ? 'active' : ''}`}
-              disabled={page === '...'}
+              className={`page-btn ${sidebarPage === p ? 'active' : ''}`}
+              disabled={p === '...'}
             >
-              {page}
+              {p}
             </button>
           ))
         )}

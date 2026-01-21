@@ -62,6 +62,26 @@ export const updateOrderStatus = async ({ orderId, newStatus, token, comment = "
 };
 
 
+/**
+ * Create a new order using Axios.
+ */
+export const createOrder = async (orderData, token) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    try {
+        const response = await axios.post(`${BASE_URL}/orders/create`, orderData, config);
+        return response.data;
+    } catch (error) {
+        console.error("Error creating order:", error);
+        throw error;
+    }
+};
+
 export const getSellerOrders = async (sellerId, params, token) => {
     const response = await axios.get(`${BASE_URL}/orders/seller/${sellerId}`, {
         params: params,

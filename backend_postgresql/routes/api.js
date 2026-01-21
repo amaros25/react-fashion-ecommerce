@@ -11,7 +11,10 @@ const adminController = require('../controllers/admin_controller');
 const reviewController = require('../controllers/review_controller');
 
 // Re-using original middleware (DB agnostic)
-const { verifyToken, verifySellerSecure, verifyAdmin, verifyUserSecure, verifyGlobalUserActions } = require('../middleware/auth');
+const { optionalHeartbeat, verifyToken, verifySellerSecure, verifyAdmin, verifyUserSecure, verifyGlobalUserActions } = require('../middleware/auth');
+
+// Apply global optional heartbeat to track activity on any route correctly
+router.use(optionalHeartbeat);
 
 // Auth Routes
 router.post('/auth/login', floodLimiter, authLimiter, authController.login);
@@ -63,6 +66,7 @@ router.get('/users/public-seller/:id', floodLimiter, generalLimiter, verifyToken
 router.put('/users/:id/updateImage', floodLimiter, maxiGeneralLimiter, verifyToken, verifyGlobalUserActions, userController.updateUserImage);
 router.patch('/users/:id/address', floodLimiter, maxiGeneralLimiter, verifyToken, verifyGlobalUserActions, userController.updateUserAddress);
 router.patch('/users/:id/phone', floodLimiter, maxiGeneralLimiter, verifyToken, verifyGlobalUserActions, userController.updateUserPhone);
+router.patch('/users/:id/views', floodLimiter, generalLimiter, userController.incrementViews); // Public-ish but rate limited
 // Rating Routes
 router.post('/api/reviews/seller', floodLimiter, generalLimiter, verifyToken, verifyGlobalUserActions, reviewController.rateSeller);
 router.post('/api/reviews/product', floodLimiter, generalLimiter, verifyToken, verifyGlobalUserActions, reviewController.rateProduct);
@@ -76,6 +80,8 @@ router.get('/admin/products', floodLimiter, generalLimiter, verifyToken, verifyA
 router.get('/admin/orders', floodLimiter, generalLimiter, verifyToken, verifyAdmin, adminController.getAllOrders);
 router.patch('/admin/toggle-user/:id', floodLimiter, generalLimiter, verifyToken, verifyAdmin, adminController.toggleUser);
 router.patch('/admin/toggle-seller/:id', floodLimiter, generalLimiter, verifyToken, verifyAdmin, adminController.toggleSeller);
+router.patch('/admin/product-status/:id', floodLimiter, generalLimiter, verifyToken, verifyAdmin, adminController.updateProductStatus);
+router.patch('/admin/order-status/:id', floodLimiter, generalLimiter, verifyToken, verifyAdmin, adminController.updateOrderStatus);
 
 
 //Unknown Routes

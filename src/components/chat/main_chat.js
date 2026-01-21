@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import ChatWindow from './chat_window';
 import ChatSidebar from './chat_sidebar';
-import { useChats } from "./use_chats";
+import { useChatManager } from "../api_managers/useChatManager";
 import "./main_chat.css";
 
 /**
@@ -16,6 +16,8 @@ const MainChat = () => {
   // Destructure contextual data passed via navigation state (e.g. from Order or Product pages)
   const {
     newOrderNumber: orderNumber,
+    orderId,
+    productId,
     sellerId,
     partnerId,
     newChatType: routeChatType,
@@ -48,38 +50,44 @@ const MainChat = () => {
   }, [orderNumber]);
 
   /**
-   * Initialize the main chat hook which handles all business logic.
-   * Partner ID priority: partnerId -> sellerId -> default "admin"
+   * Initialize the main chat manager.
+   * Partner ID priority: partnerId -> sellerId -> default 1 (Admin)
    */
-  const chatHook = useChats(
+  const chatManager = useChatManager(
     userId,
-    partnerId || sellerId || "admin",
+    localStorage.getItem("token"),
+    partnerId || sellerId || 1,
     routeChatType || "",
     orderNumber || "",
-    message || ""
+    message || "",
+    orderId,
+    productId
   );
 
-  console.log("MainChat chatHook", chatHook);
+  console.log("MainChat chatManager", chatManager);
   return (
     <div className="main-chat-container">
       <div className="main-chat">
 
-        {/* Sidebar: Shown if not hidden (e.g. hidden on mobile when chat is active) */}
-        {!chatHook.isSidebarHidden && (
+        {/* Sidebar: Shown if not hidden */}
+        {!chatManager.isSidebarHidden && (
           <ChatSidebar
-            {...chatHook}
-            startChat={() => chatHook.setIsNewChat(true)}
+            {...chatManager}
+            startChat={() => chatManager.setIsNewChat(true)}
             is_chat_from_order_item={isChatFromOrderItem}
+            currentPage={chatManager.sidebarPage}
+            handlePageChange={chatManager.setSidebarPage}
           />
         )}
 
         {/* Chat Window: Shown when a chat is selected/active */}
-        {chatHook.isChatWindowActive && (
+        {chatManager.isChatWindowActive && (
           <div className="chat-window active">
             <ChatWindow
-              {...chatHook}
+              {...chatManager}
               userId={userId}
-              onBack={chatHook.handleBackToSidebar}
+              onBack={chatManager.handleBackToSidebar}
+              onSend={chatManager.handleSendMessage}
             />
           </div>
         )}

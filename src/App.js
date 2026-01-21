@@ -25,6 +25,7 @@ import ShopPage from './components/shop/ShopPage.js';
 import ScrollToTop from './components/utils/ScrollToTop.js';
 import { FilterProvider } from './components/filter_context/filter_context.js';
 import { ToastContainer } from "react-toastify";
+import AdminRoute from "./components/utils/AdminRoute";
 import SavedProducts from './components/saved_products/saved_products.js';
 import Agb from './components/info_pages/agb.js';
 import DataProtection from './components/info_pages/data_protection.js';
@@ -99,8 +100,8 @@ function App() {
               <Route path="/article-verification" element={<InfoPage pageKey="article_verification" />} />
               <Route path="/info-board" element={<InfoPage pageKey="info_board" />} />
               <Route path="/help-center" element={<HelpCenter />} />
-              <Route path="/profile_admin" element={<AdminProfile />} />
-              <Route path="/admin/order/:id" element={<AdminOrderDetail />} />
+              <Route path="/profile_admin" element={<AdminRoute><AdminProfile /></AdminRoute>} />
+              <Route path="/admin/order/:id" element={<AdminRoute><AdminOrderDetail /></AdminRoute>} />
               <Route path="/sell" element={<InfoPage pageKey="sell" />} />
               <Route path="/buy" element={<InfoPage pageKey="buy" />} />
               <Route path="/trust-safety" element={<InfoPage pageKey="trust_safety" />} />

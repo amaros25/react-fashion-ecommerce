@@ -15,6 +15,7 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { categoryKeys, subCategories } from '../utils/const/category';
 import { useAuth } from '../../context/AuthContext';
+import { useUnreadCount } from '../api_hooks/chat_hooks';
 
 function Header() {
 
@@ -36,6 +37,11 @@ function Header() {
   } = useContext(FilterContext);
 
   const { isLoggedIn, role, handleLogout } = useAuth();
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+
+  // Fetch total unread count
+  const { data: unreadData } = useUnreadCount(userId, token);
 
 
 
@@ -182,11 +188,14 @@ function Header() {
               }
             </Link>
             {isLoggedIn && (
-              <Link to="/chat" onClick={(e) => handleClickOnPage(e, "/chat")}>
+              <Link to="/chat" onClick={(e) => handleClickOnPage(e, "/chat")} className="nav-icon-wrapper-header">
                 {activePath === "/chat"
                   ? <IoChatboxEllipses className='nav-icon-header' />
                   : <IoChatboxEllipsesOutline className='nav-icon-header' />
                 }
+                {unreadData?.unreadCount > 0 && (
+                  <span className="header-unread-badge">{unreadData.unreadCount}</span>
+                )}
               </Link>
             )}
             {role !== "seller" && (

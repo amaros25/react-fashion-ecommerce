@@ -102,7 +102,7 @@ const authController = {
         try {
             const user = await User.findByPk(userId);
             if (!user) throw new Error('user_not_found');
-            await user.touch();
+            await user.update({ updatedAt: new Date() });
             res.json({
                 message: "last_online_updated",
                 timestamp: user.updatedAt

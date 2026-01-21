@@ -9,15 +9,20 @@ import "./chat_window.css";
 const ChatWindow = ({
   activeChat,
   userId,
-  hasMore,
+  hasMoreMessages,
   loadOlderMessages,
-  sendNewMessage,
+  handleMarkAsRead,
+  handleSendMessage,
   newMessage,
   setNewMessage,
-  isLoadingOlder,
+  isLoadingMessages,
   isMobile,
   handleBackToSidebar,
-  isChatDisabled
+  isChatDisabled,
+  isNewChat,
+  messages,
+  initialChatType,
+  initialSubjectNumber
 }) => {
   const { t, i18n } = useTranslation();
   const messagesEndRef = useRef(null);
@@ -29,12 +34,12 @@ const ChatWindow = ({
 
   // Auto-scroll to bottom on new messages if user was already at the bottom
   useEffect(() => {
-    if (activeChat && messagesContainerRef.current && !isLoadingOlder) {
+    if ((activeChat || isNewChat) && messagesContainerRef.current && !isLoadingMessages) {
       if (wasScrolledToBottom.current) {
         messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
       }
     }
-  }, [activeChat, newMessage, isLoadingOlder]);
+  }, [activeChat, newMessage, isLoadingMessages, isNewChat]);
 
   /**
    * Monitor scroll position to determine if we should auto-scroll on next update.
@@ -53,14 +58,62 @@ const ChatWindow = ({
    */
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && newMessage.trim()) {
-      sendNewMessage(newMessage);
+      handleSendMessage(newMessage);
     }
   };
 
+  // IntersectionObserver to mark messages as read only when visible
+  useEffect(() => {
+    if (!activeChat || !userId || messages.length === 0) return;
+
+    const unreadMessages = messages.filter(m => String(m.senderId) !== String(userId) && !m.isRead);
+    if (unreadMessages.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleIds = entries
+          .filter(entry => entry.isIntersecting)
+          .map(entry => entry.target.getAttribute('data-message-id'));
+
+        if (visibleIds.length > 0) {
+          // Trigger markMessagesAsRead via manager if possible, 
+          // but we might need to expose updateReadMutation or just use chatApi directly.
+          // Since useChatManager already has updateReadMutation, let's assume it can be exposed 
+          // or we just call chatApi.markMessagesAsRead directly (though mutation is better for React Query).
+
+          // For now, let's assume we can call handleMarkAsRead which we'll add to props
+          handleMarkAsRead?.(visibleIds);
+        }
+      },
+      { threshold: 0.5 } // 50% visibility sufficient
+    );
+
+    const messageElements = document.querySelectorAll('.message.partner.unread');
+    messageElements.forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [messages, activeChat, userId]);
+
   return (
     <div className="chat-window-content">
-      {activeChat ? (
+      {activeChat || isNewChat ? (
         <>
+          <div className="chat-window-header">
+            <h3>
+              {activeChat?.type === "support" ||
+                (!activeChat && initialChatType === "support") ||
+                activeChat?.participant1Id === 1 ||
+                activeChat?.participant2Id === 1
+                ? t("chat.chatWithAdmin")
+                : (activeChat?.otherParticipant?.name || t("chat.customer"))
+              }
+            </h3>
+            <p className="chat-subject-line">
+              <strong>{activeChat?.type === 'order' || (!activeChat && initialChatType === 'order') ? t('chat.order') : t('chat.product')}</strong>
+              {`: ${activeChat?.subjectNumber || initialSubjectNumber || ''}`}
+            </p>
+          </div>
+
           {/* Back button for mobile navigation */}
           {isMobile && (
             <button className="back-button" onClick={handleBackToSidebar}>
@@ -70,21 +123,28 @@ const ChatWindow = ({
 
           {/* Messages List Area */}
           <div className={`messages ${isRtl ? 'rtl' : ''}`} ref={messagesContainerRef} onScroll={handleScroll}>
+            {isNewChat && messages.length === 0 && (
+              <div className="new-chat-notice">
+                {t('chat.startConversation') || "Start a new conversation"}
+              </div>
+            )}
+
             {/* "Load Older" button for pagination */}
-            {hasMore && (
+            {hasMoreMessages && (
               <div className="load-more-container">
-                <button className="load-more-btn" onClick={loadOlderMessages} disabled={isLoadingOlder}>
-                  {isLoadingOlder ? t('chat.loading') : t('chat.loadOlderMessages')}
+                <button className="load-more-btn" onClick={loadOlderMessages} disabled={isLoadingMessages}>
+                  {isLoadingMessages ? t('chat.loading') : t('chat.loadOlderMessages')}
                 </button>
               </div>
             )}
 
             {/* Render message bubbles */}
-            {(activeChat?.messages || []).map((msg, idx) => {
+            {(messages || []).map((msg, idx) => {
               const isUserMessage = String(msg.senderId) === String(userId);
               return (
                 <div
                   key={msg.id || idx}
+                  data-message-id={msg.id}
                   className={`message ${isUserMessage ? "user" : "partner"} ${msg.isRead ? "read" : "unread"} ${isRtl ? 'rtl' : ''}`}
                 >
                   <div className="msg-text">{msg.text}</div>
@@ -119,7 +179,7 @@ const ChatWindow = ({
                 onKeyDown={handleKeyDown}
               />
               <button
-                onClick={() => sendNewMessage(newMessage)}
+                onClick={() => handleSendMessage(newMessage)}
                 disabled={!newMessage.trim()}
               >
                 {t('chat.sendButton')}

@@ -15,7 +15,7 @@ export const useChatMessages = (userId, token, setChats, chats) => {
     const [newMessage, setNewMessage] = useState("");
     const [hasMore, setHasMore] = useState(true);
     const [isLoadingOlder, setIsLoadingOlder] = useState(false);
-    const [chatWindowCurrentPage, setChatWindowCurrentPage] = useState(1);
+    const [loadedMessagesCount, setLoadedMessagesCount] = useState(0);
     const [currentChatID, setCurrentChatID] = useState("");
 
     // Use a ref for chats to keep callbacks stable and avoid infinite loops
@@ -37,19 +37,12 @@ export const useChatMessages = (userId, token, setChats, chats) => {
             return;
         }
 
-        setChatWindowCurrentPage(1);
-        if (!userId || !token) return;
-
         const result = await openChat(chatId, userId, PAGE_LIMIT, token);
         if (result.success) {
             const data = result.data;
             setActiveChat(data);
-
-            // Mark as read if there are unread messages from the partner
-            const unreadMessages = data.messages.filter(m => m.senderId != userId && !m.isRead);
-            if (unreadMessages.length > 0) await markMessagesAsRead(chatId, userId, token);
-
-            setHasMore(data.messages.length === PAGE_LIMIT);
+            setLoadedMessagesCount(data.loadedMessagesCount || data.messages.length);
+            setHasMore((data.loadedMessagesCount || data.messages.length) < data.totalMessages);
         } else {
             toast.error(t(result.errorKey));
         }
@@ -126,11 +119,10 @@ export const useChatMessages = (userId, token, setChats, chats) => {
         if (!activeChat?.id || !hasMore || isLoadingOlder) return;
 
         setIsLoadingOlder(true);
-        const result = await loadMoreMessages(activeChat.id, chatWindowCurrentPage, PAGE_LIMIT, token);
+        const result = await loadMoreMessages(activeChat.id, loadedMessagesCount, PAGE_LIMIT, token);
 
         if (result.success) {
             const data = result.data;
-            // Filter out messages we already have (just in case)
             const newMessages = data.messages.filter(msg =>
                 !activeChat.messages.some(existingMsg => (existingMsg.id || existingMsg._id) === (msg.id || msg._id))
             );
@@ -140,13 +132,13 @@ export const useChatMessages = (userId, token, setChats, chats) => {
                 messages: [...newMessages, ...prev.messages]
             }));
 
-            setChatWindowCurrentPage(prev => prev + 1);
-            if (data.messages.length < PAGE_LIMIT) setHasMore(false);
+            setLoadedMessagesCount(data.loadedMessagesCount);
+            setHasMore(data.loadedMessagesCount < data.totalMessages);
         } else {
             toast.error(t(result.errorKey));
         }
         setIsLoadingOlder(false);
-    }, [activeChat, hasMore, isLoadingOlder, chatWindowCurrentPage, token, t]);
+    }, [activeChat, hasMore, isLoadingOlder, loadedMessagesCount, token, t]);
 
     return useMemo(() => ({
         activeChat,
@@ -155,6 +147,7 @@ export const useChatMessages = (userId, token, setChats, chats) => {
         setNewMessage,
         hasMore,
         isLoadingOlder,
+        loadedMessagesCount,
         currentChatID,
         setCurrentChatID,
         openSelectedChat,

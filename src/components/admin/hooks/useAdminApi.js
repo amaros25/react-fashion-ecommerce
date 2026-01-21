@@ -42,7 +42,7 @@ export const useAdminApi = (apiUrl) => {
         }
     }, [apiUrl, token]);
 
-    const toggleActivation = useCallback(async (type, id, currentStatus) => {
+    const toggleActivation = useCallback(async (type, id, status) => {
         try {
             const endpoint = type === 'user' ? 'toggle-user' : 'toggle-seller';
             const res = await fetch(`${apiUrl}/admin/${endpoint}/${id}`, {
@@ -51,7 +51,7 @@ export const useAdminApi = (apiUrl) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ active: !currentStatus })
+                body: JSON.stringify({ active: status })
             });
 
             const data = await res.json();
@@ -66,10 +66,58 @@ export const useAdminApi = (apiUrl) => {
         }
     }, [apiUrl, token]);
 
+    const updateProductStatus = useCallback(async (id, status) => {
+        try {
+            const res = await fetch(`${apiUrl}/admin/product-status/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ status })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                return { success: true, status: data.status };
+            } else {
+                return { success: false, errorKey: data.message || 'server_error' };
+            }
+        } catch (err) {
+            console.error("Error updating product status:", err);
+            return { success: false, errorKey: 'server_error' };
+        }
+    }, [apiUrl, token]);
+
+    const updateOrderStatus = useCallback(async (id, status) => {
+        try {
+            const res = await fetch(`${apiUrl}/admin/order-status/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ status })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                return { success: true, status: data.status };
+            } else {
+                return { success: false, errorKey: data.message || 'server_error' };
+            }
+        } catch (err) {
+            console.error("Error updating order status:", err);
+            return { success: false, errorKey: 'server_error' };
+        }
+    }, [apiUrl, token]);
+
     return {
         loading,
         fetchStats,
         fetchTabData,
-        toggleActivation
+        toggleActivation,
+        updateProductStatus,
+        updateOrderStatus
     };
 };

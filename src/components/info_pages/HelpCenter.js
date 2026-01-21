@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaPaperPlane, FaBox, FaTshirt, FaComments } from "react-icons/fa";
-import { fetchOrderByNumber } from "../chat/chat_api";
+import { fetchOrderByNumber } from "../api/chat_api";
 import "./HelpCenter.css";
 import { useLocation } from "react-router-dom";
 
@@ -40,7 +40,7 @@ const HelpCenter = () => {
     console.log("**** HelpCenter role: ", role);
 
     userIdForChat = userId;
-    sellerIdForChat = "admin";
+    sellerIdForChat = 1; // Admin ID
 
     console.log("**** HelpCenter userIdForChat: ", userIdForChat);
     console.log("**** HelpCenter sellerIdForChat: ", sellerIdForChat);
@@ -80,16 +80,20 @@ const HelpCenter = () => {
 
         setLoading(true);
 
+        let orderId = null;
+        let productId = null;
+
         try {
             // Validation Logic
             if (activeTab === 0 && form.orderNumber) {
                 const orderRes = await fetchOrderByNumber(form.orderNumber, token);
                 console.log("**** HelpCenter orderRes: ", orderRes);
-                if (!orderRes.success) {
+                if (!orderRes || !orderRes.id) {
                     toast.error(t("help_center.unknown_number") || "Unknown Number");
                     setLoading(false);
                     return;
                 }
+                orderId = orderRes.id;
             }
 
             if (activeTab === 1 && form.productNumber) {
@@ -102,6 +106,8 @@ const HelpCenter = () => {
                     setLoading(false);
                     return;
                 }
+                const productData = await productRes.json();
+                productId = productData.id;
             }
 
             // If valid, navigate to chat
@@ -109,10 +115,11 @@ const HelpCenter = () => {
                 state: {
                     newChatType: activeTab === 0 ? "order" : "product",
                     newOrderNumber: activeTab === 0 ? form.orderNumber : form.productNumber,
+                    orderId,
+                    productId,
                     message: form.message,
                     partnerId: sellerIdForChat,
                     sellerId: userIdForChat
-
                 }
             });
 

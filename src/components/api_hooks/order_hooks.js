@@ -61,3 +61,13 @@ export const useSellerUpdateOrderStatus = (token) => {
         },
     });
 };
+
+export const useCreateOrder = (userId) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ orderData, token }) => orderApi.createOrder(orderData, token),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['orders', userId] });
+        },
+    });
+};

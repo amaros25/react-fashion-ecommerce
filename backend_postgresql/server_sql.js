@@ -8,35 +8,40 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Logger Middleware
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} request to ${req.originalUrl}`);
-    next(); // Wir rufen `next()` auf, um die Anfrage an die nächste Middleware oder Route weiterzuleiten
+    next();
 });
 
+// Root Route für den Browser-Test
+app.get('/', (req, res) => {
+    res.send('Backend läuft perfekt auf Port 5000!');
+});
 
 // Main SQL API entry point
 app.use('/api/', sqlRoutes);
-module.exports = { app, sequelize, connectDB };
-const PORT = process.env.PORT_SQL || 5001;
+
+const PORT = process.env.PORT_SQL || 5000;
 
 const startServer = async () => {
     try {
+        console.log('Versuche Datenbank zu verbinden...');
         await connectDB();
+
         await sequelize.sync({ alter: true });
-        // Sync database (caution: { alter: true } matches models to DB)
-        // For first run, you might want this to create tables.
-        await sequelize.sync({ force: false }); // Change to force: true to drop and recreate
         console.log('SQL Database synced');
 
-        app.listen(PORT, () => {
-            console.log(`MySQL Backend running on port ${PORT}`);
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`Backend läuft definitiv auf Port ${PORT}`);
         });
     } catch (error) {
         console.error('Failed to start SQL server:', error);
     }
 };
-if (process.env.NODE_ENV !== 'test') {
-    startServer();
-}
 
+// WICHTIG: Sofort starten!
+startServer();
 
+// Exports immer ganz ans Ende
+module.exports = { app, sequelize, connectDB };

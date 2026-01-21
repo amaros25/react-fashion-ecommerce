@@ -15,7 +15,8 @@ const UserStats = sequelize.define('UserStats', {
     reviewCount: { type: DataTypes.INTEGER, defaultValue: 0 },
     avgRating: { type: DataTypes.DECIMAL(4, 2), defaultValue: 0 },
     productCount: { type: DataTypes.INTEGER, defaultValue: 0 }, // Nur für Seller relevant
-    unreadMessages: { type: DataTypes.INTEGER, defaultValue: 0 }
+    unreadMessages: { type: DataTypes.INTEGER, defaultValue: 0 },
+    views: { type: DataTypes.INTEGER, defaultValue: 0 }
 }, { tableName: 'user_stats', timestamps: false });
 
 module.exports = UserStats;

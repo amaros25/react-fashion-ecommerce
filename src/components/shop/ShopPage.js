@@ -1,4 +1,4 @@
-import { useLayoutEffect, useCallback, useMemo } from 'react';
+import { useLayoutEffect, useCallback, useMemo, useEffect } from 'react';
 import { useParams, useNavigationType } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaStar, FaRegStar, FaStarHalfAlt, FaMapMarkerAlt } from 'react-icons/fa';
@@ -10,6 +10,7 @@ import { cities, citiesData } from '../utils/const/cities';
 
 import { useUserProfileManager } from "../api_managers/userProfileHookManager.js";
 import { useSellerProductFetchManager } from '../api_managers/useSellerProductFetchManager';
+import * as userHooks from '../api_hooks/user_hooks';
 
 const ShopPage = () => {
     const { shopSlug } = useParams();
@@ -72,6 +73,24 @@ const ShopPage = () => {
 
     const averageRating = seller?.averageRating || 0;
     const reviewCount = seller?.reviewCount || 0;
+    const viewsCount = seller?.views || 0;
+
+    const { mutate: incrementViews } = userHooks.useIncrementViews();
+
+    // 3. View Increment Logic (Throttled once per day)
+    useEffect(() => {
+        if (!seller?.id) return;
+
+        const storageKey = `shop_view_${seller.id}`;
+        const lastView = localStorage.getItem(storageKey);
+        const now = new Date().getTime();
+        const oneDay = 24 * 60 * 60 * 1000;
+
+        if (!lastView || (now - parseInt(lastView, 10) > oneDay)) {
+            incrementViews(seller.id);
+            localStorage.setItem(storageKey, now.toString());
+        }
+    }, [seller?.id, incrementViews]);
 
     const handleProductClick = useCallback((product) => {
         window.localStorage.setItem('scrollPosition', window.scrollY);
@@ -107,12 +126,10 @@ const ShopPage = () => {
                 }}>
                 <div className="shop-hero-overlay"></div>
 
-                {/* Der Titel bleibt zentral */}
                 <div className="shop-hero-content">
                     <h1 className="shop-title">{seller?.shopName || "SELLER SHOP"}</h1>
                 </div>
 
-                {/* Der Info-Block wandert nach rechts unten */}
                 <div className="shop-info-bottom-right">
                     <div className="info-glass-block">
                         <span className="shop-owner">
@@ -127,19 +144,24 @@ const ShopPage = () => {
                         </span>
 
                         <div className="shop-rating-display">
-                            <div className="stars-static">
-                                {[1, 2, 3, 4, 5].map((star) => {
-                                    const diff = averageRating - (star - 1);
-                                    return (
-                                        <span key={star}>
-                                            {diff >= 1 ? <FaStar className="star filled" size={14} /> :
-                                                diff >= 0.5 ? <FaStarHalfAlt className="star filled" size={14} /> :
-                                                    <FaRegStar className="star empty" size={14} />}
-                                        </span>
-                                    );
-                                })}
+                            <div className="rating-row">
+                                <div className="stars-static">
+                                    {[1, 2, 3, 4, 5].map((star) => {
+                                        const diff = averageRating - (star - 1);
+                                        return (
+                                            <span key={star}>
+                                                {diff >= 1 ? <FaStar className="star filled" size={12} /> :
+                                                    diff >= 0.5 ? <FaStarHalfAlt className="star filled" size={12} /> :
+                                                        <FaRegStar className="star empty" size={12} />}
+                                            </span>
+                                        );
+                                    })}
+                                </div>
+                                <span className="review-count">({reviewCount})</span>
                             </div>
-                            <span className="rating-text">({reviewCount})</span>
+                            <div className="views-row">
+                                <span className="views-text">{viewsCount} {t('shop.views') || 'Views'}</span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -90,3 +90,16 @@ export const updatePhone = async ({ userId, phone, token }) => {
         throw error;
     }
 };
+
+/**
+ * Increment shop views.
+ */
+export const incrementViews = async (userId) => {
+    try {
+        const res = await axios.patch(`${BASE_URL}/users/${userId}/views`);
+        return res.data;
+    } catch (error) {
+        console.error("Error incrementing views:", error);
+        throw error;
+    }
+};

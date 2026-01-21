@@ -159,7 +159,14 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
 
     const handleChat = () => {
         const targetId = viewMode === 'seller' ? order.userId : order.sellerId;
-        navigate('/chat', { state: { newOrderNumber: order.orderNumber, partnerId: targetId, newChatType: 'order' } });
+        navigate('/chat', {
+            state: {
+                newOrderNumber: order.orderNumber,
+                orderId: order.id,
+                partnerId: targetId,
+                newChatType: 'order'
+            }
+        });
     };
 
     const renderChatButton = () => {

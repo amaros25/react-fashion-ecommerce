@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: react-fashion-ecommerce-db
+    restart: always
+    environment:
+      POSTGRES_USER: admin_shop
+      POSTGRES_PASSWORD: "etun#web!?9iuB2NN!?927nUUilH"
+      POSTGRES_DB: mein_backend_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend_postgresql
+    container_name: react-fashion-ecommerce-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend_postgresql:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      PG_HOST: db
+      PG_PORT: 5432
+      PG_DATABASE: mein_backend_db
+      PG_USER: admin_shop
+      PG_PASSWORD: "etun#web!?9iuB2NN!?927nUUilH"
+      PORT_SQL: 5000
+    depends_on:
+      - db
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: react-fashion-ecommerce-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

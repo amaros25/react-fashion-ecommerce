@@ -3,7 +3,30 @@ const { User } = require('../models');
 require('dotenv').config({ path: './backend_postgresql/.env' });
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const verifyToken = (req, res, next) => {
+const optionalHeartbeat = async (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+        const token = authHeader.split(" ")[1];
+        try {
+            const decoded = jwt.verify(token, JWT_SECRET);
+            const user = await User.findByPk(decoded.id);
+            if (user) {
+                const FOUR_MINUTES = 240000;
+                if (Date.now() - new Date(user.updatedAt).getTime() > FOUR_MINUTES) {
+                    user.changed('updatedAt', true);
+                    await user.save();
+                }
+                req.user = user;
+            }
+        } catch (error) {
+            console.log("Optional heartbeat failed:", error.message);
+        }
+    }
+    next();
+};
+
+const verifyToken = async (req, res, next) => {
+    if (req.user) return next();
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(401).json({ message: "unauthorized_no_token" });
@@ -15,7 +38,20 @@ const verifyToken = (req, res, next) => {
     const token = authHeader.split(" ")[1];
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded;
+
+        // Fetch user and update timestamp if more than 1 hour ago
+        const user = await User.findByPk(decoded.id);
+        if (user) {
+            const FOUR_MINUTES = 240000;
+            if (Date.now() - new Date(user.updatedAt).getTime() > FOUR_MINUTES) {
+                user.changed('updatedAt', true);
+                await user.save();
+            }
+            req.user = user; // Attach full user object for subsequent middleware reuse
+        } else {
+            return res.status(404).json({ message: "user_not_found" });
+        }
+
         next();
     } catch (error) {
         return res.status(403).json({ message: error.message });
@@ -24,13 +60,14 @@ const verifyToken = (req, res, next) => {
 
 const verifyAdmin = async (req, res, next) => {
     try {
-        const userId = req.user?.id || req.body.id;
-        if (!userId) throw new Error("unauthorized_no_token");
-        const user = await User.findByPk(userId);
+        const user = req.user;
         if (!user) {
-            throw new Error("seller_not_found");
-        }
-        if (user.role !== "admin") {
+            const userId = req.body.id;
+            if (!userId) throw new Error("unauthorized_no_token");
+            const dbUser = await User.findByPk(userId);
+            if (!dbUser) throw new Error("seller_not_found");
+            if (dbUser.role !== "admin") throw new Error("forbidden_admin_only");
+        } else if (user.role !== "admin") {
             throw new Error("forbidden_admin_only");
         }
         next();
@@ -42,23 +79,24 @@ const verifyAdmin = async (req, res, next) => {
 
 const verifySellerSecure = async (req, res, next) => {
     try {
-        const userId = req.user?.id || req.body.id;
-        if (!userId) throw new Error("unauthorized_no_token");
-        const user = await User.findByPk(userId);
+        const user = req.user;
         if (!user) {
-            throw new Error("seller_not_found");
+            const userId = req.body.id;
+            if (!userId) throw new Error("unauthorized_no_token");
+            const dbUser = await User.findByPk(userId);
+            if (!dbUser) throw new Error("seller_not_found");
+            req.user = dbUser; // Provision for further checks
         }
-        // if (user.role !== "seller") {
-        //     throw new Error("forbidden_seller_only");
-        // }
+
+        const activeUser = req.user;
         const forbiddenStates = {
             "pending": "seller_pending",
             "banned": "seller_banned",
             "deleted": "seller_deleted",
             "unverified": "seller_unverified"
         };
-        if (forbiddenStates[user.active]) {
-            throw new Error(forbiddenStates[user.active]);
+        if (forbiddenStates[activeUser.active]) {
+            throw new Error(forbiddenStates[activeUser.active]);
         }
         next();
     } catch (error) {
@@ -68,11 +106,9 @@ const verifySellerSecure = async (req, res, next) => {
 
 const verifyUserSecure = async (req, res, next) => {
     try {
-        const userId = req.user.id;
-        const user = await User.findByPk(userId);
-        if (!user) {
-            throw new Error("user_not_found");
-        }
+        const user = req.user;
+        if (!user) throw new Error("user_not_found");
+
         if (user.role !== "user") {
             throw new Error("forbidden_user_only");
         }
@@ -93,11 +129,9 @@ const verifyUserSecure = async (req, res, next) => {
 
 const verifyGlobalUserActions = async (req, res, next) => {
     try {
-        const userId = req.user.id;
-        const user = await User.findByPk(userId);
-        if (!user) {
-            throw new Error("user_not_found");
-        }
+        const user = req.user;
+        if (!user) throw new Error("user_not_found");
+
         const forbiddenStates = {
             "banned": "user_banned",
             "deleted": "user_deleted",
@@ -112,4 +146,11 @@ const verifyGlobalUserActions = async (req, res, next) => {
     }
 };
 
-module.exports = { verifyToken, verifyAdmin, verifySellerSecure, verifyUserSecure, verifyGlobalUserActions };
+module.exports = {
+    optionalHeartbeat,
+    verifyToken,
+    verifyAdmin,
+    verifySellerSecure,
+    verifyUserSecure,
+    verifyGlobalUserActions
+};

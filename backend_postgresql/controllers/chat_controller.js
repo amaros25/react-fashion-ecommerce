@@ -42,7 +42,7 @@ const chatController = {
                 ],
                 distinct: true
             });
-            const formattedChats = rows.map(chat => {
+            const formattedChats = await Promise.all(rows.map(async chat => {
                 const chatData = chat.toJSON();
                 const other = chatData.participant1Id === userId
                     ? chatData.participant2
@@ -52,8 +52,18 @@ const chatController = {
                     other.name = other.shopName || `${other.firstName} ${other.lastName}`;
                 }
                 chatData.otherParticipant = other;
+
+                // Calculate unread count for this specific chat for the current user
+                chatData.unreadCount = await ChatMessage.count({
+                    where: {
+                        chatId: chat.id,
+                        receiverId: userId,
+                        isRead: false
+                    }
+                });
+
                 return chatData;
-            });
+            }));
 
             res.json({
                 chats: formattedChats,
@@ -69,8 +79,8 @@ const chatController = {
     getChatById: async (req, res) => {
         try {
             const { chatId } = req.params;
-            const { page = 1, limit = 20 } = req.query;
-            const offset = (page - 1) * limit;
+            const { offset = 0, limit = 10 } = req.query;
+            const userId = req.user.id;
 
             const chat = await Chat.findByPk(chatId, {
                 include: [
@@ -79,22 +89,34 @@ const chatController = {
                 ]
             });
 
-            // 1. Zuerst prüfen, ob der Chat existiert
             if (!chat) throw new Error("chat_not_found");
 
-            // 2. Dann prüfen, ob der User berechtigt ist (req.user.id kommt meist aus der Auth-Middleware)
-            if (chat.participant1Id != req.user.id && chat.participant2Id != req.user.id) {
+            if (chat.participant1Id != userId && chat.participant2Id != userId) {
                 return res.status(403).json({ error: "unauthorized_access" });
+            }
+
+            // Determine dynamic limit for initial load (offset 0)
+            let fetchLimit = parseInt(limit);
+            if (parseInt(offset) === 0) {
+                const unreadCount = await ChatMessage.count({
+                    where: {
+                        chatId,
+                        receiverId: userId,
+                        isRead: false
+                    }
+                });
+                // Load either all unreads or at least 10
+                fetchLimit = Math.max(unreadCount, 10);
             }
 
             const { count, rows: messages } = await ChatMessage.findAndCountAll({
                 where: { chatId },
-                limit: parseInt(limit),
+                limit: fetchLimit,
                 offset: parseInt(offset),
                 order: [['createdAt', 'DESC']]
             });
 
-            // Rest bleibt gleich...
+            // Return in chronological order
             const sortedMessages = messages.reverse();
             const chatData = chat.toJSON();
             [chatData.participant1, chatData.participant2].forEach(p => {
@@ -105,8 +127,9 @@ const chatController = {
                 ...chatData,
                 messages: sortedMessages,
                 totalMessages: count,
-                totalPages: Math.ceil(count / limit),
-                currentPage: parseInt(page)
+                loadedMessagesCount: parseInt(offset) + messages.length,
+                limit: fetchLimit,
+                offset: parseInt(offset)
             });
         } catch (error) {
             await handleError(res, error, null, "get_chat_by_id_error");
@@ -194,17 +217,23 @@ const chatController = {
         const t = await sequelize.transaction();
         try {
             const { chatId } = req.params;
-            const { userId } = req.body; // Wir müssen wissen, WER den Chat gerade liest
+            const { userId, messageIds } = req.body;
 
-            // 1. Nur die Nachrichten aktualisieren, die an DIESEN User gerichtet sind
+            const where = {
+                chatId,
+                receiverId: userId,
+                isRead: false
+            };
+
+            // If specific IDs are provided, only mark those
+            if (messageIds && Array.isArray(messageIds) && messageIds.length > 0) {
+                where.id = { [Op.in]: messageIds };
+            }
+
             const [affectedCount] = await ChatMessage.update(
                 { isRead: true },
                 {
-                    where: {
-                        chatId,
-                        receiverId: userId, // Ganz wichtig: Nur eingehende Nachrichten!
-                        isRead: false
-                    },
+                    where,
                     transaction: t
                 }
             );
@@ -217,8 +246,6 @@ const chatController = {
                 });
             }
             await t.commit();
-            // 2. Den Chat ohne den kompletten Nachrichten-Ballast zurückgeben
-            // (Das spart Performance, da du die Nachrichten eh schon im Frontend hast)
             res.json({ message: "status_updated", chatId, affectedCount });
         } catch (error) {
             await handleError(res, error, t, "update_read_status_error");

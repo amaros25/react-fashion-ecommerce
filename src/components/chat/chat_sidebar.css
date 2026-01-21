@@ -80,3 +80,33 @@
   color: #94a3b8;
   padding: 24px;
 }
+
+.chat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.unread-badge {
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 5px;
+}
+
+.chat-card.unread {
+  background-color: #f0f9ff;
+}
+
+.chat-card.unread .last-message-preview {
+  color: #1e293b;
+  font-weight: 500;
+}

@@ -1,31 +1,36 @@
-const { User, Product, Order } = require('../models');
+const { User, Product, Order, UserProfileHistory, ProductStatusHistory, OrderStatusHistory } = require('../models');
 const { Op } = require('sequelize');
 const { handleError } = require('./error_handler.js');
+
 /**
  * Controller to handle admin operations
  */
 const adminController = {
-    // Get high-level stats for the dashboard
+    // ... existing stats and list methods ...
     getDashboardStats: async (req, res) => {
         try {
             const totalUsers = await User.count();
-            // Korrigiert: Nutze das role Feld aus deinem Model
             const totalSellers = await User.count({ where: { role: 'seller' } });
             const totalProducts = await Product.count();
             const totalOrders = await Order.count();
+            const activeUsers = await User.count({
+                where: {
+                    updatedAt: { [Op.gt]: new Date(Date.now() - 5 * 60 * 1000) }
+                }
+            });
 
             res.json({
                 totalUsers,
                 totalSellers,
                 totalProducts,
-                totalOrders
+                totalOrders,
+                activeUsers
             });
         } catch (error) {
             await handleError(res, error, null, "get_dashboard_stats_failed");
         }
     },
 
-    // Get all users (mit Paginierung)
     getAllUsers: async (req, res) => {
         try {
             const users = await User.findAll({
@@ -39,11 +44,9 @@ const adminController = {
         }
     },
 
-    // Get all sellers (Gefiltert aus der User Tabelle)
     getAllSellers: async (req, res) => {
         try {
             const sellers = await User.findAll({
-                // Korrigiert: role statt isSeller
                 where: { role: 'seller' },
                 attributes: { exclude: ['password'] },
                 order: [['createdAt', 'DESC']]
@@ -53,12 +56,11 @@ const adminController = {
             await handleError(res, error, null, "get_all_sellers_failed");
         }
     },
-    // Get all products (JSONB Daten kommen automatisch mit)
+
     getAllProducts: async (req, res) => {
         try {
             const products = await Product.findAll({
                 order: [['createdAt', 'DESC']]
-                // Images und Variants sind als JSONB bereits enthalten
             });
             res.json(products);
         } catch (error) {
@@ -66,37 +68,96 @@ const adminController = {
         }
     },
 
-    // Get all orders
     getAllOrders: async (req, res) => {
         try {
-            const orders = await Order.findAll({ order: [['createdAt', 'DESC']] });
+            const orders = await Order.findAll({
+                order: [['createdAt', 'DESC']],
+                include: [
+                    { model: User, as: 'buyer', attributes: ['id', 'firstName', 'lastName', 'email'] }
+                ]
+            });
             res.json(orders);
         } catch (error) {
             await handleError(res, error, null, "get_all_orders_failed");
         }
     },
 
-    // Toggle user active status
+    // Toggle user status (now supports ENUM strings)
     toggleUser: async (req, res) => {
         try {
             const { id } = req.params;
-            const { status } = req.body;
+            const { active } = req.body;
             const user = await User.findByPk(id);
             if (!user) throw new Error("user_not_found");
 
-            user.active = status;
+            user.active = active;
             await user.save();
+
+            // Record in history
+            await UserProfileHistory.create({
+                userId: user.id,
+                changeType: 'status',
+                newData: { status: active }
+            });
+
             res.json({ message: "success_update_status", active: user.active });
         } catch (err) {
             await handleError(res, err, null, "toggle_user_failed");
         }
     },
 
-    // Da Seller nun User sind, kann toggleSeller die gleiche Logik wie toggleUser nutzen oder entfernt werden
     toggleSeller: async (req, res) => {
-        // Gleiche Logik wie toggleUser, da Seller in der User Tabelle sind
         return adminController.toggleUser(req, res);
+    },
+
+    // Update product status/state
+    updateProductStatus: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { status } = req.body;
+            const product = await Product.findByPk(id);
+            if (!product) throw new Error("product_not_found");
+
+            product.currentState = status;
+            await product.save();
+
+            // Record in history
+            await ProductStatusHistory.create({
+                productId: product.id,
+                state: status,
+                comment: `Updated by Admin`
+            });
+
+            res.json({ message: "success_update_status", status: product.currentState });
+        } catch (error) {
+            await handleError(res, error, null, "update_product_status_failed");
+        }
+    },
+
+    // Update order status
+    updateOrderStatus: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { status } = req.body;
+            const order = await Order.findByPk(id);
+            if (!order) throw new Error("order_not_found");
+
+            order.currentStatus = status;
+            await order.save();
+
+            // Record in history
+            await OrderStatusHistory.create({
+                orderId: order.id,
+                status: status,
+                comment: `Updated by Admin`
+            });
+
+            res.json({ message: "success_update_status", status: order.currentStatus });
+        } catch (error) {
+            await handleError(res, error, null, "update_order_status_failed");
+        }
     }
 };
+
 
 module.exports = adminController;
