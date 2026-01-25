@@ -27,3 +27,49 @@ body {
     max-width: 100%;
   }
 }
+
+/* Globale Button-Basis in index.css */
+.btn-primary,
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border: 1px solid #000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 0;
+  /* Radikale Kante */
+}
+
+.btn-primary {
+  background-color: #000;
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #333;
+}
+
+.btn-secondary {
+  background-color: #fff;
+  color: #000;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #f8f8f8;
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  background-color: #fff;
+  border-color: #e0e0e0;
+  color: #ccc;
+  cursor: not-allowed;
+}

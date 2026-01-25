@@ -1,25 +1,15 @@
 const { Sequelize } = require('sequelize');
 
-require('dotenv').config({ path: './backend_postgresql/.env' });  // Pfad zur .env-Datei im backend_postgresql Verzeichnis
-
-
-console.log('Working directory:', process.cwd());
-require('dotenv').config();  // Lädt die .env-Datei
-console.log('User:', process.env.PG_USER);
-console.log('Password:', process.env.PG_PASSWORD);
-console.log('DB:', process.env.PG_DATABASE);
-
+// Wir nutzen die Variablen, die Docker uns gibt
 const sequelize = new Sequelize(
-
-
-    process.env.PG_DATABASE || 'mein_backend_db',
-    process.env.PG_USER || 'admin_shop',
-    process.env.PG_PASSWORD || 'etun#web!?9iuB',
+    'my_shop',
+    'astra',
+    'monia2010', // Dein aktuelles Passwort
     {
-        host: 'db',
+        host: 'localhost', // WICHTIG: In Docker muss hier 'db' stehen (Name des Containers)
         dialect: 'postgres',
-        logging: false, // Set to console.log to see SQL queries
-        port: process.env.PG_PORT || 5432,
+        logging: false,
+        port: 5432,
         pool: {
             max: 5,
             min: 0,
@@ -32,15 +22,16 @@ const sequelize = new Sequelize(
 const connectDB = async () => {
     try {
         await sequelize.authenticate();
-        console.log('PostgreSQL / Sequelize connection has been established successfully.');
-
-        // Sync models
-        // In production, use migrations instead of { alter: true }
-        // await sequelize.sync({ alter: true });
+        console.log('PostgreSQL / Sequelize connection established successfully.');
     } catch (error) {
         console.error('Unable to connect to the PostgreSQL database:', error);
         process.exit(1);
     }
 };
-connectDB();
+
+// Falls der Server lokal (ohne server_sql.js) gestartet wird:
+if (require.main === module) {
+    connectDB();
+}
+
 module.exports = { sequelize, connectDB };

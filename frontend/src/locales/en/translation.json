@@ -208,7 +208,12 @@
         "update_address": "Update Address",
         "cart_page.no_items_in_cart": "No items in cart",
         "curated_by": "Curated by",
-        "latest_collection": "Latest Collection"
+        "latest_collection": "Latest Collection",
+        "payment_method": "Payment Method",
+        "cash_on_delivery": "Cash on Delivery",
+        "cash_on_pickup": "Cash on Pickup",
+        "flouci_payment": "Pay via Flouci",
+        "flouci_coming_soon": "Currently Unavailable"
     },
     "phone": "Phone",
     "address": "Address",
@@ -763,5 +768,13 @@
     "please_provide_reason": "Please provide a reason for the delivery failure. This will be visible to the customer.",
     "write_comment_placeholder": "Write the reason here (e.g., incorrect address, customer not reachable)...",
     "order_state_update": "Update Order Status",
-    "view_reason": "View reason"
+    "view_reason": "View reason",
+    "profile_incomplete_text": "To publish this product, please complete your shop information.",
+    "go_to_profile_settings": "EDIT PROFILE",
+    "processing": "PROCESSING...",
+    "toast": {
+        "status_change": "PROFILE STATUS: {{status}}",
+        "new_message": "NEW MESSAGE RECEIVED",
+        "order_update": "ORDER {{number}}: STATUS UPDATED"
+    }
 }

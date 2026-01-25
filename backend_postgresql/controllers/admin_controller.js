@@ -1,4 +1,4 @@
-const { User, Product, Order, UserProfileHistory, ProductStatusHistory, OrderStatusHistory } = require('../models');
+const { User, Product, Order, UserProfileHistory, ProductStatusHistory, OrderStatusHistory, UserStats, sequelize } = require('../models');
 const { Op } = require('sequelize');
 const { handleError } = require('./error_handler.js');
 
@@ -36,6 +36,7 @@ const adminController = {
             const users = await User.findAll({
                 where: { role: 'user' },
                 attributes: { exclude: ['password'] },
+                include: [{ model: UserStats, as: 'stats', attributes: ['active'] }],
                 order: [['createdAt', 'DESC']]
             });
             res.json(users);
@@ -49,6 +50,7 @@ const adminController = {
             const sellers = await User.findAll({
                 where: { role: 'seller' },
                 attributes: { exclude: ['password'] },
+                include: [{ model: UserStats, as: 'stats', attributes: ['active'] }],
                 order: [['createdAt', 'DESC']]
             });
             res.json(sellers);
@@ -84,23 +86,24 @@ const adminController = {
 
     // Toggle user status (now supports ENUM strings)
     toggleUser: async (req, res) => {
+        const t = await sequelize.transaction();
         try {
             const { id } = req.params;
             const { active } = req.body;
-            const user = await User.findByPk(id);
-            if (!user) throw new Error("user_not_found");
 
-            user.active = active;
-            await user.save();
+            const stats = await UserStats.findOne({ where: { userId: id } });
+            if (!stats) throw new Error("stats_not_found");
+
+            await stats.update({ active }, { transaction: t });
 
             // Record in history
             await UserProfileHistory.create({
-                userId: user.id,
+                userId: id,
                 changeType: 'status',
                 newData: { status: active }
-            });
-
-            res.json({ message: "success_update_status", active: user.active });
+            }, { transaction: t });
+            await t.commit();
+            res.json({ message: "success_update_status", active: stats.active });
         } catch (err) {
             await handleError(res, err, null, "toggle_user_failed");
         }

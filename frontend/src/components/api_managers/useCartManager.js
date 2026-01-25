@@ -12,6 +12,7 @@ export const useCartManager = (userId, token, queryClient) => {
     const [cart, setCart] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+
     // Initial load from localStorage
     useEffect(() => {
         const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -62,7 +63,7 @@ export const useCartManager = (userId, token, queryClient) => {
         localStorage.setItem("cart", JSON.stringify(newCart));
     };
 
-    const submitGroups = async (user_data, isDelivery, orderStatus) => {
+    const submitGroups = async (user_data, isDelivery, orderStatus, paymentMethod) => {
         if (!userId || !token) {
             toast.error(t("product_page.must_login"));
             return { success: false, loginRequired: true };
@@ -110,12 +111,18 @@ export const useCartManager = (userId, token, queryClient) => {
                     items: formattedItems,
                     status: [{ update: orderStatus, date: new Date() }],
                     notes: "",
-                    paymentMethod: "",
+                    paymentMethod: paymentMethod,
                     is_delivery: isDelivery,
                     selectedAddress,
                 };
 
-                await createOrderMutation({ orderData, token });
+                const result = await createOrderMutation({ orderData, token });
+
+                // If Flouci returns a payment URL, redirect to it
+                if (result.success && result.result_url) {
+                    window.location.href = result.result_url;
+                    return { success: true, redirecting: true };
+                }
             }
 
             toast.success(t("orders_created_success"));

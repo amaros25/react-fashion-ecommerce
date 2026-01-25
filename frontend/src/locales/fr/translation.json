@@ -202,7 +202,12 @@
     "update_address": "Modifier l'adresse",
     "cart_page.no_items_in_cart": "Aucun article dans le panier",
     "curated_by": "Curaté par",
-    "latest_collection": "Dernière collection"
+    "latest_collection": "Dernière collection",
+    "payment_method": "Mode de paiement",
+    "cash_on_delivery": "Paiement à la livraison",
+    "cash_on_pickup": "Paiement en magasin",
+    "flouci_payment": "Paiement via Flouci",
+    "flouci_coming_soon": "Actuellement indisponible"
   },
   "phone": "Téléphone",
   "address": "Adresse",
@@ -750,5 +755,13 @@
   "please_provide_reason": "Veuillez indiquer le motif de l'échec de la livraison. Cela sera visible par le client.",
   "write_comment_placeholder": "Écrivez le motif ici (ex: adresse incorrecte, client injoignable)...",
   "order_state_update": "Mise à jour du statut",
-  "view_reason": "Voir le motif"
+  "view_reason": "Voir le motif",
+  "profile_incomplete_text": "Pour publier ce produit, veuillez compléter les informations de votre boutique.",
+  "go_to_profile_settings": "MODIFIER LE PROFIL",
+  "processing": "EN COURS...",
+  "toast": {
+    "status_change": "STATUT DU PROFIL: {{status}}",
+    "new_message": "NOUVEAU MESSAGE REÇU",
+    "order_update": "COMMANDE {{number}}: STATUT MIS À JOUR"
+  }
 }

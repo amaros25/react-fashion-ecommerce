@@ -35,11 +35,7 @@ const User = sequelize.define('User', {
         allowNull: false,
         defaultValue: 'user'
     },
-    active: {
-        type: DataTypes.ENUM('pending', 'active', 'banned', 'deleted', 'verified', 'unverified'),
-        allowNull: false,
-        defaultValue: 'pending'
-    },
+
     shopName: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -56,11 +52,26 @@ const User = sequelize.define('User', {
     },
     city: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true,
+        set(value) {
+            // Wandelt leere Strings, undefined oder "null"-Strings in echtes null um
+            if (value === "" || value === undefined || value === null) {
+                this.setDataValue('city', null);
+            } else {
+                this.setDataValue('city', parseInt(value));
+            }
+        }
     },
     subCity: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true,
+        set(value) {
+            if (value === "" || value === undefined || value === null) {
+                this.setDataValue('subCity', null);
+            } else {
+                this.setDataValue('subCity', parseInt(value));
+            }
+        }
     },
     phone: {
         type: DataTypes.STRING,
@@ -78,7 +89,7 @@ const User = sequelize.define('User', {
             { unique: true, fields: ['email'] },
             { unique: true, fields: ['phone'] },
             { unique: true, fields: ['shopSlug'] },
-            { fields: ['role', 'active'] }
+            { fields: ['role'] }
         ],
         hooks: {
             beforeSave: (user) => {
@@ -111,6 +122,7 @@ User.afterCreate(async (user, options) => {
     try {
         await UserStats.create({
             userId: user.id,
+            active: 'pending',
             orderCount: 0,
             openOrders: 0,
             reviewCount: 0,

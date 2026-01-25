@@ -19,12 +19,6 @@ function Register() {
 
   // States
   const [role, setRole] = useState("user");
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [selectedSubCity, setSelectedSubCity] = useState(null);
-  const [subCities, setSubCities] = useState([]);
-  const [selectedCityIndex, setSelectedCityIndex] = useState(null);
-  const [selectedSubCityIndex, setSelectedSubCityIndex] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,7 +27,7 @@ function Register() {
 
   const [formData, setFormData] = useState({
     firstName: "", lastName: "", email: "", password: "",
-    phone: "", shopName: "", address: "", confirmPassword: "",
+    confirmPassword: "", phone: ""
   });
 
 
@@ -43,45 +37,6 @@ function Register() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleCityChange = (e) => {
-    const cityIndex = e.target.selectedIndex - 1;
-    setSelectedCityIndex(cityIndex);
-    const cityName = cities[cityIndex];
-    setSelectedCity(cityName);
-    setSubCities(citiesData[cityName] || []);
-    setSelectedSubCityIndex(null);
-  };
-
-  const handleSubCityChange = (e) => {
-    const subCityIndex = e.target.selectedIndex - 1;
-    setSelectedSubCity(subCities[subCityIndex]);
-    setSelectedSubCityIndex(subCityIndex);
-  };
-
-  const handleRoleChange = (newRole) => {
-    setRole(newRole);
-    setImageFile(null);
-    setFormData({
-      firstName: "", lastName: "", email: "", password: "",
-      confirmPassword: "", phone: "", shopName: "", address: "",
-    });
-    setError("");
-  };
-
-  // Diese Funktion nutzt die übergebenen IDs direkt (kein State-Warten!)
-  const uploadAndSaveImage = async (file, newUserId, newToken) => {
-    try {
-      const imageUrl = await uploadImage(file);
-      if (!imageUrl) throw new Error("Cloudinary Upload failed");
-      const res = await updateImage({ userId: newUserId, imageUrl, token: newToken });
-      console.log("Image Update Response:", res);
-      return res.success;
-    } catch (err) {
-      console.error("Image Step Error:", err);
-      return false;
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -96,7 +51,7 @@ function Register() {
       confirmPassword: formData.confirmPassword.trim()
     };
 
-    const validationError = ValidateRegisterForm(cleanFormData, role, acceptedTerms, imageFile, selectedCity, selectedSubCity, t);
+    const validationError = ValidateRegisterForm(cleanFormData, role, acceptedTerms, t);
 
     if (validationError) {
       setIsSubmitting(false);
@@ -112,28 +67,14 @@ function Register() {
         email: cleanFormData.email,
         password: cleanFormData.password,
         phone: cleanFormData.phone,
-        address: cleanFormData.address,
-        city: selectedCityIndex,
-        subCity: selectedSubCityIndex,
         role: role,
-        ...(role === "seller" && { shopName: cleanFormData.shopName })
       };
 
       const response = await authManager.register(payload);
 
       if (response.success) {
-        // Falls ein Bild ausgewählt wurde
-        if (imageFile) {
-          // Wir nutzen DIREKT response.userId und response.token
-          await uploadAndSaveImage(imageFile, response.userId, response.token);
-
-          toast.success(t("register.user_created_successfully"));
-          setTimeout(() => navigate("/login"), 1500);
-        } else {
-          const errorKey = response.error || "default";
-          setError(t(`register.error.${errorKey}`));
-          toast.error(t(`register.error.${errorKey}`));
-        }
+        toast.success(t("register.user_created_successfully"));
+        setTimeout(() => navigate("/login"), 1500);
       }
     } catch (err) {
       const msg = err.response?.data?.message || err.message;
@@ -153,8 +94,8 @@ function Register() {
             {error && <p className="error">{error}</p>}
 
             <div className="role-selection">
-              <div className={`role-option ${role === 'user' ? 'active' : ''}`} onClick={() => handleRoleChange('user')}>{t("register.shoper")}</div>
-              <div className={`role-option ${role === 'seller' ? 'active' : ''}`} onClick={() => handleRoleChange('seller')}>{t("register.seller")}</div>
+              <div className={`role-option ${role === 'user' ? 'active' : ''}`} onClick={() => setRole('user')}>{t("register.shoper")}</div>
+              <div className={`role-option ${role === 'seller' ? 'active' : ''}`} onClick={() => setRole('seller')}>{t("register.seller")}</div>
             </div>
 
             <label>{t("register.firstName")}</label>
@@ -181,38 +122,9 @@ function Register() {
                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
-
             <label>{t("register.phone")}</label>
             <input type="tel" name="phone" value={formData.phone} onChange={handleChange} />
-
-            <label>{t("register.address")}</label>
-            <input type="text" name="address" value={formData.address} onChange={handleChange} />
-
-            <label>{t("register.city")}</label>
-            <select name="city" value={selectedCity || ''} onChange={handleCityChange}>
-              <option value="">{t("selectCity")}</option>
-              {cities.map((c, i) => <option key={i} value={c}>{c}</option>)}
-            </select>
-
-            {selectedCity && (
-              <>
-                <label>{t("register.subCity")}</label>
-                <select name="subCity" value={selectedSubCity || ''} onChange={handleSubCityChange}>
-                  <option value="">{t("selectSubCity")}</option>
-                  {subCities.map((sc, i) => <option key={i} value={sc}>{sc}</option>)}
-                </select>
-              </>
-            )}
-
-            {role === "seller" && (
-              <>
-                <label>{t("register.shopName")}</label>
-                <input type="text" name="shopName" value={formData.shopName} onChange={handleChange} />
-              </>
-            )}
-
-            <label>{role === "seller" ? t("register.profileImageRequired") : t("register.profileImageOptional")}</label>
-            <ImageSelectUpload onImageChange={(files) => setImageFile(files?.[0])} maximages={1} />
+            {/* Simplify registration fields as requested */}
 
             <div className="terms-checkbox">
               <label>

@@ -252,7 +252,11 @@ const productController = {
         const search = req.query.search?.trim() || "";
         const offset = (page - 1) * limit;
         try {
+            const { status } = req.query;
             const where = { sellerId: sId };
+            if (status !== undefined) {
+                where.currentState = parseInt(status, 10);
+            }
             if (search) {
                 where[Op.or] = [
                     { name: { [Op.iLike]: `%${search}%` } },
@@ -290,6 +294,19 @@ const productController = {
             throw new Error(validation.message);
         }
         const { sellerId, name, description, price, delprice, category, subcategory, images, variants } = req.body;
+
+        // Check seller profile completeness
+        const seller = await User.findByPk(sellerId);
+        if (!seller) throw new Error("seller_not_found");
+        if (seller.role !== 'seller') throw new Error("user_is_not_a_seller");
+
+        const isProfileComplete = seller.shopName && seller.phone && seller.address &&
+            seller.city !== undefined && seller.subCity !== undefined;
+
+        if (!isProfileComplete) {
+            throw new Error("seller_profile_incomplete");
+        }
+
         const t = await sequelize.transaction();
         try {
             const product = await Product.create({

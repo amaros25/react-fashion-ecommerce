@@ -36,9 +36,11 @@ function ProfileSeller() {
     error: sellerError,
     updateAddress,
     updatePhone,
+    updateShopName,
     updateImage,
     isUpdatingAddress,
     isUpdatingPhone,
+    isUpdatingShopName,
     isUpdatingImage
   } = useUserProfileManager(userId, token);
 
@@ -54,9 +56,11 @@ function ProfileSeller() {
         data={seller} // 'user' statt 'seller'
         updateAddress={updateAddress}
         updatePhone={updatePhone}
+        updateShopName={updateShopName}
         updateImage={updateImage}
         isUpdatingAddress={isUpdatingAddress}
         isUpdatingPhone={isUpdatingPhone}
+        isUpdatingShopName={isUpdatingShopName}
         isUpdatingImage={isUpdatingImage}
         viewMode="seller"
       />
@@ -82,7 +86,7 @@ function ProfileSeller() {
       </nav>
       <div>
         {activeTab === "add_new_product" && (
-          <AddProduct sellerId={userId} token={token} />
+          <AddProduct sellerId={userId} token={token} seller={seller} />
         )}
         {activeTab === "products" && (
           <SellerProducts sellerId={userId} token={token} />

@@ -29,7 +29,7 @@ export const useUser = (userId, token) => {
         queryKey: ['user', userId],
         queryFn: () => userApi.fetchUser(userId, token),
         enabled: !!userId && !!token,
-        staleTime: 1000 * 60 * 5,
+        staleTime: Infinity,
         retry: shouldNotRetry,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false
@@ -75,6 +75,27 @@ export const useUpdatePhone = ({ userId, token }) => {
         },
         onError: (error) => {
             handleMutationError(error, "Phone Update");
+        },
+        retry: false,
+    });
+};
+
+export const useUpdateShopName = ({ userId, token }) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (shopName) => userApi.updateShopName({ userId, shopName, token }),
+        onSuccess: (response) => {
+            queryClient.setQueryData(['user', userId], (oldUser) => {
+                if (!oldUser) return oldUser;
+                const source = response.user || response;
+                return {
+                    ...oldUser,
+                    shopName: source.shopName ?? oldUser.shopName
+                };
+            });
+        },
+        onError: (error) => {
+            handleMutationError(error, "Shop Name Update");
         },
         retry: false,
     });

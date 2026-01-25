@@ -30,23 +30,23 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
 
     useEffect(() => {
         if (messagesData?.messages) {
-            const newMsgs = messagesData.messages;
-            if (fetchOffset === 0 && (messages.length === 0 || messagesData.chatId !== selectedChatId)) {
-                // Initial load: either unreads or last 10
-                setMessages(newMsgs);
-            } else if (fetchOffset > 0) {
-                // Older messages: prepend only those we don't have
-                const uniqueNew = newMsgs.filter(nm => !messages.some(m => m.id === nm.id));
-                if (uniqueNew.length > 0) {
-                    setMessages(prev => [...uniqueNew, ...prev]);
-                }
+            const newMsgsFromApi = messagesData.messages;
+            if (fetchOffset === 0) {
+
+                setMessages(newMsgsFromApi);
+            } else {
+                setMessages(prev => {
+                    const uniqueNew = newMsgsFromApi.filter(
+                        nm => !prev.some(m => m.id === nm.id)
+                    );
+                    return [...uniqueNew, ...prev];
+                });
             }
             // Correctly determine if more older messages exist on the server
             const totalOnServer = messagesData.totalMessages || 0;
-            const currentOffsetEnd = fetchOffset + newMsgs.length;
-            setHasMoreMessages(currentOffsetEnd < totalOnServer);
+            setHasMoreMessages(newMsgsFromApi.length + fetchOffset < totalOnServer);
         }
-    }, [messagesData, selectedChatId, token]);
+    }, [messagesData]);
 
     const activeChat = messagesData || null;
 
@@ -109,9 +109,11 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
         setIsNewChat(false);
         setIsChatWindowActive(true);
         if (isMobile) setIsSidebarHidden(true);
-        setFetchOffset(0);
-        setMessages([]);
-        setHasMoreMessages(true);
+        if (selectedChatId !== chatId) {
+            setFetchOffset(0);
+            setMessages([]);
+            setHasMoreMessages(true);
+        }
     };
 
     const handleSendMessage = async (text) => {

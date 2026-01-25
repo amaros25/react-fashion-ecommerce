@@ -42,6 +42,7 @@ router.post('/orders/create', floodLimiter, maxiGeneralLimiter, verifyToken, ver
 router.put('/orders/:id/status', floodLimiter, generalLimiter, verifyToken, verifyGlobalUserActions, orderController.updateOrderStatus);
 router.get('/orders/product/:productId/count', floodLimiter, generalLimiter, verifyToken, verifyGlobalUserActions, orderController.getOrderCountByProduct);
 router.get('/orders/stats/:sellerId', floodLimiter, generalLimiter, verifyToken, verifyGlobalUserActions, orderController.getSellerOrderStats);
+router.get('/orders/verify-payment/:paymentId', floodLimiter, generalLimiter, orderController.verifyFlouciPayment);
 
 // Chat Routes
 router.get('/chats/user/:userId', floodLimiter, generalLimiter, verifyToken, verifyGlobalUserActions, chatController.getUserChats);
@@ -66,6 +67,7 @@ router.get('/users/public-seller/:id', floodLimiter, generalLimiter, verifyToken
 router.put('/users/:id/updateImage', floodLimiter, maxiGeneralLimiter, verifyToken, verifyGlobalUserActions, userController.updateUserImage);
 router.patch('/users/:id/address', floodLimiter, maxiGeneralLimiter, verifyToken, verifyGlobalUserActions, userController.updateUserAddress);
 router.patch('/users/:id/phone', floodLimiter, maxiGeneralLimiter, verifyToken, verifyGlobalUserActions, userController.updateUserPhone);
+router.patch('/users/:id/shopName', verifyToken, userController.updateUserShopName);
 router.patch('/users/:id/views', floodLimiter, generalLimiter, userController.incrementViews); // Public-ish but rate limited
 // Rating Routes
 router.post('/api/reviews/seller', floodLimiter, generalLimiter, verifyToken, verifyGlobalUserActions, reviewController.rateSeller);

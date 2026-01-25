@@ -92,6 +92,23 @@ export const updatePhone = async ({ userId, phone, token }) => {
 };
 
 /**
+ * Update user shop name.
+ */
+export const updateShopName = async ({ userId, shopName, token }) => {
+    try {
+        const res = await axios.patch(
+            `${BASE_URL}/users/${userId}/shopName`,
+            { shopName },
+            getAuthHeaders(token)
+        );
+        return res.data;
+    } catch (error) {
+        console.error("Error updating shop name:", error);
+        throw error;
+    }
+};
+
+/**
  * Increment shop views.
  */
 export const incrementViews = async (userId) => {

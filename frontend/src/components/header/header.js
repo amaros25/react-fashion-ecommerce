@@ -15,7 +15,10 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { categoryKeys, subCategories } from '../utils/const/category';
 import { useAuth } from '../../context/AuthContext';
-import { useUnreadCount } from '../api_hooks/chat_hooks';
+import * as userHooks from '../api_hooks/user_hooks';
+import toast, { Toaster } from 'react-hot-toast';
+import { socket } from '../../context/socket';
+import { useHeaderToasts } from './useHeaderToasts'; // Pfad anpassen
 
 function Header() {
 
@@ -27,6 +30,10 @@ function Header() {
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const { isLoggedIn, role, userId, token } = useAuth();
+  const { data: user } = userHooks.useUser(userId, token);
+
+  useHeaderToasts(user);
 
   const {
     handleSearch,
@@ -36,14 +43,13 @@ function Header() {
     setSortBy
   } = useContext(FilterContext);
 
-  const { isLoggedIn, role, handleLogout } = useAuth();
-  const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
-
-  // Fetch total unread count
-  const { data: unreadData } = useUnreadCount(userId, token);
 
 
+  useEffect(() => {
+    if (user?.unreadMessages > 0) {
+      console.log("Neue Nachrichten verfügbar!");
+    }
+  }, [user?.unreadMessages]);
 
   const handleCategoryClick = (categoryKey) => {
     console.log("categoryKey: ", categoryKey);
@@ -168,6 +174,28 @@ function Header() {
   return (
     <>
       <div className="header" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            style: {
+              marginTop: '40px',
+              background: '#000',
+              color: '#fff',
+              borderRadius: '0px',
+              padding: '16px  0px',
+              fontSize: '13px',
+              letterSpacing: '1px',
+              textTransform: 'uppercase',
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              boxShadow: 'none',
+              border: '1px solid #333',
+              minWidth: '300px'
+            },
+            success: {
+              icon: null, // Icons wirken oft zu "verspielt", weglassen für Zara-Style
+            }
+          }}
+        />
         <nav className="navbar-header">
           <h1 className="logo-header">
             <Link to="/home" onClick={(e) => {
@@ -193,8 +221,8 @@ function Header() {
                   ? <IoChatboxEllipses className='nav-icon-header' />
                   : <IoChatboxEllipsesOutline className='nav-icon-header' />
                 }
-                {unreadData?.unreadCount > 0 && (
-                  <span className="header-unread-badge">{unreadData.unreadCount}</span>
+                {user?.unreadMessages > 0 && (
+                  <span className="header-unread-badge">{user.unreadMessages}</span>
                 )}
               </Link>
             )}
@@ -318,6 +346,7 @@ function Header() {
             </ul>
           </div>
         )}
+
       </div>
     </>
   );

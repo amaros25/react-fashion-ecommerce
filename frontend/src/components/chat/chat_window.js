@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import "./chat_window.css";
 
@@ -27,19 +27,39 @@ const ChatWindow = ({
   const { t, i18n } = useTranslation();
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
+  const readTimeoutRef = useRef(null);
 
   // Ref to track if we were at the bottom before a state update
   const wasScrolledToBottom = useRef(true);
   const isRtl = i18n.dir() === "rtl";
 
   // Auto-scroll to bottom on new messages if user was already at the bottom
-  useEffect(() => {
-    if ((activeChat || isNewChat) && messagesContainerRef.current && !isLoadingMessages) {
-      if (wasScrolledToBottom.current) {
-        messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+  useLayoutEffect(() => {
+    if (messagesContainerRef.current && !isLoadingMessages) {
+      const container = messagesContainerRef.current;
+
+      // Prüfen, ob wir scrollen müssen
+      const isUserLastSender = messages.length > 0 && String(messages[messages.length - 1].senderId) === String(userId);
+      const shouldScroll = wasScrolledToBottom.current || isUserLastSender;
+
+      if (shouldScroll) {
+        // Wir nutzen ein doppeltes RequestAnimationFrame. 
+        // Das garantiert, dass Chrome das Layout wirklich fertig berechnet hat.
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            container.scrollTo({
+              top: container.scrollHeight,
+              behavior: isUserLastSender ? 'smooth' : 'auto'
+            });
+            // Sicherheits-Check: Falls 'smooth' in Chrome hakt, erzwinge 'auto' nach 100ms
+            setTimeout(() => {
+              container.scrollTop = container.scrollHeight;
+            }, 100);
+          });
+        });
       }
     }
-  }, [activeChat, newMessage, isLoadingMessages, isNewChat]);
+  }, [messages.length, isLoadingMessages]);
 
   /**
    * Monitor scroll position to determine if we should auto-scroll on next update.
@@ -76,23 +96,22 @@ const ChatWindow = ({
           .map(entry => entry.target.getAttribute('data-message-id'));
 
         if (visibleIds.length > 0) {
-          // Trigger markMessagesAsRead via manager if possible, 
-          // but we might need to expose updateReadMutation or just use chatApi directly.
-          // Since useChatManager already has updateReadMutation, let's assume it can be exposed 
-          // or we just call chatApi.markMessagesAsRead directly (though mutation is better for React Query).
-
-          // For now, let's assume we can call handleMarkAsRead which we'll add to props
-          handleMarkAsRead?.(visibleIds);
+          if (readTimeoutRef.current) clearTimeout(readTimeoutRef.current);
+          readTimeoutRef.current = setTimeout(() => {
+            handleMarkAsRead?.(visibleIds);
+          }, 1000); // Warte 1 Sekunde, um alle sichtbaren IDs zu sammeln
         }
-      },
-      { threshold: 0.5 } // 50% visibility sufficient
-    );
+      }, { threshold: 0.5 });
 
     const messageElements = document.querySelectorAll('.message.partner.unread');
     messageElements.forEach(el => observer.observe(el));
 
-    return () => observer.disconnect();
-  }, [messages, activeChat, userId]);
+
+    return () => {
+      observer.disconnect();
+      if (readTimeoutRef.current) clearTimeout(readTimeoutRef.current);
+    };
+  }, [messages]);
 
   return (
     <div className="chat-window-content">

@@ -1,0 +1,23 @@
+# Stage 1: Build
+FROM node:20 AS build
+WORKDIR /app
+
+# Da context "." ist, müssen wir in den frontend-Ordner greifen
+COPY frontend/package*.json ./
+RUN npm install
+
+# Den restlichen Code aus dem frontend-Ordner kopieren
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Serve
+FROM nginx:alpine
+
+# WICHTIG: Hier muss auch frontend/ davor stehen!
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Die fertigen Dateien aus der Build-Stage kopieren
+COPY --from=build /app/build /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

@@ -9,7 +9,12 @@ export const useUserChats = (userId, token, page = 1) => {
         queryKey: ['chats', userId, page],
         queryFn: () => chatApi.fetchChats({ userId, page, token }),
         enabled: !!userId && !!token,
-        staleTime: 1000 * 30, // 30 seconds
+        staleTime: Infinity,
+        placeholderData: (previousData) => previousData,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        gcTime: 1000 * 60 * 30,
     });
 };
 
@@ -21,7 +26,11 @@ export const useChatMessages = (chatId, token, offset = 0, limit = 10) => {
         queryKey: ['chat-messages', chatId, offset, limit],
         queryFn: () => chatApi.openChat(chatId, null, limit, token, offset),
         enabled: !!chatId && !!token,
-        staleTime: 0, // Always fresh for messages
+        staleTime: Infinity,
+        refetchInterval: false,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
     });
 };
 
@@ -30,12 +39,37 @@ export const useChatMessages = (chatId, token, offset = 0, limit = 10) => {
  */
 export const useSendMessage = (chatId) => {
     const queryClient = useQueryClient();
+
     return useMutation({
         mutationFn: ({ senderId, text, token }) =>
             chatApi.sendMessage({ chatId, senderId, text, token }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['chat-messages', chatId] });
-            queryClient.invalidateQueries({ queryKey: ['chats'] }); // Update list summary
+
+        onSuccess: (newMessageFromServer) => {
+            // Wir aktualisieren den Cache für 'chat-messages' manuell
+            queryClient.setQueryData(['chat-messages', chatId, 0, 10], (oldData) => {
+                if (!oldData) return oldData;
+
+                // Wir fügen die neue Nachricht (das Echo) einfach an das Ende des Arrays an
+                return {
+                    ...oldData,
+                    messages: [...oldData.messages, newMessageFromServer],
+                    totalMessages: (oldData.totalMessages || 0) + 1
+                };
+            });
+
+            // Optional: Auch die Sidebar aktualisieren, damit dort die letzte Nachricht steht
+            // ohne ein GET /chats auszulösen
+            queryClient.setQueryData(['chats', newMessageFromServer.senderId, 1], (oldSidebarData) => {
+                if (!oldSidebarData) return oldSidebarData;
+                return {
+                    ...oldSidebarData,
+                    chats: oldSidebarData.chats.map(chat =>
+                        chat.id === chatId
+                            ? { ...chat, messages: [newMessageFromServer], updatedAt: newMessageFromServer.createdAt }
+                            : chat
+                    )
+                };
+            });
         },
     });
 };
@@ -48,7 +82,7 @@ export const useCreateChat = () => {
     return useMutation({
         mutationFn: (variables) => chatApi.createChat(variables),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['chats'] });
+            //queryClient.invalidateQueries({ queryKey: ['chats'] });
         },
     });
 };
@@ -61,32 +95,37 @@ export const useUnreadCount = (userId, token) => {
         queryKey: ['unread-count', userId],
         queryFn: () => chatApi.fetchUnreadCount({ userId, token }),
         enabled: !!userId && !!token,
-        refetchInterval: 1000 * 60, // Poll every minute
+        refetchInterval: Infinity,
     });
 };
 /**
  * Hook to mark messages in a chat as read.
  */
+
 export const useUpdateReadStatus = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ chatId, userId, token, messageIds }) =>
             chatApi.markMessagesAsRead(chatId, userId, token, messageIds),
         onSuccess: (data, variables) => {
-            const { affectedCount } = data;
-
-            // Targeted update for user unread count to avoid full re-fetch
-            queryClient.setQueryData(['user', variables.userId], (oldUser) => {
-                if (!oldUser) return oldUser;
-                const currentUnread = oldUser.unreadMessages || 0;
+            // 1. Sidebar gezielt updaten (RICHTIGER KEY: 'chats')
+            queryClient.setQueryData(['chats', variables.userId, 1], (oldData) => {
+                if (!oldData || !oldData.chats) return oldData;
                 return {
-                    ...oldUser,
-                    unreadMessages: Math.max(0, currentUnread - (affectedCount || 0))
+                    ...oldData,
+                    chats: oldData.chats.map(chat =>
+                        chat.id === variables.chatId
+                            ? { ...chat, unreadCount: 0 }
+                            : chat
+                    )
                 };
             });
 
-            queryClient.invalidateQueries({ queryKey: ['unread-count', variables.userId] });
-            queryClient.invalidateQueries({ queryKey: ['chats', variables.userId] });
+            // 2. Unread Count manuell dekrementieren statt Invalidate (Kein GET!)
+            queryClient.setQueryData(['unread-count', variables.userId], (oldCount) => {
+                if (typeof oldCount !== 'number') return 0;
+                return Math.max(0, oldCount - (data.affectedCount || 0));
+            });
         },
     });
 };

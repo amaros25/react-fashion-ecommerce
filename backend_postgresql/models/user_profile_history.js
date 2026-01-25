@@ -7,7 +7,7 @@ const UserProfileHistory = sequelize.define('UserProfileHistory', {
         type: DataTypes.INTEGER, allowNull: false, index: true, references: { model: 'users', key: 'id' }, onDelete: 'CASCADE'
     },
     changeType: {
-        type: DataTypes.ENUM('address', 'phone', 'image', 'all', 'initial', 'status'),
+        type: DataTypes.ENUM('address', 'phone', 'image', 'shopName', 'all', 'initial', 'status'),
         allowNull: false
     },
     newData: { type: DataTypes.JSONB, allowNull: false }

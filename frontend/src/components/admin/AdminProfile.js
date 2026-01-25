@@ -131,7 +131,9 @@ const AdminProfile = () => {
             setDataList(prev => prev.map(item =>
                 item.id === selectedItem.id ? {
                     ...item,
-                    active: modalType === 'user' || modalType === 'seller' ? result.active : item.active,
+                    stats: modalType === 'user' || modalType === 'seller'
+                        ? { ...item.stats, active: result.active }
+                        : item.stats,
                     currentState: modalType === 'product' ? result.status : item.currentState,
                     currentStatus: modalType === 'order' ? result.status : item.currentStatus
                 } : item
@@ -300,8 +302,9 @@ const AdminProfile = () => {
                             <span>Status</span>
                         </div>
                         {currentItems.map(item => {
-                            const statusColorClass = (item.active === 'active' || item.active === 'verified') ? 'status-success' :
-                                (item.active === 'pending' || item.active === 'unverified') ? 'status-pending' : 'status-danger';
+                            console.log("admin", item);
+                            const statusColorClass = (item.stats?.active === 'active' || item.stats?.active === 'verified') ? 'status-success' :
+                                (item.stats?.active === 'pending' || item.stats?.active === 'unverified') ? 'status-pending' : 'status-danger';
 
                             return (
                                 <div key={item.id} className="list-item" style={{ gridTemplateColumns: '80px 1.5fr 2fr 1fr 1fr 120px' }}>
@@ -320,7 +323,7 @@ const AdminProfile = () => {
                                             onClick={() => openStatusModal(item, activeTab === 'users' ? 'user' : 'seller')}
                                             style={{ border: 'none', cursor: 'pointer', width: '100%', textTransform: 'capitalize' }}
                                         >
-                                            {item.active}
+                                            {item.stats?.active}
                                         </button>
                                     </span>
                                 </div>

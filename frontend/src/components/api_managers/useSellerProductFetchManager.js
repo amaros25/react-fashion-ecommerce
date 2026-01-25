@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useSellerProducts } from '../api_hooks/seller_products_hook';
 
-export const useSellerProductFetchManager = (sellerId, token) => {
+export const useSellerProductFetchManager = (sellerId, token, status = null) => {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState('');
 
     const { data, isLoading, error } = useSellerProducts(sellerId, {
         page,
         search,
-        limit: 15
+        limit: 15,
+        status: status
     }, token);
 
     return {

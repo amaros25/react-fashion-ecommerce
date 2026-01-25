@@ -193,7 +193,12 @@
     "update_address": "تعديل العنوان",
     "cart_page.no_items_in_cart": "لا توجد عناصر في السلة",
     "curated_by": "يُدَار من قِبَل",
-    "latest_collection": "أحدث مجموعة"
+    "latest_collection": "أحدث مجموعة",
+    "payment_method": "طريقة الدفع",
+    "cash_on_delivery": "الدفع عند الاستلام",
+    "cash_on_pickup": "الدفع عند الاستلام من المتجر",
+    "flouci_payment": "الدفع عبر تطبيق فلوسي",
+    "flouci_coming_soon": "غير متاح حالياً"
   },
   "phone": "الهاتف",
   "address": "العنوان",
@@ -748,5 +753,13 @@
   "please_provide_reason": "يرجى تقديم سبب لفشل التوصيل. سيكون هذا مرئياً للزبون.",
   "write_comment_placeholder": "اكتب السبب هنا (مثلاً: العنوان غير صحيح، تعذر الاتصال بالزبون)...",
   "order_state_update": "تحديث حالة الطلب",
-  "view_reason": "عرض السبب"
+  "view_reason": "عرض السبب",
+  "profile_incomplete_text": "لنشر هذا المنتج، يرجى استكمال معلومات متجرك.",
+  "go_to_profile_settings": "تعديل الملف الشخصي",
+  "processing": "جاري المعالجة...",
+  "toast": {
+    "status_change": "حالة الملف الشخصي: {{status}}",
+    "new_message": "رسالة جديدة",
+    "order_update": "الطلب {{number}}: تم تحديث الحالة"
+  }
 }

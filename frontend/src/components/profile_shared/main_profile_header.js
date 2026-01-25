@@ -18,9 +18,11 @@ function MainProfileHeader({
     data, // user oder seller Objekt
     updateAddress,
     updatePhone,
+    updateShopName,
     updateImage,
     isUpdatingAddress,
     isUpdatingPhone,
+    isUpdatingShopName,
     isUpdatingImage,
     viewMode = "user"
 }) {
@@ -29,7 +31,7 @@ function MainProfileHeader({
     const { uploadImage } = useUploadImageApi(cloudName, uploadPreset);
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const isAnyUpdating = isUpdatingAddress || isUpdatingPhone || isUpdatingImage;
+    const isAnyUpdating = isUpdatingAddress || isUpdatingPhone || isUpdatingImage || isUpdatingShopName;
 
     const fileInputRef = useRef(null);
     const [showSettings, setShowSettings] = useState(false);
@@ -37,7 +39,8 @@ function MainProfileHeader({
         address: "",
         city: "",
         subCity: "",
-        phone: ""
+        phone: "",
+        shopName: ""
     });
     const [subCities, setSubCities] = useState([]);
 
@@ -48,7 +51,8 @@ function MainProfileHeader({
                 address: data?.address || "",
                 city: cityName,
                 subCity: citiesData[cityName]?.[data?.subCity] || "",
-                phone: data?.phone || ""
+                phone: data?.phone || "",
+                shopName: data?.shopName || ""
             });
             if (cityName) {
                 setSubCities(citiesData[cityName] || []);
@@ -74,11 +78,13 @@ function MainProfileHeader({
 
             let addressChanged = formData.address !== data.address || cityIndex !== data.city || subCityIndex !== data.subCity;
             let phoneChanged = formData.phone !== data.phone;
+            let shopNameChanged = (data.role === 'seller') && (formData.shopName !== data.shopName);
 
-            if (!addressChanged && !phoneChanged) return toast.error(t("no_changes"));
+            if (!addressChanged && !phoneChanged && !shopNameChanged) return toast.error(t("no_changes"));
 
             if (addressChanged) await updateAddress({ address: formData.address, city: cityIndex, subCity: subCityIndex });
             if (phoneChanged) await updatePhone(formData.phone);
+            if (shopNameChanged) await updateShopName(formData.shopName);
 
             toast.success(t("profile_updated"));
             setShowSettings(false);
@@ -233,6 +239,12 @@ function MainProfileHeader({
                             <button className="profile-close-modal-btn" onClick={() => setShowSettings(false)}>&times;</button>
                         </div>
                         <div className="profile-modal-body">
+                            {data?.role === 'seller' && (
+                                <div className="profile-form-group">
+                                    <label>{t("register.shopName") || "Shop Name"}</label>
+                                    <input type="text" name="shopName" value={formData.shopName} onChange={handleInputChange} disabled={isAnyUpdating} />
+                                </div>
+                            )}
                             <div className="profile-form-group">
                                 <label>{t("phone_number")}</label>
                                 <input type="text" name="phone" value={formData.phone} onChange={handleInputChange} disabled={isAnyUpdating} />

@@ -1,5 +1,6 @@
 const { Order, Product, UserStats, User, SellerBill, OrderStatusHistory, OrderItem, ProductVariant, ProductReview, UserReview, sequelize } = require('../models');
 const { Op } = require('sequelize');
+const axios = require('axios');
 const { handleError } = require('./error_handler.js');
 
 /**
@@ -188,7 +189,7 @@ const orderController = {
     createOrder: async (req, res) => {
         const t = await sequelize.transaction();
         try {
-            const { items, is_delivery, userId, sellerId } = req.body;
+            const { items, is_delivery, userId, sellerId, paymentMethod } = req.body;
             let calculatedTotal = 0;
             let minDeliveryPrice = Infinity;
             if (!items || items.length === 0) throw new Error("at_least_one_item_required");
@@ -248,8 +249,51 @@ const orderController = {
             await UserStats.increment('orderCount', { by: 1, where: { userId: userId }, transaction: t });
             await UserStats.increment(['orderCount', 'openOrders'], { by: 1, where: { userId: sellerId }, transaction: t });
 
+            // Flouci Payment Integration
+            if (paymentMethod === 'flouci') {
+                try {
+                    // Flouci API expects amount in millimes (1 TND = 1000 millimes)
+                    const amountInMillimes = Math.round(price_incl_delivery * 1000);
+
+                    const flouciData = {
+                        "app_token": process.env.FLOUCI_APP_TOKEN || "test_token",
+                        "app_public": process.env.FLOUCI_APP_PUBLIC || "test_public",
+                        "amount": amountInMillimes,
+                        "accept_card": "true",
+                        "session_timeout_secs": 1200,
+                        "success_link": `${process.env.FRONTEND_URL}/payment-success?orderId=${order.id}`,
+                        "fail_link": `${process.env.FRONTEND_URL}/payment-fail?orderId=${order.id}`,
+                        "developer_tracking_id": order.orderNumber
+                    };
+
+                    const response = await axios.post('https://developers.flouci.com/api/v2/generate_payment', flouciData);
+
+                    if (response.data && response.data.success) {
+                        await order.update({
+                            paymentInfo: {
+                                method: 'flouci',
+                                payment_id: response.data.result.payment_id,
+                                status: 'pending'
+                            }
+                        }, { transaction: t });
+
+                        await t.commit();
+                        return res.status(201).json({
+                            success: true,
+                            order,
+                            result_url: response.data.result.link
+                        });
+                    } else {
+                        throw new Error("flouci_session_generation_failed");
+                    }
+                } catch (flouciError) {
+                    console.error("Flouci Error:", flouciError.response?.data || flouciError.message);
+                    throw new Error("payment_service_unavailable");
+                }
+            }
+
             await t.commit();
-            res.status(201).json(order);
+            res.status(201).json({ success: true, order });
 
         } catch (error) {
             await handleError(res, error, t, "create_order_error");
@@ -355,6 +399,52 @@ const orderController = {
             });
         } catch (error) {
             await handleError(res, error, null, "get_seller_order_stats_error");
+        }
+    },
+    // GET: Verify Flouci Payment
+    verifyFlouciPayment: async (req, res) => {
+        try {
+            const { paymentId } = req.params;
+            const APP_PUBLIC = process.env.FLOUCI_APP_PUBLIC || "test_public";
+            const APP_TOKEN = process.env.FLOUCI_APP_TOKEN || "test_token";
+
+            const response = await axios.get(`https://developers.flouci.com/api/v2/verify_payment/${paymentId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apppublic': APP_PUBLIC,
+                    'apptoken': APP_TOKEN
+                }
+            });
+
+            if (response.data && response.data.success) {
+                const { status, developer_tracking_id } = response.data.result;
+
+                if (status === 'SUCCESS') {
+                    const order = await Order.findOne({ where: { orderNumber: developer_tracking_id } });
+                    if (order) {
+                        // Status 1 = Paid / Active
+                        await order.update({
+                            currentStatus: 1,
+                            paymentInfo: {
+                                ...order.paymentInfo,
+                                status: 'paid',
+                                verification_data: response.data.result
+                            }
+                        });
+
+                        await OrderStatusHistory.create({
+                            orderId: order.id,
+                            status: 1,
+                            comment: "Payment verified via Flouci"
+                        });
+                    }
+                }
+                res.json(response.data);
+            } else {
+                res.status(400).json({ success: false, message: "verification_failed" });
+            }
+        } catch (error) {
+            await handleError(res, error, null, "verify_payment_error");
         }
     }
 };

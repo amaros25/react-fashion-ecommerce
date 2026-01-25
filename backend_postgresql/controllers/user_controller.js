@@ -1,5 +1,5 @@
 const { handleError } = require('./error_handler.js');
-const { User, SellerBill, UserStats, UserProfileHistory, Order, Product, UserReview, ProductReview, sequelize } = require('../models');
+const { User, SellerBill, UserStats, UserProfileHistory, Order, Product, UserReview, ProductReview, OrderItem, sequelize } = require('../models');
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 require('dotenv').config({ path: './env' });
@@ -20,8 +20,8 @@ const userController = {
             const idArray = ids.split(",");
             const users = await User.findAll({
                 where: { id: { [Op.in]: idArray } },
-                attributes: ['id', 'firstName', 'lastName', 'shopName', 'role', 'phone', 'address', 'imageUrl', 'city', 'subCity', 'active'],
-                include: [{ model: UserStats, as: 'stats', attributes: ['avgRating', 'reviewCount'] }]
+                attributes: ['id', 'firstName', 'lastName', 'shopName', 'role', 'phone', 'address', 'imageUrl', 'city', 'subCity'],
+                include: [{ model: UserStats, as: 'stats', attributes: ['avgRating', 'reviewCount', 'active'] }]
             });
             const formattedUsers = users.map(user => ({
                 id: user.id,
@@ -30,11 +30,11 @@ const userController = {
                 shopName: user.shopName || "Kein Shopname",
                 role: user.role,
                 imageUrl: user.imageUrl || "",
-                city: user.city || 0,
-                subCity: user.subCity || 0,
+                city: user.city,
+                subCity: user.subCity,
                 avgRating: user.stats?.avgRating || 0,
                 reviewCount: user.stats?.reviewCount || 0,
-                active: user.active,
+                active: user.stats?.active,
                 phone: user.phone || "",
                 address: user.address || "",
             }));
@@ -52,7 +52,7 @@ const userController = {
             const seller = await User.findByPk(id, {
                 attributes: ['shopName', 'city', 'subCity', 'imageUrl'],
                 include: [{
-                    model: sequelize.models.UserStats,
+                    model: UserStats,
                     as: 'stats',
                     attributes: ['reviewCount', 'avgRating']
                 }]
@@ -80,68 +80,51 @@ const userController = {
         try {
             const identifier = req.params.id;
             let user;
+            const commonInclude = [{
+                model: UserStats,
+                as: 'stats',
+                attributes: ['avgRating', 'reviewCount', 'unreadMessages', 'orderCount', 'views', 'openOrders', 'productCount', 'active']
+            }];
             if (!isNaN(identifier)) {
                 user = await User.findByPk(identifier, {
-                    include: [{ model: UserStats, as: 'stats', attributes: ['avgRating', 'reviewCount', 'unreadMessages', 'orderCount', 'views'] }]
+                    include: commonInclude
                 });
             }
             // 2. Versuch: Falls nicht gefunden, suche über shopName
             if (!user) {
                 user = await User.findOne({
                     where: { shopSlug: identifier },
-                    include: [{ model: UserStats, as: 'stats', attributes: ['avgRating', 'reviewCount', 'unreadMessages', 'orderCount', 'views'] }]
+                    include: commonInclude
                 });
             }
 
             if (!user) throw new Error("user_not_found");
 
-            if (user.role == "seller") {
-                res.json({
-                    id: user.id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    role: user.role,
-                    shopName: user.shopName,
-                    shopSlug: user.shopSlug,
-                    active: user.active,
-                    phone: user.phone || "",
-                    address: user.address || "",
-                    city: user.city || 0,
-                    subCity: user.subCity || 0,
-                    imageUrl: user.imageUrl || "",
-                    orderCount: user.stats?.orderCount || 0,
-                    openOrders: user.stats?.openOrders || 0,
-                    reviewCount: user.stats?.reviewCount || 0,
-                    averageRating: user.stats?.avgRating || 0,
-                    productCount: user.stats?.productCount || 0,
-                    unreadMessages: user.stats?.unreadMessages || 0,
-                    views: user.stats?.views || 0
-                });
-            } else {
-                res.json({
-                    id: user.id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    role: user.role,
-                    shopName: user.shopName,
-                    shopSlug: user.shopSlug,
-                    active: user.active,
-                    phone: user.phone || "",
-                    address: user.address || "",
-                    city: user.city || 0,
-                    subCity: user.subCity || 0,
-                    imageUrl: user.imageUrl || "",
-                    orderCount: user.stats?.orderCount || 0,
-                    reviewCount: user.stats?.reviewCount || 0,
-                    averageRating: user.stats?.avgRating || 0,
-                    unreadMessages: user.stats?.unreadMessages || 0,
-                    views: user.stats?.views || 0
-                });
+            const userData = {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
+                shopName: user.shopName,
+                shopSlug: user.shopSlug,
+                active: user.stats?.active,
+                phone: user.phone || "",
+                address: user.address || "",
+                city: user.city,
+                subCity: user.subCity,
+                imageUrl: user.imageUrl || "",
+                orderCount: user.stats?.orderCount || 0,
+                reviewCount: user.stats?.reviewCount || 0,
+                averageRating: user.stats?.avgRating || 0,
+                unreadMessages: user.stats?.unreadMessages || 0,
+                views: user.stats?.views || 0
+            };
+            if (user.role === "seller") {
+                userData.openOrders = user.stats?.openOrders || 0;
+                userData.productCount = user.stats?.productCount || 0;
             }
-
-
+            res.json(userData);
         } catch (error) {
             console.error('Error fetching user by ID:', error);
             await handleError(res, error, null, "failed_to_fetch_user_by_id");
@@ -159,15 +142,17 @@ const userController = {
                 shopName, role
             } = req.body;
 
-            if (!firstName || !lastName || !email || !password || !phone || !address || !role) throw new Error("missing_data");
-            if (role === 'seller' && !shopName) throw new Error("shop_name_required");
-            const existingUserMail = await User.findOne({ where: { email } });
-            if (existingUserMail) throw new Error("user_exists_email");
-            const existingUserPhone = await User.findOne({ where: { phone: phone } });
-            if (existingUserPhone) throw new Error("user_exists_phone");
-            if (shopName) {
+            if (!firstName || !lastName || !email || !password || !role || !phone) throw new Error("missing_data");
+            if (role === 'seller' && shopName) {
                 const existingShop = await User.findOne({ where: { shopName } });
                 if (existingShop) throw new Error("shop_name_already_taken");
+            }
+            const existingUserMail = await User.findOne({ where: { email } });
+            if (existingUserMail) throw new Error("user_exists_email");
+
+            if (phone) {
+                const existingUserPhone = await User.findOne({ where: { phone: phone } });
+                if (existingUserPhone) throw new Error("user_exists_phone");
             }
             t = await sequelize.transaction();
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -176,12 +161,12 @@ const userController = {
                 lastName,
                 email,
                 password: hashedPassword,
-                shopName: role === 'seller' ? shopName : null,
+                shopName: (role === 'seller' && shopName) ? shopName : null,
                 role: role || 'user',
-                address: address,
-                city: city || 0,
-                subCity: subCity || 0,
-                phone: phone,
+                address: address || "",
+                city: city,
+                subCity: subCity,
+                phone: phone || "",
                 imageUrl: ""
 
             }, { transaction: t });
@@ -317,6 +302,48 @@ const userController = {
         }
     },
 
+    updateUserShopName: async (req, res) => {
+        console.log("updateUserShopName");
+        const t = await sequelize.transaction();
+        try {
+            console.log(req.body);
+            const { shopName } = req.body;
+            if (!shopName || shopName.trim().length < 3) throw new Error("invalid_shop_name");
+            console.log("shopName: ", shopName);
+
+            const user = await User.findByPk(req.params.id);
+            console.log("user: ", user);
+            if (!user) throw new Error("user_not_found");
+            if (user.role !== 'seller') throw new Error("only_sellers_can_have_shopname");
+
+            if (user.shopName === shopName) throw new Error("no_changes_detected");
+
+            const shopExists = await User.findOne({ where: { shopName } });
+            if (shopExists && shopExists.id !== user.id) throw new Error("shop_name_already_taken");
+
+            await UserProfileHistory.create({
+                userId: user.id,
+                changeType: 'shopName',
+                newData: { shopName }
+            }, { transaction: t });
+
+            await user.update({ shopName }, { transaction: t });
+            await t.commit();
+            res.json({
+                message: "success",
+                userId: user.id,
+                shopName: user.shopName
+            });
+        } catch (error) {
+            console.log("FULL ERROR DETAILS:");
+            console.log("Name:", error.name);
+            console.log("Message:", error.message);
+            console.log("Stack:", error.stack);
+            console.error('Error updating shop name:', error);
+            await handleError(res, error, t, "shop_name_update_failed");
+        }
+    },
+
     getSellerBills: async (req, res) => {
         try {
             const { sellerId } = req.params;
@@ -360,10 +387,23 @@ const userController = {
                 throw new Error("missing_data");
             }
 
+            const order = await Order.findOne({
+                where: { id: orderId, userId: senderId },
+                include: [{ model: OrderItem, as: 'items', attributes: ['productId'] }],
+                transaction: t
+            });
+
+            if (!order) throw new Error("order_not_found_or_unauthorized");
+
+            const boughtProductIds = order.items.map(item => item.productId);
+            const isValid = productRatings.every(p => boughtProductIds.includes(p.productId));
+
+            if (!isValid) throw new Error("invalid_products_in_review");
+
             // --- PART A: RATE SELLER (Only ONCE per order) ---
 
             // Check if seller was already rated for this order
-            const existingUserReview = await UserReview.findOne({ where: { senderId, orderId } });
+            const existingUserReview = await UserReview.findOne({ where: { senderId, orderId }, transaction: t });
             if (existingUserReview) {
                 throw new Error("order_already_rated");
             }
@@ -382,7 +422,7 @@ const userController = {
             const userStats = await UserStats.findOne({ where: { userId: receiverId }, transaction: t });
             if (userStats) {
                 const newCount = userStats.reviewCount + 1;
-                const newAvg = ((parseFloat(userStats.avgRating) * userStats.reviewCount) + sellerRating) / newCount;
+                const newAvg = ((parseFloat(userStats.avgRating || 0) * userStats.reviewCount) + sellerRating) / newCount;
                 await userStats.update({
                     reviewCount: newCount,
                     avgRating: parseFloat(newAvg.toFixed(2))
@@ -404,7 +444,7 @@ const userController = {
                 const product = await Product.findByPk(p.productId, { transaction: t });
                 if (product) {
                     const newProdCount = product.reviewCount + 1;
-                    const newProdAvg = ((parseFloat(product.avgRating) * product.reviewCount) + p.rating) / newProdCount;
+                    const newProdAvg = ((parseFloat(product.avgRating || 0) * product.reviewCount) + p.rating) / newProdCount;
                     await product.update({
                         reviewCount: newProdCount,
                         avgRating: parseFloat(newProdAvg.toFixed(2))

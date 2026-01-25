@@ -37,7 +37,7 @@ const ShopPage = () => {
         isLoading: productsLoading,
         currentPage: page,
         handlePageChange
-    } = useSellerProductFetchManager(seller?.id, token);
+    } = useSellerProductFetchManager(seller?.id, token, 1);
 
     const loading = sellerLoading || productsLoading;
 

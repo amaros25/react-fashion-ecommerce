@@ -1,0 +1,21 @@
+FROM node:20
+WORKDIR /app
+
+
+# 1. Kopiere die package.json (aus dem richtigen Ordner auf dem Host)
+COPY backend_postgresql/package*.json ./
+
+# 2. Installiere die Abhängigkeiten
+RUN npm install
+
+# 3. Kopiere den gesamten Inhalt von backend_postgresql in den Container
+# WICHTIG: Hier muss der Ordnername stehen, in dem auch deine .env liegt
+COPY backend_postgresql/ ./
+
+# 4. Check, ob die .env da ist
+RUN ls -la .env && cat .env
+
+
+# 4. Startbefehl (Pfad innerhalb des Containers)
+EXPOSE 5000
+CMD ["node", "server_sql.js"]

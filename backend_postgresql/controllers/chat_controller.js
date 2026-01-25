@@ -230,6 +230,12 @@ const chatController = {
                 where.id = { [Op.in]: messageIds };
             }
 
+            const countBefore = await ChatMessage.count({ where, transaction: t });
+
+            if (countBefore === 0) {
+                await t.rollback();
+                return res.json({ message: "already_read", affectedCount: 0 });
+            }
             const [affectedCount] = await ChatMessage.update(
                 { isRead: true },
                 {

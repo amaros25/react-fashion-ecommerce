@@ -36,6 +36,9 @@
   background-color: #f8fafc;
   /* Softer background */
   scroll-behavior: smooth;
+  overflow-anchor: none;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .message {

@@ -1,12 +1,12 @@
 
 
-const ValidateRegisterForm = (formData, role, acceptedTerms, imageFile, selectedCity, selectedSubCity, t) => {
+const ValidateRegisterForm = (formData, role, acceptedTerms, t) => {
     console.log("ValidateRegisterForm formData: ", formData);
     const isValidEmail = (email) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email);
     const isStrongPassword = (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
     const isValidPhone = (phone) => /^[0-9]{8,15}$/.test(phone);
+
     const isValidName = (name) => /^[\p{L}\s]+$/u.test(name);
-    const isValidAddress = (address) => address && address.length >= 5;
 
 
     // Check first name
@@ -40,41 +40,12 @@ const ValidateRegisterForm = (formData, role, acceptedTerms, imageFile, selected
     if (formData.password !== formData.confirmPassword) {
         return t("register.error.passwordMismatch");
     }
-
     // Check phone
     if (!formData.phone) {
         return t("register.error.phoneRequired");
     }
-
     if (!isValidPhone(formData.phone)) {
         return t("register.error.invalidPhone");
-    }
-
-    // Check address
-    if (!formData.address) {
-        return t("register.error.addressRequired");
-    }
-
-    if (formData.address.length < 5 || !isValidAddress(formData.address)) {
-        return t("register.error.invalidAddress");
-    }
-
-    // Check city and sub-city
-    if (!selectedCity) {
-        return t("register.error.cityRequired");
-    }
-    if (!selectedSubCity) {
-        return t("register.error.subCityRequired");
-    }
-
-    // Seller checks
-    if (role === "seller") {
-        if (!formData.shopName || formData.shopName.trim().length < 3) {
-            return t("register.error.fillShopNameAddress");
-        }
-        if (!imageFile) {
-            return t("register.error.uploadProfileImage");
-        }
     }
 
     // Terms acceptance

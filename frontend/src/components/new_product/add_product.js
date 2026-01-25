@@ -24,7 +24,7 @@ const initialFormState = {
   sizes: [{ size: "", stock: 1, color: "#000000", customSize: "" }],
 };
 
-function AddProduct({ sellerId, token }) {
+function AddProduct({ sellerId, token, seller }) {
   const { t, i18n } = useTranslation();
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -33,6 +33,9 @@ function AddProduct({ sellerId, token }) {
 
   // Custom hook that manages the API request and returns the upload status object (isSubmitting)
   const { addProduct, isSubmitting } = useSellerProductAddManager(sellerId, token);
+
+  const isProfileComplete = seller?.shopName && seller?.phone && seller?.address &&
+    seller?.city !== undefined && seller?.subCity !== undefined;
 
   const [formData, setFormData] = useState(initialFormState);
 
@@ -412,15 +415,29 @@ function AddProduct({ sellerId, token }) {
         </div>
 
         {/* Submit Wrapper */}
-        <div className="submit-button-wrapper">
+        <div className="submit-area-wrapper">
           <button
             type="submit"
-            className="submit-btn"
-            disabled={isSubmitting?.loading} // Prevent clicks while uploading
-            style={{ opacity: isSubmitting?.loading ? 0.7 : 1, cursor: isSubmitting?.loading ? "not-allowed" : "pointer" }}
+            className={`main-submit-btn ${!isProfileComplete ? "is-locked" : ""}`}
+            disabled={isSubmitting?.loading || !isProfileComplete}
           >
-            {t("post_product")}
+            {isSubmitting?.loading ? t("processing") : t("post_product")}
           </button>
+
+          {!isProfileComplete && (
+            <div className="status-notice-container">
+              <p className="status-notice-text">
+                {t("profile_incomplete_text")}
+              </p>
+              <button
+                type="button"
+                className="status-action-link"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              >
+                {t("go_to_profile_settings")}
+              </button>
+            </div>
+          )}
         </div>
       </form>
 

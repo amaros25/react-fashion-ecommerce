@@ -5,6 +5,55 @@
   font-family: 'Inter', sans-serif;
 }
 
+/* Profile Incomplete Warning */
+.profile-incomplete-warning {
+  background-color: #fff9db;
+  border: 1px solid #fab005;
+  border-left: 5px solid #fab005;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  margin: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-incomplete-warning h3 {
+  margin: 0;
+  color: #856404;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.profile-incomplete-warning p {
+  color: #5c5c5c;
+  font-size: 1.05rem;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+.complete-profile-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 10px;
+}
+
+.complete-profile-btn:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 .add-product-header {
   margin-bottom: 30px;
   text-align: center;
@@ -254,6 +303,83 @@
   background: #333;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Container-Layout */
+.submit-area-wrapper {
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 1px solid #eeeeee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Haupt-Button: Schwarz, flach, weit */
+.main-submit-btn {
+  width: 100%;
+  max-width: 420px;
+  height: 52px;
+  background-color: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0;
+  /* Keine Rundungen */
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.main-submit-btn:hover:not(:disabled) {
+  background-color: #333333;
+}
+
+/* Deaktivierter Button: Kontur-Stil statt Block */
+.main-submit-btn.is-locked {
+  background-color: #ffffff;
+  color: #cccccc;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+/* Status-Hinweis unter dem Button */
+.status-notice-container {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.status-notice-text {
+  font-size: 11px;
+  color: #888888;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* Minimalistischer Link-Button */
+.status-action-link {
+  background: none;
+  border: none;
+  border-bottom: 1px solid #000000;
+  /* Nur eine feine Linie unten */
+  font-size: 11px;
+  font-weight: 600;
+  color: #000000;
+  padding: 0 0 3px 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.status-action-link:hover {
+  color: #888888;
+  border-bottom-color: #888888;
 }
 
 /* Responsive - Tablet */

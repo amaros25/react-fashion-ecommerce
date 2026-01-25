@@ -31,6 +31,7 @@ export default function ProfileUser() {
     updateImage
   } = useUserProfileManager(userId, token);
 
+  console.log("User Profile user: ", user);
   /**
    * 2. FETCH ORDERS & MANAGE STATUS UPDATES
    * This custom hook now handles both:
@@ -55,7 +56,7 @@ export default function ProfileUser() {
   useEffect(() => {
     const finalError = userError || ordersError;
     console.log("finalError: ", finalError);
-    if (finalError) {
+    if (finalError && finalError !== "no_orders_found") {
       toast.error(t(finalError), {
         position: "top-center",
         autoClose: 5000
