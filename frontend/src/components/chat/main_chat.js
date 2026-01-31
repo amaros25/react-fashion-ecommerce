@@ -4,13 +4,14 @@ import ChatWindow from './chat_window';
 import ChatSidebar from './chat_sidebar';
 import { useChatManager } from "../api_managers/useChatManager";
 import "./main_chat.css";
-
+import { useQueryClient } from '@tanstack/react-query';
 /**
  * MainChat component serves as the layout wrapper for the chat feature.
  * It manages the high-level state from navigation (router location)
  * and orchestrates the Sidebar and ChatWindow.
  */
 const MainChat = () => {
+  const queryClient = useQueryClient();
   const location = useLocation();
 
   // Destructure contextual data passed via navigation state (e.g. from Order or Product pages)
@@ -64,6 +65,16 @@ const MainChat = () => {
     productId
   );
 
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setUserId(storedUserId);
+      // WICHTIG: Sobald wir auf die Chat-Seite kommen, 
+      // sagen wir React Query, dass die Chat-Liste neu geladen werden muss.
+      queryClient.invalidateQueries(['chats', String(storedUserId)]);
+    }
+  }, [queryClient]);
+
   console.log("MainChat chatManager", chatManager);
   return (
     <div className="main-chat-container">
@@ -72,11 +83,12 @@ const MainChat = () => {
         {/* Sidebar: Shown if not hidden */}
         {!chatManager.isSidebarHidden && (
           <ChatSidebar
-            {...chatManager}
-            startChat={() => chatManager.setIsNewChat(true)}
-            is_chat_from_order_item={isChatFromOrderItem}
-            currentPage={chatManager.sidebarPage}
-            handlePageChange={chatManager.setSidebarPage}
+            {...chatManager} // Das reicht oft nicht, wenn Destructuring im Manager anders benannt ist
+            selectedChatId={chatManager.selectedChatId} // Explizit übergeben!
+            handleSelectChat={chatManager.handleSelectChat}
+            sidebarPage={chatManager.sidebarPage}
+            setSidebarPage={chatManager.setSidebarPage}
+            totalPages={chatManager.totalPages}
           />
         )}
 
@@ -86,6 +98,8 @@ const MainChat = () => {
             <ChatWindow
               {...chatManager}
               userId={userId}
+              activeChat={chatManager.activeChat}
+              messages={chatManager.messages}
               onBack={chatManager.handleBackToSidebar}
               onSend={chatManager.handleSendMessage}
             />

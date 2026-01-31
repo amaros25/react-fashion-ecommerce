@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as orderHooks from '../api_hooks/order_hooks';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -66,6 +66,34 @@ export const useOrderManager = ({ role, id, token, initialLimit = 10 }) => {
 
         return statusMutation.mutateAsync({ orderId, status: newStatus, newStatus, token, comment });
     };
+
+    // useEffect(() => {
+    //     if (!socket || !id) return;
+
+    //     const handleOrderUpdate = (payload) => {
+    //         // Prüfen, ob das Event für Bestellungen ist
+    //         if (payload.type === 'ORDER_UPDATE' || payload.trigger_reason === 'order_stat_upd') {
+    //             console.log("📦 Order Update empfangen:", payload);
+
+    //             // Den Cache für die Bestellliste invalidieren
+    //             // Das sorgt dafür, dass die Liste im Hintergrund neu geladen wird
+    //             if (isSeller) {
+    //                 queryClient.invalidateQueries({ queryKey: ['sellerOrders', id] });
+    //             } else {
+    //                 queryClient.invalidateQueries({ queryKey: ['orders', id] });
+    //             }
+
+    //             // Optional: Toast Nachricht anzeigen, falls man nicht im Chat ist
+    //             // toast.info(`Status der Bestellung ${payload.orderNumber} hat sich geändert.`);
+    //         }
+    //     };
+
+    //     socket.on('stats_update', handleOrderUpdate);
+
+    //     return () => {
+    //         socket.off('stats_update', handleOrderUpdate);
+    //     };
+    // }, [id, isSeller, queryClient]);
 
     return {
         // Daten

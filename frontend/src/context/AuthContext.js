@@ -17,27 +17,13 @@ export const AuthProvider = ({ children }) => {
         if (token && userId && socket) {
             if (!socket.connected) socket.connect();
             socket.emit('join_private_room', userId);
-            const handleStatsUpdate = (newData) => {
-                console.log("🌎 Globales Socket-Update:", newData);
-                const queryKey = ['user', String(newData.userId)];
 
-                queryClient.setQueryData(queryKey, (oldData) => {
-                    if (!oldData) return oldData;
-                    return { ...oldData, ...newData };
-                });
-                queryClient.invalidateQueries({ queryKey });
-                queryClient.invalidateQueries({ queryKey: ['chats', String(userId)] });
-                queryClient.invalidateQueries({
-                    queryKey: ['chat-messages'],
-                    exact: false
-                });
-            };
-            socket.on('stats_update', handleStatsUpdate);
+            // Clean up listener if it was attached elsewhere, but here we only manage connection
             return () => {
-                socket.off('stats_update', handleStatsUpdate);
+                // socket.off('stats_update', handleStatsUpdate);
             };
         }
-    }, [token, userId, queryClient]);
+    }, [token, userId]);
 
     useEffect(() => {
         if (token && userId) {

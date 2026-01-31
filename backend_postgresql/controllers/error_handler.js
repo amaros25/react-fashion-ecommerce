@@ -50,10 +50,13 @@ const handleError = async (res, error, t = null, defaultMessage = "operation_fai
         "invalid_or_expired_token",
         "password_reset_success",
         "error_resetting_password",
-        "not_found"
+        "not_found",
+        "unauthorized_access: user_banned",
+        "unauthorized_access: user_pending",
+        "unauthorized_access: user_deleted",
     ];
 
-    const message = knownErrors.includes(error.message) ? error.message : defaultMessage;
+    const message = error.message || defaultMessage;
     const statusCode = knownErrors.includes(error.message) ? 400 : 500;
 
     return res.status(statusCode).json({ message });

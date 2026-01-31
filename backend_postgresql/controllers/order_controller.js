@@ -9,6 +9,20 @@ const { handleError } = require('./error_handler.js');
 
 
 const orderController = {
+
+
+
+    _verifyStatus: async (userId) => {
+        const stats = await UserStats.findOne({ where: { userId } });
+        if (!stats) return;
+
+        if (['banned', 'deleted', 'pending'].includes(stats.active)) {
+            const error = new Error(`user_${stats.active}`);
+            error.statusCode = 403;
+            throw error;
+        }
+    },
+
     // GET: Get order by ID
     getOrderByID: async (req, res) => {
         try {
@@ -192,6 +206,9 @@ const orderController = {
             const { items, is_delivery, userId, sellerId, paymentMethod } = req.body;
             let calculatedTotal = 0;
             let minDeliveryPrice = Infinity;
+
+            await orderController._verifyStatus(userId);
+
             if (!items || items.length === 0) throw new Error("at_least_one_item_required");
             const buyer = await User.findByPk(userId, { transaction: t });
             if (!buyer) throw new Error('user_not_found');
@@ -316,6 +333,9 @@ const orderController = {
             if (!order) {
                 throw new Error("order_not_found");
             }
+
+            await orderController._verifyStatus(order.sellerId);
+
             const oldStatus = parseInt(order.currentStatus);
             const newStatus = parseInt(status);
             const replenishmentStatuses = [30, 31, 42];
@@ -346,7 +366,7 @@ const orderController = {
                     amount: roundedAmount,
                 }, { transaction: t });
             }
-            const closingStatuses = [10, 30, 31, 42];
+            const closingStatuses = [3, 10, 13, 22, 24, 30, 31, 41, 42];
             if (closingStatuses.includes(newStatus) && !closingStatuses.includes(oldStatus) && oldStatus !== 0) {
                 await UserStats.decrement('openOrders', {
                     by: 1,
@@ -389,6 +409,8 @@ const orderController = {
     getSellerOrderStats: async (req, res) => {
         try {
             const { sellerId } = req.params;
+            await orderController._verifyStatus(sellerId);
+
             const totalOrders = await Order.count({ where: { sellerId } });
             const openOrders = await Order.count({
                 where: { sellerId, currentStatus: 1 }

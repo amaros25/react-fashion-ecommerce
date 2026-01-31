@@ -8,7 +8,7 @@ import "./chat_sidebar.css";
  */
 const ChatSidebar = ({
   chats = [],
-  activeChat,
+  selectedChatId,
   sidebarPage,
   setSidebarPage,
   totalPages,
@@ -64,15 +64,18 @@ const ChatSidebar = ({
         ) : (
           sortedChats.map((chat) => {
             // Get text of the last message or a placeholder
-            const lastMessage = chat.messages?.length > 0
-              ? chat.messages[chat.messages.length - 1].text
-              : t('chat.noMessages');
+            const isActive = String(selectedChatId) === String(chat.id);
+            const lastMessagePreview = chat.lastMessage ||
+              (chat.messages?.length > 0 ? chat.messages[chat.messages.length - 1].text : t('chat.noMessages'));
 
             return (
               <div
                 key={chat.id}
-                className={`chat-card ${activeChat?.id === chat.id ? "active" : ""} ${chat.unreadCount > 0 ? "unread" : ""}`}
-                onClick={() => handleSelectChat(chat.id)}
+                className={`chat-card ${isActive ? "active" : ""} ${chat.unreadCount > 0 ? "unread" : ""}`}
+                onClick={() => {
+                  console.log("Chat geklickt:", chat.id);
+                  handleSelectChat(chat.id);
+                }}
               >
                 <div className="chat-card-header">
                   <strong>
@@ -90,7 +93,7 @@ const ChatSidebar = ({
                   {`: ${chat.subjectNumber || t('chat.noNumberAvailable')}`}
                 </div>
                 <div className="last-message-preview">
-                  <strong>{t('chat.lastMessage')}:</strong> {lastMessage}
+                  <strong>{t('chat.lastMessage')}:</strong> {lastMessagePreview}
                 </div>
                 <div className="chat-date">
                   {chat.updatedAt && new Date(chat.updatedAt).toLocaleString()}

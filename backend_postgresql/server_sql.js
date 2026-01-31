@@ -43,7 +43,6 @@ io.on('connection', (socket) => {
     socket.on('join_private_room', (userId) => {
         if (userId) {
             socket.join(`user_${userId}`);
-            console.log(`📡 Socket: User ${userId} ist seinem Raum beigetreten.`);
         }
     });
 
@@ -58,8 +57,12 @@ const startServer = async () => {
         await connectDB();
 
         // Synchronisation (Vorsicht mit alter:true in Production)
-        await sequelize.sync({ alter: true });
-        console.log('✅ SQL Database synced');
+        // await sequelize.sync({ alter: true });
+        sequelize.sync().then(() => {
+            console.log('✅ SQL Database synced');
+        });
+
+
 
         // Initialisiere den Postgres Listener und übergebe io
         await initDbListener(io);

@@ -155,7 +155,7 @@ function MainProfileHeader({
                     {/* Identity Section */}
                     <div className="profile-identity">
                         <div className="profile-avatar-minimal" onClick={() => fileInputRef.current.click()}>
-                            <img src={data?.imageUrl || '/default-avatar.png'} alt="Profile" style={{ opacity: isUpdatingImage ? 0.5 : 1 }} />
+                            <img src={data?.imageUrl} alt="Profile" style={{ opacity: isUpdatingImage ? 0.5 : 1 }} />
                             {isUpdatingImage && <div className="avatar-loader">...</div>}
                             <input type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleProfileImageChange} />
                         </div>

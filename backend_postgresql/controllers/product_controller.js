@@ -54,7 +54,14 @@ const validateProductData = (data) => {
  */
 const productController = {
 
+    _verifyStatus: async (userId) => {
+        const stats = await UserStats.findOne({ where: { userId } });
+        if (!stats) return;
 
+        if (['banned', 'deleted', 'pending'].includes(stats.active)) {
+            throw new Error(`unauthorized_access: user_${stats.active}`);
+        }
+    },
     // GET: Get new products with filter, search and pagination
     getNewProducts: async (req, res) => {
         try {
@@ -289,26 +296,28 @@ const productController = {
 
     // POST: Create a new product
     createProduct: async (req, res) => {
-        const validation = validateProductData(req.body);
-        if (!validation.isValid) {
-            throw new Error(validation.message);
-        }
-        const { sellerId, name, description, price, delprice, category, subcategory, images, variants } = req.body;
-
-        // Check seller profile completeness
-        const seller = await User.findByPk(sellerId);
-        if (!seller) throw new Error("seller_not_found");
-        if (seller.role !== 'seller') throw new Error("user_is_not_a_seller");
-
-        const isProfileComplete = seller.shopName && seller.phone && seller.address &&
-            seller.city !== undefined && seller.subCity !== undefined;
-
-        if (!isProfileComplete) {
-            throw new Error("seller_profile_incomplete");
-        }
-
-        const t = await sequelize.transaction();
         try {
+            t = await sequelize.transaction();
+            const validation = validateProductData(req.body);
+            if (!validation.isValid) {
+                throw new Error(validation.message);
+            }
+            const { sellerId, name, description, price, delprice, category, subcategory, images, variants } = req.body;
+
+
+            await productController._verifyStatus(sellerId);
+
+            // Check seller profile completeness
+            const seller = await User.findByPk(sellerId);
+            if (!seller) throw new Error("seller_not_found");
+            if (seller.role !== 'seller') throw new Error("user_is_not_a_seller");
+
+            const isProfileComplete = seller.shopName && seller.phone && seller.address &&
+                seller.city !== undefined && seller.subCity !== undefined;
+
+            if (!isProfileComplete) {
+                throw new Error("seller_profile_incomplete");
+            }
             const product = await Product.create({
                 sellerId: parseInt(sellerId, 10),
                 name,
@@ -342,6 +351,8 @@ const productController = {
         const { userId, rating, comment } = req.body;
         const t = await sequelize.transaction();
         try {
+            await productController._verifyStatus(userId);
+
             // 1. Produkt & Verkäufer finden
             const product = await Product.findByPk(productId, { transaction: t });
             if (!product) {

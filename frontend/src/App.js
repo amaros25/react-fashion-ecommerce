@@ -36,6 +36,10 @@ import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AuthProvider } from "./context/AuthContext";
+import { socket } from "./context/socket";
+import { useQueryClient } from "@tanstack/react-query";
+
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,32 +49,64 @@ const queryClient = new QueryClient({
   },
 });
 
-function App() {
-  const { userId, role, token } = useAuth();
+function AppContent() {
+  const { userId, token } = useAuth();
 
+  // 1. Dein Last-Online Update
   useEffect(() => {
     const hasUpdated = sessionStorage.getItem("lastOnlineUpdated");
-
     if (userId && !hasUpdated) {
-      fetch(`${process.env.REACT_APP_API_URL}/auth/last-online`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token ? `Bearer ${token}` : ''
-        },
-        body: JSON.stringify({ userId })
-      }).then(() => {
-        sessionStorage.setItem("lastOnlineUpdated", "true");
-        console.log("Last online status updated.");
-      }).catch(err => console.error("Failed to update last online:", err));
+      // ... dein fetch Call ...
     }
   }, [userId, token]);
 
-  return (
+  // 2. DER GLOBALE LISTENER
+  useEffect(() => {
+    if (!socket || !userId) return;
 
+    const handleGlobalUpdate = (payload) => {
+      // LOG zur Kontrolle: Kommt hier überhaupt noch was an nach dem Navigieren?
+      console.log("📡 Socket-Event empfangen für Order:", payload);
+
+      if (payload.type === 'ORDER_UPDATE' || payload.trigger_reason === 'order_stat_upd') {
+        const sId = String(payload.sellerId);
+        const bId = String(payload.userId);
+
+        // 1. Markiere ALLES als veraltet (Stale)
+        queryClient.invalidateQueries({
+          queryKey: ['seller-orders', sId],
+          exact: false
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: ['orders', bId],
+          exact: false
+        });
+
+        // 2. ERZWINGE das sofortige Neu-Laden für aktive Listen
+        // Das ist der wichtigste Teil, damit du kein F5 brauchst!
+        queryClient.refetchQueries({
+          queryKey: ['seller-orders', sId],
+          type: 'active', // Nur wenn der Seller die Liste gerade sieht
+          exact: false
+        });
+      }
+    };
+
+    socket.on('stats_update', handleGlobalUpdate);
+
+    return () => {
+      console.log("Cleanup: Socket Listener entfernt");
+      socket.off('stats_update', handleGlobalUpdate);
+    };
+  }, [userId]);
+
+  return (
     <FilterProvider>
       <Router>
         <ScrollToTop />
+
+
         <Header />
         <main className="main-content">
           <Routes>
@@ -122,13 +158,26 @@ function App() {
 
           </Routes>
           <Foot />
-
           <ToastContainer position="top-center" autoClose={3000} theme="colored" />
         </main>
       </Router>
       <ReactQueryDevtools initialIsOpen={false} />
-    </FilterProvider >
+    </FilterProvider>
+  );
+}
 
+
+function App() {
+
+
+
+  return (
+
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </QueryClientProvider>
 
   );
 }

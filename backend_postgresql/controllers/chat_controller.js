@@ -5,6 +5,19 @@ const { handleError } = require('./error_handler.js');
  * Controller to handle chat-related operations for MySQL
  */
 const chatController = {
+
+
+    _verifyStatus: async (userId) => {
+        const stats = await UserStats.findOne({ where: { userId } });
+        if (!stats) return;
+
+        if (['banned', 'deleted', 'pending'].includes(stats.active)) {
+            const error = new Error(`user_${stats.active}`);
+            error.statusCode = 403;
+            throw error;
+        }
+    },
+
     // GET: Get all chats for a user or seller
     getUserChats: async (req, res) => {
         try {
@@ -17,6 +30,8 @@ const chatController = {
                     { participant2Id: userId }
                 ]
             };
+            await chatController._verifyStatus(userId);
+
             const { count, rows } = await Chat.findAndCountAll({
                 where,
                 order: [['updatedAt', 'DESC']],
@@ -139,9 +154,12 @@ const chatController = {
     // POST: Add a new message to a chat
     addMessage: async (req, res) => {
         const t = await sequelize.transaction();
+        const io = req.app.get('socketio');
         try {
             const { chatId } = req.params;
             const { senderId, text } = req.body;
+            await chatController._verifyStatus(senderId);
+
             const chat = await Chat.findByPk(chatId, { transaction: t });
             if (!chat) throw new Error("chat_not_found");
             const receiverId = chat.participant1Id == senderId
@@ -164,6 +182,18 @@ const chatController = {
                 transaction: t
             });
             await t.commit();
+
+            if (io) {
+                // Sende die komplette Nachricht an den Empfänger-Raum
+                io.to(`user_${receiverId}`).emit('new_message_content', {
+                    id: message.id,
+                    chatId: message.chatId,
+                    senderId: message.senderId,
+                    text: message.text,
+                    createdAt: message.createdAt
+                });
+            }
+
             res.json(message);
         } catch (error) {
             await handleError(res, error, t, "add_message_error");
@@ -176,6 +206,9 @@ const chatController = {
             let { participant1Id, participant2Id, type, subjectNumber, orderId, productId } = req.body;
 
             if (!type) throw new Error("missing_type");
+            await chatController._verifyStatus(participant1Id);
+
+            await chatController._verifyStatus(participant2Id);
 
             const ADMIN_ID = 1;
             if (!participant1Id) participant1Id = ADMIN_ID;
@@ -261,6 +294,8 @@ const chatController = {
     getUnreadCount: async (req, res) => {
         try {
             const { userId } = req.params;
+            await chatController._verifyStatus(userId);
+
             const count = await ChatMessage.count({
                 where: {
                     receiverId: userId,

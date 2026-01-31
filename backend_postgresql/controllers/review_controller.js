@@ -2,8 +2,21 @@ const { UserReview, ProductReview, UserStats, Product, sequelize } = require('..
 const { handleError } = require('./error_handler.js');
 
 
-class ReviewController {
-    static async rateSeller(req, res) {
+const reviewController = {
+
+
+
+    _verifyStatus: async (userId) => {
+        const stats = await UserStats.findOne({ where: { userId } });
+        if (!stats) return;
+
+        if (['banned', 'deleted', 'pending'].includes(stats.active)) {
+            const error = new Error(`unauthorized_access: user_${stats.active}`);
+            error.statusCode = 403;
+            throw error;
+        }
+    },
+    rateSeller: async (req, res) => {
         const t = await sequelize.transaction();
         try {
             const { sellerId, orderId, userId, rating, comment } = req.body;
@@ -11,6 +24,7 @@ class ReviewController {
             if (!sellerId || !orderId || !userId || !rating) {
                 throw new Error("missing_data");
             }
+            await reviewController._verifyStatus(userId);
 
             const existingReview = await UserReview.findOne({
                 where: { senderId: userId, orderId: orderId }
@@ -44,10 +58,10 @@ class ReviewController {
         } catch (error) {
             await handleError(res, error, t, "failed_to_rate_seller");
         }
-    }
+    },
 
     // --- PART 2: RATE SINGLE PRODUCT ---
-    static async rateProduct(req, res) {
+    rateProduct: async (req, res) => {
         const t = await sequelize.transaction();
         try {
             const { productId, userId, rating, comment } = req.body;
@@ -55,6 +69,8 @@ class ReviewController {
             if (!productId || !userId || !rating) {
                 throw new Error("missing_data");
             }
+
+            await reviewController._verifyStatus(userId);
 
             // Optional: Hier prüfen, ob User das Produkt schon mal bewertet hat
             await ProductReview.create({
@@ -85,7 +101,7 @@ class ReviewController {
             await handleError(res, error, t, "failed_to_rate_product");
         }
     }
-}
+};
 
 // Exportiere die Klasse selbst
-module.exports = ReviewController;
+module.exports = reviewController;

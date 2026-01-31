@@ -14,7 +14,6 @@ import MainProfileHeader from "../profile_shared/main_profile_header";
 export default function ProfileUser() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const apiUrl = process.env.REACT_APP_API_URL;
   const { userId, token } = useAuth();
   const ordersPerPage = 5;
 
@@ -30,6 +29,7 @@ export default function ProfileUser() {
     updatePhone,
     updateImage
   } = useUserProfileManager(userId, token);
+
 
   console.log("User Profile user: ", user);
   /**

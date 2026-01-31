@@ -12,10 +12,12 @@ async function initDbListener(io) {
     try {
         await pgClient.connect();
         console.log('✅ Postgres Listener: Verbindung zur DB hergestellt (astra)');
-
         await pgClient.query('LISTEN stats_update');
 
         pgClient.on('notification', (msg) => {
+            console.log("Payload from DB:", msg);
+            console.log("Payload from DB:", msg.payload);
+
             if (msg.channel === 'stats_update') {
                 const payload = JSON.parse(msg.payload);
                 const reason = payload.trigger_reason;
@@ -29,7 +31,7 @@ async function initDbListener(io) {
                     io.to(`user_${payload.userId}`).emit('stats_update', payload);
                     return;
                 }
-                if (reason === 'order_stat_upd') {
+                if (reason === 'orders_update' || reason === 'order_stat_upd') {
                     payload.toastMessage = "od";
                     io.to(`user_${payload.userId}`).emit('stats_update', payload);
                     io.to(`user_${payload.sellerId}`).emit('stats_update', payload);

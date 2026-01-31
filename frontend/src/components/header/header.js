@@ -17,11 +17,12 @@ import { categoryKeys, subCategories } from '../utils/const/category';
 import { useAuth } from '../../context/AuthContext';
 import * as userHooks from '../api_hooks/user_hooks';
 import toast, { Toaster } from 'react-hot-toast';
-import { socket } from '../../context/socket';
-import { useHeaderToasts } from './useHeaderToasts'; // Pfad anpassen
+import { useHeaderToasts } from './useHeaderToasts';
+import { socket } from '../../context/socket'; // Socket importieren
+import { useQueryClient } from '@tanstack/react-query';
 
 function Header() {
-
+  const queryClient = useQueryClient();
   const location = useLocation();
   const activePath = location.pathname;
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ function Header() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const { isLoggedIn, role, userId, token } = useAuth();
-  const { data: user } = userHooks.useUser(userId, token);
+  const { data: user, refetch } = userHooks.useUser(userId, token);
 
   useHeaderToasts(user);
 
@@ -43,6 +44,32 @@ function Header() {
     setSortBy
   } = useContext(FilterContext);
 
+
+  useEffect(() => {
+    if (!socket || !userId) return;
+
+    socket.emit('join_private_room', userId);
+
+    const handleStatsUpdate = (newData) => {
+      // Cache sofort aktualisieren
+      queryClient.setQueryData(['user', String(userId)], (oldData) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          unreadMessages: newData.unreadMessages
+        };
+      });
+    };
+
+    socket.on('stats_update', handleStatsUpdate);
+    return () => socket.off('stats_update', handleStatsUpdate);
+  }, [userId, queryClient]);
+
+  useEffect(() => {
+    const onFocus = () => refetch(); // Holt frische Daten von der DB, wenn der User den Tab wieder öffnet
+    window.addEventListener('focus', onFocus);
+    return () => window.removeEventListener('focus', onFocus);
+  }, [refetch]);
 
 
   useEffect(() => {

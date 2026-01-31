@@ -13,6 +13,17 @@ const jwt = require('jsonwebtoken');
 
 const userController = {
 
+    _verifyStatus: async (userId) => {
+        const stats = await UserStats.findOne({ where: { userId } });
+        if (!stats) return;
+
+        if (['banned', 'deleted', 'pending'].includes(stats.active)) {
+            const error = new Error(`user_${stats.active}`);
+            error.statusCode = 403;
+            throw error;
+        }
+    },
+
     getSellersByIds: async (req, res) => {
         try {
             const { ids } = req.query;
@@ -197,6 +208,7 @@ const userController = {
         const t = await sequelize.transaction();
         try {
             const { imageUrl } = req.body;
+            await userController._verifyStatus(req.params.id);
             const user = await User.findByPk(req.params.id);
             if (!user) {
                 throw new Error("user_not_found");
@@ -228,6 +240,7 @@ const userController = {
         const t = await sequelize.transaction();
         try {
             const { address: addressObj } = req.body;
+            await userController._verifyStatus(req.params.id);
             if (!addressObj) {
                 throw new Error("missing_address_data");
             }
@@ -273,6 +286,7 @@ const userController = {
         const t = await sequelize.transaction();
         try {
             const { phone } = req.body;
+            await userController._verifyStatus(req.params.id);
             const user = await User.findByPk(req.params.id);
             if (!user) {
                 throw new Error("user_not_found");
@@ -308,6 +322,7 @@ const userController = {
         try {
             console.log(req.body);
             const { shopName } = req.body;
+            await userController._verifyStatus(req.params.id);
             if (!shopName || shopName.trim().length < 3) throw new Error("invalid_shop_name");
             console.log("shopName: ", shopName);
 
@@ -381,7 +396,7 @@ const userController = {
             const { id: receiverId } = req.params; // Seller ID
             const { userId: senderId, orderId, sellerRating, productRatings } = req.body;
             // productRatings should be an array: [{ productId, rating, comment }, ...]
-
+            await userController._verifyStatus(senderId);
             // 1. Validation
             if (!senderId || !orderId || !sellerRating || !Array.isArray(productRatings)) {
                 throw new Error("missing_data");
