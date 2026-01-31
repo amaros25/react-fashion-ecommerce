@@ -44,27 +44,6 @@ function Header() {
     setSortBy
   } = useContext(FilterContext);
 
-
-  useEffect(() => {
-    if (!socket || !userId) return;
-
-    socket.emit('join_private_room', userId);
-
-    const handleStatsUpdate = (newData) => {
-      // Cache sofort aktualisieren
-      queryClient.setQueryData(['user', String(userId)], (oldData) => {
-        if (!oldData) return oldData;
-        return {
-          ...oldData,
-          unreadMessages: newData.unreadMessages
-        };
-      });
-    };
-
-    socket.on('stats_update', handleStatsUpdate);
-    return () => socket.off('stats_update', handleStatsUpdate);
-  }, [userId, queryClient]);
-
   useEffect(() => {
     const onFocus = () => refetch(); // Holt frische Daten von der DB, wenn der User den Tab wieder öffnet
     window.addEventListener('focus', onFocus);
@@ -379,4 +358,4 @@ function Header() {
   );
 }
 
-export { Header };
+export default Header;

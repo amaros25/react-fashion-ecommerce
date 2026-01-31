@@ -29,24 +29,7 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
 
 
 
-    // 3. Messages Sync
-    useEffect(() => {
-        if (messagesData?.messages) {
-            const newMsgsFromApi = messagesData.messages;
-            if (fetchOffset === 0) {
-                setMessages(newMsgsFromApi);
-            } else {
-                setMessages(prev => {
-                    const uniqueNew = newMsgsFromApi.filter(nm => !prev.some(m => m.id === nm.id));
-                    return [...uniqueNew, ...prev];
-                });
-            }
-            const totalOnServer = messagesData.totalMessages || 0;
-            setHasMoreMessages(messages.length < totalOnServer);
-        }
-    }, [messagesData]);
-
-    // 4. Sidebar View Logic
+    // 2. Data Memos
     const chats = useMemo(() => {
         let list = chatsData?.chats || [];
         if (isNewChat && !selectedChatId) {
@@ -66,12 +49,96 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
 
     const totalPages = chatsData?.totalPages || 1;
 
-    // 5. Mutations
+    // 3. Mutations
     const sendMessageMutation = useSendMessage(selectedChatId);
     const createChatMutation = useCreateChat();
     const updateReadMutation = useUpdateReadStatus();
 
-    // 6. Actions
+    // 6. Actions (Müssen VOR useEffect definiert sein, da sie dort genutzt werden!)
+    const handleMarkAsRead = (messageIds) => {
+        if (!selectedChatId || !userId || !token || messageIds.length === 0) return;
+
+        updateReadMutation.mutate({ chatId: selectedChatId, userId, token, messageIds }, {
+            onSuccess: () => {
+                // 1. Globalen Header-Counter updaten (hast du schon)
+                queryClient.setQueryData(['user', String(userId)], (oldData) => {
+                    if (!oldData) return oldData;
+                    return {
+                        ...oldData,
+                        unreadMessages: Math.max(0, (oldData.unreadMessages || 0) - messageIds.length)
+                    };
+                });
+
+                // 2. NEU: Die Sidebar-Liste im Cache finden und den unreadCount dieses Chats auf 0 setzen
+                queryClient.setQueryData(['chats', String(userId), sidebarPage], (oldData) => {
+                    if (!oldData || !oldData.chats) return oldData;
+
+                    return {
+                        ...oldData,
+                        chats: oldData.chats.map(chat => {
+                            if (String(chat.id) === String(selectedChatId)) {
+                                return {
+                                    ...chat,
+                                    unreadCount: 0 // Da der Chat offen ist, setzen wir ihn auf 0
+                                };
+                            }
+                            return chat;
+                        })
+                    };
+                });
+            }
+        });
+    };
+
+    // Hilfsfunktion zur Cache-Bereinigung (auslagern, damit sie überall genutzt werden kann)
+    const updateCacheAfterRead = (chatId, countRemoved) => {
+        // 1. Sidebar Counter auf 0
+        queryClient.setQueryData(['chats', String(userId), sidebarPage], (oldData) => {
+            if (!oldData) return oldData;
+            return {
+                ...oldData,
+                chats: oldData.chats.map(c =>
+                    String(c.id) === String(chatId) ? { ...c, unreadCount: 0 } : c
+                )
+            };
+        });
+
+        // 2. Globaler Header Counter minus X
+        queryClient.setQueryData(['user', String(userId)], (oldData) => {
+            if (!oldData) return oldData;
+            return {
+                ...oldData,
+                unreadMessages: Math.max(0, (oldData.unreadMessages || 0) - countRemoved)
+            };
+        });
+    };
+
+    const handleSelectChat = async (chatId) => {
+        setMessages([]);
+        setFetchOffset(0);
+        setSelectedChatId(chatId);
+        setIsChatWindowActive(true);
+        if (isMobile) setIsSidebarHidden(true);
+
+        // NEU: Alle Nachrichten dieses Chats im Cache finden, die nicht von mir sind
+        const chat = chats.find(c => String(c.id) === String(chatId));
+        if (chat && chat.unreadCount > 0) {
+            try {
+                await updateReadMutation.mutateAsync({
+                    chatId,
+                    userId,
+                    token,
+                    all: true // Signal an das Backend: Alles in diesem Chat lesen
+                });
+
+                // Cache sofort bereinigen (Sidebar & Global)
+                updateCacheAfterRead(chatId, chat.unreadCount);
+            } catch (err) {
+                console.error("Fehler beim massenweisen als gelesen markieren", err);
+            }
+        }
+    };
+
     const handleSendMessage = async (text) => {
         const messageText = text || newMessage;
         if (!messageText.trim()) return;
@@ -110,43 +177,30 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
         }
     };
 
-    const handleMarkAsRead = (messageIds) => {
-        if (!selectedChatId || !userId || !token || messageIds.length === 0) return;
-
-        updateReadMutation.mutate({ chatId: selectedChatId, userId, token, messageIds }, {
-            onSuccess: () => {
-                // 1. Globalen Header-Counter updaten (hast du schon)
-                queryClient.setQueryData(['user', String(userId)], (oldData) => {
-                    if (!oldData) return oldData;
-                    return {
-                        ...oldData,
-                        unreadMessages: Math.max(0, (oldData.unreadMessages || 0) - messageIds.length)
-                    };
-                });
-
-                // 2. NEU: Die Sidebar-Liste im Cache finden und den unreadCount dieses Chats auf 0 setzen
-                queryClient.setQueryData(['chats', String(userId), sidebarPage], (oldData) => {
-                    if (!oldData || !oldData.chats) return oldData;
-
-                    return {
-                        ...oldData,
-                        chats: oldData.chats.map(chat => {
-                            if (String(chat.id) === String(selectedChatId)) {
-                                return {
-                                    ...chat,
-                                    unreadCount: 0 // Da der Chat offen ist, setzen wir ihn auf 0
-                                };
-                            }
-                            return chat;
-                        })
-                    };
-                });
-            }
-        });
+    const handleBackToSidebar = () => {
+        setSelectedChatId(null);
+        setIsNewChat(false);
+        setIsChatWindowActive(false);
+        setIsSidebarHidden(false);
     };
 
+    // 7. Sync Side Effects
+    useEffect(() => {
+        if (messagesData?.messages) {
+            const newMsgsFromApi = messagesData.messages;
+            if (fetchOffset === 0) {
+                setMessages(newMsgsFromApi);
+            } else {
+                setMessages(prev => {
+                    const uniqueNew = newMsgsFromApi.filter(nm => !prev.some(m => m.id === nm.id));
+                    return [...uniqueNew, ...prev];
+                });
+            }
+            const totalOnServer = messagesData.totalMessages || 0;
+            setHasMoreMessages(messages.length < totalOnServer);
+        }
+    }, [messagesData]);
 
-    // 2. Real-Time Socket Logic (Der "Antigravity" Plan)
     useEffect(() => {
         if (!socket || !userId) return;
 
@@ -205,67 +259,6 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
             socket.off('new_message_content', handleNewMessageContent);
         };
     }, [userId, selectedChatId, queryClient, handleMarkAsRead]);
-
-    // In handleSelectChat innerhalb von useChatManager.js
-    const handleSelectChat = async (chatId) => {
-        setMessages([]);
-        setFetchOffset(0);
-        setSelectedChatId(chatId);
-        setIsChatWindowActive(true);
-        if (isMobile) setIsSidebarHidden(true);
-
-        // NEU: Alle Nachrichten dieses Chats im Cache finden, die nicht von mir sind
-        const chat = chats.find(c => String(c.id) === String(chatId));
-        if (chat && chat.unreadCount > 0) {
-            // Wir triggern ein "Mark all as read" für diesen Chat
-            // Du kannst hier entweder eine neue API-Funktion markAllAsRead(chatId) aufrufen
-            // oder die IDs der Nachrichten sammeln, falls dein Backend das braucht.
-
-            try {
-                await updateReadMutation.mutateAsync({
-                    chatId,
-                    userId,
-                    token,
-                    all: true // Signal an das Backend: Alles in diesem Chat lesen
-                });
-
-                // Cache sofort bereinigen (Sidebar & Global)
-                updateCacheAfterRead(chatId, chat.unreadCount);
-            } catch (err) {
-                console.error("Fehler beim massenweisen als gelesen markieren", err);
-            }
-        }
-    };
-
-    // Hilfsfunktion zur Cache-Bereinigung (auslagern, damit sie überall genutzt werden kann)
-    // Hilfsfunktion zur Cache-Bereinigung (auslagern, damit sie überall genutzt werden kann)
-    const updateCacheAfterRead = (chatId, countRemoved) => {
-        // 1. Sidebar Counter auf 0
-        queryClient.setQueryData(['chats', String(userId), sidebarPage], (oldData) => {
-            if (!oldData) return oldData;
-            return {
-                ...oldData,
-                chats: oldData.chats.map(c =>
-                    String(c.id) === String(chatId) ? { ...c, unreadCount: 0 } : c
-                )
-            };
-        });
-
-        // 2. Globaler Header Counter minus X
-        queryClient.setQueryData(['user', String(userId)], (oldData) => {
-            if (!oldData) return oldData;
-            return {
-                ...oldData,
-                unreadMessages: Math.max(0, (oldData.unreadMessages || 0) - countRemoved)
-            };
-        });
-    };
-    const handleBackToSidebar = () => {
-        setSelectedChatId(null);
-        setIsNewChat(false);
-        setIsChatWindowActive(false);
-        setIsSidebarHidden(false);
-    };
 
     return {
         chats, messages, selectedChatId,

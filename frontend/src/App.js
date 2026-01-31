@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./i18n";
 import "react-toastify/dist/ReactToastify.css";
-import { Header } from "./components/header/header";
+import Header from "./components/header/header";
 import Foot from "./components/foot/foot";
 import Home from "./components/home/home.js";
 import ProductPage from "./components/products/product_page.js";
@@ -38,6 +38,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AuthProvider } from "./context/AuthContext";
 import { socket } from "./context/socket";
 import { useQueryClient } from "@tanstack/react-query";
+import { CHAT_KEYS } from "./components/api_hooks/chat_hooks";
 
 
 
@@ -51,6 +52,7 @@ const queryClient = new QueryClient({
 
 function AppContent() {
   const { userId, token } = useAuth();
+  const qc = useQueryClient();
 
   // 1. Dein Last-Online Update
   useEffect(() => {
@@ -58,48 +60,13 @@ function AppContent() {
     if (userId && !hasUpdated) {
       // ... dein fetch Call ...
     }
-  }, [userId, token]);
 
-  // 2. DER GLOBALE LISTENER
-  useEffect(() => {
-    if (!socket || !userId) return;
+    // Wichtig: Auch in der App.js den Room joinen, falls wir nicht im Chat sind
+    if (socket && userId) {
+      socket.emit('join_private_room', userId);
+    }
+  }, [userId, token, socket]);
 
-    const handleGlobalUpdate = (payload) => {
-      // LOG zur Kontrolle: Kommt hier überhaupt noch was an nach dem Navigieren?
-      console.log("📡 Socket-Event empfangen für Order:", payload);
-
-      if (payload.type === 'ORDER_UPDATE' || payload.trigger_reason === 'order_stat_upd') {
-        const sId = String(payload.sellerId);
-        const bId = String(payload.userId);
-
-        // 1. Markiere ALLES als veraltet (Stale)
-        queryClient.invalidateQueries({
-          queryKey: ['seller-orders', sId],
-          exact: false
-        });
-
-        queryClient.invalidateQueries({
-          queryKey: ['orders', bId],
-          exact: false
-        });
-
-        // 2. ERZWINGE das sofortige Neu-Laden für aktive Listen
-        // Das ist der wichtigste Teil, damit du kein F5 brauchst!
-        queryClient.refetchQueries({
-          queryKey: ['seller-orders', sId],
-          type: 'active', // Nur wenn der Seller die Liste gerade sieht
-          exact: false
-        });
-      }
-    };
-
-    socket.on('stats_update', handleGlobalUpdate);
-
-    return () => {
-      console.log("Cleanup: Socket Listener entfernt");
-      socket.off('stats_update', handleGlobalUpdate);
-    };
-  }, [userId]);
 
   return (
     <FilterProvider>

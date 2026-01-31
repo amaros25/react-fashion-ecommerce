@@ -4,6 +4,12 @@ import * as chatApi from '../api/chat_api';
 /**
  * Hook to fetch all chats for a user.
  */
+// Empfohlene Struktur in chat_hooks.js
+export const CHAT_KEYS = {
+    chats: (userId, page) => ['chats', String(userId), page],
+    messages: (chatId) => ['chat-messages', chatId, 0, 10], // Wir nutzen den hardcoded Key des Users, machen ihn aber variabel
+};
+
 export const useUserChats = (userId, token, page = 1) => {
     return useQuery({
         queryKey: ['chats', userId, page],
