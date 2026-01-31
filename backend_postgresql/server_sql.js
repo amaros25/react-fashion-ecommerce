@@ -39,6 +39,9 @@ const io = new Server(server, {
     }
 });
 
+// WICHTIG: IO Instanz für Express App verfügbar machen
+app.set('socketio', io);
+
 io.on('connection', (socket) => {
     socket.on('join_private_room', (userId) => {
         if (userId) {
