@@ -59,7 +59,7 @@ const ChatWindow = ({
         });
       }
     }
-  }, [messages.length, isLoadingMessages]);
+  }, [messages, isLoadingMessages, userId]);
 
   /**
    * Monitor scroll position to determine if we should auto-scroll on next update.
@@ -111,7 +111,7 @@ const ChatWindow = ({
       observer.disconnect();
       if (readTimeoutRef.current) clearTimeout(readTimeoutRef.current);
     };
-  }, [messages]);
+  }, [messages, activeChat, userId, handleMarkAsRead]);
 
   return (
     <div className="chat-window-content">
@@ -119,13 +119,13 @@ const ChatWindow = ({
         <>
           <div className="chat-window-header">
             <h3>
-              {activeChat?.type === "support" ||
-                (!activeChat && initialChatType === "support") ||
-                activeChat?.participant1Id === 1 ||
-                activeChat?.participant2Id === 1
-                ? t("chat.chatWithAdmin")
-                : (activeChat?.otherParticipant?.name || t("chat.customer"))
-              }
+              {activeChat ? (
+                // Wenn wir einen echten Chat haben
+                (activeChat.participant1Id === 1 || activeChat.participant2Id === 1) ? t("chat.chatWithAdmin") : (activeChat.otherParticipant?.name || t("chat.customer"))
+              ) : (
+                // Wenn wir einen Ghost-Chat haben (initialChatType ist hier oft gesetzt)
+                initialChatType === "support" ? t("chat.chatWithAdmin") : (activeChat?.otherParticipant?.name || t("chat.customer"))
+              )}
             </h3>
             <p className="chat-subject-line">
               <strong>{activeChat?.type === 'order' || (!activeChat && initialChatType === 'order') ? t('chat.order') : t('chat.product')}</strong>

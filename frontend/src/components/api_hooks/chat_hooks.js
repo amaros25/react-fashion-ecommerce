@@ -31,7 +31,7 @@ export const useChatMessages = (chatId, token, offset = 0, limit = 10) => {
     return useQuery({
         queryKey: ['chat-messages', chatId, offset, limit],
         queryFn: () => chatApi.openChat(chatId, null, limit, token, offset),
-        enabled: !!chatId && !!token,
+        enabled: !!chatId && !!token && chatId !== 'new-chat-temp',
         staleTime: Infinity,
         refetchInterval: false,
         refetchOnMount: false,
@@ -127,10 +127,28 @@ export const useUpdateReadStatus = () => {
                 };
             });
 
-            // 2. Unread Count manuell dekrementieren statt Invalidate (Kein GET!)
+            // 2. Unread Count manuell dekrementieren statt Invalidate
             queryClient.setQueryData(['unread-count', variables.userId], (oldCount) => {
                 if (typeof oldCount !== 'number') return 0;
                 return Math.max(0, oldCount - (data.affectedCount || 0));
+            });
+
+            // 3. Nachrichten-Cache updaten, um den Loop zu stoppen
+            queryClient.setQueriesData({ queryKey: ['chat-messages', variables.chatId] }, (oldData) => {
+                if (!oldData || !oldData.messages) return oldData;
+                return {
+                    ...oldData,
+                    messages: oldData.messages.map(m => {
+                        if (variables.messageIds.length > 0) {
+                            // Wenn spezifische IDs gelesene wurden
+                            return variables.messageIds.includes(String(m.id)) ? { ...m, isRead: true } : m;
+                        } else if (variables.all) {
+                            // Wenn "all" gesetzt ist (z.B. beim Öffnen)
+                            return { ...m, isRead: true };
+                        }
+                        return m;
+                    })
+                };
             });
         },
     });

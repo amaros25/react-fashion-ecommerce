@@ -32,7 +32,9 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
     // 2. Data Memos
     const chats = useMemo(() => {
         let list = chatsData?.chats || [];
-        if (isNewChat && !selectedChatId) {
+        // Wenn wir in einem Ghost-Chat sind (neu, aber noch kein DB-Eintrag)
+        // fügen wir ihn künstlich in die Liste ein, damit er sichtbar bleibt
+        if (isNewChat && selectedChatId === 'new-chat-temp') {
             const virtualChat = {
                 id: 'new-chat-temp',
                 type: initialChatType || 'support',
@@ -56,7 +58,7 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
 
     // 6. Actions (Müssen VOR useEffect definiert sein, da sie dort genutzt werden!)
     const handleMarkAsRead = (messageIds) => {
-        if (!selectedChatId || !userId || !token || messageIds.length === 0) return;
+        if (!selectedChatId || selectedChatId === 'new-chat-temp' || !userId || !token || messageIds.length === 0) return;
 
         updateReadMutation.mutate({ chatId: selectedChatId, userId, token, messageIds }, {
             onSuccess: () => {
@@ -114,15 +116,22 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
     };
 
     const handleSelectChat = async (chatId) => {
+        if (String(chatId) === String(selectedChatId)) {
+            // Wenn der Chat schon aktiv ist, nur sicherstellen, dass wir ihn sehen (Mobile)
+            setIsChatWindowActive(true);
+            if (isMobile) setIsSidebarHidden(true);
+            return;
+        }
+
         setMessages([]);
         setFetchOffset(0);
         setSelectedChatId(chatId);
         setIsChatWindowActive(true);
         if (isMobile) setIsSidebarHidden(true);
 
-        // NEU: Alle Nachrichten dieses Chats im Cache finden, die nicht von mir sind
+        // ... Rest der Logik ...
         const chat = chats.find(c => String(c.id) === String(chatId));
-        if (chat && chat.unreadCount > 0) {
+        if (chat && chat.id !== 'new-chat-temp' && chat.unreadCount > 0) {
             try {
                 await updateReadMutation.mutateAsync({
                     chatId,
@@ -153,7 +162,8 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
         };
 
         try {
-            if (isNewChat) {
+            if (isNewChat && selectedChatId === 'new-chat-temp') {
+                // Ghost Chat persistieren
                 const newChat = await createChatMutation.mutateAsync({
                     type: initialChatType || 'support',
                     subjectNumber: initialSubjectNumber || 'General',
@@ -163,17 +173,36 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
                     productId: initialProductId,
                     token
                 });
-                await chatApi.sendMessage({ chatId: newChat.id, senderId: userId, text: messageText, token });
-                setSelectedChatId(newChat.id);
+
+                // Jetzt die Nachricht an den NEUEN Chat senden
+                const sentMsg = await chatApi.sendMessage({
+                    chatId: newChat.id,
+                    senderId: userId,
+                    text: messageText,
+                    token
+                });
+
+                // UI Zustand aktualisieren
                 setIsNewChat(false);
+                setSelectedChatId(newChat.id);
+                setMessages([sentMsg]); // Die erste echte Nachricht im Fenster anzeigen
+
+                // Sidebar aktualisieren (Invalidieren, damit der neue Chat erscheint)
+                queryClient.invalidateQueries(['chats', String(userId)]);
             } else {
-                setMessages(prev => [...prev, tempMsg]); // Sofort anzeigen
-                await sendMessageMutation.mutateAsync({ senderId: userId, text: messageText, token });
+                // Normaler Chat-Versand
+                const sentMsg = await sendMessageMutation.mutateAsync({
+                    senderId: userId,
+                    text: messageText,
+                    token
+                });
+                setMessages(prev => [...prev.filter(m => m.id !== tempMsg.id), sentMsg]);
             }
             setNewMessage("");
         } catch (err) {
-            toast.error(t("error_sending_message"));
-            setMessages(prev => prev.filter(m => m.id !== tempMsg.id)); // Bei Fehler entfernen
+            console.error("Fehler beim Senden:", err);
+            toast.error(t('chat.sendError'));
+            setMessages(prev => prev.filter(m => m.id !== tempMsg.id));
         }
     };
 
@@ -184,7 +213,31 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
         setIsSidebarHidden(false);
     };
 
-    // 7. Sync Side Effects
+    // 7. Auto-Initialization from Navigation State
+    useEffect(() => {
+        // Only run if we have navigation state and charts have loaded
+        if (!chatsData || !initialPartnerId) return;
+
+        // Try to find an existing chat for this partner and subject
+        const existingChat = chatsData.chats.find(c =>
+            String(c.otherParticipant?.id) === String(initialPartnerId) &&
+            String(c.subjectNumber || '') === String(initialSubjectNumber || '')
+        );
+
+        if (existingChat) {
+            handleSelectChat(existingChat.id);
+            setIsNewChat(false);
+        } else if (initialPartnerId) {
+            // No existing chat found, prepare a ghost chat
+            setSelectedChatId('new-chat-temp');
+            setIsNewChat(true);
+            setIsChatWindowActive(true);
+            if (isMobile) setIsSidebarHidden(true);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [chatsData?.chats.length, initialPartnerId, initialSubjectNumber]);
+
+    // 8. Sync Side Effects
     useEffect(() => {
         if (messagesData?.messages) {
             const newMsgsFromApi = messagesData.messages;
@@ -199,7 +252,7 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
             const totalOnServer = messagesData.totalMessages || 0;
             setHasMoreMessages(messages.length < totalOnServer);
         }
-    }, [messagesData]);
+    }, [messagesData, fetchOffset]);
 
     useEffect(() => {
         if (!socket || !userId) return;

@@ -16,13 +16,9 @@ import { IoChatboxEllipses } from "react-icons/io5";
 import { categoryKeys, subCategories } from '../utils/const/category';
 import { useAuth } from '../../context/AuthContext';
 import * as userHooks from '../api_hooks/user_hooks';
-import toast, { Toaster } from 'react-hot-toast';
 import { useHeaderToasts } from './useHeaderToasts';
-import { socket } from '../../context/socket'; // Socket importieren
-import { useQueryClient } from '@tanstack/react-query';
-
+import toast, { Toaster } from 'react-hot-toast';
 function Header() {
-  const queryClient = useQueryClient();
   const location = useLocation();
   const activePath = location.pathname;
   const navigate = useNavigate();

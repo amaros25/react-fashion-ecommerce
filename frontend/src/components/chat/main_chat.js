@@ -57,7 +57,7 @@ const MainChat = () => {
   const chatManager = useChatManager(
     userId,
     localStorage.getItem("token"),
-    partnerId || sellerId || 1,
+    partnerId || sellerId || null,
     routeChatType || "",
     orderNumber || "",
     message || "",
