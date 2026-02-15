@@ -207,7 +207,10 @@
     "cash_on_delivery": "Paiement à la livraison",
     "cash_on_pickup": "Paiement en magasin",
     "flouci_payment": "Paiement via Flouci",
-    "flouci_coming_soon": "Actuellement indisponible"
+    "flouci_coming_soon": "Actuellement indisponible",
+    "profile_incomplete": "Veuillez d'abord mettre à jour votre profil",
+    "payment_method_required": "Veuillez sélectionner un mode de paiement",
+    "max_rate_applied": "taux maximum appliqué"
   },
   "phone": "Téléphone",
   "address": "Adresse",

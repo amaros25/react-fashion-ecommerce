@@ -11,11 +11,13 @@ import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { useUserProfileManager } from "../api_managers/userProfileHookManager.js";
 import MainProfileHeader from "../profile_shared/main_profile_header";
+import { useNavigate } from "react-router-dom";
 
 function ProfileSeller() {
   const apiUrl = process.env.REACT_APP_API_URL;
   const { userId, token } = useAuth();
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(() => {
     return localStorage.getItem("sellerActiveTab") || "add_new_product";
   });
@@ -43,6 +45,14 @@ function ProfileSeller() {
     isUpdatingShopName,
     isUpdatingImage
   } = useUserProfileManager(userId, token);
+
+  console.log("seller", seller);
+  console.log("sellerLoading", sellerLoading);
+  console.log("sellerError", sellerError);
+
+  useEffect(() => {
+    if (!userId || !token || sellerError == "jwt expired") navigate("/login");
+  }, [userId, token, navigate]);
 
   if (sellerLoading || !seller) {
     return <LoadingSpinner />;

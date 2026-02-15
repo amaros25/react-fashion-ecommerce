@@ -70,8 +70,9 @@ export default function ProfileUser() {
    * Redirects user to login if credentials (userId/token) are missing.
    */
   useEffect(() => {
-    if (!userId || !token) navigate("/login");
+    if (!userId || !token || userError == "jwt expired") navigate("/login");
   }, [userId, token, navigate]);
+
 
 
   /**

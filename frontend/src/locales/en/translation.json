@@ -213,7 +213,8 @@
         "cash_on_delivery": "Cash on Delivery",
         "cash_on_pickup": "Cash on Pickup",
         "flouci_payment": "Pay via Flouci",
-        "flouci_coming_soon": "Currently Unavailable"
+        "flouci_coming_soon": "Currently Unavailable",
+        "max_rate_applied": "Maximum rate applied"
     },
     "phone": "Phone",
     "address": "Address",

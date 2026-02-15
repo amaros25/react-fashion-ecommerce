@@ -198,7 +198,8 @@
     "cash_on_delivery": "الدفع عند الاستلام",
     "cash_on_pickup": "الدفع عند الاستلام من المتجر",
     "flouci_payment": "الدفع عبر تطبيق فلوسي",
-    "flouci_coming_soon": "غير متاح حالياً"
+    "flouci_coming_soon": "غير متاح حالياً",
+    "max_rate_applied": "السعر الأقصى تم تطبيقه"
   },
   "phone": "الهاتف",
   "address": "العنوان",

@@ -9,6 +9,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useUserProfileManager } from "../api_managers/userProfileHookManager.js";
 import { useCartManager } from "../api_managers/useCartManager.js";
 import { useQueryClient } from '@tanstack/react-query';
+import LoadingSpinner from "../loading/loading_spinner";
 import "./cart_page.css";
 
 const CartPage = () => {
@@ -17,7 +18,8 @@ const CartPage = () => {
   const { userId, token } = useAuth();
   const navigate = useNavigate();
 
-  const { user, loading: userLoading } = useUserProfileManager(userId, token);
+  // Fetching user profile and cart data using custom hook managers
+  const { user, loading: userLoading } = useUserProfileManager(userId, token); //TODO: check if this is the best way to handle this
   const {
     cart,
     groupedCart,
@@ -26,43 +28,98 @@ const CartPage = () => {
     isSubmitting,
     handleRemoveItem,
     submitGroups
-  } = useCartManager(userId, token, queryClient);
+  } = useCartManager(userId, token, queryClient); //TODO: check if this is the best way to handle this
 
+  // Local state for delivery preference and payment selection
   const [isDelivery, setIsDelivery] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState(null);
 
+  // Reset scroll position to top when the page mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  /**
+   * Validates user data and payment method before submitting the order.
+   * If successful, redirects the user to their profile page.
+   */
   const handleNewOrder = async () => {
     if (!user?.phone || !user?.address) {
-      toast.error(t("cart_page.please_update_profile_first"));
+      toast.error(t("cart_page.profile_incomplete")); //TODO: translate this message
       return;
     }
     if (!paymentMethod) {
-      toast.error(t("cart_page.please_select_payment"));
+      toast.error(t("cart_page.payment_method_required")); //TODO: translate this message
       return;
     }
+
     const result = await submitGroups(user, isDelivery, ORDER_STATUS.PENDING, paymentMethod);
     if (result.success && !result.redirecting) navigate("/profile_user");
     else if (result.loginRequired) navigate("/login");
   };
 
+  /**
+   * Calculates the shipping cost for a specific seller group.
+   */
+  const calculateSellerShipping = (items) => {
+    return isDelivery ? Math.max(...items.map(i => Number(i.delprice) || 0)) : 0;
+  };
+
+  /**
+   * Calculates the total for a specific seller group, 
+   * including shipping if delivery is selected.
+   */
   const calculateSellerTotal = (items) => {
-    const sub = items.reduce((s, i) => s + Number(i.price) * (i.quantity || 1), 0);
-    const ship = isDelivery ? items.reduce((s, i) => s + (Number(i.delprice) || 0), 0) : 0;
+    const sub = items.reduce((s, i) => s + Number(i.price) * (i.quantity || 1), 0); // Reduce is a higher-order function that reduces an array to a single value, calculating the subtotal of the items
+    const ship = calculateSellerShipping(items); // Calculate the shipping cost for the seller group
+    console.log("sub", sub);
+    console.log("ship", ship);
     return sub + ship;
   };
 
+  const calculateSellerTotalWithoutShipping = (items) => {
+    const sub = items.reduce((s, i) => s + Number(i.price) * (i.quantity || 1), 0); // Reduce is a higher-order function that reduces an array to a single value, calculating the subtotal of the items
+    console.log("sub", sub);
+    return sub;
+  };
+
+  /**
+   * Calculates the grand total for all items across all sellers.
+   */
   const calculateTotal = () => {
     return Object.entries(groupedCart).reduce((acc, [_, items]) => acc + calculateSellerTotal(items), 0);
   };
 
+  /**
+   * Calculates the total shipping cost for all sellers.
+   */
+  const calculateTotalShipping = () => {
+    if (!isDelivery) return 0;
+
+    // Wir gehen durch jede Gruppe (Seller) im groupedCart
+    return Object.values(groupedCart).reduce((totalShip, items) => {
+      // Finde den maximalen Lieferpreis in dieser spezifischen Gruppe
+      const maxForSeller = Math.max(...items.map(i => Number(i.delprice) || 0));
+      return totalShip + maxForSeller;
+    }, 0);
+  };
+
+  // Derived state for button handling and RTL support
   const isProfileComplete = user?.phone && user?.address;
   const isButtonDisabled = isSubmitting || !isProfileComplete || !paymentMethod || !cart.length;
-  const dir = i18n.language === "ar" ? "rtl" : "ltr";
 
+  const dir = i18n.language === "ar" ? "rtl" : "ltr";
+  //Loading
+  if (userLoading) {
+    return (
+      <div className="cart-page-loading" dir={dir}>
+        <div className="loading-state">
+          <LoadingSpinner />
+        </div>
+      </div>
+    );
+  }
+  // Empty State UI
   if (cart.length === 0) {
     return (
       <div className="cart-page-empty" dir={dir}>
@@ -85,10 +142,11 @@ const CartPage = () => {
       </header>
 
       <div className="cart-layout">
-        {/* LINKS: PRODUKTE NACH VERKÄUFER */}
+        {/* LEFT COLUMN: List of products grouped by Seller */}
         <div className="cart-items-section">
           {Object.entries(groupedCart).map(([sellerId, items]) => {
             const seller = sellersMap[sellerId];
+            const sellerShipping = calculateSellerShipping(items);
             return (
               <section key={sellerId} className="seller-group">
                 <div className="seller-header-modern">
@@ -100,12 +158,10 @@ const CartPage = () => {
                 <div className="items-list">
                   {items.map((item, i) => (
                     <div key={item.variantId || i} className="cart-item-modern">
-                      {/* Links: Das Bild */}
                       <div className="item-image-wrapper" onClick={() => navigate(`/product/${item.productId}`)}>
                         <img src={item.image} alt={item.name} />
                       </div>
 
-                      {/* Rechts: Die Details */}
                       <div className="item-details">
                         <div className="item-info-top">
                           <h3 className="item-title-large" onClick={() => navigate(`/product/${item.productId}`)}>
@@ -116,7 +172,7 @@ const CartPage = () => {
                           </button>
                         </div>
 
-                        {/* Farbe & Größe - Jetzt deutlich präsenter */}
+                        {/* Product specifications like Color and Size */}
                         <div className="item-specs-enhanced">
                           <div className="spec-item">
                             <span className="spec-label">{t("size")}:</span>
@@ -132,13 +188,15 @@ const CartPage = () => {
                           </div>
                         </div>
 
-                        {/* Preis-Bereich: Untereinander gelistet */}
+                        {/* Breakdown of item price and shipping fee */}
                         <div className="item-pricing-breakdown">
                           <div className="price-row-item">
                             <span className="price-label">{t("product_price")}:</span>
                             <span className="price-value">
                               {(Number(item.price) * item.quantity).toFixed(3)} <small>{t("price_suf")}</small>
                             </span>
+
+
                           </div>
 
                           {isDelivery && (
@@ -153,28 +211,35 @@ const CartPage = () => {
                       </div>
                     </div>
                   ))}
+
                 </div>
 
-                {/* Seller-Footer nur anzeigen, wenn es mehrere Verkäufer gibt */}
+                {/* Subtotal shown only if multiple sellers are involved */}
                 {Object.keys(groupedCart).length > 1 && (
                   <div className="seller-footer-mini">
                     <span>
-                      {t("cart_page.subtotal")}: {calculateSellerTotal(items).toFixed(3)}
+                      {t("cart_page.subtotal")}: {calculateSellerTotalWithoutShipping(items).toFixed(3)} <small>{t("price_suf")}</small>
                     </span>
+                    {isDelivery && (
+                      <div className="delivery-seller-price">
+                        <span>{t("cart_page.shipping")}: </span>
+                        <span>{sellerShipping.toFixed(3)} <small>{t("price_suf")}</small></span>
+                        <span> ({t("cart_page.max_rate_applied")})</span>
+                      </div>
+                    )}
                   </div>
                 )}
-
               </section>
             );
           })}
         </div>
 
-        {/* RECHTS: SUMMARY & CHECKOUT */}
+        {/* RIGHT COLUMN: Order Summary, Delivery Options, and Payment */}
         <aside className="cart-summary-section">
           <div className="summary-card">
-
             <h2 className="summary-title">{t("cart_page.order_summary")}</h2>
 
+            {/* Toggle between Delivery and Store Pickup */}
             <div className="delivery-toggle-modern">
               <button className={`toggle-tab ${isDelivery ? 'active' : ''}`} onClick={() => setIsDelivery(true)}>
                 {t("cart_page.delivery")}
@@ -184,7 +249,7 @@ const CartPage = () => {
               </button>
             </div>
 
-            {/* INFO BLOCK: ADDRESS */}
+            {/* User Address/Phone Verification Block */}
             <div className="info-block">
               <span className="info-label">{isDelivery && t("cart_page.delivery_address")}</span>
               {isDelivery ? (
@@ -206,42 +271,35 @@ const CartPage = () => {
               )}
             </div>
 
-            {/* PAYMENT */}
-            {/* PAYMENT */}
+            {/* Payment Method Selection */}
             <div className="payment-selection-modern">
               <span className="info-label">{t("cart_page.payment_method")}</span>
               <div className="payment-stack">
                 {isDelivery ? (
-                  <>
-                    {/* Cash on Delivery */}
-                    <div
-                      className={`pay-option-card ${paymentMethod === 'cod' ? 'active' : ''}`}
-                      onClick={() => setPaymentMethod('cod')}
-                    >
-                      <div className="pay-option-content">
-                        <FaWallet className="pay-icon active-icon-style" />
-                        <span className="pay-text">{t("cart_page.cash_on_delivery")}</span>
-                      </div>
-                      {paymentMethod === 'cod' && <div className="select-dot"></div>}
+                  <div
+                    className={`pay-option-card ${paymentMethod === 'cod' ? 'active' : ''}`}
+                    onClick={() => setPaymentMethod('cod')}
+                  >
+                    <div className="pay-option-content">
+                      <FaWallet className="pay-icon active-icon-style" />
+                      <span className="pay-text">{t("cart_page.cash_on_delivery")}</span>
                     </div>
-                  </>
+                    {paymentMethod === 'cod' && <div className="select-dot"></div>}
+                  </div>
                 ) : (
-                  <>
-                    {/* Cash on Pickup */}
-                    <div
-                      className={`pay-option-card ${paymentMethod === 'pickup' ? 'active' : ''}`}
-                      onClick={() => setPaymentMethod('pickup')}
-                    >
-                      <div className="pay-option-content">
-                        <FaStore className="pay-icon active-icon-style" />
-                        <span className="pay-text">{t("cart_page.cash_on_pickup")}</span>
-                      </div>
-                      {paymentMethod === 'pickup' && <div className="select-dot"></div>}
+                  <div
+                    className={`pay-option-card ${paymentMethod === 'pickup' ? 'active' : ''}`}
+                    onClick={() => setPaymentMethod('pickup')}
+                  >
+                    <div className="pay-option-content">
+                      <FaStore className="pay-icon active-icon-style" />
+                      <span className="pay-text">{t("cart_page.cash_on_pickup")}</span>
                     </div>
-                  </>
+                    {paymentMethod === 'pickup' && <div className="select-dot"></div>}
+                  </div>
                 )}
 
-                {/* Flouci - Wird nun IMMER angezeigt (unterhalb der jeweiligen Barzahlung) */}
+                {/* Placeholder for future payment integrations */}
                 <div className="pay-option-card disabled">
                   <div className="pay-option-content">
                     <FaCreditCard className="pay-icon" />
@@ -256,16 +314,16 @@ const CartPage = () => {
               </div>
             </div>
 
-            {/* TOTALS */}
+            {/* Final Totals and Checkout Button */}
             <div className="summary-details">
               <div className="summary-row">
                 <span>{t("cart_page.subtotal")}</span>
-                <span>{cart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0).toFixed(3)}</span>
+                <span>{cart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0).toFixed(3)} <small>{t("price_suf")}</small></span>
               </div>
               {isDelivery && (
                 <div className="summary-row">
                   <span>{t("cart_page.shipping")}</span>
-                  <span>{cart.reduce((sum, item) => sum + (Number(item.delprice) || 0), 0).toFixed(3)}</span>
+                  <span>{calculateTotalShipping().toFixed(3)} <small>{t("price_suf")}</small></span>
                 </div>
               )}
               <div className="summary-row total">
