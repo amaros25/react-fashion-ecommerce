@@ -11,6 +11,7 @@ import { cities, citiesData } from '../utils/const/cities';
 import { useUserProfileManager } from "../api_managers/userProfileHookManager.js";
 import { useSellerProductFetchManager } from '../api_managers/useSellerProductFetchManager';
 import * as userHooks from '../api_hooks/user_hooks';
+import { getDefaultAvatar } from "../utils/defaultAvatars";
 
 const ShopPage = () => {
     const { shopSlug } = useParams();
@@ -120,7 +121,7 @@ const ShopPage = () => {
 
             <header className="shop-hero"
                 style={{
-                    backgroundImage: seller?.imageUrl ? `url(${seller.imageUrl})` : 'none',
+                    backgroundImage: `url(${seller?.imageUrl || getDefaultAvatar('seller')})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                 }}>

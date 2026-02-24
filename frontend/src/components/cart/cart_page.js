@@ -32,12 +32,25 @@ const CartPage = () => {
 
   // Local state for delivery preference and payment selection
   const [isDelivery, setIsDelivery] = useState(true);
-  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('cod');
 
-  // Reset scroll position to top when the page mounts
+  /**
+   * Reset scroll position to top when the page mounts.
+   */
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  /**
+   * Automatically switch payment method when delivery preference changes.
+   */
+  useEffect(() => {
+    if (isDelivery) {
+      setPaymentMethod('cod');
+    } else {
+      setPaymentMethod('pickup');
+    }
+  }, [isDelivery]);
 
   /**
    * Validates user data and payment method before submitting the order.
@@ -122,14 +135,21 @@ const CartPage = () => {
   // Empty State UI
   if (cart.length === 0) {
     return (
-      <div className="cart-page-empty" dir={dir}>
-        <div className="empty-state">
-          <FaShoppingBag className="empty-icon" />
-          <h2>{t("cart_page.empty_cart")}</h2>
-          <button onClick={() => navigate("/home")} className="continue-shopping-btn">
-            {t("cart_page.continue_shopping")}
-          </button>
-        </div>
+      <div className="cart-page-container" dir={dir}>
+        <header className="cart-header">
+          <h1>{t("cart_page.title")}</h1>
+          <span className="item-count">{cart.length} {t("cart_page.items")}</span>
+        </header>
+        <div className="cart-page-empty" dir={dir}>
+
+          <div className="empty-state">
+            <FaShoppingBag className="empty-icon" />
+            <h2>{t("cart_page.empty_cart")}</h2>
+            <button onClick={() => navigate("/home")} className="continue-shopping-btn">
+              {t("cart_page.continue_shopping")}
+            </button>
+          </div>
+        </div >
       </div>
     );
   }

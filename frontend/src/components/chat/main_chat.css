@@ -1,118 +1,108 @@
+ .main-chat-container {
+   width: 100%;
+   max-width: 1200px;
+   margin: 0 auto;
+   padding: 20px;
+   box-sizing: border-box;
+ }
+
  .main-chat {
    display: flex;
-   gap: 20px;
-   flex: 1;
-   box-sizing: border-box;
-   background-color: #eeeeee;
-   border-radius: 10px;
+   gap: 1px;
+   /* Minimalist divider */
+   background-color: #eee;
+   border-radius: 4px;
    overflow: hidden;
-   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-   padding: 20px;
-   margin: 1% 0;
-   flex-direction: row;
-   min-height: 70vh;
+   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+   height: 80vh;
    align-items: stretch;
-   /* Stretch sidebar and window to equal height */
  }
 
  .chat-sidebar {
-   width: 300px;
-   flex-direction: column;
-   overflow: hidden;
+   width: 350px;
    background-color: #ffffff;
-   height: 80vh;
-   /* Consistent height */
-   max-height: 80vh;
-   align-self: stretch;
+   display: flex;
+   flex-direction: column;
+   border-right: 1px solid #eee;
  }
 
  .chat-window {
    flex: 1;
+   background-color: #ffffff;
    display: flex;
    flex-direction: column;
-   min-height: 80vh;
-   max-height: 80vh;
-   align-self: stretch;
-   /* Stretch to fill .main-chat height */
  }
 
- .chat-window.active {
-   background-color: #fff;
-   padding: 10px;
-   border-radius: 10px;
-   box-sizing: border-box;
-   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-   flex-direction: column;
-   flex: 1;
-   display: flex;
-   overflow: hidden;
-   min-height: 80vh;
-   max-height: 80vh;
-   align-self: stretch;
-   /* Ensure it stays full height */
+ .chat-sidebar.hidden {
+   display: none;
  }
 
  .chat-window.hidden {
    display: none;
  }
 
+ /* Sidebar Header */
+ .sidebar-header {
+   padding: 25px 20px;
+   border-bottom: 1px solid #f5f5f5;
+ }
 
- @media (max-width: 350px) {
+ .sidebar-header h2 {
+   font-size: 0.9rem;
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 2px;
+   margin: 0;
+   color: #1a1a1a;
+ }
+
+ /* Tablet & Mobile Refinements */
+ @media (max-width: 1024px) {
+   .main-chat-container {
+     padding: 10px;
+   }
 
    .main-chat {
-     display: flex;
-     flex: 1;
-     box-sizing: border-box;
-     box-shadow: 0;
-     padding: 0px;
+     height: 85vh;
    }
 
    .chat-sidebar {
      width: 300px;
-     flex-direction: column;
-     display: flex;
-     overflow: hidden;
-     background-color: #ffffff;
-     min-height: 100vh;
-     max-height: 100vh;
    }
  }
 
-
-
- @media (min-width: 351px) and (max-width: 768px) {
+ @media (max-width: 768px) {
+   .main-chat-container {
+     padding: 0;
+     height: 100vh;
+   }
 
    .main-chat {
-     display: flex;
-     flex: 1;
-     box-sizing: border-box;
-     box-shadow: 0;
-     padding: 0px;
+     height: 100vh;
+     border-radius: 0;
+     box-shadow: none;
    }
 
    .chat-sidebar {
-     display: flex;
-     height: auto;
-     max-height: 100vh;
-   }
-
-   .chat-sidebar.hidden {
-     opacity: 0;
-     visibility: hidden;
-   }
-
-   .chat-window-active {
-     display: flex;
+     width: 100%;
+     border-right: none;
    }
 
    .chat-window {
-     min-height: 50vh;
-     max-height: 60vh;
+     width: 100%;
    }
 
-   .chat-window.active {
-     min-height: 50vh;
-     max-height: 90vh;
+   /* Logic handled by hidden class */
+ }
+
+ /* Very Narrow Screens */
+ @media (max-width: 360px) {
+   .sidebar-header {
+     padding: 15px;
    }
 
+   .sidebar-header h2 {
+     font-size: 0.8rem;
+     letter-spacing: 1.5px;
+   }
  }

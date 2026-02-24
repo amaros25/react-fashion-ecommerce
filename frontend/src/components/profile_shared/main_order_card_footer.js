@@ -1,10 +1,10 @@
 import React, { useState } from "react"; // useState hinzugefügt
 import OrderStatusStepper from "./order_status_stepper.js";
-import { FaChevronDown, FaChevronUp, FaInfoCircle } from "react-icons/fa"; // Icons für das Dropdown
+import { FaChevronDown, FaInfoCircle } from "react-icons/fa"; // Icons für das Dropdown
 import "./css/main_order_card_footer.css";
+import "./css/card_buttons.css";
 
-
-const MainOrderCardFooter = ({ order, t, viewMode, renderUserButtons, renderSellerButtons, renderChatButton }) => {
+const MainOrderCardFooter = ({ order, t, viewMode, renderUserButtons, renderSellerButtons }) => {
     console.log("MainOrderCardFooter order:", order);
     const [showComment, setShowComment] = useState(false);
 
@@ -31,7 +31,13 @@ const MainOrderCardFooter = ({ order, t, viewMode, renderUserButtons, renderSell
                         <div className="mocf-zara-content" dir="auto">
                             <p className="mocf-zara-comment">{lastStatusWithComment.comment}</p>
                             <span className="mocf-zara-date">
-                                {new Date(lastStatusWithComment.createdAt).toLocaleDateString()}
+                                {new Date(lastStatusWithComment.createdAt).toLocaleString([], {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                })}
                             </span>
                         </div>
                     )}
@@ -39,9 +45,6 @@ const MainOrderCardFooter = ({ order, t, viewMode, renderUserButtons, renderSell
             )}
 
             <div className="mocf-footer-bottom">
-                <div className="mocf-chat-section">
-                    {renderChatButton && renderChatButton()}
-                </div>
                 <div className="mocf-actions-group">
                     {viewMode === "user" ? renderUserButtons() : renderSellerButtons()}
                 </div>

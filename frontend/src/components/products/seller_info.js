@@ -3,13 +3,14 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import { cities, citiesData } from '../utils/const/cities';
 import "./seller_info.css";
+import { getDefaultAvatar } from "../utils/defaultAvatars";
 
 function SellerInfo({ seller }) {
   if (!seller) return null;
   console.log("SellerInfo:", seller);
   const reviewCount = seller.stats?.reviewCount || 0;
   const averageRating = seller.stats?.avgRating || 0;
-  const sellerImage = seller.imageUrl || '/default-avatar.png';
+  const sellerImage = seller.imageUrl || getDefaultAvatar('seller');
   const cityName = cities ? cities[seller.city] : null;
   const SellerSubCity = (cityName && citiesData && citiesData[cityName])
     ? citiesData[cityName][seller.subCity]

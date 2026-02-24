@@ -56,6 +56,9 @@ const ChatSidebar = ({
 
   return (
     <div className={`chat-sidebar ${isSidebarHidden ? 'hidden' : ''}`}>
+      <div className="sidebar-header">
+        <h2>{t('chat.messages') || 'Messages'}</h2>
+      </div>
       <div className="conversation-list">
         {sortedChats.length === 0 ? (
           <div className="no-chats-message">

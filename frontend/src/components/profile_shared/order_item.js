@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "./order_items.css";
+import "./css/order_items.css";
 import { ORDER_STATUS } from "../utils/const/order_status";
-import { FaStar, FaRegCommentDots } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 
 export default function OrderItem({ item, product, order, t, showRatingButton, isLast, chatRole = 'seller', viewMode = 'user', onRateClick }) {
   const navigate = useNavigate();
@@ -57,6 +57,9 @@ export default function OrderItem({ item, product, order, t, showRatingButton, i
 
     return (
       <div className="product-rating-minimal-badge">
+        <span className="moch-mini-label">
+          {t("your_product_rating")}:
+        </span>
         <div className="star-display-small">
           {[1, 2, 3, 4, 5].map((star) => (
             <FaStar
@@ -65,9 +68,6 @@ export default function OrderItem({ item, product, order, t, showRatingButton, i
             />
           ))}
         </div>
-        <span className="rating-label-fine">
-          {t("your_product_rating")}
-        </span>
       </div>
     );
   };
@@ -108,12 +108,12 @@ export default function OrderItem({ item, product, order, t, showRatingButton, i
 
                 {/* 2. If NOT rated: Show Rate Button */}
                 {viewMode === "user" && !isRated && showRatingButton && isEligibleStatus && (
-                  <button className="rate-product-btn" onClick={(e) => {
+                  <button className="order-card-btn-small" onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     onRateClick();
                   }}>
-                    {t("rate_products")}
+                    <FaStar /> {t("rate_products")}
                   </button>
                 )}
               </div>
@@ -122,12 +122,12 @@ export default function OrderItem({ item, product, order, t, showRatingButton, i
             {/* Product Variants (Size, Color, Quantity) */}
             <div className="order-product-variants">
               <div className="variant-item">
-                <span className="variant-label">{t("size")}:</span>
+                <span className="moch-mini-label">{t("size")}:</span>
                 <span className="variant-value">{item.variant.size}</span>
               </div>
 
               <div className="variant-item">
-                <span className="variant-label">{t("color")}:</span>
+                <span className="moch-mini-label">{t("color")}:</span>
                 {isHexColor(item.variant.color) ? (
                   <span
                     className="color-swatch"
@@ -146,15 +146,15 @@ export default function OrderItem({ item, product, order, t, showRatingButton, i
               </div>
 
               <div className="variant-item">
-                <span className="variant-label">{t("quantity")}:</span>
+                <span className="moch-mini-label">{t("quantity")}:</span>
                 <span className="variant-value">{item.quantity}</span>
               </div>
             </div>
             <div className="order-product-variants">
-              <span className="variant-label">{t("price")}:</span>
-              <span className="variant-value">{item.product?.price}</span>
-              <span className="variant-label">{t("cart_page.shipping")}:</span>
-              <span className="variant-value">{item.product?.delprice}</span>
+              <span className="moch-mini-label">{t("price")}:</span>
+              <span className="variant-value">{item.product?.price} {t("price_suf")}</span>
+              <span className="moch-mini-label">{t("cart_page.shipping")}:</span>
+              <span className="variant-value">{item.product?.delprice} {t("price_suf")}</span>
             </div>
           </div>
         </div>

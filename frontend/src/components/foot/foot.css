@@ -72,29 +72,82 @@
 }
 
 /* Responsive - Tablet */
+@media (max-width: 1024px) {
+  .footer-columns {
+    gap: 30px;
+  }
+}
+
 @media (max-width: 768px) {
+  .footer-container {
+    padding: 30px 20px 20px;
+  }
+
   .footer-columns {
     flex-direction: column;
     gap: 20px;
   }
-}
 
-/* Responsive - Mobile */
-@media (max-width: 600px) {
-  .footer-container {
-    padding: 30px 15px 15px;
+  .footer-column h3 {
+    font-size: 1rem;
+    margin-bottom: 10px;
   }
 
   .footer-column li {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+  }
+
+  .footer-horizontal-menu ul {
+    gap: 20px;
   }
 
   .footer-horizontal-menu li {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsive - Mobile & Narrow Screens */
+@media (max-width: 480px) {
+  .footer-container {
+    padding: 25px 15px 15px;
+  }
+
+  .footer-column h3 {
+    font-size: 0.95rem;
+  }
+
+  .footer-column li {
+    font-size: 0.8rem;
+    min-height: 36px;
+    /* Slightly smaller touch target but still decent */
+  }
+
+  .footer-horizontal-menu ul {
+    gap: 12px;
+  }
+
+  .footer-horizontal-menu li {
+    font-size: 0.75rem;
+    min-height: 36px;
+  }
+
+  .footer-divider {
+    margin: 20px 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .footer-container {
+    padding: 20px 10px;
+  }
+
+  .footer-columns {
+    gap: 15px;
+  }
+
+  .footer-horizontal-menu ul {
+    gap: 8px;
   }
 }
 
@@ -117,21 +170,4 @@
 
 .footer-horizontal-menu li:hover {
   color: #00aaff;
-}
-
-/* Small Mobile */
-@media (max-width: 480px) {
-  .footer-container {
-    padding: 20px 10px 20px;
-  }
-
-  .footer-horizontal-menu ul {
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-  }
-
-  .footer-horizontal-menu li {
-    font-size: 0.8rem;
-  }
 }

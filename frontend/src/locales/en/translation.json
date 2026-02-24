@@ -777,5 +777,6 @@
         "status_change": "PROFILE STATUS: {{status}}",
         "new_message": "NEW MESSAGE RECEIVED",
         "order_update": "ORDER {{number}}: STATUS UPDATED"
-    }
+    },
+    "order_date": "Date"
 }

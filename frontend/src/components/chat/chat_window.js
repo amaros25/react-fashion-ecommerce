@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { FaChevronLeft } from "react-icons/fa";
 import "./chat_window.css";
 
 /**
@@ -17,7 +18,7 @@ const ChatWindow = ({
   setNewMessage,
   isLoadingMessages,
   isMobile,
-  handleBackToSidebar,
+  onBack, // Renamed for consistency with handleBackToSidebar
   isChatDisabled,
   isNewChat,
   messages,
@@ -118,27 +119,25 @@ const ChatWindow = ({
       {activeChat || isNewChat ? (
         <>
           <div className="chat-window-header">
-            <h3>
-              {activeChat ? (
-                // Wenn wir einen echten Chat haben
-                (activeChat.participant1Id === 1 || activeChat.participant2Id === 1) ? t("chat.chatWithAdmin") : (activeChat.otherParticipant?.name || t("chat.customer"))
-              ) : (
-                // Wenn wir einen Ghost-Chat haben (initialChatType ist hier oft gesetzt)
-                initialChatType === "support" ? t("chat.chatWithAdmin") : (activeChat?.otherParticipant?.name || t("chat.customer"))
-              )}
-            </h3>
-            <p className="chat-subject-line">
-              <strong>{activeChat?.type === 'order' || (!activeChat && initialChatType === 'order') ? t('chat.order') : t('chat.product')}</strong>
-              {`: ${activeChat?.subjectNumber || initialSubjectNumber || ''}`}
-            </p>
+            {isMobile && (
+              <button className="back-button" onClick={onBack}>
+                <FaChevronLeft />
+              </button>
+            )}
+            <div className="header-info">
+              <h3>
+                {activeChat ? (
+                  (activeChat.participant1Id === 1 || activeChat.participant2Id === 1) ? t("chat.chatWithAdmin") : (activeChat.otherParticipant?.name || t("chat.customer"))
+                ) : (
+                  initialChatType === "support" ? t("chat.chatWithAdmin") : (activeChat?.otherParticipant?.name || t("chat.customer"))
+                )}
+              </h3>
+              <p className="chat-subject-line">
+                <strong>{activeChat?.type === 'order' || (!activeChat && initialChatType === 'order') ? t('chat.order') : t('chat.product')}</strong>
+                {`: ${activeChat?.subjectNumber || initialSubjectNumber || ''}`}
+              </p>
+            </div>
           </div>
-
-          {/* Back button for mobile navigation */}
-          {isMobile && (
-            <button className="back-button" onClick={handleBackToSidebar}>
-              &larr; {t('chat.backToChats')}
-            </button>
-          )}
 
           {/* Messages List Area */}
           <div className={`messages ${isRtl ? 'rtl' : ''}`} ref={messagesContainerRef} onScroll={handleScroll}>

@@ -124,7 +124,7 @@ export default function ProfileUser() {
         />
         <div className="profile-content-section">
           <div className="section-header-user-profile">
-            <h2>{t("your_orders")}</h2>
+            <h1>{t("your_orders")}</h1>
             <span className="user-profile-collection-count">
               {totalOrdersCount} {t("orders")}
             </span>
@@ -168,6 +168,8 @@ export default function ProfileUser() {
               )}
             </>
           )}
+
+
         </div>
       </div>
     </div>

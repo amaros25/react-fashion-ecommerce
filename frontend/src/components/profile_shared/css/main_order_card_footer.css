@@ -8,6 +8,7 @@
     gap: 20px;
     overflow: hidden;
     font-family: "Helvetica Neue", Arial, sans-serif;
+    padding: 10px;
 }
 
 /* Revised Footer Layout: Split Chat & Actions */
@@ -16,24 +17,19 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-top: 10px;
-    flex-wrap: wrap;
     gap: 15px;
-
 }
 
-.mocf-chat-section {
-    display: flex;
-    align-items: center;
-}
 
 /* Ensure Chat Button is part of this section logic internally, or just sits here */
 
 .mocf-actions-group {
     display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
+    gap: 12px;
+    align-items: end;
+    justify-content: end;
+    flex-grow: 1;
+
 }
 
 /* RTL Support is automatic with space-between:
@@ -118,19 +114,20 @@
     }
 
     .mocf-footer-bottom {
-        flex-direction: column-reverse;
-        /* Stack actions above chat? Or just stack. User didn't specify mobile order, standard is fine. */
-        align-items: stretch;
-        gap: 15px;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
     }
 
-    .mocf-chat-section,
     .mocf-actions-group {
         width: 100%;
+        display: flex;
         justify-content: center;
     }
 
     .mocf-actions-group {
         flex-direction: column;
+        align-items: center;
+        gap: 10px;
     }
 }

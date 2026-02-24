@@ -279,7 +279,8 @@
     "cancelled_user": "ملغاة من قبلك",
     "cancelled_seller": "ملغاة من قبل البائع",
     "first_try_delivery_failed": "فشل المحاولة الأولى",
-    "second_try_delivery_failed": "فشل المحاولة الثانية"
+    "second_try_delivery_failed": "فشل المحاولة الثانية",
+    "failed_delivery": "فشل التوصيل"
   },
   "no_products_found": "لم يتم العثور على منتجات",
   "number": "رقم",
@@ -762,5 +763,6 @@
     "status_change": "حالة الملف الشخصي: {{status}}",
     "new_message": "رسالة جديدة",
     "order_update": "الطلب {{number}}: تم تحديث الحالة"
-  }
+  },
+  "order_date": "تاريخ الطلب"
 }

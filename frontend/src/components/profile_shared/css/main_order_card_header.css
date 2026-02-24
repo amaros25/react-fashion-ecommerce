@@ -2,8 +2,8 @@
 
 /* Generic container/font */
 .moch-container {
-    padding: 0 0 16px 0;
-    border-bottom: 0.5px solid #e5e5e5;
+    padding: 0 0 10px 0;
+    border-bottom: 0.5px solid #f0eded;
     margin-bottom: 20px;
     font-family: "Helvetica Neue", Arial, sans-serif;
     width: 100%;
@@ -11,6 +11,8 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    background-color: #ebe8e852;
+    padding: 10px;
 }
 
 /* DESKTOP LAYOUT (Default: Matches Original) */
@@ -85,7 +87,9 @@
 
 .moch-date {
     display: inline-block;
+    font-size: 13px;
     padding-left: 10px;
+    color: inherit;
     border-left: 0.5px solid #e5e5e5;
 }
 
@@ -99,7 +103,7 @@
     /* Kept 13px */
     border-radius: 2px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     display: inline-block;
     width: fit-content;
 }
@@ -124,41 +128,59 @@
 
 .moch-total-label {
     /* Usually hidden or small */
-    font-size: 13px;
+    font-size: 15px;
     color: #888;
     text-transform: uppercase;
     margin-right: 4px;
 }
 
 .moch-price {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 400;
     color: #000;
     letter-spacing: 0.5px;
 }
 
-.moch-report-link {
-    display: inline-flex;
+/* Container für das Icon am Ende */
+.chat-icon-only-wrapper {
+    display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 500;
-    color: #000000;
-    background-color: transparent;
-    border: 1px solid #e5e5e5;
+    justify-content: center;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 6px 8px;
-    margin-top: 8px;
-    border-radius: 0;
+
+    /* Abstand nach oben in der rechten Spalte */
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    color: #000;
 }
 
-.moch-report-link:hover {
-    border-color: #ee4c4c;
-    background-color: #fcfcfc;
-    color: #000;
+.chat-icon-only-wrapper:hover {
+    opacity: 0.6;
+    transform: scale(1.1);
+    /* Minimaler Zoom-Effekt beim Hover */
+}
+
+.chat-icon-large {
+    font-size: 1.4rem;
+    /* Hier die Größe steuern (deutlich größer) */
+    stroke-width: 1px;
+    /* Macht das Icon feiner, falls unterstützt */
+}
+
+/* Mobile Anpassung */
+@media (max-width: 768px) {
+    .chat-icon-only-wrapper {
+        grid-column: 2;
+        grid-row: 2 / span 2;
+        /* Positioniert es rechts neben ID/Badge */
+        align-self: center;
+        margin-top: 0;
+        margin-right: 5px;
+    }
+
+    .chat-icon-large {
+        font-size: 1.5rem;
+        /* Etwas kleiner auf Mobile */
+    }
 }
 
 /* Ratings */
@@ -171,7 +193,7 @@
 }
 
 .moch-mini-label {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     color: #888;
     text-transform: uppercase;
@@ -192,34 +214,10 @@
     color: #c5a059;
 }
 
-.moch-rate-btn {
-    background-color: #fff;
-    border: 1px solid #000;
-    padding: 2px 10px;
-    /* Slightly wider for button feel */
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-radius: 2px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: #000;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    font-family: inherit;
-    min-width: 80px;
-    /* Ensure it looks substantial */
-    text-align: center;
-}
 
-.moch-rate-btn:hover {
-    background-color: #000;
-    color: #fff;
-}
+
+
+
 
 /* --- MOBILE / TABLET APP LAYOUT ( < 768px ) --- */
 @media (max-width: 768px) {
@@ -269,6 +267,8 @@
         font-weight: 500;
         align-self: center;
         text-align: right;
+        margin-right: 35px;
+        /* Make room for chat icon */
     }
 
     .moch-total-label {
@@ -287,9 +287,6 @@
         margin-top: -2px;
     }
 
-    .moch-id-label {
-        display: none;
-    }
 
     .moch-id-value {
         font-family: 'Courier New', Courier, monospace;
@@ -305,18 +302,7 @@
         color: #999;
     }
 
-    /* Report Link: Moves to Row 2, Right side */
-    .moch-report-link {
-        grid-column: 2;
-        grid-row: 2;
-        justify-self: end;
-        align-self: center;
-        padding: 4px 6px;
-        /* Reset padding for mobile if needed */
-        margin-top: 0;
-        border: none;
-        /* Make it less button-like on mobile if desired, or keep */
-    }
+
 
     /* ROW 3: Badge & Ratings */
     .moch-badge {
@@ -339,12 +325,6 @@
         border-left: none;
     }
 
-    .moch-rate-btn {
-        border: 1px solid #000;
-        padding: 4px 10px;
-        border-radius: 4px;
-        text-decoration: none;
-    }
 
     .moch-mini-label {
         font-size: 11px;
@@ -355,4 +335,19 @@
         white-space: nowrap;
     }
 
+    .chat-with-seller-main-btn {
+        top: 12px;
+        right: 12px;
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 1rem !important;
+    }
+
+}
+
+/* RTL Override for Chat Button */
+[dir="rtl"] .chat-with-seller-main-btn {
+    align-self: flex-start;
+    /* Pushes to left in RTL */
+    flex-direction: row-reverse;
 }

@@ -47,27 +47,29 @@
   }
 
   .main-image {
-    max-height: 450px;
-  }
-
-  .thumbnail {
-    width: 70px;
-    height: 70px;
-  }
-}
-
-@media (max-width: 480px) {
-  .main-image {
-    max-height: 350px;
-    margin-bottom: 12px;
+    max-height: 400px;
+    margin-bottom: 10px;
   }
 
   .thumbnail {
     width: 60px;
     height: 60px;
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-image {
+    max-height: 320px;
+    margin-bottom: 10px;
+  }
+
+  .thumbnail {
+    width: 50px;
+    height: 50px;
   }
 
   .thumbnail-row {
-    gap: 8px;
+    gap: 6px;
   }
 }

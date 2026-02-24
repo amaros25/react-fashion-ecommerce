@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./main_profile_header.css";
+import "./css/main_profile_header.css";
 import { cities, citiesData } from '../utils/const/cities';
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import {
-    FaTrash, FaStar, FaStarHalfAlt, FaExclamationTriangle,
-    FaMapMarkerAlt, FaPhone
-} from 'react-icons/fa';
+
 import useUploadImageApi from "../upload_image_profile/hooks/upload_image_api";
 import {
     MdVerified, MdHourglassEmpty, MdBlock,
     MdErrorOutline, MdPersonOff
 } from 'react-icons/md';
+import { getDefaultAvatar } from "../utils/defaultAvatars";
+
+import { FaTrash, FaStar, FaStarHalfAlt, FaExclamationTriangle, FaMapMarkerAlt, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { MdMessage, MdSettings, MdLogout } from 'react-icons/md';
 
 function MainProfileHeader({
     data, // user oder seller Objekt
@@ -155,7 +156,7 @@ function MainProfileHeader({
                     {/* Identity Section */}
                     <div className="profile-identity">
                         <div className="profile-avatar-minimal" onClick={() => fileInputRef.current.click()}>
-                            <img src={data?.imageUrl} alt="Profile" style={{ opacity: isUpdatingImage ? 0.5 : 1 }} />
+                            <img src={data?.imageUrl || getDefaultAvatar(data?.role)} alt="Profile" style={{ opacity: isUpdatingImage ? 0.5 : 1 }} />
                             {isUpdatingImage && <div className="avatar-loader">...</div>}
                             <input type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleProfileImageChange} />
                         </div>
@@ -169,7 +170,10 @@ function MainProfileHeader({
                             </div>
 
                             <div className="profile-identity-details">
-                                <p className="profile-email-minimal">{data?.email}</p>
+                                <div className="contact-item">
+                                    <FaEnvelope size={12} />
+                                    <p className="profile-email-minimal">{data?.email}</p>
+                                </div>
                                 {viewMode === "seller" && (
                                     <p className="profile-realname-minimal">{data?.firstName} {data?.lastName}</p>
                                 )}
@@ -210,21 +214,16 @@ function MainProfileHeader({
                     )}
 
                     {/* Rechte Seite: Stats & Actions */}
-                    <div className="profile-actions-stats-group">
-                        <div className="actions-minimal">
-                            <button className="action-btn-minimal" onClick={() => navigate('/chat')}>
-                                {t("messages")}
-                                {data?.unreadMessages > 0 && <span className="badge-count">{data?.unreadMessages}</span>}
-                            </button>
-                            <button className="action-btn-minimal" onClick={() => setShowSettings(true)}>
-                                {t("settings")}
-                            </button>
-                            <button className="action-btn-minimal logout" onClick={handleLogout}>
-                                {t("logout")}
-                            </button>
-                        </div>
+                    <div className="actions-minimal-icons">
 
 
+                        <button className="icon-action-btn" onClick={() => setShowSettings(true)} title={t("settings")}>
+                            <MdSettings />
+                        </button>
+
+                        <button className="icon-action-btn logout" onClick={handleLogout} title={t("logout")}>
+                            <MdLogout />
+                        </button>
                     </div>
                 </div>
             </div>

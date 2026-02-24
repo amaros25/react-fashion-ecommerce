@@ -202,19 +202,6 @@ function ProductPage() {
             setMainImage={setMainImage}
             product={product}
           />
-          <div className="seller-section-container"
-            onClick={() => {
-              if (seller) {
-                console.log("seller.shopSlug:", seller.shopSlug);
-                const identifier = seller.shopSlug || seller.id;
-                navigate(`/${identifier}`);
-              }
-            }}
-            style={{ cursor: 'pointer' }}>
-            <h3 className="seller-section-title">{t("product_page.explore_seller")}</h3>
-            <SellerInfo seller={seller} />
-          </div>
-
         </div>
 
         <div className="product-right-column">
@@ -290,6 +277,18 @@ function ProductPage() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="seller-section-container"
+        onClick={() => {
+          if (seller) {
+            console.log("seller.shopSlug:", seller.shopSlug);
+            const identifier = seller.shopSlug || seller.id;
+            navigate(`/${identifier}`);
+          }
+        }}
+        style={{ cursor: 'pointer' }}>
+        <h3 className="seller-section-title">{t("product_page.explore_seller")}</h3>
+        <SellerInfo seller={seller} />
       </div>
       {product.category !== undefined && (
         <RelatedProducts category={product.category} currentProductId={product.id} />

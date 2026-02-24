@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { FaStar, FaRegStar, FaTimes } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import './product_rating_modal.css';
+import './css/product_rating_modal.css';
 import { useProductRatingManager } from '../api_managers/useProductRatingManager';
 
 const StarRating = ({ rating, onRate, maxStars = 5, disabled = false }) => {

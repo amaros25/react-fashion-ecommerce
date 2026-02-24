@@ -1,0 +1,150 @@
+/* --- BUTTON STYLES (1:1 Übernommen) --- */
+
+
+.order-card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background-color: #fff !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    box-sizing: border-box;
+    color: #000 !important;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 0 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    /* Fixed uniform width */
+    margin: 0;
+    font-family: inherit;
+    margin-bottom: 15px;
+}
+
+.order-card-btn-small {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 4px 8px;
+    background-color: #fff !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    box-sizing: border-box;
+    color: #000 !important;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 0 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    /* Fixed uniform width */
+    margin: 0;
+    font-family: inherit;
+    margin-top: 5px;
+}
+
+.order-card-btn:hover {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #000 !important;
+}
+
+.order-card-btn-small:hover {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #000 !important;
+}
+
+.btn-confirm {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #111827;
+    color: #fff;
+}
+
+.btn-success {
+    background-color: #10b981;
+    color: #fff;
+}
+
+.btn-warning {
+    background-color: #f59e0b;
+    color: #fff;
+}
+
+.btn-cancel {
+    background-color: #ef4444;
+    color: #fff;
+}
+
+.btn-cancel-outline {
+    background-color: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+}
+
+.btn-rate {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.btn-return {
+    background-color: #6b7280;
+    color: #fff;
+}
+
+/* Force all specific buttons to match the shared style exactly */
+.btn-confirm,
+.btn-confirm-step,
+.btn-success,
+.btn-warning,
+.btn-cancel,
+.btn-cancel-outline,
+.btn-rate,
+.btn-return {
+    background-color: #fff !important;
+    border: 1px solid #000 !important;
+    color: #000 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Ensure Cancel hover is also consistent (Black/White) */
+.btn-cancel:hover {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #000 !important;
+}
+
+
+
+@media (max-width: 768px) {
+    .order-card-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .order-card-btn {
+        height: 32px !important;
+        width: 140px !important;
+        font-size: 0.75rem;
+        padding: 0 10px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-card-btn {
+        min-height: 44px;
+    }
+}

@@ -4,16 +4,32 @@
  }
 
  .msaved-container {
-     width: 100%;
-     max-width: 100%;
-     min-height: auto;
-     padding-top: 30px;
-     box-sizing: border-box;
      margin: 0 auto;
+     padding: 40px 10px;
+     background-color: #fff;
  }
 
  .no-products {
      padding-bottom: 150px;
+ }
+
+
+ .collection-header-saved {
+     margin-bottom: 50px;
+     display: flex;
+     justify-content: space-between;
+     align-items: baseline;
+     gap: 15px;
+     border-bottom: 1px solid var(--text-main);
+     padding-bottom: 15px;
+ }
+
+ .collection-header-saved h1 {
+     font-size: var(--font-h1);
+     text-transform: uppercase;
+     letter-spacing: var(--spacing-wide);
+     font-weight: var(--weight-medium);
+     margin: 0;
  }
 
  @media (max-width: 480px) {
@@ -30,5 +46,4 @@
          padding: 12px;
          max-width: 100%;
      }
-
  }

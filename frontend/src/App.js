@@ -124,7 +124,7 @@ function AppContent() {
 
 
           </Routes>
-          <Foot />
+          {/* <Foot /> */}
           <ToastContainer position="top-center" autoClose={3000} theme="colored" />
         </main>
       </Router>

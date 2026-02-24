@@ -65,12 +65,12 @@ function SavedProducts() {
 
     return (
         <div className="msaved-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-            <div className="collection-header">
-                <h2>{t('saved_products.title')}</h2>
-                <span className="collection-count">{savedProductsList.length} {t('cart_page.items')}</span>
+            <div className="collection-header-saved">
+                <h1>{t('saved_products.title')}</h1>
+                <span className="item-count">{savedProductsList.length} {t('cart_page.items')}</span>
             </div>
 
-            <div className="product-card-list">
+            <div className="latest-product-list">
                 {savedProductsList.length > 0 ? (
                     savedProductsList.map((product) => (
                         <ProductCard

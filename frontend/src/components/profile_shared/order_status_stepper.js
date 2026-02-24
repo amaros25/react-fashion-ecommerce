@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './order_status_stepper.css';
+import './css/order_status_stepper.css';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 // Constants for all possible order states
