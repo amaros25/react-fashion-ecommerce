@@ -171,6 +171,16 @@
   font-style: italic;
 }
 
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
 .load-more-btn {
   background: #fff;
   color: #1a1a1a;
@@ -186,4 +196,17 @@
 .load-more-btn:hover:not(:disabled) {
   background: #1a1a1a;
   color: #fff;
+}
+
+.chat-disabled-notice {
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-top: 1px solid #f5f5f5;
+  text-align: center;
+  color: #d0011b;
+  /* Emotional Red for 'blocked/terminated' */
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }

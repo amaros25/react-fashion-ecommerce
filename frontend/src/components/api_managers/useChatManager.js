@@ -15,7 +15,7 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
     const [sidebarPage, setSidebarPage] = useState(1);
     const [fetchOffset, setFetchOffset] = useState(0);
     const [messages, setMessages] = useState([]);
-    const [hasMoreMessages, setHasMoreMessages] = useState(true);
+    const [hasMoreMessages, setHasMoreMessages] = useState(false);
     const [isSidebarHidden, setIsSidebarHidden] = useState(false);
     const [isChatWindowActive, setIsChatWindowActive] = useState(false);
     const [newMessage, setNewMessage] = useState(initialMessage || "");
@@ -38,6 +38,7 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
             const virtualChat = {
                 id: 'new-chat-temp',
                 type: initialChatType || 'support',
+                orderId: initialOrderId || null,
                 subjectNumber: initialSubjectNumber || 'General',
                 otherParticipant: { name: t('chat.newConversation') || 'New Conversation' },
                 messages: [],
@@ -249,10 +250,15 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
                     return [...uniqueNew, ...prev];
                 });
             }
+
+            // Fix: Strict total check
             const totalOnServer = messagesData.totalMessages || 0;
-            setHasMoreMessages(messages.length < totalOnServer);
+            const currentMsgsCount = messagesData.messages.length + fetchOffset;
+            setHasMoreMessages(currentMsgsCount < totalOnServer && !isNewChat);
+        } else if (isNewChat || selectedChatId === null) {
+            setHasMoreMessages(false);
         }
-    }, [messagesData, fetchOffset]);
+    }, [messagesData, fetchOffset, isNewChat, selectedChatId]);
 
     useEffect(() => {
         if (!socket || !userId) return;
@@ -313,9 +319,69 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
         };
     }, [userId, selectedChatId, queryClient, handleMarkAsRead]);
 
+    const activeChat = useMemo(() => {
+        const chatFromList = chats.find(c => String(c.id) === String(selectedChatId));
+        if (!chatFromList) return null;
+
+        // Merge with fresh metadata from messagesData (which comes from getChatById)
+        // messagesData contains: { ...chatData, messages: [...], ... }
+        if (messagesData && String(messagesData.id) === String(selectedChatId)) {
+            return {
+                ...chatFromList,
+                ...messagesData // Overwrite with fresh metadata (including Order object)
+            };
+        }
+        return chatFromList;
+    }, [chats, selectedChatId, messagesData]);
+
+    const isChatDisabled = useMemo(() => {
+        // Log for debugging
+        if (activeChat) {
+            console.log("DEBUG: Checking chat disable", {
+                id: activeChat.id,
+                type: activeChat.type,
+                orderId: activeChat.orderId,
+                orderStatus: activeChat.orderStatus,
+                nestedStatus: activeChat.Order?.currentStatus
+            });
+        }
+
+        if (!activeChat) return false;
+
+        // An order chat is identified by type OR by having an orderId
+        const isOrderChat = String(activeChat.type).toLowerCase() === 'order' || !!activeChat.orderId;
+
+        if (!isOrderChat) {
+            return false;
+        }
+
+        const allowedStatuses = [
+            1,  // CONFIRMED
+            2,  // SHIPPED
+            40, // READY_TO_PICKUP
+        ];
+
+        // Favor top-level orderStatus, then nested Order.currentStatus
+        const status = activeChat.orderStatus ?? activeChat.Order?.currentStatus ?? activeChat.currentStatus;
+
+        console.log("DEBUG: Resolved status", status);
+
+        if (status === undefined || status === null) {
+            // For new chats or while loading, we might not have a status yet.
+            // If it's an order chat, we should probably check if it's new.
+            return false;
+        }
+
+        const statusNum = Number(status);
+        const disabled = !allowedStatuses.includes(statusNum);
+
+        console.log("DEBUG: isChatDisabled result", disabled);
+        return disabled;
+    }, [activeChat]);
+
     return {
         chats, messages, selectedChatId,
-        activeChat: chats.find(c => String(c.id) === String(selectedChatId)),
+        activeChat,
         isNewChat,
         isLoadingChats, isLoadingMessages, isFetchingMessages,
         handleSelectChat, handleSendMessage, handleBackToSidebar,
@@ -323,6 +389,7 @@ export const useChatManager = (userId, token, initialPartnerId, initialChatType,
         newMessage, setNewMessage, sidebarPage, setSidebarPage,
         totalPages, hasMoreMessages,
         loadOlderMessages: () => { if (hasMoreMessages && !isFetchingMessages) setFetchOffset(messages.length); },
-        handleMarkAsRead
+        handleMarkAsRead,
+        isChatDisabled
     };
 };

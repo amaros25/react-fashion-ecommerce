@@ -1,4 +1,4 @@
-const { Chat, ChatMessage, User, UserStats, sequelize } = require('../models');
+const { Chat, ChatMessage, User, UserStats, Order, sequelize } = require('../models');
 const { Op } = require('sequelize');
 const { handleError } = require('./error_handler.js');
 /**
@@ -53,13 +53,21 @@ const chatController = {
                         model: User,
                         as: 'participant2',
                         attributes: ['id', 'firstName', 'lastName', 'shopName']
+                    },
+                    {
+                        model: Order,
+                        attributes: ['id', 'currentStatus', 'orderNumber']
                     }
                 ],
                 distinct: true
             });
             const formattedChats = await Promise.all(rows.map(async chat => {
                 const chatData = chat.toJSON();
-                const other = chatData.participant1Id === userId
+                // Add top-level orderStatus if available
+                if (chatData.Order) {
+                    chatData.orderStatus = chatData.Order.currentStatus;
+                }
+                const other = parseInt(chatData.participant1Id) === parseInt(userId)
                     ? chatData.participant2
                     : chatData.participant1;
 
@@ -100,7 +108,8 @@ const chatController = {
             const chat = await Chat.findByPk(chatId, {
                 include: [
                     { model: User, as: 'participant1', attributes: ['id', 'firstName', 'lastName', 'shopName'] },
-                    { model: User, as: 'participant2', attributes: ['id', 'firstName', 'lastName', 'shopName'] }
+                    { model: User, as: 'participant2', attributes: ['id', 'firstName', 'lastName', 'shopName'] },
+                    { model: Order, attributes: ['id', 'currentStatus', 'orderNumber'] }
                 ]
             });
 
@@ -134,6 +143,10 @@ const chatController = {
             // Return in chronological order
             const sortedMessages = messages.reverse();
             const chatData = chat.toJSON();
+            // Add top-level orderStatus if available
+            if (chatData.Order) {
+                chatData.orderStatus = chatData.Order.currentStatus;
+            }
             [chatData.participant1, chatData.participant2].forEach(p => {
                 if (p) p.name = p.shopName || `${p.firstName} ${p.lastName}`;
             });

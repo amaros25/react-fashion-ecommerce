@@ -507,8 +507,8 @@
     "newChatWithSeller": "Nouvelle discussion vendeur",
     "newChatWithAdmin": "Nouvelle discussion admin",
     "cancel_with_seller": "Annuler la discussion",
-    "chatDisabled": "Discussion désactivée",
-    "disabledNotice": "Cette discussion est en lecture seule."
+    "chatDisabled": "bestellung terminated",
+    "disabledNotice": "bestellung terminated"
   },
   "saved_products": {
     "title": "Produits sauvegardés",

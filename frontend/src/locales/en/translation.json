@@ -516,8 +516,8 @@
         "chatWithAdmin": "Chat with Admin",
         "newChatWithAdmin": "New chat with admin",
         "cancel_with_seller": "Cancel chat with seller",
-        "chatDisabled": "Chat disabled",
-        "disabledNotice": "This chat is read-only because the order is completed or the return window has expired."
+        "chatDisabled": "bestellung terminated",
+        "disabledNotice": "bestellung terminated"
     },
     "saved_products": {
         "title": "Saved Products",
