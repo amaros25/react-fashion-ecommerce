@@ -66,48 +66,53 @@ function SellerProducts({ sellerId, token }) {
             <p>{t("no_products_found")}</p>
           </div>
         ) : (
-          products.map((product) => (
-            <div
-              key={product.id}
-              className="premium-product-card"
-              onClick={() => navigate(`/product/${product.id}`)}
-            >
-              <div className="card-image-container">
-                <img
-                  src={product.images?.[0]}
-                  alt={product.name}
-                  className="card-image"
-                />
-                <div className="card-overlay">
-                  <span className="view-details-btn">{t("view_details")}</span>
+          products.map((product) => {
+            const totalStock = calculateTotalStock(product);
+            return (
+              <div
+                key={product.id}
+                className="premium-product-card"
+                onClick={() => navigate(`/product/${product.id}`)}
+              >
+                <div className="card-image-container">
+                  <img
+                    src={product.images?.[0]}
+                    alt={product.name}
+                    className="card-image"
+                  />
+                  <div className="card-overlay">
+                    <span className="view-details-btn">{t("view_details")}</span>
+                  </div>
+                  {product.productNumber && (
+                    <span className="product-badge">{product.productNumber}</span>
+                  )}
                 </div>
-                {product.productNumber && (
-                  <span className="product-badge">{product.productNumber}</span>
-                )}
-              </div>
 
-              <div className="card-content">
-                <h4 className="card-title">{product.name}</h4>
-                <div className="card-meta">
-                  <span className="card-price">
-                    {product.price ? `${product.price} ${t("price_suf")}` : t("price_not_available")}
+                <div className="card-content">
+                  <h4 className="card-title">{product.name}</h4>
+                  <div className="card-meta">
+                    <span className="card-price">
+                      {product.price ? `${product.price} ${t("price_suf")}` : t("price_not_available")}
+                    </span>
+                    <span className="card-orders">
+                      {product.orderCount > 0 ? `${product.orderCount} ${t("orders")}` : t("no_orders")}
+                    </span>
+                  </div>
+                  <span className={`card-stock ${totalStock === 0 ? "out-of-stock" : ""}`}>
+                    {t("stock")}: {totalStock}
                   </span>
-                  <span className="card-orders">
-                    {product.orderCount > 0 ? `${product.orderCount} ${t("orders")}` : t("no_orders")}
-                  </span>
-                </div>
-                <span className="card-stock">{t("stock")}: {calculateTotalStock(product)}</span>
-                <div className="card-footer">
-                  <span className="date-added">
-                    {t("added_date")}: {new Date(product.createdAt).toLocaleDateString(i18n.language)}
-                  </span>
-                  <span className={`current-state-badge ${getStateInfo(product).class}`}>
-                    {getStateInfo(product).label}
-                  </span>
+                  <div className="card-footer">
+                    <span className="date-added">
+                      {t("added_date")}: {new Date(product.createdAt).toLocaleDateString(i18n.language)}
+                    </span>
+                    <span className={`current-state-badge ${getStateInfo(product).class}`}>
+                      {getStateInfo(product).label}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 

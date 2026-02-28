@@ -4,6 +4,8 @@ import "./css/order_items.css";
 import { ORDER_STATUS } from "../utils/const/order_status";
 import { FaStar } from "react-icons/fa";
 
+import RatingTrigger from "./RatingTrigger.js";
+
 export default function OrderItem({ item, product, order, t, showRatingButton, isLast, chatRole = 'seller', viewMode = 'user', onRateClick }) {
   const navigate = useNavigate();
   const userReview = item.product?.reviews?.[0];
@@ -12,7 +14,8 @@ export default function OrderItem({ item, product, order, t, showRatingButton, i
 
   const isEligibleStatus = [
     Number(ORDER_STATUS.DELIVERED),
-    Number(ORDER_STATUS.PICKED_UP)
+    Number(ORDER_STATUS.PICKED_UP),
+    Number(ORDER_STATUS.RETURN_RECEIVED)
   ].includes(Number(order.currentStatus));
 
 
@@ -51,27 +54,6 @@ export default function OrderItem({ item, product, order, t, showRatingButton, i
 
 
 
-  const renderUserRating = () => {
-    // Nur für User anzeigen und nur wenn bereits bewertet wurde
-    if (viewMode !== "user" || !isRated) return null;
-
-    return (
-      <div className="product-rating-minimal-badge">
-        <span className="moch-mini-label">
-          {t("your_product_rating")}:
-        </span>
-        <div className="star-display-small">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <FaStar
-              key={star}
-              className={star <= ratingValue ? "star-active" : "star-empty"}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <Link to={`/product/${item.productId}`} className="order-item-link">
       <div className="order-item-card">
@@ -99,24 +81,25 @@ export default function OrderItem({ item, product, order, t, showRatingButton, i
                 {item.product?.name || t("loading_product")}
               </p>
 
-              {/* RATING / RATE BUTTON (Next to Title) */}
-              <div className="order-product-rating-inline">
-                {/* 1. If rated: Show Stars */}
-                {viewMode === "user" && isRated && (
-                  renderUserRating()
-                )}
-
-                {/* 2. If NOT rated: Show Rate Button */}
-                {viewMode === "user" && !isRated && showRatingButton && isEligibleStatus && (
-                  <button className="order-card-btn-small" onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onRateClick();
-                  }}>
-                    <FaStar /> {t("rate_products")}
-                  </button>
-                )}
-              </div>
+              {/* RATING TRIGGER (Next to Title) */}
+              {viewMode === "user" && isEligibleStatus && (showRatingButton || isRated) && (
+                <div className="order-product-rating-trigger">
+                  <RatingTrigger
+                    rating={ratingValue}
+                    isRated={isRated}
+                    canRate={isEligibleStatus}
+                    onRateClick={(e) => {
+                      if (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                      onRateClick();
+                    }}
+                    t={t}
+                    label={isRated ? t("your_product_rating") : undefined}
+                  />
+                </div>
+              )}
             </div>
 
             {/* Product Variants (Size, Color, Quantity) */}

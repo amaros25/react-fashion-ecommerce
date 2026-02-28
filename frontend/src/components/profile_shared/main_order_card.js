@@ -2,11 +2,12 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ORDER_STATUS } from "../utils/const/order_status.js";
 import OrderItem from "./order_item.js";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 
 import MainOrderCardHeader from "./main_order_card_header.js";
 import MainOrderCardFooter from "./main_order_card_footer.js";
 import MainOrderCardModals from "./main_order_card_modals.js";
+import { cities, citiesData } from '../utils/const/cities';
 
 import "./css/main_order_card.css";
 
@@ -169,6 +170,27 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
     const formattedDate = order.createdAt ? new Date(order.createdAt).toLocaleString() : '';
     const seenProducts = new Set();
 
+
+    const showContactInfo = viewMode === "seller" && currentStatus >= Number(ORDER_STATUS.CONFIRMED);
+    let buyerPhone = "";
+    let buyerCompleteAddress = "";
+    let buyerCityText = "";
+    let buyerSubCityText = "";
+
+    try {
+        buyerPhone = order.buyerSnapshot?.p;
+    } catch (error) {
+        buyerPhone = t("failed_load_address");
+    }
+    try {
+        const buyerAddress = order.buyerSnapshot?.a;
+        buyerCityText = cities[order.buyerSnapshot?.c];
+        buyerSubCityText = citiesData[buyerCityText][order.buyerSnapshot?.sc];
+        buyerCompleteAddress = `${buyerAddress}, ${buyerSubCityText}, ${buyerCityText}`;
+    } catch (error) {
+        buyerCompleteAddress = t("failed_load_address");
+    }
+
     console.log("order", order);
 
 
@@ -198,6 +220,24 @@ function MainOrderCard({ order, products, t, onStatusChange, onRatingComplete, i
                     );
                 })}
             </div>
+
+            {viewMode === "seller" && showContactInfo && (
+                <div className="card-order-customer-details">
+                    <h4 className="customer-details-title">{t("cart_page.customer_info", { defaultValue: t("contact_info") || "Contact Information" })}</h4>
+                    <div className="customer-info-paragraph">
+                        <div className="customer-info-line">
+                            <FaPhoneAlt fontSize={13} />
+                            <span className="info-value-buyer">{buyerPhone}</span>
+                        </div>
+                        {isDelivery && (
+                            <div className="customer-info-line">
+                                <FaMapMarkerAlt fontSize={13} />
+                                <span className="info-value-buyer">{buyerCompleteAddress}</span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
 
             <MainOrderCardFooter
                 order={order} t={t} viewMode={viewMode}

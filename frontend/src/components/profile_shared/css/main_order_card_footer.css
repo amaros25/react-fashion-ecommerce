@@ -14,7 +14,7 @@
 /* Revised Footer Layout: Split Chat & Actions */
 .mocf-footer-bottom {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 100%;
     gap: 15px;
@@ -26,10 +26,14 @@
 .mocf-actions-group {
     display: flex;
     gap: 12px;
-    align-items: end;
-    justify-content: end;
-    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    /* Centered across all screens */
+}
 
+/* RTL Support for persistent centering */
+[dir="rtl"] .mocf-actions-group {
+    justify-content: center;
 }
 
 /* RTL Support is automatic with space-between:
@@ -107,27 +111,77 @@
 
 /* --- RESPONSIVE DESIGN --- */
 
-@media (max-width: 768px) {
+
+/* --- NATIVE APP LOOK (Mobile & Tablet) --- */
+@media (max-width: 1024px) {
     .mocf-container {
-        padding-top: 12px;
+        padding: 15px;
         gap: 15px;
     }
 
     .mocf-footer-bottom {
-        flex-direction: column;
+        gap: 12px;
+    }
+
+    .mocf-zara-text {
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+    }
+
+    .mocf-zara-comment {
+        font-size: 0.8rem;
+    }
+}
+
+/* Tablets & Small Laptops (iPad etc) */
+@media (min-width: 600px) and (max-width: 1024px) {
+    .mocf-footer-bottom {
+        flex-direction: row;
         align-items: center;
-        gap: 20px;
+    }
+}
+
+/* Smartphone & Tablet Fix (< 768px) */
+@media (max-width: 767px) {
+    .mocf-container {
+        padding: 12px;
+    }
+
+    .mocf-footer-bottom {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
     }
 
     .mocf-actions-group {
         width: 100%;
         display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    [dir="rtl"] .mocf-actions-group {
         justify-content: center;
     }
 
-    .mocf-actions-group {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
+    .mocf-zara-trigger {
+        padding: 10px 0;
+    }
+}
+
+/* Very small displays (< 400px) */
+@media (max-width: 399px) {
+    .mocf-container {
+        padding: 10px;
+    }
+
+    .mocf-zara-text {
+        font-size: 0.6rem;
+        letter-spacing: 0.5px;
+    }
+
+    .mocf-zara-comment {
+        font-size: 0.75rem;
     }
 }

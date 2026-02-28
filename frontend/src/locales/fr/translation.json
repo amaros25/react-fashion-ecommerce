@@ -766,5 +766,6 @@
     "status_change": "STATUT DU PROFIL: {{status}}",
     "new_message": "NOUVEAU MESSAGE REÇU",
     "order_update": "COMMANDE {{number}}: STATUT MIS À JOUR"
-  }
+  },
+  "contact_info": "Contact"
 }

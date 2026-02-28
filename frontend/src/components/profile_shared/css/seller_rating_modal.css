@@ -185,18 +185,56 @@
 }
 
 /* Animation */
-@keyframes srmFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
+
+/* --- NATIVE APP LOOK (Mobile & Tablet) --- */
+@media (max-width: 1024px) {
+    .srm-content {
+        padding: 40px 30px;
+        max-width: 400px;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .srm-seller-img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .srm-submit-btn {
+        padding: 15px;
+        letter-spacing: 2px;
     }
 }
 
-.srm-content {
-    animation: srmFadeIn 0.5s ease-out;
+/* Tablets & Small Laptops (iPad etc) */
+@media (min-width: 600px) and (max-width: 1024px) {
+    .srm-content {
+        max-width: 440px;
+    }
+}
+
+/* Smartphone & Tablet Fix (< 768px) */
+@media (max-width: 767px) {
+    .srm-content {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        border: none;
+        padding: 60px 20px;
+    }
+}
+
+/* Very small displays (< 400px) */
+@media (max-width: 399px) {
+    .srm-header h2 {
+        font-size: 12px;
+        letter-spacing: 2px;
+    }
+
+    .srm-seller-img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .srm-star-btn {
+        font-size: 20px;
+    }
 }

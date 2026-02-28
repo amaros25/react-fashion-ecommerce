@@ -167,18 +167,57 @@
 }
 
 /* Animation für das Öffnen */
-@keyframes prFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
+
+/* --- NATIVE APP LOOK (Mobile & Tablet) --- */
+@media (max-width: 1024px) {
+    .pr-modal-content {
+        padding: 40px 30px;
+        max-width: 400px;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .pr-product-img {
+        width: 100px;
+        height: 130px;
+    }
+
+    .pr-submit-btn {
+        padding: 15px;
+        letter-spacing: 2px;
     }
 }
 
-.pr-modal-content {
-    animation: prFadeIn 0.6s ease-out;
+/* Tablets & Small Laptops (iPad etc) */
+@media (min-width: 600px) and (max-width: 1024px) {
+    .pr-modal-content {
+        max-width: 440px;
+    }
+}
+
+/* Smartphone & Tablet Fix (< 768px) */
+@media (max-width: 767px) {
+    .pr-modal-content {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        border: none;
+        padding: 60px 20px;
+    }
+}
+
+/* Very small displays (< 400px) */
+@media (max-width: 399px) {
+    .pr-modal-header h2 {
+        font-size: 12px;
+        letter-spacing: 2px;
+    }
+
+    .pr-product-img {
+        width: 80px;
+        height: 110px;
+    }
+
+    .pr-star-btn {
+        font-size: 18px;
+        gap: 10px;
+    }
 }

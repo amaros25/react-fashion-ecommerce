@@ -187,20 +187,133 @@
     letter-spacing: 4px;
 }
 
-/* Responsive */
+/* Responsive Improvements for Mobile App Look */
 @media (max-width: 768px) {
-    .body-row {
-        flex-direction: column;
-        gap: 20px;
+    .seller-bills-container {
+        padding: 10px 15px;
+        /* Reduced from 20px */
+    }
+
+    .bills-list {
+        gap: 8px;
+        /* Reduced from 12px */
+    }
+
+    .bill-card-zara {
+        border: 1px solid #f0f0f0;
+        border-radius: 10px;
+        padding: 10px;
+        /* Reduced from 12px */
+        background-color: #ffffff;
+        box-shadow: none;
     }
 
     .bill-card-header {
+        padding: 0 0 8px 0;
+        /* Reduced from 10px */
+        background: none;
+        border-bottom: 0.5px solid #f9f9f9;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .title-status-group {
+        gap: 4px;
+        /* Reduced from 8px */
         flex-direction: column;
-        gap: 15px;
         align-items: flex-start;
     }
 
+    .bill-main-title {
+        font-size: 10px;
+        color: #999;
+        letter-spacing: 1px;
+    }
+
+    .bill-status-badge-zara {
+        font-size: 8.5px;
+        /* Slightly smaller */
+        padding: 1.5px 5px;
+        /* Tighter padding */
+        letter-spacing: 0.5px;
+        border-radius: 3px;
+    }
+
+    .facture-number {
+        font-size: 9.5px;
+        /* Slightly smaller */
+        color: #bbb;
+    }
+
     .header-right {
-        align-items: flex-start;
+        align-items: flex-end;
+        gap: 0px;
+        /* Removed gap */
+    }
+
+    .cost-label {
+        font-size: 8.5px;
+    }
+
+    .cost-value {
+        font-size: 1rem;
+        /* Slightly smaller */
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        line-height: 1;
+    }
+
+    .bill-card-body {
+        padding: 8px 0 0 0;
+        /* Reduced from 10px */
+        gap: 8px;
+        /* Reduced from 12px */
+    }
+
+    .body-row {
+        flex-direction: column;
+        gap: 6px;
+        /* Reduced from 10px */
+    }
+
+    .info-block {
+        gap: 1px;
+        /* Reduced from 2px */
+    }
+
+    .label-zara {
+        font-size: 9px;
+        color: #bbb;
+    }
+
+    .value-zara {
+        font-size: 10.5px;
+        /* Slightly smaller */
+        font-weight: 500;
+        color: #444;
+    }
+
+    .pagination {
+        margin-top: 30px;
+        /* Reduced from 40px */
+        gap: 15px;
+        /* Reduced from 20px */
+    }
+
+    .pagination-btn {
+        font-size: 0.7rem;
+    }
+}
+
+/* Specific fix for very small devices */
+@media (max-width: 400px) {
+    .bill-card-zara {
+        padding: 8px;
+    }
+
+    .cost-value {
+        font-size: 0.95rem;
     }
 }

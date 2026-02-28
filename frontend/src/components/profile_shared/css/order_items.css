@@ -169,45 +169,8 @@
 /* --- GEMEINSAME STYLES FÜR RATING BADGES (ZARA STYLE) --- */
 
 /* Container für Produkt-Rating & Seller-Rating Badge */
-.product-rating-minimal-badge,
-.already-rated-container {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0;
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  margin-top: 0;
-}
-
-/* Sterne-Gruppe */
-.star-display-small,
-.order-seller-rating-display {
-  display: flex;
-  gap: 2px;
-}
-
-/* Einzelne Sterne (Größe angepasst) */
-.star-display-small svg,
-.order-seller-rating-display svg {
-  width: 13px;
-  /* Von 9px auf 13px erhöht */
-  height: 13px;
-}
-
-/* Farbe der aktiven Sterne */
-.star-active {
-  color: #c5a059 !important;
-  /* Mattes Gold */
-}
-
-/* Farbe der leeren Sterne */
-.star-empty,
-.star-icon-minimal.empty {
-  color: #e4e5e9;
-  opacity: 0.6;
-}
+/* --- GEMEINSAME STYLES FÜR RATING (REPLACED BY RATING TRIGGER) --- */
+/* Old badge and star display removed in favor of RatingTrigger */
 
 /* Text-Labels (YOUR RATING / SELLER RATING) */
 .rating-label-fine,
@@ -263,70 +226,88 @@
 }
 
 /* Tablet Responsive */
-@media (max-width: 768px) {
+
+/* --- NATIVE APP LOOK (Mobile & Tablet) --- */
+@media (max-width: 1024px) {
   .order-item-card {
-    padding: 16px;
-    gap: 16px;
+    padding: 12px 15px;
+    gap: 15px;
   }
 
   .order-item-image-container {
-    width: 80px;
-    height: 100px;
-    /* Slightly taller for fashion/app look */
+    width: 60px;
+    height: 80px;
     border-radius: 4px;
   }
 
   .order-product-title {
-    font-size: 1rem;
-    line-height: 1.3;
+    font-size: 0.9rem;
+    letter-spacing: -0.2px;
   }
 
   .order-product-variants {
-    font-size: 0.85rem;
-    margin-top: 4px;
+    font-size: 0.75rem;
+    gap: 8px;
+  }
+
+  .rating-label-fine,
+  .mini-label {
+    font-size: 9px;
   }
 }
 
-/* Mobile Responsive */
-@media (max-width: 600px) {
-  .order-item-card {
-    padding: 12px;
-    gap: 12px;
-  }
-
+/* Tablets & Small Laptops (iPad etc) */
+@media (min-width: 600px) and (max-width: 1024px) {
   .order-item-image-container {
     width: 70px;
     height: 90px;
   }
 
   .order-product-title {
-    font-size: 0.95rem;
-  }
-
-  .order-product-variants {
-    font-size: 0.8rem;
-    gap: 8px;
-    flex-wrap: wrap;
+    font-size: 1rem;
   }
 }
 
-/* Small Mobile Responsive */
-@media (max-width: 480px) {
+/* Smartphone & Tablet Fix (< 768px) */
+@media (max-width: 767px) {
   .order-item-card {
-    padding: 10px;
+    padding: 10px 12px;
+    gap: 12px;
   }
 
   .order-item-image-container {
-    width: 65px;
-    height: 85px;
+    width: 55px;
+    height: 75px;
   }
 
   .order-product-title {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
   .order-product-variants {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     gap: 6px;
+  }
+}
+
+/* Very small displays (< 400px) */
+@media (max-width: 399px) {
+  .order-item-card {
+    padding: 8px 10px;
+    gap: 10px;
+  }
+
+  .order-item-image-container {
+    width: 50px;
+    height: 65px;
+  }
+
+  .order-product-title {
+    font-size: 0.8rem;
+  }
+
+  .order-product-variants {
+    font-size: 0.65rem;
+    gap: 4px;
   }
 }

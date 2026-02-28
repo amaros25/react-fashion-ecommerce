@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
-import "./image_select_upload.css"; // keep using this!
+import { FaCamera, FaTimes } from "react-icons/fa"; // Added Icons
+import "./image_select_upload.css";
 
 function ImageSelectUpload({ onImageChange, maximages }) {
   const { t } = useTranslation();
@@ -11,7 +12,7 @@ function ImageSelectUpload({ onImageChange, maximages }) {
     (acceptedFiles) => {
       const total = selectedImages.length + acceptedFiles.length;
       if (total > maximages) {
-        alert(t("alter_max_images"));  // "You can only upload up to X images"
+        alert(t("alter_max_images"));
         return;
       }
 
@@ -39,38 +40,42 @@ function ImageSelectUpload({ onImageChange, maximages }) {
 
   return (
     <div className="image-upload-container">
-      <div className="image-upload">
-        <div {...getRootProps({ className: "custom-dropzone" })}>
+      <div className="image-upload-section">
+        <div {...getRootProps({ className: "custom-dropzone-zara" })}>
           <input {...getInputProps()} />
+          <FaCamera className="camera-icon-zara" />
           {isDragActive ? (
-            <p>{t("drop_here") /* "Drop images here..." */}</p>
+            <span className="dropzone-text-zara">{t("drop_here")}</span>
           ) : (
-            <p>{t("choose_files") /* "Drag & drop or click to select images" */}</p>
+            <span className="dropzone-text-zara">{t("choose_files")}</span>
           )}
         </div>
 
         {maximages === 3 && (
-          selectedImages.length === maximages ? (
-            <p className="max-images-warning">{t("max_images_selected") /* "Maximum images selected" */}</p>
-          ) : (
-            <p className="images-infos">{t("alter_max_images") /* "You can upload up to 3 images" */}</p>
-          )
+          <div className="upload-info-box">
+            {selectedImages.length === maximages ? (
+              <p className="max-images-warning-zara">{t("max_images_selected")}</p>
+            ) : (
+              <p className="images-infos-zara">{t("alter_max_images")}</p>
+            )}
+          </div>
         )}
       </div>
 
-      <div className={`image-preview ${maximages === 1 ? "single-preview" : ""}`}>
+      <div className={`image-preview-zara ${maximages === 1 ? "single-preview-zara" : ""}`}>
         {selectedImages.map((image, index) => (
-          <div key={index} className="image-container">
+          <div key={index} className="preview-item-zara">
             <img
               src={URL.createObjectURL(image)}
               alt={`preview-${index}`}
-              className="image-thumbnail"
+              className="preview-img-zara"
             />
             <button
-              className="delete-button-image"
+              className="delete-btn-zara"
               onClick={() => handleImageDelete(index)}
+              title="Delete"
             >
-              X
+              <FaTimes />
             </button>
           </div>
         ))}

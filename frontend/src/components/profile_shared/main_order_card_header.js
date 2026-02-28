@@ -3,20 +3,13 @@ import { FaStar, FaRegStar, FaExclamationCircle } from "react-icons/fa";
 import "./css/main_order_card_header.css"
 import { ORDER_STATUS } from "../utils/const/order_status.js";
 import { FaRegCommentDots } from "react-icons/fa";
-import { cities, citiesData } from '../utils/const/cities';
+
+import RatingTrigger from "./RatingTrigger.js";
 
 const MainOrderCardHeader = ({
     order, viewMode, t, formattedDate, isDelivery,
     canRateSeller, setIsSellerModalOpen, navigate, onChatClick
 }) => {
-    const renderSellerStars = (rating) => (
-        <div className="moch-stars">
-            {[...Array(5)].map((_, i) => (
-                i < rating ? <FaStar key={i} className="star-active" /> : <FaRegStar key={i} color="#e5e5e5" />
-            ))}
-        </div>
-    );
-
     const isChatAllowed = () => {
         const lastStatus = Number(order.currentStatus);
         const allowed = [
@@ -41,123 +34,88 @@ const MainOrderCardHeader = ({
         );
     };
 
-    const currentStatus = Number(order.currentStatus);
-    const showContactInfo = viewMode === "seller" && currentStatus >= Number(ORDER_STATUS.CONFIRMED);
-    let buyerPhone = "";
-    let buyerCompleteAddress = "";
-    let buyerCityText = "";
-    let buyerSubCityText = "";
-
-    try {
-        buyerPhone = order.buyerSnapshot?.p;
-    } catch (error) {
-        console.log("error", error);
-        buyerPhone = t("failed_load_address");
-    }
-    try {
-        const buyerAddress = order.buyerSnapshot?.a;
-        buyerCityText = cities[order.buyerSnapshot?.c];
-        buyerSubCityText = citiesData[buyerCityText][order.buyerSnapshot?.sc];
-        buyerCompleteAddress = `${buyerAddress}, ${buyerSubCityText}, ${buyerCityText}`;
-    } catch (error) {
-        console.log("error", error);
-        buyerCompleteAddress = t("failed_load_address");
-    }
-
+    const itemsCount = order.items?.length || 0;
 
     return (
         <div className="moch-container">
-            <div className="moch-left-section">
-                {/* Desktop Group: Shop Name + Rating */}
-                <div className="moch-group-shop">
-                    {viewMode === "seller" && (
-                        <div className="moch-group-shop">
-                            {!showContactInfo && isDelivery && (
-                                <div className="moch-meta-wrapper">
-                                    <span className="moch-mini-label">{t("register.city")} & {t("register.subCity")}: </span>
-                                    <span className="info-value">{buyerCityText} {buyerSubCityText}</span>
+            <div className="moch-desktop-left">
+                {/* ROW 1 LEFT (Mobile) / Top Left (PC) */}
+                <div className="moch-unit-shop">
+                    <div className="moch-shop-info">
+                        <span className="moch-shop-name">
+                            {viewMode === "seller" ? (order.buyer ? `${order.buyer.firstName} ${order.buyer.lastName}` : t("cart_page.customer")) : (order.seller?.shopName || t("loading"))}
+                        </span>
+
+                        {/* Rating Trigger next to shop name, BEFORE badge */}
+                        {viewMode === "user" && [
+                            ORDER_STATUS.DELIVERED,
+                            ORDER_STATUS.PICKED_UP,
+                            ORDER_STATUS.RETURN_RECEIVED
+                        ].includes(Number(order.currentStatus)) && (
+                                <div className="moch-rating-trigger-inline">
+                                    <RatingTrigger
+                                        rating={order.sellerReview?.rating}
+                                        isRated={!!order.sellerReview}
+                                        canRate={canRateSeller()}
+                                        onRateClick={() => setIsSellerModalOpen(true)}
+                                        t={t}
+                                        label={order.sellerReview ? t("your_seller_rating") : undefined}
+                                    />
                                 </div>
                             )}
-                            {showContactInfo && order.buyerSnapshot && (
-                                <>
-                                    <div className="moch-meta-wrapper">
-                                        <span className="moch-mini-label">{t("cart_page.customer")}</span>
-                                        <span className="info-value">{order.buyer ? `${order.buyer.firstName} ${order.buyer.lastName}` : t("loading_user_error")}</span>
-                                    </div>
-                                    {isDelivery && (
-                                        <div className="moch-meta-wrapper">
-                                            <span className="moch-separator-line"></span>
-                                            <span className="moch-mini-label">{t("address")}</span>
-                                            <span className="info-value">{buyerCompleteAddress}</span>
-                                        </div>
-                                    )}
-                                    <div className="moch-meta-wrapper">
-                                        <span className="moch-separator-line"></span>
-                                        <span className="moch-mini-label">{t("phone")}</span>
-                                        <span className="info-value">{buyerPhone}</span>
-                                    </div>
-                                </>
-                            )}
 
-                            {renderChatButton()}
-                        </div>
-                    )}
-                    {viewMode === "user" && order.seller?.shopName && (
-                        <div className="moch-shop-info">
-                            <span className="moch-shop-name">{order.seller.shopName}</span>
-                            <div className="moch-separator-line"></div>
-                            {renderChatButton()}
-
-                        </div>
-                    )}
-                    {viewMode === "user" && (
-                        <>
-                            <div className="moch-rating-zone">
-                                {order.sellerReview ? (
-                                    <div className="moch-rated-container">
-                                        <span className="moch-mini-label">{t("your_seller_rating")}:</span>
-                                        {renderSellerStars(order.sellerReview.rating)}
-                                    </div>
-                                ) : canRateSeller() ? (
-                                    <button className="order-card-btn-small" onClick={() => setIsSellerModalOpen(true)}>
-                                        <FaStar /> {t("rate_seller")}
-                                    </button>
-                                ) : null}
-                            </div>
-                        </>
-                    )}
-
+                        <span className={`moch-badge pc-only ${isDelivery ? 'delivery' : 'pickup'}`}>
+                            {isDelivery ? t("cart_page.delivery") : t("cart_page.pickup")}
+                        </span>
+                    </div>
+                    {renderChatButton()}
                 </div>
 
-                {/* Desktop Group: Meta + Badge */}
-                <div className="moch-group-meta">
+                {/* ROW 2 LEFT (Mobile) / Bottom Left (PC) */}
+                <div className="moch-unit-meta">
                     <div className="moch-meta-wrapper">
                         <span className="moch-mini-label">{t("orderNumber")}</span>
                         <span className="moch-id-value">{order.orderNumber}</span>
-                        <div className="moch-separator-line"></div>
-                        <span className="moch-mini-label">{t("orderDate")}</span>
-                        {formattedDate && <span className="moch-id-value"> {formattedDate}</span>}
+
+                        {formattedDate && (
+                            <span className="moch-date-pc pc-only">
+                                <span className="moch-separator-dot">•</span>
+                                {formattedDate}
+                            </span>
+                        )}
+
+                        {/* Badge next to order number on mobile */}
+                        <span className={`moch-badge mobile-only ${isDelivery ? 'delivery' : 'pickup'}`}>
+                            {isDelivery ? t("cart_page.delivery") : t("cart_page.pickup")}
+                        </span>
                     </div>
-                    <div className="moch-separator-line"></div>
-                    <span className={`moch-badge ${isDelivery ? 'delivery' : 'pickup'}`}>
-                        {isDelivery ? t("cart_page.delivery") : t("cart_page.pickup")}
-                    </span>
                 </div>
             </div>
 
-            <div className="moch-right-section">
-                <div className="moch-group-price">
-                    <span className="moch-total-label">{t("cart_page.total")}:</span>
-                    <span className="moch-price">{Number(order.totalPrice || 0).toFixed(3)} {t("price_suf")}</span>
-                </div>
-                <div className="order-card-btn-small" onClick={() => navigate("/help-center", { state: { orderNumber: order.orderNumber } })}>
-                    <FaExclamationCircle /> {t("report_order")}
+            {/* ROW 1 RIGHT & ROW 2 RIGHT (Mobile) / Right Section (PC) */}
+            <div className="moch-desktop-right">
+                {/* Mobile Row 1 Right */}
+                <div className="moch-unit-date-mobile">
+                    {formattedDate && <span className="moch-date-text-mobile">{formattedDate}</span>}
                 </div>
 
+                <div className="moch-unit-price-row">
+                    <div className="moch-unit-price">
+                        <span className="moch-total-label pc-only">{t("cart_page.total")}:</span>
+                        <span className="moch-price">{Number(order.totalPrice || 0).toFixed(3)} {t("price_suf")}</span>
+                    </div>
 
+                    <div className="moch-unit-report" onClick={() => navigate("/help-center", { state: { orderNumber: order.orderNumber } })}>
+                        <FaExclamationCircle className="moch-report-icon" />
+                        <span className="moch-report-text-pc">{t("report_order")}</span>
+                    </div>
+                </div>
             </div>
+
         </div>
     );
 };
+
+
 
 export default MainOrderCardHeader;

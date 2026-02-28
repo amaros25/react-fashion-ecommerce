@@ -32,6 +32,8 @@ import Agb from './components/info_pages/agb.js';
 import DataProtection from './components/info_pages/data_protection.js';
 import ResetPassword from './components/reset_password/reset_password.js';
 import { useAuth } from "./context/AuthContext";
+import SellerRoute from "./components/utils/SellerRoute";
+import ProtectedRoute from "./components/utils/ProtectedRoute";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -83,17 +85,16 @@ function AppContent() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
-            <Route path="/profile_seller" element={<ProfileSeller />} />
-            <Route path="/profile_user" element={<ProfileUser />} />
+            <Route path="/profile_seller" element={<SellerRoute><ProfileSeller /></SellerRoute>} />
+            <Route path="/profile_user" element={<ProtectedRoute><ProfileUser /></ProtectedRoute>} />
             <Route path="/main_order_card" element={<MainOrderCard />} />
             <Route path="/main_profile_header" element={<MainProfileHeader />} />
 
-            <Route path="/add_product" element={<AddProduct />} />
-
-            <Route path="/cart_page" element={<CartPage />} />
+            <Route path="/add_product" element={<SellerRoute><AddProduct /></SellerRoute>} />
+            <Route path="/cart_page" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
             <Route path="/payment-success" element={<PaymentStatus type="success" />} />
             <Route path="/payment-fail" element={<PaymentStatus type="fail" />} />
-            <Route path="/chat" element={<MainChat />} />
+            <Route path="/chat" element={<ProtectedRoute><MainChat /></ProtectedRoute>} />
             <Route path="/:shopSlug" element={<ShopPage />} />
             <Route path="/home/:category/:subcategory" element={<Home />} />
             <Route path="/home/:category" element={<Home />} />
@@ -118,7 +119,7 @@ function AppContent() {
             <Route path="/our-platform" element={<InfoPage pageKey="our_platform" />} />
             <Route path="/press" element={<InfoPage pageKey="press" />} />
             <Route path="/mobile-apps" element={<InfoPage pageKey="mobile_apps" />} />
-            <Route path="/saved_products" element={<SavedProducts />} />
+            <Route path="/saved_products" element={<ProtectedRoute><SavedProducts /></ProtectedRoute>} />
             <Route path="/agb" element={<Agb />} />
             <Route path="/data_protection" element={<DataProtection />} />
 

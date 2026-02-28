@@ -764,5 +764,6 @@
     "new_message": "رسالة جديدة",
     "order_update": "الطلب {{number}}: تم تحديث الحالة"
   },
-  "order_date": "تاريخ الطلب"
+  "order_date": "تاريخ الطلب",
+  "contact_info": "الاتصال"
 }

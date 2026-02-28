@@ -160,6 +160,7 @@
 .order-stepper.stepper-collapsed .stepper-item {
     flex: 0 0 auto;
     min-width: 120px;
+    padding: 10px;
 }
 
 .stepper-item.failed .step-counter {
@@ -196,91 +197,21 @@
     }
 }
 
-/* Tablet Responsive */
-@media (max-width: 768px) {
-    .order-stepper {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 15px;
-        padding: 8px 0;
-    }
 
-    .stepper-item {
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 12px;
+/* --- NATIVE APP LOOK (Mobile & Tablet) --- */
+@media (max-width: 1024px) {
+    .order-stepper {
+        padding: 5px 5px;
     }
 
     .step-counter {
-        flex-shrink: 0;
-        margin-bottom: 0;
-        width: 28px;
-        height: 28px;
-        font-size: 13px;
-    }
-
-    .step-content {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        flex: 1;
-        min-width: 0;
-        /* Prevents overflow issues */
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
     }
 
     .step-name {
-        text-align: left;
-        width: 100%;
         font-size: 11px;
-    }
-
-    .step-date {
-        text-align: left;
-        margin-top: 2px;
-        font-size: 10px;
-        /* Slight bump for readability or keep small */
-        width: 100%;
-    }
-
-    .step-line {
-        display: none;
-    }
-
-    .order-stepper.stepper-collapsed {
-        flex-direction: row;
-        justify-content: center;
-    }
-
-    .order-stepper.stepper-collapsed .stepper-item {
-        flex-direction: column;
-        align-items: center;
-        min-width: 100px;
-    }
-
-    .order-stepper.stepper-collapsed .step-name {
-        text-align: center;
-    }
-
-    .order-stepper.stepper-collapsed .step-content {
-        align-items: center;
-    }
-
-    .order-stepper.stepper-collapsed .step-date {
-        text-align: center;
-    }
-
-    /* RTL Mobile Overrides */
-    .rtl .step-content {
-        align-items: flex-end;
-    }
-
-    .rtl .step-name {
-        text-align: right;
-    }
-
-    .rtl .step-date {
-        text-align: right;
     }
 
     .stepper-toggle-btn {
@@ -289,21 +220,66 @@
     }
 }
 
-/* Mobile Responsive */
-@media (max-width: 600px) {
+/* Tablets & Small Laptops (iPad etc) */
+@media (min-width: 600px) and (max-width: 1024px) {
     .order-stepper {
-        gap: 12px;
-        padding: 6px 0;
+        padding: 5px 5px;
+        justify-content: space-around;
+        flex-direction: row;
     }
 
     .stepper-item {
-        gap: 10px;
+        min-width: 120px;
+    }
+}
+
+/* Smartphone & Tablet Fix (< 768px) */
+@media (max-width: 767px) {
+    .order-stepper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .order-stepper.stepper-collapsed {
+        align-items: center;
+    }
+
+    .stepper-item {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
     }
 
     .step-counter {
-        width: 26px;
-        height: 26px;
-        font-size: 12px;
+        margin-inline-start: 0;
+    }
+
+    .step-content {
+        align-items: flex-start;
+        padding: 0;
+    }
+
+    .step-name,
+    .step-date {
+        text-align: left;
+    }
+
+    .step-line {
+        display: none;
+    }
+
+    .stepper-toggle-btn {
+        min-height: 44px;
+    }
+}
+
+/* Very small displays (< 400px) */
+@media (max-width: 399px) {
+    .step-counter {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
     }
 
     .step-name {
@@ -314,55 +290,7 @@
         font-size: 8px;
     }
 
-    .stepper-toggle-btn {
-        font-size: 0.8rem;
-        padding: 7px 10px;
-    }
-
-    .order-stepper-cancelled {
-        padding: 8px;
-        font-size: 0.85rem;
-    }
-}
-
-/* Small Mobile Responsive */
-@media (max-width: 480px) {
     .order-stepper {
-        gap: 10px;
-        padding: 5px 0;
-    }
-
-    .stepper-item {
         gap: 8px;
-    }
-
-    .step-counter {
-        width: 24px;
-        height: 24px;
-        font-size: 11px;
-    }
-
-    .step-name {
-        font-size: 9px;
-    }
-
-    .step-date {
-        font-size: 7px;
-    }
-
-    .stepper-toggle-btn {
-        font-size: 0.75rem;
-        padding: 6px 8px;
-        min-height: 44px;
-        /* Touch target minimum */
-    }
-
-    .order-stepper-cancelled {
-        padding: 6px;
-        font-size: 0.8rem;
-    }
-
-    .order-stepper.stepper-collapsed .stepper-item {
-        min-width: 80px;
     }
 }

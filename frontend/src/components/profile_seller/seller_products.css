@@ -181,6 +181,12 @@
   font-weight: 700;
 }
 
+.card-stock.out-of-stock {
+  color: #ef4444 !important;
+  /* Zara-style red */
+  font-weight: 700;
+}
+
 .card-orders {
   font-size: 13px;
   color: #666;
