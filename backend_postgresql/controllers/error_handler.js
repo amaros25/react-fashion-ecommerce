@@ -54,6 +54,7 @@ const handleError = async (res, error, t = null, defaultMessage = "operation_fai
         "unauthorized_access: user_banned",
         "unauthorized_access: user_pending",
         "unauthorized_access: user_deleted",
+        "get_user_orders_error"
     ];
 
     const message = error.message || defaultMessage;

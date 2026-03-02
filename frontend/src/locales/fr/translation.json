@@ -117,7 +117,8 @@
       "register_seller_failed": "L'inscription du vendeur a échoué.",
       "user_created_successfully": "L'utilisateur a été enregistré avec succès.",
       "missing_data": "Veuillez remplir tous les champs.",
-      "image_upload_failed": "L'envoi de l'image a échoué."
+      "image_upload_failed": "L'envoi de l'image a échoué.",
+      "passwordMismatch": "Les mots de passe ne correspondent pas."
     }
   },
   "sizes": "Tailles",

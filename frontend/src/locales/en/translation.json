@@ -53,7 +53,7 @@
     "reset_password_title": "Reset Password",
     "reset_password_desc": "Enter your email to receive a reset link",
     "enter_email": "Enter your email",
-    "send_reset_link": "Send Reset Link",
+    "send_reset_link": "Send",
     "reset_email_error": "Error sending reset email",
     "enter_new_password": "Enter your new password",
     "confirm_password": "Confirm Password",
@@ -123,7 +123,8 @@
             "register_seller_failed": "Seller registration failed.",
             "user_created_successfully": "User has been registered successfully.",
             "missing_data": "Please fill in all fields.",
-            "image_upload_failed": "Image upload failed."
+            "image_upload_failed": "Image upload failed.",
+            "passwordMismatch": "Passwords do not match."
         }
     },
     "sizes": "Sizes",
@@ -516,7 +517,7 @@
         "chatWithAdmin": "Chat with Admin",
         "newChatWithAdmin": "New chat with admin",
         "cancel_with_seller": "Cancel chat with seller",
-        "chatDisabled": "bestellung terminated",
+        "chatDisabled": "Commande close",
         "disabledNotice": "Commande close",
         "messages": "Messages"
     },

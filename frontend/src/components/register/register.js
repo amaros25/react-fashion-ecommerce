@@ -111,9 +111,6 @@ function Register() {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
-
-
-
             <label>{t("register.confirmPassword")}</label>
             <div className="password-input-container">
               <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
@@ -121,7 +118,6 @@ function Register() {
                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
-
             <label>{t("register.phone")}</label>
             <input type="tel" name="phone" value={formData.phone} onChange={handleChange} />
             {/* Simplify registration fields as requested */}

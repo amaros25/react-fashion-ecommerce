@@ -108,7 +108,8 @@
       "register_seller_failed": "فشل تسجيل البائع.",
       "user_created_successfully": "تم تسجيل المستخدم بنجاح.",
       "missing_data": "يرجى ملء جميع الحقول.",
-      "image_upload_failed": "فشل تحميل الصورة."
+      "image_upload_failed": "فشل تحميل الصورة.",
+      "passwordMismatch": "كلمات المرور غير متطابقة."
     }
   },
   "sizes": "المقاسات",

@@ -51,7 +51,7 @@ function ProfileSeller() {
   console.log("sellerError", sellerError);
 
   useEffect(() => {
-    if (!userId || !token || sellerError == "jwt expired") navigate("/login");
+    if (!userId || !token || sellerError === "jwt expired" || seller === undefined) navigate("/login");
   }, [userId, token, navigate]);
 
   if (sellerLoading || !seller) {

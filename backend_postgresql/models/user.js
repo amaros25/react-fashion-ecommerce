@@ -137,3 +137,7 @@ User.afterCreate(async (user, options) => {
 });
 
 module.exports = User;
+
+
+//SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
+//damit der nächste user die id hat, die nach der letzten id kommt

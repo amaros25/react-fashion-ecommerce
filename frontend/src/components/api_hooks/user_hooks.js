@@ -28,7 +28,7 @@ export const useUser = (userId, token) => {
     return useQuery({
         queryKey: ['user', userId],
         queryFn: () => userApi.fetchUser(userId, token),
-        enabled: !!userId && !!token,
+        enabled: !!userId && userId !== 'null' && !!token,
         staleTime: Infinity,
         retry: shouldNotRetry,
         refetchOnWindowFocus: false,
