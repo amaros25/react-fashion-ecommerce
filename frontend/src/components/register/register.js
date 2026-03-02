@@ -2,16 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-import ImageSelectUpload from '../new_product/image_select_upload.js';
 import { toast } from "react-toastify";
-import { cities, citiesData } from '../utils/const/cities.js';
 import { Link } from "react-router-dom";
 import ValidateRegisterForm from "./validateregisterform";
 import "./register.css";
 import { useAuthManager } from "../api_managers/useAuthManager";
-
 import useUploadImageApi from "../upload_image_profile/hooks/upload_image_api";
-import { updateImage } from '../api/user_api';
+
 function Register() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -107,21 +104,24 @@ function Register() {
             <label>{t("register.email")}</label>
             <input type="email" name="email" value={formData.email} onChange={handleChange} />
 
-            <div style={{ position: "relative" }}>
-              <label>{t("register.password")}</label>
+            <label>{t("register.password")}</label>
+            <div className="password-input-container">
               <input type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} />
-              <span onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", top: "38px", [i18n.dir() === "rtl" ? "left" : "right"]: "10px", cursor: "pointer" }}>
+              <span className="password-toggle-icon" onClick={() => setShowPassword(!showPassword)}  >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
 
-            <div style={{ position: "relative" }}>
-              <label>{t("register.confirmPassword")}</label>
+
+
+            <label>{t("register.confirmPassword")}</label>
+            <div className="password-input-container">
               <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
-              <span onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{ position: "absolute", top: "38px", [i18n.dir() === "rtl" ? "left" : "right"]: "10px", cursor: "pointer" }}>
+              <span className="password-toggle-icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)} >
                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
+
             <label>{t("register.phone")}</label>
             <input type="tel" name="phone" value={formData.phone} onChange={handleChange} />
             {/* Simplify registration fields as requested */}
