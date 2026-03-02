@@ -53,7 +53,7 @@
   "reset_password_title": "Réinitialiser le mot de passe",
   "reset_password_desc": "Entrez votre e-mail pour recevoir un lien de réinitialisation",
   "enter_email": "Entrez votre e-mail",
-  "send_reset_link": "Envoyer le lien de réinitialisation",
+  "send_reset_link": "Envoyer",
   "reset_email_error": "Erreur lors de l'envoi de l'e-mail de réinitialisation",
   "enter_new_password": "Entrez votre nouveau mot de passe",
   "confirm_password": "Confirmer le mot de passe",
@@ -507,8 +507,9 @@
     "newChatWithSeller": "Nouvelle discussion vendeur",
     "newChatWithAdmin": "Nouvelle discussion admin",
     "cancel_with_seller": "Annuler la discussion",
-    "chatDisabled": "bestellung terminated",
-    "disabledNotice": "bestellung terminated"
+    "chatDisabled": "Commande Terminée",
+    "disabledNotice": "Commande Terminée",
+    "messages": "Messages"
   },
   "saved_products": {
     "title": "Produits sauvegardés",

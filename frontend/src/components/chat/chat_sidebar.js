@@ -15,7 +15,8 @@ const ChatSidebar = ({
   handleSelectChat,
   isSidebarHidden
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "ar";
 
   /**
    * Helper to generate the pagination range with ellipses if needed.
@@ -55,7 +56,7 @@ const ChatSidebar = ({
     : [];
 
   return (
-    <div className={`chat-sidebar ${isSidebarHidden ? 'hidden' : ''}`}>
+    <div className={`chat-sidebar ${isSidebarHidden ? 'hidden' : ''}`} dir={isRtl ? "rtl" : "ltr"}>
       <div className="sidebar-header">
         <h2>{t('chat.messages') || 'Messages'}</h2>
       </div>

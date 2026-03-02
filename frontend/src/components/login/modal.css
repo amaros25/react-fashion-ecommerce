@@ -5,11 +5,14 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    padding: 15px;
 }
 
 /* Modal content */
@@ -103,4 +106,59 @@
 .btn-submit:disabled {
     background-color: #666;
     cursor: not-allowed;
+}
+
+
+
+/* Tablets (iPad etc.) */
+@media (max-width: 1024px) {
+    .modal-content {
+        padding: 30px;
+        max-width: 400px;
+    }
+}
+
+/* Mobile Devices (Standard Smartphones) */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 25px 20px;
+    }
+
+    .modal-content h3 {
+        font-size: 1.1rem;
+        /* Schrift etwas kleiner */
+        letter-spacing: 1px;
+    }
+
+    .modal-buttons {
+        flex-direction: column-reverse;
+        /* Buttons untereinander, Cancel unten */
+        gap: 10px;
+    }
+
+    .modal-buttons button {
+        max-width: 100%;
+        /* Buttons gehen über die volle Breite */
+        width: 100%;
+        padding: 14px;
+        /* Größere Touch-Fläche für Finger */
+    }
+}
+
+/* Sehr kleine Handys (z.B. iPhone SE alt) */
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 20px 15px;
+        width: 95%;
+    }
+
+    .modal-content p {
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+
+    .modal-content input {
+        margin-bottom: 15px;
+        padding: 10px 0;
+    }
 }

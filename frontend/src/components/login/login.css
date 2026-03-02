@@ -175,7 +175,7 @@
 
 .password-toggle-icon {
   position: absolute;
-  right: 10px;
+  inset-inline-end: 10px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
@@ -204,8 +204,32 @@
   color: #000;
 }
 
+.login-form input {
+  background-color: #ECE9E2;
+}
+
+.login-form input:focus {
+  background-color: #ECE9E2;
+}
+
+.login-form input:-webkit-autofill,
+.login-form input:-webkit-autofill:hover,
+.login-form input:-webkit-autofill:focus,
+.login-form input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #f2f2f2 inset !important;
+  box-shadow: 0 0 0 1000px #ECE9E2 inset !important;
+  -webkit-text-fill-color: #000 !important;
+  caret-color: #000 !important;
+}
+
+.login-form input:-moz-autofill {
+  box-shadow: 0 0 0 1000px #ECE9E2 inset !important;
+  -moz-text-fill-color: #000 !important;
+}
 
 /* ---------- Responsive Design ---------- */
+
+
 
 /* Tablets */
 @media (max-width: 1024px) {
@@ -220,6 +244,8 @@
 }
 
 /* Mobile devices */
+
+
 @media (max-width: 768px) {
   .login-page-content {
     padding: 30px 15px;
@@ -250,9 +276,10 @@
 }
 
 /* Very small phones */
-@media (max-width: 480px) {
+
+@media (320px <=width <=480px) {
   .login-page-content {
-    padding: 20px 10px;
+    padding: 10px 10px;
   }
 
   .login-form {
@@ -261,36 +288,29 @@
   }
 
   .login-form h2 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+  }
+
+  .login-form label {
+    margin-top: 10px;
+    font-size: 10px;
+    margin-bottom: 5px;
+    letter-spacing: 1.1px;
   }
 
   .login-form input,
   .login-form button {
-    padding: 10px 0;
-    font-size: 13px;
+    padding: 8px 0;
+    font-size: 11px;
   }
-}
 
+  .forgot-password-link {
+    margin-top: 12px;
+    font-size: 10px;
+  }
 
-.login-form input {
-  background-color: #ECE9E2;
-}
+  .register-link {
+    font-size: 10px;
+  }
 
-.login-form input:focus {
-  background-color: #ECE9E2;
-}
-
-.login-form input:-webkit-autofill,
-.login-form input:-webkit-autofill:hover,
-.login-form input:-webkit-autofill:focus,
-.login-form input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px #f2f2f2 inset !important;
-  box-shadow: 0 0 0 1000px #ECE9E2 inset !important;
-  -webkit-text-fill-color: #000 !important;
-  caret-color: #000 !important;
-}
-
-.login-form input:-moz-autofill {
-  box-shadow: 0 0 0 1000px #ECE9E2 inset !important;
-  -moz-text-fill-color: #000 !important;
 }

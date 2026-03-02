@@ -502,7 +502,8 @@
     "newChatWithAdmin": "دردشة جديدة مع المشرف",
     "cancel_with_seller": "إلغاء المحادثة مع البائع",
     "chatDisabled": "bestellung terminated",
-    "disabledNotice": "bestellung terminated"
+    "disabledNotice": "طلب منتهي",
+    "messages": "الرسائل"
   },
   "saved_products": {
     "title": "منتجات المحفوظات",
@@ -765,5 +766,9 @@
     "order_update": "الطلب {{number}}: تم تحديث الحالة"
   },
   "order_date": "تاريخ الطلب",
-  "contact_info": "الاتصال"
+  "contact_info": "الاتصال",
+  "send_reset_link": "إرسال",
+  "reset_password_title": "إعادة تعيين كلمة المرور",
+  "reset_password_desc": "أدخل بريدك الإلكتروني لاستلام رابط إعادة التعيين",
+  "enter_email": "أدخل بريدك الإلكتروني"
 }

@@ -517,7 +517,8 @@
         "newChatWithAdmin": "New chat with admin",
         "cancel_with_seller": "Cancel chat with seller",
         "chatDisabled": "bestellung terminated",
-        "disabledNotice": "bestellung terminated"
+        "disabledNotice": "Commande close",
+        "messages": "Messages"
     },
     "saved_products": {
         "title": "Saved Products",
