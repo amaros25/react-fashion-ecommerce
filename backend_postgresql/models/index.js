@@ -3,7 +3,7 @@ const User = require('./user');
 const Product = require('./product');
 const ProductReview = require('./product_review');
 const Order = require('./order');
-const SellerBill = require('./seller_bill');
+//const SellerBill = require('./seller_bill');
 const UserReview = require('./user_review');
 const Chat = require('./chat');
 const ChatMessage = require('./chat_message');
@@ -81,9 +81,9 @@ Product.hasMany(ProductReview, { foreignKey: 'productId', as: 'reviews' });
 ProductReview.belongsTo(Product, { foreignKey: 'productId' });
 
 // User (Seller) - Bills & Reviews
-User.hasMany(SellerBill, { foreignKey: 'sellerId', as: 'bills' });
-SellerBill.belongsTo(User, { foreignKey: 'sellerId' });
-SellerBill.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
+// User.hasMany(SellerBill, { foreignKey: 'sellerId', as: 'bills' });
+// SellerBill.belongsTo(User, { foreignKey: 'sellerId' });
+// SellerBill.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
 
 // Order - Chat
 Order.hasMany(Chat, { foreignKey: 'orderId' });

@@ -60,7 +60,7 @@ router.get('/users/:id/user', floodLimiter, generalLimiter, verifyToken, verifyG
 router.post('/products/:id/rate', floodLimiter, generalLimiter, verifyToken, verifyUserSecure, productController.addReview);
 
 //only Seller Actions
-router.get('/sellers/:sellerId/bills', floodLimiter, generalLimiter, verifyToken, verifySellerSecure, userController.getSellerBills);
+// router.get('/sellers/:sellerId/bills', floodLimiter, generalLimiter, verifyToken, verifySellerSecure, userController.getSellerBills);
 router.get('/users/public-seller/:id', floodLimiter, generalLimiter, verifyToken, verifySellerSecure, userController.getPublicSeller);
 
 // User && Seller Actions

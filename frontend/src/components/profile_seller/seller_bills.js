@@ -3,7 +3,7 @@ import "./seller_bills.css";
 import { useTranslation } from "react-i18next";
 import LoadingSpinner from "../utils/loading_spinner";
 
-function SellerBills({ sellerId, apiUrl, token }) {
+/*function SellerBills({ sellerId, apiUrl, token }) {
     const { t } = useTranslation();
     const [bills, setBills] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -120,4 +120,4 @@ function SellerBills({ sellerId, apiUrl, token }) {
     );
 }
 
-export default SellerBills;
+export default SellerBills; */

@@ -359,36 +359,35 @@ const userController = {
         }
     },
 
-    getSellerBills: async (req, res) => {
-        try {
-            const { sellerId } = req.params;
-            const { page = 1, limit = 10 } = req.query;
-            const offset = (page - 1) * limit;
-
-            if (req.user.id !== parseInt(sellerId) && req.user.role !== 'admin') throw new Error("unauthorized_access");
-
-            const { count, rows } = await SellerBill.findAndCountAll({
-                where: { sellerId },
-                include: [
-                    { model: Order, as: 'order', attributes: ['orderNumber'] },
-                ],
-                order: [['createdAt', 'DESC']],
-                limit: parseInt(limit),
-                offset: parseInt(offset)
-            });
-
-            res.json({
-                bills: rows,
-                totalCount: count,
-                page: parseInt(page),
-                totalPages: Math.ceil(count / limit)
-            });
-        } catch (error) {
-            console.error('Error fetching seller bills:', error);
-            await handleError(res, error, null, "failed_to_fetch_seller_bills");
-        }
-    },
-
+    /*   getSellerBills: async (req, res) => {
+           try {
+               const { sellerId } = req.params;
+               const { page = 1, limit = 10 } = req.query;
+               const offset = (page - 1) * limit;
+   
+               if (req.user.id !== parseInt(sellerId) && req.user.role !== 'admin') throw new Error("unauthorized_access");
+   
+               const { count, rows } = await SellerBill.findAndCountAll({
+                   where: { sellerId },
+                   include: [
+                       { model: Order, as: 'order', attributes: ['orderNumber'] },
+                   ],
+                   order: [['createdAt', 'DESC']],
+                   limit: parseInt(limit),
+                   offset: parseInt(offset)
+               });
+   
+               res.json({
+                   bills: rows,
+                   totalCount: count,
+                   page: parseInt(page),
+                   totalPages: Math.ceil(count / limit)
+               });
+           } catch (error) {
+               console.error('Error fetching seller bills:', error);
+               await handleError(res, error, null, "failed_to_fetch_seller_bills");
+           }
+       },*/
 
     rateUserAndProduct: async (req, res) => {
         const t = await sequelize.transaction();

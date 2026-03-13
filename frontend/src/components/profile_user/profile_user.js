@@ -56,6 +56,11 @@ export default function ProfileUser() {
   useEffect(() => {
     const finalError = userError || ordersError;
     console.log("finalError: ", finalError);
+    if (!userId || !token || userError == "jwt expired") {
+      navigate("/login");
+      return;
+    }
+
     if (finalError && finalError !== "no_orders_found") {
       toast.error(t(finalError), {
         position: "top-center",

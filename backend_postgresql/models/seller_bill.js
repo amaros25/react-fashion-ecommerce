@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../db');
 
-const SellerBill = sequelize.define('SellerBill', {
+
+/*const SellerBill = sequelize.define('SellerBill', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -64,4 +65,4 @@ const SellerBill = sequelize.define('SellerBill', {
     ]
 });
 
-module.exports = SellerBill;
+module.exports = SellerBill; */

@@ -13,9 +13,8 @@
      padding-bottom: 150px;
  }
 
-
  .collection-header-saved {
-     margin-bottom: 50px;
+     margin-bottom: 20px;
      display: flex;
      justify-content: space-between;
      align-items: baseline;
@@ -32,18 +31,38 @@
      margin: 0;
  }
 
- @media (max-width: 480px) {
+ @media (max-width: 768px) {
+
+     .collection-header-saved h1 {
+         font-size: 0.7rem;
+         letter-spacing: var(--spacing-wide);
+         font-weight: var(--weight-bold);
+         margin-bottom: 0px;
+         padding-bottom: 0px;
+         margin-top: 10px;
+     }
+
      .msaved-container {
          width: 100%;
          padding: 8px;
          max-width: 100%;
          margin: 0;
      }
- }
 
- @media (min-width: 481px) and (max-width: 768px) {
-     .msaved-container {
-         padding: 12px;
-         max-width: 100%;
+     .item-count-saved {
+         font-size: 0.7rem;
+         letter-spacing: var(--spacing-normal);
+         color: var(--text-muted);
      }
+
+     .no-products {
+         padding-bottom: 150px;
+         font-size: 0.9rem;
+     }
+
+     .collection-header-saved {
+         margin-bottom: 10px;
+
+     }
+
  }

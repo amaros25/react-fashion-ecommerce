@@ -67,7 +67,7 @@ function SavedProducts() {
         <div className="msaved-container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
             <div className="collection-header-saved">
                 <h1>{t('saved_products.title')}</h1>
-                <span className="item-count">{savedProductsList.length} {t('cart_page.items')}</span>
+                <span className="item-count-saved">{savedProductsList.length} {t('cart_page.items')}</span>
             </div>
 
             <div className="latest-product-list">

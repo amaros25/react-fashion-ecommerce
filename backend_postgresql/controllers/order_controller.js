@@ -357,15 +357,15 @@ const orderController = {
                 status: newStatus,
                 comment: comment
             }, { transaction: t });
-            if (Number(newStatus) === 3 || Number(newStatus) === 41) {
-                const rawAmount = parseFloat(order.totalPrice) * 0.03;
-                const roundedAmount = Number(rawAmount.toFixed(1));
-                await SellerBill.create({
-                    orderId: order.id,
-                    sellerId: order.sellerId,
-                    amount: roundedAmount,
-                }, { transaction: t });
-            }
+            /*  if (Number(newStatus) === 3 || Number(newStatus) === 41) {
+                  const rawAmount = parseFloat(order.totalPrice) * 0.03;
+                  const roundedAmount = Number(rawAmount.toFixed(1));
+                  await SellerBill.create({
+                      orderId: order.id,
+                      sellerId: order.sellerId,
+                      amount: roundedAmount,
+                  }, { transaction: t });
+              }*/
             const closingStatuses = [3, 10, 13, 22, 24, 30, 31, 41, 42];
             if (closingStatuses.includes(newStatus) && !closingStatuses.includes(oldStatus) && oldStatus !== 0) {
                 await UserStats.decrement('openOrders', {

@@ -4,7 +4,7 @@ import AddProduct from "../new_product/add_product";
 import SellerProducts from "./seller_products";
 import SellerOrders from "./seller_orders.js";
 
-import SellerBills from "./seller_bills.js";
+// import SellerBills from "./seller_bills.js";
 import LoadingSpinner from "../utils/loading_spinner.js";
 import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthContext";
@@ -76,12 +76,12 @@ function ProfileSeller() {
       />
 
       <nav className="seller-profile-nav">
-        {["add_new_product", "products", "allOrders", "bills"].map((tab) => {
+        {["add_new_product", "products", "allOrders"].map((tab) => {
           let label = "";
           if (tab === "add_new_product") label = t("add_new_product");
           if (tab === "products") label = t(`tabs_seller.${tabKeys[0]}`);
           if (tab === "allOrders") label = t(`tabs_seller.${tabKeys[2]}`);
-          if (tab === "bills") label = t("tabs_seller.bills");
+          // if (tab === "bills") label = t("tabs_seller.bills");
 
           return (
             <div
@@ -107,9 +107,9 @@ function ProfileSeller() {
             token={token}
           />
         )}
-        {activeTab === "bills" && (
+        {/* {activeTab === "bills" && (
           <SellerBills sellerId={userId} apiUrl={apiUrl} token={token} />
-        )}
+        )} */}
 
       </div>
     </div>

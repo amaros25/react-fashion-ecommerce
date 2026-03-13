@@ -138,7 +138,7 @@ const CartPage = () => {
       <div className="cart-page-container" dir={dir}>
         <header className="cart-header">
           <h1>{t("cart_page.title")}</h1>
-          <span className="item-count">{cart.length} {t("cart_page.items")}</span>
+          <span className="item-count-cart-page">{cart.length} {t("cart_page.items")}</span>
         </header>
         <div className="cart-page-empty" dir={dir}>
 
@@ -158,7 +158,7 @@ const CartPage = () => {
     <div className="cart-page-container" dir={dir}>
       <header className="cart-header">
         <h1>{t("cart_page.title")}</h1>
-        <span className="item-count">{cart.length} {t("cart_page.items")}</span>
+        <span className="item-count-cart-page">{cart.length} {t("cart_page.items")}</span>
       </header>
 
       <div className="cart-layout">
@@ -275,8 +275,17 @@ const CartPage = () => {
               {isDelivery ? (
                 isProfileComplete ? (
                   <div className="address-status">
-                    <p><FaMapMarkerAlt /> {user.address}, {citiesData[cities[user.city]]?.[user.subCity]}</p>
-                    <p><FaPhoneAlt /> {user.phone}</p>
+                    <div className="info-row">
+                      <span className="icon-container"><FaMapMarkerAlt /></span>
+                      <span className="text-content">
+                        {user.address}, {citiesData[cities[user.city]]?.[user.subCity]}
+                      </span>
+                    </div>
+
+                    <div className="info-row">
+                      <span className="icon-container"><FaPhoneAlt /></span>
+                      <span className="text-content">{user.phone}</span>
+                    </div>
                   </div>
                 ) : (
                   <div className="address-status error">
@@ -353,7 +362,7 @@ const CartPage = () => {
             </div>
 
             <button
-              className="btn-primary"
+              className="btn-primary-cart"
               onClick={handleNewOrder}
               disabled={isButtonDisabled}
             >
